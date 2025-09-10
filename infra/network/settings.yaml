@@ -1,0 +1,35 @@
+createNew: true
+name: myNetwork
+
+resourceGroup:
+  createNew: true
+  name: myResourceGroup
+  location: eastus
+
+ipAddresses:
+  addressSpaces: 
+    - 10.0.0.0/16
+  subnets:
+    - name: mySubnet1
+      addressPrefix: 10.0.1.0/24
+
+security:
+  encryption:
+    enabled: true
+  azureBastion:
+    enabled: true
+    createNew: true
+    hostName: myBastionHost
+    publicIPAddressName: myBastionPublicIP
+  azureFirewall:
+    enabled: true
+    createNew: true
+    name: myAzureFirewall
+    subnetName: AzureFirewallSubnet
+    Tier: Standard
+    policy: myFirewallPolicy
+    publicIPAddressName: myFirewallPublicIP
+  ddosProtection:
+    enabled: true
+    createNew: true
+    planName: myDDoSPlan
