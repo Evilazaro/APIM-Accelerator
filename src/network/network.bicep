@@ -37,11 +37,14 @@ output AZURE_VIRTUAL_NETWORK_NAME string = virtualNetwork.outputs.AZURE_VIRTUAL_
 @description('Virtual Network ID output')
 output AZURE_VIRTUAL_NETWORK_ID string = virtualNetwork.outputs.AZURE_VIRTUAL_NETWORK_ID
 
-resource firewallSubnet 'Microsoft.Network/virtualNetworks/subnets@2024-07-01' existing = {
-  name: '${virtualNetwork.name}/${settings.security.azureFirewall.subnetName}'
-  scope: resourceGroup(resourceGroupName)
-}
-
+var firewallSubnetId = resourceId(
+  subscription().subscriptionId,
+  resourceGroupName,
+  'Microsoft.Network/virtualNetworks/subnets',
+  virtualNetwork.outputs.AZURE_VIRTUAL_NETWORK_NAME,
+  settings.security.azureFirewall.subnetName
+)
+// subscriptions/6a4029ea-399b-4933-9701-436db72883d4/resourceGroups/myResourceGroup/providers/Microsoft.Network/virtualNetworks/myNetwork/subnets/AzureBastionSubnet
 @description('Module to create Azure Firewall')
 module azureFirewall './modules/firewall.bicep' = {
   scope: resourceGroup(resourceGroupName)
@@ -53,7 +56,7 @@ module azureFirewall './modules/firewall.bicep' = {
     publicIPAllocationMethod: 'Static'
     publicIPSkuName: 'Standard'
     publicIPSkuTier: 'Regional'
-    virtualNetworkSubnetId: firewallSubnet.id
+    virtualNetworkSubnetId: firewallSubnetId
   }
   dependsOn: [
     virtualNetwork

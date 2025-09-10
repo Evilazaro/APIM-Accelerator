@@ -4,7 +4,7 @@ targetScope = 'subscription'
 var location = 'East US'
 
 @description('Deploy the network resources')
-module network 'network/network.bicep' = {
+module network '../src/network/network.bicep' = {
   name: 'networkDeployment'
   params: {
     location: location
