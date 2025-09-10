@@ -1,3 +1,5 @@
+# yaml-language-server: $schema=./network.schema.json
+
 name: apim-virtual-network
 description: Configuration settings for the network infrastructure including VNet, subnets, Azure Bastion, Azure Firewall, and DDoS protection.
 
@@ -26,7 +28,7 @@ security:
     enabled: true
     name: apim-firewall
     sku: AZFW_VNet
-    Tier: Standard
+    tier: Standard
     subnetName: AzureFirewallSubnet
     publicIPAddressName: firewall-public-ip
   ddosProtection:

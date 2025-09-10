@@ -77,7 +77,7 @@ module azureFirewall './modules/firewall.bicep' = if (settings.security.azureFir
     name: settings.security.azureFirewall.name
     location: location
     skuName: settings.security.azureFirewall.sku
-    skuTier: settings.security.azureFirewall.Tier
+    skuTier: settings.security.azureFirewall.tier
     publicIPAllocationMethod: 'Static'
     publicIPSkuName: 'Standard'
     publicIPSkuTier: 'Regional'
