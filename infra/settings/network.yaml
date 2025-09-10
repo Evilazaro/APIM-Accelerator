@@ -5,12 +5,12 @@ resourceGroup:
   name: apim-network-rg
 
 ipAddresses:
-  addressSpaces: 
+  addressSpaces:
     - 10.0.0.0/16
   subnets:
-    - name: AzureBastionSubnet
-      addressPrefix: 10.0.1.0/24
     - name: AzureFirewallSubnet
+      addressPrefix: 10.0.1.0/24
+    - name: AzureBastionSubnet
       addressPrefix: 10.0.2.0/24
 
 security:
@@ -18,17 +18,22 @@ security:
     enabled: true
   azureBastion:
     enabled: true
-    name: myBastion
-    hostName: myBastionHost
-    publicIPAddressName: myBastionPublicIP
+    name: apim-bastion
+    sku: Basic
+    publicIPAddressName: bastion-public-ip
     subnetName: AzureBastionSubnet
   azureFirewall:
     enabled: true
-    name: myAzureFirewall
-    subnetName: AzureFirewallSubnet
+    name: apim-firewall
+    sku: AZFW_VNet
     Tier: Standard
-    policy: myFirewallPolicy
-    publicIPAddressName: myFirewallPublicIP
+    subnetName: AzureFirewallSubnet
+    publicIPAddressName: firewall-public-ip
   ddosProtection:
     enabled: true
-    planName: myDDoSPlan
+    name: apim-ddos-plan
+
+  
+tags:
+  environment: production
+  project: apim-accelerator

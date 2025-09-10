@@ -34,10 +34,14 @@ param skuTier string
 ])
 param publicIPAddressVersion string
 
+@description('Tags for the Public IP Address')
+param tags object
+
 @description('Public IP Address Resource')
 resource publicIPAddress 'Microsoft.Network/publicIPAddresses@2024-07-01' = {
   name: name
   location: location
+  tags: tags
   properties: {
     publicIPAllocationMethod: publicIPAllocationMethod
     publicIPAddressVersion: publicIPAddressVersion

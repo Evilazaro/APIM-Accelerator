@@ -3,16 +3,32 @@ targetScope = 'subscription'
 @description('Location for the network resources')
 param location string
 
-var settings = loadYamlContent('./settings.yaml')
+param dateTime string = utcNow('yyyyMMddHHmmss')
+
+// Load network settings from the external YAML file
+var settings = loadYamlContent('../../infra/settings/network.yaml')
 
 @description('Conditionally create a new resource group or use an existing one.')
 resource networkRG 'Microsoft.Resources/resourceGroups@2025-04-01' = {
   name: settings.resourceGroup.name
   location: location
+  tags: settings.tags
+}
+
+@description('Module to create DDoS Protection Plan')
+module ddosProtection 'modules/ddos.bicep' = {
+  name: 'ddosProtection-${dateTime}'
+  scope: networkRG
+  params: {
+    name: settings.security.ddosProtection.name
+    location: location
+    tags: settings.tags
+  }
 }
 
 @description('Module to create Virtual Network')
 module virtualNetwork 'modules/vitual-network.bicep' = {
+  name: 'virtualNetwork-${dateTime}'
   scope: networkRG
   params: {
     name: settings.name
@@ -20,7 +36,12 @@ module virtualNetwork 'modules/vitual-network.bicep' = {
     addressPrefixes: settings.ipAddresses.addressSpaces
     subnets: settings.ipAddresses.subnets
     enableEncryption: settings.security.encryption.enabled
+    ddosProtectionPlanId: ddosProtection.outputs.DDOS_PROTECTION_PLAN_ID
+    tags: settings.tags
   }
+  dependsOn: [
+    ddosProtection
+  ]
 }
 
 @description('Virtual Network Name output')
@@ -36,19 +57,49 @@ var firewallSubnetId = resourceId(
   virtualNetwork.outputs.AZURE_VIRTUAL_NETWORK_NAME,
   settings.security.azureFirewall.subnetName
 )
-// subscriptions/6a4029ea-399b-4933-9701-436db72883d4/resourceGroups/myResourceGroup/providers/Microsoft.Network/virtualNetworks/myNetwork/subnets/AzureBastionSubnet
+
 @description('Module to create Azure Firewall')
 module azureFirewall './modules/firewall.bicep' = {
+  name: 'azureFirewall-${dateTime}'
   scope: networkRG
   params: {
     name: settings.security.azureFirewall.name
     location: location
-    skuName: 'AZFW_VNet'
-    skuTier: 'Standard'
+    skuName: settings.security.azureFirewall.sku
+    skuTier: settings.security.azureFirewall.Tier
     publicIPAllocationMethod: 'Static'
     publicIPSkuName: 'Standard'
     publicIPSkuTier: 'Regional'
     virtualNetworkSubnetId: firewallSubnetId
+    tags: settings.tags
+  }
+  dependsOn: [
+    virtualNetwork
+  ]
+}
+
+var bastionSubnetId = resourceId(
+  subscription().subscriptionId,
+  networkRG.name,
+  'Microsoft.Network/virtualNetworks/subnets',
+  virtualNetwork.outputs.AZURE_VIRTUAL_NETWORK_NAME,
+  settings.security.azureBastion.subnetName
+)
+
+@description('Module to create Azure Bastion Host')
+module azureBastion './modules/bastion.bicep' = {
+  name: 'azureBastion-${dateTime}'
+  scope: networkRG
+  params: {
+    name: settings.security.azureBastion.name
+    location: location
+    sku: settings.security.azureBastion.sku
+    publicIPAllocationMethod: 'Static'
+    privateIPAllocationMethod: 'Dynamic'
+    virtualNetworkSubnetId: bastionSubnetId
+    publicIPSkuName: 'Standard'
+    publicIPSkuTier: 'Regional'
+    tags: settings.tags
   }
   dependsOn: [
     virtualNetwork

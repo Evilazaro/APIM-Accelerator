@@ -1,11 +1,13 @@
 targetScope = 'subscription'
 
 @description('Location for all resources')
-var location = 'East US'
+param location string
+
+param dateTime string = utcNow('yyyyMMddHHmmss')
 
 @description('Deploy the network resources')
 module network '../src/network/network.bicep' = {
-  name: 'networkDeployment'
+  name: 'network-${dateTime}'
   params: {
     location: location
   }

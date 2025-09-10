@@ -11,13 +11,21 @@ param addressPrefixes array
 
 @description('The subnets for the virtual network.')
 param subnets array
+
 @description('Enable Virtual network encryption')
 param enableEncryption bool
+
+@description('The resource ID of the DDoS Protection Plan to associate with the virtual network.')
+param ddosProtectionPlanId string
+
+@description('Tags for the Virtual Network')  
+param tags object
 
 @description('Virtual Network Resource')
 resource virtualNetwork 'Microsoft.Network/virtualNetworks@2024-07-01' = {
   name: name
   location: location
+  tags: tags
   properties: {
     addressSpace: {
       addressPrefixes: addressPrefixes
@@ -36,6 +44,11 @@ resource virtualNetwork 'Microsoft.Network/virtualNetworks@2024-07-01' = {
           enforcement: 'AllowUnencrypted'
         }
       : null
+    ddosProtectionPlan: empty(ddosProtectionPlanId)
+      ? null
+      : {
+          id: ddosProtectionPlanId
+        }
   }
 }
 

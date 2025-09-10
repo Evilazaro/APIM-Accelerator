@@ -39,9 +39,12 @@ param publicIPSkuTier string
 @description('Virtual Network subnet ID to deploy the Azure Firewall into')
 param virtualNetworkSubnetId string
 
+@description('Tags for the Azure Firewall')
+param tags object
+
 @description('Module to create Public IP Address')
 module publicIP './public-ip-address.bicep' = {
-  name: 'myPublicIP'
+  name: 'firewall-PublicIP'
   scope: resourceGroup()
   params: {
     name: '${name}-pip'
@@ -50,6 +53,7 @@ module publicIP './public-ip-address.bicep' = {
     skuName: publicIPSkuName
     skuTier: publicIPSkuTier
     publicIPAddressVersion: 'IPv4'
+    tags: tags
   }
 }
 
@@ -57,6 +61,7 @@ module publicIP './public-ip-address.bicep' = {
 resource azureFirewall 'Microsoft.Network/azureFirewalls@2024-07-01' = {
   name: name
   location: location
+  tags: tags
   properties: {
     sku: {
       name: skuName

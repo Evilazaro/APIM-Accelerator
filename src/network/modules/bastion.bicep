@@ -5,15 +5,13 @@ param name string
 param location string
 
 @description('SKU Name of the Azure Bastion Host')
-param skuName string
-
-@description('SKU Tier of the Azure Bastion Host')
 @allowed([
+  'Developer'
   'Basic'
   'Standard'
   'Premium'
 ])
-param skuTier string
+param sku string
 
 @description('Public IP IP Allocation Method')
 @allowed([
@@ -46,9 +44,12 @@ param publicIPSkuTier string
 @description('Virtual Network subnet ID to deploy the Azure Bastion Host into')
 param virtualNetworkSubnetId string
 
+@description('Tags for the Azure Bastion Host')
+param tags object
+
 @description('Module to create Public IP Address')
 module publicIP './public-ip-address.bicep' = {
-  name: 'myPublicIP'
+  name: 'bastion-PublicIP'
   scope: resourceGroup()
   params: {
     name: '${name}-pip'
@@ -57,6 +58,7 @@ module publicIP './public-ip-address.bicep' = {
     skuName: publicIPSkuName
     skuTier: publicIPSkuTier
     publicIPAddressVersion: 'IPv4'
+    tags: tags
   }
 }
 
@@ -65,7 +67,7 @@ resource azureBastion 'Microsoft.Network/bastionHosts@2024-07-01' = {
   name: name
   location: location
   sku: {
-    name: skuName
+    name: sku
   }
   properties: {
     ipConfigurations: [
