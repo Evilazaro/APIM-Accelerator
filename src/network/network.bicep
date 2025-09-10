@@ -31,9 +31,6 @@ module ddosProtection 'modules/ddos.bicep' = if (settings.security.ddosProtectio
   params: {
     name: settings.security.ddosProtection.name
     location: location
-    enableDiagnostics: settings.diagnostics.enabled
-    diagnosticStorageAccountId: diagnosticStorageAccountId
-    logAnalyticsWorkspaceId: logAnalyticsWorkspaceId
     tags: tags
   }
 }
