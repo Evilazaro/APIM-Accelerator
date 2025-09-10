@@ -27,12 +27,20 @@ param skuName string
 ])
 param skuTier string
 
+@description('Public IP Address Version')
+@allowed([
+  'IPv4'
+  'IPv6'
+])
+param publicIPAddressVersion string
+
 @description('Public IP Address Resource')
 resource publicIPAddress 'Microsoft.Network/publicIPAddresses@2024-07-01' = {
   name: name
   location: location
   properties: {
     publicIPAllocationMethod: publicIPAllocationMethod
+    publicIPAddressVersion: publicIPAddressVersion
   }
   sku: {
     name: skuName

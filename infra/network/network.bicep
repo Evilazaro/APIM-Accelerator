@@ -48,9 +48,9 @@ module azureFirewall './modules/firewall.bicep' = {
   params: {
     name: settings.name
     location: location
-    skuName: 'Standard'
+    skuName: 'AZFW_VNet'
     skuTier: 'Standard'
-    publicIPAllocationMethod: 'Dynamic'
+    publicIPAllocationMethod: 'Static'
     publicIPSkuName: 'Standard'
     publicIPSkuTier: 'Regional'
     virtualNetworkSubnetId: firewallSubnet.id

@@ -5,14 +5,11 @@ param name string
 param location string
 
 @description('SKU Name of the Azure Firewall')
-@allowed([
-  'Standard'
-  'Premium'
-])
 param skuName string
 
 @description('SKU Tier of the Azure Firewall')
 @allowed([
+  'Basic'
   'Standard'
   'Premium'
 ])
@@ -52,6 +49,7 @@ module publicIP './public-ip-address.bicep' = {
     publicIPAllocationMethod: publicIPAllocationMethod
     skuName: publicIPSkuName
     skuTier: publicIPSkuTier
+    publicIPAddressVersion: 'IPv4'
   }
 }
 
