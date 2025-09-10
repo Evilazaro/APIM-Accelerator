@@ -1,9 +1,8 @@
-name: myNetwork
+name: apim-virtual-network
+description: Configuration settings for the network infrastructure including VNet, subnets, Azure Bastion, Azure Firewall, and DDoS protection.
 
 resourceGroup:
-  createNew: true
-  name: myResourceGroup
-  location: eastus
+  name: apim-network-rg
 
 ipAddresses:
   addressSpaces: 
@@ -19,6 +18,7 @@ security:
     enabled: true
   azureBastion:
     enabled: true
+    name: myBastion
     hostName: myBastionHost
     publicIPAddressName: myBastionPublicIP
     subnetName: AzureBastionSubnet
