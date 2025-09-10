@@ -16,3 +16,6 @@ resource ddosProtectionPlan 'Microsoft.Network/ddosProtectionPlans@2024-07-01' =
 
 @description('DDoS Protection Plan ID output')
 output DDOS_PROTECTION_PLAN_ID string = ddosProtectionPlan.id
+
+@description('DDoS Protection Plan Name output')
+output DDOS_PROTECTION_PLAN_NAME string = ddosProtectionPlan.name

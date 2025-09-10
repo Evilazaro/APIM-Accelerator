@@ -3,6 +3,9 @@ targetScope = 'subscription'
 @description('Location for the network resources')
 param location string
 
+@description('Tags to apply to all resources')
+param tags object
+
 param dateTime string = utcNow('yyyyMMddHHmmss')
 
 // Load network settings from the external YAML file
@@ -12,7 +15,7 @@ var settings = loadYamlContent('../../infra/settings/network.yaml')
 resource networkRG 'Microsoft.Resources/resourceGroups@2025-04-01' = {
   name: settings.resourceGroup.name
   location: location
-  tags: settings.tags
+  tags: tags
 }
 
 @description('Module to create DDoS Protection Plan')
@@ -22,9 +25,15 @@ module ddosProtection 'modules/ddos.bicep' = {
   params: {
     name: settings.security.ddosProtection.name
     location: location
-    tags: settings.tags
+    tags: tags
   }
 }
+
+@description('DDoS Protection Plan ID output')
+output DDOS_PROTECTION_PLAN_ID string = ddosProtection.outputs.DDOS_PROTECTION_PLAN_ID
+
+@description('DDoS Protection Plan Name output')
+output DDOS_PROTECTION_PLAN_NAME string = ddosProtection.outputs.DDOS_PROTECTION_PLAN_NAME
 
 @description('Module to create Virtual Network')
 module virtualNetwork 'modules/vitual-network.bicep' = {
@@ -37,7 +46,7 @@ module virtualNetwork 'modules/vitual-network.bicep' = {
     subnets: settings.ipAddresses.subnets
     enableEncryption: settings.security.encryption.enabled
     ddosProtectionPlanId: ddosProtection.outputs.DDOS_PROTECTION_PLAN_ID
-    tags: settings.tags
+    tags: tags
   }
   dependsOn: [
     ddosProtection
@@ -71,7 +80,7 @@ module azureFirewall './modules/firewall.bicep' = {
     publicIPSkuName: 'Standard'
     publicIPSkuTier: 'Regional'
     virtualNetworkSubnetId: firewallSubnetId
-    tags: settings.tags
+    tags: tags
   }
   dependsOn: [
     virtualNetwork
@@ -99,9 +108,15 @@ module azureBastion './modules/bastion.bicep' = {
     virtualNetworkSubnetId: bastionSubnetId
     publicIPSkuName: 'Standard'
     publicIPSkuTier: 'Regional'
-    tags: settings.tags
+    tags: tags
   }
   dependsOn: [
     virtualNetwork
   ]
 }
+
+@description('Azure Bastion Host ID output')
+output AZURE_BASTION_HOST_ID string = azureBastion.outputs.AZURE_BASTION_HOST_ID
+
+@description('Azure Bastion Host Name output')
+output AZURE_BASTION_HOST_NAME string = azureBastion.outputs.AZURE_BASTION_HOST_NAME

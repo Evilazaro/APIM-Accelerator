@@ -66,6 +66,7 @@ module publicIP './public-ip-address.bicep' = {
 resource azureBastion 'Microsoft.Network/bastionHosts@2024-07-01' = {
   name: name
   location: location
+  tags: tags
   sku: {
     name: sku
   }
@@ -86,3 +87,9 @@ resource azureBastion 'Microsoft.Network/bastionHosts@2024-07-01' = {
     ]
   }
 }
+
+@description('Azure Bastion Host ID output')
+output AZURE_BASTION_HOST_ID string = azureBastion.id
+
+@description('Azure Bastion Host Name output')
+output AZURE_BASTION_HOST_NAME string = azureBastion.name
