@@ -41,8 +41,17 @@ param publicIPSkuName string
 ])
 param publicIPSkuTier string
 
-@description('Virtual Network subnet ID to deploy the Azure Bastion Host into')
+@description('Bastion subnet ID to deploy the Azure Bastion Host into')
 param virtualNetworkSubnetId string
+
+@description('Enable diagnostics for the Azure Bastion')
+param enableDiagnostics bool
+
+@description('Log Analytics Workspace ID for diagnostics (optional)')
+param logAnalyticsWorkspaceId string
+
+@description('Storage Account ID for diagnostics (optional)')
+param diagnosticStorageAccountId string
 
 @description('Tags for the Azure Bastion Host')
 param tags object
@@ -58,6 +67,9 @@ module publicIP './public-ip-address.bicep' = {
     skuName: publicIPSkuName
     skuTier: publicIPSkuTier
     publicIPAddressVersion: 'IPv4'
+    enableDiagnostics: enableDiagnostics
+    diagnosticStorageAccountId: diagnosticStorageAccountId
+    logAnalyticsWorkspaceId: logAnalyticsWorkspaceId
     tags: tags
   }
 }
@@ -93,3 +105,28 @@ output AZURE_BASTION_HOST_ID string = azureBastion.id
 
 @description('Azure Bastion Host Name output')
 output AZURE_BASTION_HOST_NAME string = azureBastion.name
+
+@description('Diagnostics settings for the Azure Bastion')
+resource diagnostics 'microsoft.insights/diagnosticSettings@2021-05-01-preview' = if (enableDiagnostics) {
+  scope: azureBastion
+  name: '${name}-diagnostics'
+  properties: {
+    workspaceId: empty(logAnalyticsWorkspaceId) ? null : logAnalyticsWorkspaceId
+    storageAccountId: empty(diagnosticStorageAccountId) ? null : diagnosticStorageAccountId
+    logs: [
+      {
+        categoryGroup: 'allLogs'
+        enabled: true
+      }
+    ]
+    metrics: [
+      {
+        category: 'AllMetrics'
+        enabled: true
+      }
+    ]
+  }
+  dependsOn: [
+    azureBastion
+  ]
+}

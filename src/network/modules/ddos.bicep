@@ -5,7 +5,7 @@ param name string
 param location string
 
 @description('Tags for the DDoS Protection Plan')
-param tags object 
+param tags object
 
 @description('DDoS Protection Plan resource')
 resource ddosProtectionPlan 'Microsoft.Network/ddosProtectionPlans@2024-07-01' = {

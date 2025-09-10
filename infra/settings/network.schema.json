@@ -14,10 +14,7 @@
     "additionalProperties": false,
     "properties": {
         "name": {
-            "type": "string",
-            "pattern": "^[a-zA-Z0-9][a-zA-Z0-9-]*[a-zA-Z0-9]$",
-            "minLength": 2,
-            "maxLength": 80,
+            "$ref": "#/definitions/azureResourceName",
             "title": "Virtual Network Name",
             "description": "Name of the virtual network. Must start and end with alphanumeric characters and can contain hyphens.",
             "examples": [
@@ -34,7 +31,11 @@
             "description": "Human-readable description of the network configuration and its purpose.",
             "examples": [
                 "Configuration settings for the network infrastructure including VNet, subnets, Azure Bastion, Azure Firewall, and DDoS protection."
-            ]
+            ],
+            "errorMessage": {
+                "minLength": "Description must be at least 10 characters long",
+                "maxLength": "Description must not exceed 500 characters"
+            }
         },
         "resourceGroup": {
             "type": "object",
@@ -46,10 +47,7 @@
             "additionalProperties": false,
             "properties": {
                 "name": {
-                    "type": "string",
-                    "pattern": "^[a-zA-Z0-9][a-zA-Z0-9._()-]*[a-zA-Z0-9_)]$",
-                    "minLength": 1,
-                    "maxLength": 90,
+                    "$ref": "#/definitions/azureResourceGroupName",
                     "title": "Resource Group Name",
                     "description": "Name of the Azure Resource Group. Must follow Azure naming conventions.",
                     "examples": [
@@ -78,8 +76,7 @@
                     "maxItems": 10,
                     "uniqueItems": true,
                     "items": {
-                        "type": "string",
-                        "pattern": "^(?:(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\\.){3}(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\\/(?:[0-9]|[1-2][0-9]|3[0-2])$",
+                        "$ref": "#/definitions/cidrBlock",
                         "title": "CIDR Block",
                         "description": "IPv4 CIDR notation (e.g., 10.0.0.0/16, 192.168.1.0/24).",
                         "examples": [
@@ -87,6 +84,11 @@
                             "172.16.0.0/12",
                             "192.168.0.0/16"
                         ]
+                    },
+                    "errorMessage": {
+                        "minItems": "At least one address space is required",
+                        "maxItems": "No more than 10 address spaces are allowed",
+                        "uniqueItems": "Address spaces must be unique"
                     }
                 },
                 "subnets": {
@@ -106,10 +108,7 @@
                         "additionalProperties": false,
                         "properties": {
                             "name": {
-                                "type": "string",
-                                "pattern": "^[a-zA-Z0-9][a-zA-Z0-9._-]*[a-zA-Z0-9]$",
-                                "minLength": 1,
-                                "maxLength": 80,
+                                "$ref": "#/definitions/subnetName",
                                 "title": "Subnet Name",
                                 "description": "Name of the subnet. Must follow Azure naming conventions.",
                                 "examples": [
@@ -120,8 +119,7 @@
                                 ]
                             },
                             "addressPrefix": {
-                                "type": "string",
-                                "pattern": "^(?:(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\\.){3}(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\\/(?:[0-9]|[1-2][0-9]|3[0-2])$",
+                                "$ref": "#/definitions/cidrBlock",
                                 "title": "Subnet Address Prefix",
                                 "description": "IPv4 CIDR notation for the subnet address space.",
                                 "examples": [
@@ -131,7 +129,30 @@
                                 ]
                             }
                         }
+                    },
+                    "uniqueItems": true,
+                    "errorMessage": {
+                        "minItems": "At least one subnet is required",
+                        "maxItems": "No more than 50 subnets are allowed",
+                        "uniqueItems": "Subnet configurations must be unique"
                     }
+                }
+            }
+        },
+        "diagnostics": {
+            "type": "object",
+            "title": "Diagnostics Configuration",
+            "description": "Configuration for network diagnostics and monitoring capabilities.",
+            "required": [
+                "enabled"
+            ],
+            "additionalProperties": false,
+            "properties": {
+                "enabled": {
+                    "type": "boolean",
+                    "title": "Enable Diagnostics",
+                    "description": "Whether to enable network diagnostics and monitoring features.",
+                    "default": true
                 }
             }
         },
@@ -177,10 +198,7 @@
                             "default": false
                         },
                         "name": {
-                            "type": "string",
-                            "pattern": "^[a-zA-Z0-9][a-zA-Z0-9-]*[a-zA-Z0-9]$",
-                            "minLength": 1,
-                            "maxLength": 80,
+                            "$ref": "#/definitions/azureResourceName",
                             "title": "Bastion Host Name",
                             "description": "Name of the Azure Bastion host resource.",
                             "examples": [
@@ -200,10 +218,7 @@
                             "default": "Basic"
                         },
                         "publicIPAddressName": {
-                            "type": "string",
-                            "pattern": "^[a-zA-Z0-9][a-zA-Z0-9-]*[a-zA-Z0-9]$",
-                            "minLength": 1,
-                            "maxLength": 80,
+                            "$ref": "#/definitions/publicIPName",
                             "title": "Public IP Address Name",
                             "description": "Name of the public IP address resource for the Bastion host.",
                             "examples": [
@@ -256,10 +271,7 @@
                             "default": false
                         },
                         "name": {
-                            "type": "string",
-                            "pattern": "^[a-zA-Z0-9][a-zA-Z0-9-]*[a-zA-Z0-9]$",
-                            "minLength": 1,
-                            "maxLength": 80,
+                            "$ref": "#/definitions/azureResourceName",
                             "title": "Firewall Name",
                             "description": "Name of the Azure Firewall resource.",
                             "examples": [
@@ -297,10 +309,7 @@
                             "const": "AzureFirewallSubnet"
                         },
                         "publicIPAddressName": {
-                            "type": "string",
-                            "pattern": "^[a-zA-Z0-9][a-zA-Z0-9-]*[a-zA-Z0-9]$",
-                            "minLength": 1,
-                            "maxLength": 80,
+                            "$ref": "#/definitions/publicIPName",
                             "title": "Public IP Address Name",
                             "description": "Name of the public IP address resource for the firewall.",
                             "examples": [
@@ -347,10 +356,7 @@
                             "default": false
                         },
                         "name": {
-                            "type": "string",
-                            "pattern": "^[a-zA-Z0-9][a-zA-Z0-9-]*[a-zA-Z0-9]$",
-                            "minLength": 1,
-                            "maxLength": 80,
+                            "$ref": "#/definitions/azureResourceName",
                             "title": "DDoS Protection Plan Name",
                             "description": "Name of the DDoS Protection plan resource.",
                             "examples": [
@@ -402,6 +408,9 @@
                     }
                 ]
             },
+            "diagnostics": {
+                "enabled": true
+            },
             "security": {
                 "encryption": {
                     "enabled": true
@@ -432,14 +441,71 @@
         "azureResourceName": {
             "type": "string",
             "pattern": "^[a-zA-Z0-9][a-zA-Z0-9-]*[a-zA-Z0-9]$",
-            "minLength": 1,
+            "minLength": 2,
             "maxLength": 80,
-            "description": "Standard Azure resource naming pattern"
+            "description": "Standard Azure resource naming pattern. Must start and end with alphanumeric characters and can contain hyphens.",
+            "errorMessage": {
+                "pattern": "Resource name must start and end with alphanumeric characters and can only contain hyphens",
+                "minLength": "Resource name must be at least 2 characters long",
+                "maxLength": "Resource name must not exceed 80 characters"
+            }
+        },
+        "azureResourceGroupName": {
+            "type": "string",
+            "pattern": "^[a-zA-Z0-9][a-zA-Z0-9._()-]*[a-zA-Z0-9_)]$",
+            "minLength": 1,
+            "maxLength": 90,
+            "description": "Azure resource group naming pattern. Can contain alphanumeric characters, periods, underscores, hyphens, and parentheses.",
+            "errorMessage": {
+                "pattern": "Resource group name can only contain alphanumeric characters, periods, underscores, hyphens, and parentheses",
+                "minLength": "Resource group name must be at least 1 character long",
+                "maxLength": "Resource group name must not exceed 90 characters"
+            }
         },
         "cidrBlock": {
             "type": "string",
             "pattern": "^(?:(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\\.){3}(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\\/(?:[0-9]|[1-2][0-9]|3[0-2])$",
-            "description": "IPv4 CIDR notation"
+            "description": "IPv4 CIDR notation (e.g., 10.0.0.0/16, 192.168.1.0/24)",
+            "errorMessage": {
+                "pattern": "Must be a valid IPv4 CIDR notation (e.g., 10.0.0.0/16)"
+            }
+        },
+        "subnetName": {
+            "type": "string",
+            "pattern": "^[a-zA-Z0-9][a-zA-Z0-9._-]*[a-zA-Z0-9]$",
+            "minLength": 1,
+            "maxLength": 80,
+            "description": "Azure subnet naming pattern. Must follow Azure naming conventions.",
+            "errorMessage": {
+                "pattern": "Subnet name must start and end with alphanumeric characters and can contain periods, underscores, and hyphens",
+                "minLength": "Subnet name must be at least 1 character long",
+                "maxLength": "Subnet name must not exceed 80 characters"
+            }
+        },
+        "publicIPName": {
+            "type": "string",
+            "pattern": "^[a-zA-Z0-9][a-zA-Z0-9-]*[a-zA-Z0-9]$",
+            "minLength": 1,
+            "maxLength": 80,
+            "description": "Azure public IP address naming pattern",
+            "errorMessage": {
+                "pattern": "Public IP name must start and end with alphanumeric characters and can only contain hyphens",
+                "minLength": "Public IP name must be at least 1 character long",
+                "maxLength": "Public IP name must not exceed 80 characters"
+            }
+        },
+        "enabledConfiguration": {
+            "type": "object",
+            "description": "Base configuration object with enabled flag",
+            "required": [
+                "enabled"
+            ],
+            "properties": {
+                "enabled": {
+                    "type": "boolean",
+                    "description": "Whether this feature is enabled"
+                }
+            }
         }
     }
 }

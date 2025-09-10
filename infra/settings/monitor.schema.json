@@ -1,0 +1,92 @@
+{
+    "$schema": "https://json-schema.org/draft-07/schema#",
+    "$id": "https://schemas.azure.com/apim-accelerator/monitor-configuration/v1.0.0/monitor.schema.json",
+    "title": "APIM Monitor Configuration Schema",
+    "description": "JSON Schema for validating Azure API Management monitoring infrastructure configuration including Log Analytics workspace and other monitoring capabilities.",
+    "type": "object",
+    "required": [
+        "resourceGroup",
+        "logAnalytics"
+    ],
+    "additionalProperties": false,
+    "properties": {
+        "resourceGroup": {
+            "type": "object",
+            "title": "Resource Group Configuration",
+            "description": "Configuration for the Azure Resource Group that will contain the monitoring resources.",
+            "required": [
+                "name"
+            ],
+            "additionalProperties": false,
+            "properties": {
+                "name": {
+                    "$ref": "#/definitions/azureResourceGroupName",
+                    "title": "Resource Group Name",
+                    "description": "Name of the Azure Resource Group for monitoring resources. Must follow Azure naming conventions.",
+                    "examples": [
+                        "apim-monitoring-rg",
+                        "prod-monitoring-resources",
+                        "dev-apim-monitor-rg"
+                    ]
+                }
+            }
+        },
+        "logAnalytics": {
+            "type": "object",
+            "title": "Log Analytics Workspace Configuration",
+            "description": "Configuration for Azure Log Analytics workspace for monitoring and logging.",
+            "required": [
+                "name"
+            ],
+            "additionalProperties": false,
+            "properties": {
+                "name": {
+                    "$ref": "#/definitions/logAnalyticsWorkspaceName",
+                    "title": "Log Analytics Workspace Name",
+                    "description": "Name of the Log Analytics workspace. Must follow Azure naming conventions.",
+                    "examples": [
+                        "apim-accelerator-law",
+                        "prod-monitoring-workspace",
+                        "dev-apim-logs"
+                    ]
+                }
+            }
+        }
+    },
+    "examples": [
+        {
+            "resourceGroup": {
+                "name": "apim-monitoring-rg"
+            },
+            "logAnalytics": {
+                "name": "apim-accelerator-law"
+            }
+        }
+    ],
+    "definitions": {
+        "azureResourceGroupName": {
+            "type": "string",
+            "pattern": "^[a-zA-Z0-9][a-zA-Z0-9._()-]*[a-zA-Z0-9_)]$",
+            "minLength": 1,
+            "maxLength": 90,
+            "description": "Azure resource group naming pattern. Can contain alphanumeric characters, periods, underscores, hyphens, and parentheses.",
+            "errorMessage": {
+                "pattern": "Resource group name can only contain alphanumeric characters, periods, underscores, hyphens, and parentheses",
+                "minLength": "Resource group name must be at least 1 character long",
+                "maxLength": "Resource group name must not exceed 90 characters"
+            }
+        },
+        "logAnalyticsWorkspaceName": {
+            "type": "string",
+            "pattern": "^[a-zA-Z0-9][a-zA-Z0-9-]*[a-zA-Z0-9]$",
+            "minLength": 3,
+            "maxLength": 63,
+            "description": "Log Analytics workspace naming pattern. Must be 3-63 characters, start and end with alphanumeric characters, and can contain hyphens.",
+            "errorMessage": {
+                "pattern": "Log Analytics workspace name must start and end with alphanumeric characters and can only contain hyphens",
+                "minLength": "Log Analytics workspace name must be at least 3 characters long",
+                "maxLength": "Log Analytics workspace name must not exceed 63 characters"
+            }
+        }
+    }
+}
