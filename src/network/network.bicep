@@ -6,6 +6,12 @@ param location string
 @description('Tags to apply to all resources')
 param tags object
 
+@description('Log Analytics Workspace Resource ID for VNet diagnostics (optional)')
+param logAnalyticsWorkspaceId string
+
+@description('Storage Account Resource ID for VNet diagnostics (optional)')
+param diagnosticStorageAccountId string
+
 param dateTime string = utcNow('yyyyMMddHHmmss')
 
 // Load network settings from the external YAML file
@@ -25,6 +31,9 @@ module ddosProtection 'modules/ddos.bicep' = if (settings.security.ddosProtectio
   params: {
     name: settings.security.ddosProtection.name
     location: location
+    enableDiagnostics: settings.diagnostics.enabled
+    diagnosticStorageAccountId: diagnosticStorageAccountId
+    logAnalyticsWorkspaceId: logAnalyticsWorkspaceId
     tags: tags
   }
 }
@@ -46,6 +55,9 @@ module virtualNetwork 'modules/vitual-network.bicep' = {
     subnets: settings.ipAddresses.subnets
     enableEncryption: settings.security.encryption.enabled
     ddosProtectionPlanId: ddosProtection!.outputs.DDOS_PROTECTION_PLAN_ID
+    enableDiagnostics: settings.diagnostics.enabled
+    diagnosticStorageAccountId: diagnosticStorageAccountId
+    logAnalyticsWorkspaceId: logAnalyticsWorkspaceId
     tags: tags
   }
   dependsOn: [
@@ -82,6 +94,9 @@ module azureFirewall './modules/firewall.bicep' = if (settings.security.azureFir
     publicIPSkuName: 'Standard'
     publicIPSkuTier: 'Regional'
     virtualNetworkSubnetId: firewallSubnetId!
+    enableDiagnostics: settings.diagnostics.enabled
+    diagnosticStorageAccountId: diagnosticStorageAccountId
+    logAnalyticsWorkspaceId: logAnalyticsWorkspaceId
     tags: tags
   }
   dependsOn: [
@@ -118,6 +133,9 @@ module azureBastion './modules/bastion.bicep' = if (settings.security.azureBasti
     virtualNetworkSubnetId: bastionSubnetId!
     publicIPSkuName: 'Standard'
     publicIPSkuTier: 'Regional'
+    enableDiagnostics: settings.diagnostics.enabled
+    diagnosticStorageAccountId: diagnosticStorageAccountId
+    logAnalyticsWorkspaceId: logAnalyticsWorkspaceId
     tags: tags
   }
   dependsOn: [

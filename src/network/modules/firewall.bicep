@@ -39,6 +39,15 @@ param publicIPSkuTier string
 @description('Virtual Network subnet ID to deploy the Azure Firewall into')
 param virtualNetworkSubnetId string
 
+@description('Enable diagnostics for the Azure Firewall')
+param enableDiagnostics bool
+
+@description('Log Analytics Workspace ID for diagnostics (optional)')
+param logAnalyticsWorkspaceId string
+
+@description('Storage Account ID for diagnostics (optional)')
+param diagnosticStorageAccountId string
+
 @description('Tags for the Azure Firewall')
 param tags object
 
@@ -53,6 +62,9 @@ module publicIP './public-ip-address.bicep' = {
     skuName: publicIPSkuName
     skuTier: publicIPSkuTier
     publicIPAddressVersion: 'IPv4'
+    enableDiagnostics: enableDiagnostics
+    diagnosticStorageAccountId: diagnosticStorageAccountId
+    logAnalyticsWorkspaceId: logAnalyticsWorkspaceId
     tags: tags
   }
 }
@@ -89,3 +101,28 @@ output AZURE_FIREWALL_NAME string = azureFirewall.name
 
 @description('Azure Firewall ID output')
 output AZURE_FIREWALL_ID string = azureFirewall.id
+
+@description('Diagnostics settings for the Azure Firewall')
+resource diagnostics 'microsoft.insights/diagnosticSettings@2021-05-01-preview' = if (enableDiagnostics) {
+  scope: azureFirewall
+  name: '${name}-diagnostics'
+  properties: {
+    workspaceId: empty(logAnalyticsWorkspaceId) ? null : logAnalyticsWorkspaceId
+    storageAccountId: empty(diagnosticStorageAccountId) ? null : diagnosticStorageAccountId
+    logs: [
+      {
+        category: 'AllLogs'
+        enabled: true
+      }
+    ]
+    metrics: [
+      {
+        category: 'AllMetrics'
+        enabled: true
+      }
+    ]
+  }
+  dependsOn: [
+    azureFirewall
+  ]
+}

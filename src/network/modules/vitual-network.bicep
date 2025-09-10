@@ -18,7 +18,16 @@ param enableEncryption bool
 @description('The resource ID of the DDoS Protection Plan to associate with the virtual network.')
 param ddosProtectionPlanId string
 
-@description('Tags for the Virtual Network')  
+@description('Enable diagnostics for the Virtual Network')
+param enableDiagnostics bool
+
+@description('Log Analytics Workspace ID for diagnostics (optional)')
+param logAnalyticsWorkspaceId string
+
+@description('Storage Account ID for diagnostics (optional)')
+param diagnosticStorageAccountId string
+
+@description('Tags for the Virtual Network')
 param tags object
 
 @description('Virtual Network Resource')
@@ -65,3 +74,28 @@ output AZURE_VIRTUAL_NETWORK_SUBNETS object[] = [
     id: virtualNetwork.properties.subnets[index].id
   }
 ]
+
+@description('Diagnostics settings for the Virtual Network')
+resource diagnostics 'microsoft.insights/diagnosticSettings@2021-05-01-preview' = if (enableDiagnostics) {
+  scope: virtualNetwork
+  name: '${name}-diagnostics'
+  properties: {
+    workspaceId: empty(logAnalyticsWorkspaceId) ? null : logAnalyticsWorkspaceId
+    storageAccountId: empty(diagnosticStorageAccountId) ? null : diagnosticStorageAccountId
+    logs: [
+      {
+        category: 'AllLogs'
+        enabled: true
+      }
+    ]
+    metrics: [
+      {
+        category: 'AllMetrics'
+        enabled: true
+      }
+    ]
+  }
+  dependsOn: [
+    virtualNetwork
+  ]
+}
