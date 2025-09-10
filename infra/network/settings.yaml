@@ -1,4 +1,3 @@
-createNew: true
 name: myNetwork
 
 resourceGroup:
@@ -10,20 +9,21 @@ ipAddresses:
   addressSpaces: 
     - 10.0.0.0/16
   subnets:
-    - name: mySubnet1
+    - name: AzureBastionSubnet
       addressPrefix: 10.0.1.0/24
+    - name: AzureFirewallSubnet
+      addressPrefix: 10.0.2.0/24
 
 security:
   encryption:
     enabled: true
   azureBastion:
     enabled: true
-    createNew: true
     hostName: myBastionHost
     publicIPAddressName: myBastionPublicIP
+    subnetName: AzureBastionSubnet
   azureFirewall:
     enabled: true
-    createNew: true
     name: myAzureFirewall
     subnetName: AzureFirewallSubnet
     Tier: Standard
@@ -31,5 +31,4 @@ security:
     publicIPAddressName: myFirewallPublicIP
   ddosProtection:
     enabled: true
-    createNew: true
     planName: myDDoSPlan

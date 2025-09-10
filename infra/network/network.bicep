@@ -27,6 +27,7 @@ module virtualNetwork 'modules/vitual-network.bicep' = {
     location: location
     addressPrefixes: settings.ipAddresses.addressSpaces
     subnets: settings.ipAddresses.subnets
+    enableEncryption: settings.security.encryption.enabled
   }
 }
 
@@ -35,3 +36,26 @@ output AZURE_VIRTUAL_NETWORK_NAME string = virtualNetwork.outputs.AZURE_VIRTUAL_
 
 @description('Virtual Network ID output')
 output AZURE_VIRTUAL_NETWORK_ID string = virtualNetwork.outputs.AZURE_VIRTUAL_NETWORK_ID
+
+resource firewallSubnet 'Microsoft.Network/virtualNetworks/subnets@2024-07-01' existing = {
+  name: '${virtualNetwork.name}/${settings.security.azureFirewall.subnetName}'
+  scope: resourceGroup(resourceGroupName)
+}
+
+@description('Module to create Azure Firewall')
+module azureFirewall './modules/firewall.bicep' = {
+  scope: resourceGroup(resourceGroupName)
+  params: {
+    name: settings.name
+    location: location
+    skuName: 'Standard'
+    skuTier: 'Standard'
+    publicIPAllocationMethod: 'Dynamic'
+    publicIPSkuName: 'Standard'
+    publicIPSkuTier: 'Regional'
+    virtualNetworkSubnetId: firewallSubnet.id
+  }
+  dependsOn: [
+    virtualNetwork
+  ]
+}
