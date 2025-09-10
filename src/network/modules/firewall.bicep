@@ -83,3 +83,9 @@ resource azureFirewall 'Microsoft.Network/azureFirewalls@2024-07-01' = {
     ]
   }
 }
+
+@description('Azure Firewall Name output')
+output AZURE_FIREWALL_NAME string = azureFirewall.name
+
+@description('Azure Firewall ID output')
+output AZURE_FIREWALL_ID string = azureFirewall.id

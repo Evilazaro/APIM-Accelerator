@@ -19,7 +19,7 @@ resource networkRG 'Microsoft.Resources/resourceGroups@2025-04-01' = {
 }
 
 @description('Module to create DDoS Protection Plan')
-module ddosProtection 'modules/ddos.bicep' = {
+module ddosProtection 'modules/ddos.bicep' = if (settings.security.ddosProtection.enabled) {
   name: 'ddosProtection-${dateTime}'
   scope: networkRG
   params: {
@@ -30,10 +30,10 @@ module ddosProtection 'modules/ddos.bicep' = {
 }
 
 @description('DDoS Protection Plan ID output')
-output DDOS_PROTECTION_PLAN_ID string = ddosProtection.outputs.DDOS_PROTECTION_PLAN_ID
+output DDOS_PROTECTION_PLAN_ID string = ddosProtection!.outputs.DDOS_PROTECTION_PLAN_ID
 
 @description('DDoS Protection Plan Name output')
-output DDOS_PROTECTION_PLAN_NAME string = ddosProtection.outputs.DDOS_PROTECTION_PLAN_NAME
+output DDOS_PROTECTION_PLAN_NAME string = ddosProtection!.outputs.DDOS_PROTECTION_PLAN_NAME
 
 @description('Module to create Virtual Network')
 module virtualNetwork 'modules/vitual-network.bicep' = {
@@ -45,7 +45,7 @@ module virtualNetwork 'modules/vitual-network.bicep' = {
     addressPrefixes: settings.ipAddresses.addressSpaces
     subnets: settings.ipAddresses.subnets
     enableEncryption: settings.security.encryption.enabled
-    ddosProtectionPlanId: ddosProtection.outputs.DDOS_PROTECTION_PLAN_ID
+    ddosProtectionPlanId: ddosProtection!.outputs.DDOS_PROTECTION_PLAN_ID
     tags: tags
   }
   dependsOn: [
@@ -59,16 +59,18 @@ output AZURE_VIRTUAL_NETWORK_NAME string = virtualNetwork.outputs.AZURE_VIRTUAL_
 @description('Virtual Network ID output')
 output AZURE_VIRTUAL_NETWORK_ID string = virtualNetwork.outputs.AZURE_VIRTUAL_NETWORK_ID
 
-var firewallSubnetId = resourceId(
-  subscription().subscriptionId,
-  networkRG.name,
-  'Microsoft.Network/virtualNetworks/subnets',
-  virtualNetwork.outputs.AZURE_VIRTUAL_NETWORK_NAME,
-  settings.security.azureFirewall.subnetName
-)
+var firewallSubnetId = (settings.security.azureFirewall.enabled)
+  ? resourceId(
+      subscription().subscriptionId,
+      networkRG.name,
+      'Microsoft.Network/virtualNetworks/subnets',
+      virtualNetwork.outputs.AZURE_VIRTUAL_NETWORK_NAME,
+      settings.security.azureFirewall.subnetName
+    )
+  : null
 
 @description('Module to create Azure Firewall')
-module azureFirewall './modules/firewall.bicep' = {
+module azureFirewall './modules/firewall.bicep' = if (settings.security.azureFirewall.enabled) {
   name: 'azureFirewall-${dateTime}'
   scope: networkRG
   params: {
@@ -79,7 +81,7 @@ module azureFirewall './modules/firewall.bicep' = {
     publicIPAllocationMethod: 'Static'
     publicIPSkuName: 'Standard'
     publicIPSkuTier: 'Regional'
-    virtualNetworkSubnetId: firewallSubnetId
+    virtualNetworkSubnetId: firewallSubnetId!
     tags: tags
   }
   dependsOn: [
@@ -87,16 +89,24 @@ module azureFirewall './modules/firewall.bicep' = {
   ]
 }
 
-var bastionSubnetId = resourceId(
-  subscription().subscriptionId,
-  networkRG.name,
-  'Microsoft.Network/virtualNetworks/subnets',
-  virtualNetwork.outputs.AZURE_VIRTUAL_NETWORK_NAME,
-  settings.security.azureBastion.subnetName
-)
+@description('Azure Firewall Name output')
+output AZURE_FIREWALL_NAME string = azureFirewall!.outputs.AZURE_FIREWALL_NAME
+
+@description('Azure Firewall ID output')
+output AZURE_FIREWALL_ID string = azureFirewall!.outputs.AZURE_FIREWALL_ID
+
+var bastionSubnetId = (settings.security.azureBastion.enabled)
+  ? resourceId(
+      subscription().subscriptionId,
+      networkRG.name,
+      'Microsoft.Network/virtualNetworks/subnets',
+      virtualNetwork.outputs.AZURE_VIRTUAL_NETWORK_NAME,
+      settings.security.azureBastion.subnetName
+    )
+  : null
 
 @description('Module to create Azure Bastion Host')
-module azureBastion './modules/bastion.bicep' = {
+module azureBastion './modules/bastion.bicep' = if (settings.security.azureBastion.enabled) {
   name: 'azureBastion-${dateTime}'
   scope: networkRG
   params: {
@@ -105,7 +115,7 @@ module azureBastion './modules/bastion.bicep' = {
     sku: settings.security.azureBastion.sku
     publicIPAllocationMethod: 'Static'
     privateIPAllocationMethod: 'Dynamic'
-    virtualNetworkSubnetId: bastionSubnetId
+    virtualNetworkSubnetId: bastionSubnetId!
     publicIPSkuName: 'Standard'
     publicIPSkuTier: 'Regional'
     tags: tags
@@ -116,7 +126,7 @@ module azureBastion './modules/bastion.bicep' = {
 }
 
 @description('Azure Bastion Host ID output')
-output AZURE_BASTION_HOST_ID string = azureBastion.outputs.AZURE_BASTION_HOST_ID
+output AZURE_BASTION_HOST_ID string = azureBastion!.outputs.AZURE_BASTION_HOST_ID
 
 @description('Azure Bastion Host Name output')
-output AZURE_BASTION_HOST_NAME string = azureBastion.outputs.AZURE_BASTION_HOST_NAME
+output AZURE_BASTION_HOST_NAME string = azureBastion!.outputs.AZURE_BASTION_HOST_NAME
