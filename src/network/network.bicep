@@ -53,7 +53,7 @@ module virtualNetwork 'modules/vitual-network.bicep' = {
     enableEncryption: settings.security.encryption.enabled
     ddosProtectionPlanId: ddosProtection!.outputs.DDOS_PROTECTION_PLAN_ID
     enableDiagnostics: settings.diagnostics.enabled
-    diagnosticStorageAccountId: diagnosticStorageAccountId
+    diagnosticStorageAccountId: diagnosticStorageAccountId!
     logAnalyticsWorkspaceId: logAnalyticsWorkspaceId
     tags: tags
   }
@@ -92,7 +92,7 @@ module azureFirewall './modules/firewall.bicep' = if (settings.security.azureFir
     publicIPSkuTier: 'Regional'
     virtualNetworkSubnetId: firewallSubnetId!
     enableDiagnostics: settings.diagnostics.enabled
-    diagnosticStorageAccountId: diagnosticStorageAccountId
+    diagnosticStorageAccountId: diagnosticStorageAccountId!
     logAnalyticsWorkspaceId: logAnalyticsWorkspaceId
     tags: tags
   }
@@ -131,7 +131,7 @@ module azureBastion './modules/bastion.bicep' = if (settings.security.azureBasti
     publicIPSkuName: 'Standard'
     publicIPSkuTier: 'Regional'
     enableDiagnostics: settings.diagnostics.enabled
-    diagnosticStorageAccountId: diagnosticStorageAccountId
+    diagnosticStorageAccountId: diagnosticStorageAccountId!
     logAnalyticsWorkspaceId: logAnalyticsWorkspaceId
     tags: tags
   }

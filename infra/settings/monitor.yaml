@@ -5,3 +5,8 @@ resourceGroup:
 
 logAnalytics:
   name: "apim-accelerator-law"
+  provisionStorageAccount: true
+
+applicationInsights:
+  enabled: true
+  name: "apim-accelerator-ai"

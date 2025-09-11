@@ -14,9 +14,13 @@ ipAddresses:
       addressPrefix: 10.0.1.0/24
     - name: AzureBastionSubnet
       addressPrefix: 10.0.2.0/24
-  
+    - name: AppGatewaySubnet
+      addressPrefix: 10.0.3.0/24
+    - name: apim-subnet
+      addressPrefix: 10.0.4.0/24
 diagnostics:
     enabled: true
+    provisionStorageAccount: true 
 
 security:
   encryption:

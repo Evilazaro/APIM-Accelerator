@@ -27,8 +27,8 @@ module network '../src/network/network.bicep' = {
   name: 'network-${dateTime}'
   params: {
     location: location
-    diagnosticStorageAccountId: ''
     logAnalyticsWorkspaceId: monitoring.outputs.AZURE_LOG_ANALYTICS_WORKSPACE_ID
+    diagnosticStorageAccountId: monitoring!.outputs.AZURE_STORAGE_ACCOUNT_ID
     tags: resourceOgranization.tags
   }
   dependsOn: [
