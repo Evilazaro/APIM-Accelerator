@@ -22,6 +22,21 @@ output AZURE_LOG_ANALYTICS_WORKSPACE_ID string = monitoring.outputs.AZURE_LOG_AN
 @description('Log Analytics Workspace Name output')
 output AZURE_LOG_ANALYTICS_WORKSPACE_NAME string = monitoring.outputs.AZURE_LOG_ANALYTICS_WORKSPACE_NAME
 
+@description('Storage Account ID output')
+output AZURE_STORAGE_ACCOUNT_ID string = monitoring!.outputs.AZURE_STORAGE_ACCOUNT_ID
+
+@description('Storage Account Name output')
+output AZURE_STORAGE_ACCOUNT_NAME string = monitoring!.outputs.AZURE_STORAGE_ACCOUNT_NAME
+
+@description('Application Insights ID output')
+output AZURE_APPLICATION_INSIGHTS_ID string = monitoring!.outputs.AZURE_APPLICATION_INSIGHTS_ID
+
+@description('Application Insights Name output')
+output AZURE_APPLICATION_INSIGHTS_NAME string = monitoring!.outputs.AZURE_APPLICATION_INSIGHTS_NAME
+
+@description('Application Insights Instrumentation Key output')
+output AZURE_APPLICATION_INSIGHTS_INSTRUMENTATION_KEY string = monitoring!.outputs.AZURE_APPLICATION_INSIGHTS_INSTRUMENTATION_KEY
+
 @description('Deploy the network resources')
 module network '../src/network/network.bicep' = {
   name: 'network-${dateTime}'

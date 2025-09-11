@@ -4,6 +4,12 @@ param name string
 @description('Location of the Azure Bastion Host')
 param location string
 
+@description('Virtual Network Name')
+param virtualNetworkName string
+
+@description('Azure Bastion Subnet Address Prefix (e.g., 10.0.1.0/24)')
+param azureBastionSubnetAddressPrefix string
+
 @description('SKU Name of the Azure Bastion Host')
 @allowed([
   'Developer'
@@ -41,9 +47,6 @@ param publicIPSkuName string
 ])
 param publicIPSkuTier string
 
-@description('Bastion subnet ID to deploy the Azure Bastion Host into')
-param virtualNetworkSubnetId string
-
 @description('Enable diagnostics for the Azure Bastion')
 param enableDiagnostics bool
 
@@ -74,6 +77,14 @@ module publicIP './public-ip-address.bicep' = {
   }
 }
 
+@description('Azure Bastion Subnet')
+resource azureBastionSubnet 'Microsoft.Network/virtualNetworks/subnets@2024-07-01' = {
+  name: '${virtualNetworkName}/AzureBastionSubnet'
+  properties: {
+    addressPrefix: azureBastionSubnetAddressPrefix
+  }
+}
+
 @description('Azure Bastion Host Resource')
 resource azureBastion 'Microsoft.Network/bastionHosts@2024-07-01' = {
   name: name
@@ -89,7 +100,7 @@ resource azureBastion 'Microsoft.Network/bastionHosts@2024-07-01' = {
         properties: {
           privateIPAllocationMethod: privateIPAllocationMethod
           subnet: {
-            id: virtualNetworkSubnetId
+            id: azureBastionSubnet.id
           }
           publicIPAddress: {
             id: publicIP.outputs.AZURE_PUBLIC_IP_ADDRESS_ID

@@ -22,6 +22,7 @@ param diagnosticStorageAccountId string
 
 param tags object
 
+@description('Application Insights resource')
 resource appInsights 'Microsoft.Insights/components@2020-02-02' = {
   name: name
   location: location
@@ -33,6 +34,15 @@ resource appInsights 'Microsoft.Insights/components@2020-02-02' = {
     WorkspaceResourceId: logAnalyticsWorkspaceId
   }
 }
+
+@description('Application Insights Resource ID output')
+output AZURE_APPLICATION_INSIGHTS_ID string = appInsights.id
+
+@description('Application Insights Name output')
+output AZURE_APPLICATION_INSIGHTS_NAME string = appInsights.name
+
+@description('Application Insights Instrumentation Key output')
+output AZURE_APPLICATION_INSIGHTS_INSTRUMENTATION_KEY string = appInsights.properties.InstrumentationKey
 
 @description('Diagnostics settings for the Application Insights resource')
 resource diagnostics 'microsoft.insights/diagnosticSettings@2021-05-01-preview' = if (enableDiagnostics) {

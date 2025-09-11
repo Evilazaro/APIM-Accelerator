@@ -34,33 +34,14 @@ output AZURE_LOG_ANALYTICS_WORKSPACE_ID string = logAnalyticsWorkspace.outputs.A
 output AZURE_LOG_ANALYTICS_WORKSPACE_NAME string = logAnalyticsWorkspace.outputs.AZURE_LOG_ANALYTICS_WORKSPACE_NAME
 
 @description('Deploy Storage Account for Application Insights diagnostics (if enabled)')
-module storageAccount 'modules/storage-account.bicep' = if (settings.logAnalytics.provisionStorageAccount) {
-  name: 'appInsightsStorage-${dateTime}'
+module storageAccount 'modules/storage-account.bicep' = if (settings.storageAccount.enabled) {
+  name: 'appInsightsStorage'
   scope: monitoringRG
   params: {
-    name: 'appinsightsdiag${toLower(replace(dateTime, '-', ''))}'
+    name: settings.storageAccount.name
     location: location
     sku: 'Standard_LRS'
     kind: 'StorageV2'
-    dnsEndpointType: 'Standard'
-    defaultToOAuthAuthentication: false
-    publicNetworkAccess: 'Enabled'
-    allowCrossTenantReplication: false
-    minimumTlsVersion: 'TLS1_2'
-    allowBlobPublicAccess: false
-    allowSharedKeyAccess: true
-    largeFileSharesState: 'Disabled'
-    networkAclsBypass: 'AzureServices'
-    networkAclsVirtualNetworkRules: []
-    networkAclsIpRules: []
-    networkAclsDefaultAction: 'Allow'
-    supportsHttpsTrafficOnly: true
-    requireInfrastructureEncryption: false
-    serviceKeyType: 'Account'
-    enableFileService: false
-    enableBlobService: true
-    enableQueueService: true
-    enableTableService: true
     accessTier: 'Hot'
     tags: tags
   }
@@ -71,3 +52,28 @@ output AZURE_STORAGE_ACCOUNT_ID string = storageAccount!.outputs.AZURE_STORAGE_A
 
 @description('Storage Account Name output')
 output AZURE_STORAGE_ACCOUNT_NAME string = storageAccount!.outputs.AZURE_STORAGE_ACCOUNT_NAME
+
+@description('Deploy Application Insights (if enabled)')
+module applicationInsights 'modules/application-insights.bicep' = if (settings.applicationInsights.enabled) {
+  name: 'applicationInsights-${dateTime}'
+  scope: monitoringRG
+  params: {
+    name: settings.applicationInsights.name
+    location: location
+    enableDiagnostics: settings.diagnostics.enabled
+    logAnalyticsWorkspaceId: logAnalyticsWorkspace.outputs.AZURE_LOG_ANALYTICS_WORKSPACE_ID
+    diagnosticStorageAccountId: storageAccount!.outputs.AZURE_STORAGE_ACCOUNT_ID
+    type: 'web'
+    requestSource: 'rest'
+    tags: tags
+  }
+}
+
+@description('Application Insights ID output')
+output AZURE_APPLICATION_INSIGHTS_ID string = applicationInsights!.outputs.AZURE_APPLICATION_INSIGHTS_ID
+
+@description('Application Insights Name output')
+output AZURE_APPLICATION_INSIGHTS_NAME string = applicationInsights!.outputs.AZURE_APPLICATION_INSIGHTS_NAME
+
+@description('Application Insights Instrumentation Key output')
+output AZURE_APPLICATION_INSIGHTS_INSTRUMENTATION_KEY string = applicationInsights!.outputs.AZURE_APPLICATION_INSIGHTS_INSTRUMENTATION_KEY

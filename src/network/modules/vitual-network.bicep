@@ -30,6 +30,19 @@ param diagnosticStorageAccountId string
 @description('Tags for the Virtual Network')
 param tags object
 
+@description('Module to create Network Security Group')
+module networkSecurityGroups './network-security-groups.bicep' = {
+  name: 'networkSecurityGroups'
+  scope: resourceGroup()
+  params: {
+    location: location
+    nsgs: subnets
+    tags: tags
+  }
+}
+
+var nsgs = networkSecurityGroups.outputs.AZURE_NETWORK_SECURITY_GROUP_IDs
+
 @description('Virtual Network Resource')
 resource virtualNetwork 'Microsoft.Network/virtualNetworks@2024-07-01' = {
   name: name
@@ -40,10 +53,15 @@ resource virtualNetwork 'Microsoft.Network/virtualNetworks@2024-07-01' = {
       addressPrefixes: addressPrefixes
     }
     subnets: [
-      for subnet in subnets: {
+      for (subnet, i) in subnets: {
         name: subnet.name
         properties: {
           addressPrefix: subnet.addressPrefix
+          networkSecurityGroup: (subnet.name != 'AzureFirewallSubnet' && subnet.name != 'AzureBastionSubnet')
+            ? {
+                id: nsgs[i]
+              }
+            : null
         }
       }
     ]
@@ -72,6 +90,7 @@ output AZURE_VIRTUAL_NETWORK_SUBNETS object[] = [
   for (item, index) in subnets: {
     name: item.name
     id: virtualNetwork.properties.subnets[index].id
+    nsgId: nsgs[index]
   }
 ]
 

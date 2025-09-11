@@ -4,6 +4,12 @@ param name string
 @description('Location of the Azure Firewall')
 param location string
 
+@description('Virtual Network Name')
+param virtualNetworkName string
+
+@description('Address Prefix for the Azure Firewall Subnet (AzureFirewallSubnet)')
+param azureFirewallSubnetAddressPrefix string
+
 @description('SKU Name of the Azure Firewall')
 param skuName string
 
@@ -36,9 +42,6 @@ param publicIPSkuName string
 ])
 param publicIPSkuTier string
 
-@description('Virtual Network subnet ID to deploy the Azure Firewall into')
-param virtualNetworkSubnetId string
-
 @description('Enable diagnostics for the Azure Firewall')
 param enableDiagnostics bool
 
@@ -69,6 +72,14 @@ module publicIP './public-ip-address.bicep' = {
   }
 }
 
+@description('Azure Firewall Subnet')
+resource azureFirewallSubnet 'Microsoft.Network/virtualNetworks/subnets@2024-07-01' = {
+  name: '${virtualNetworkName}/AzureFirewallSubnet'
+  properties: {
+    addressPrefix: azureFirewallSubnetAddressPrefix
+  }
+}
+
 @description('Azure Firewall Resource')
 resource azureFirewall 'Microsoft.Network/azureFirewalls@2024-07-01' = {
   name: name
@@ -88,7 +99,7 @@ resource azureFirewall 'Microsoft.Network/azureFirewalls@2024-07-01' = {
             id: publicIP.outputs.AZURE_PUBLIC_IP_ADDRESS_ID
           }
           subnet: {
-            id: virtualNetworkSubnetId
+            id: azureFirewallSubnet.id
           }
         }
       }

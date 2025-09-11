@@ -68,16 +68,6 @@ output AZURE_VIRTUAL_NETWORK_NAME string = virtualNetwork.outputs.AZURE_VIRTUAL_
 @description('Virtual Network ID output')
 output AZURE_VIRTUAL_NETWORK_ID string = virtualNetwork.outputs.AZURE_VIRTUAL_NETWORK_ID
 
-var firewallSubnetId = (settings.security.azureFirewall.enabled)
-  ? resourceId(
-      subscription().subscriptionId,
-      networkRG.name,
-      'Microsoft.Network/virtualNetworks/subnets',
-      virtualNetwork.outputs.AZURE_VIRTUAL_NETWORK_NAME,
-      settings.security.azureFirewall.subnetName
-    )
-  : null
-
 @description('Module to create Azure Firewall')
 module azureFirewall './modules/firewall.bicep' = if (settings.security.azureFirewall.enabled) {
   name: 'azureFirewall-${dateTime}'
@@ -85,12 +75,13 @@ module azureFirewall './modules/firewall.bicep' = if (settings.security.azureFir
   params: {
     name: settings.security.azureFirewall.name
     location: location
+    virtualNetworkName: virtualNetwork.outputs.AZURE_VIRTUAL_NETWORK_NAME
+    azureFirewallSubnetAddressPrefix: settings.security.azureFirewall.subnet.addressPrefix
     skuName: settings.security.azureFirewall.sku
     skuTier: settings.security.azureFirewall.tier
     publicIPAllocationMethod: 'Static'
     publicIPSkuName: 'Standard'
     publicIPSkuTier: 'Regional'
-    virtualNetworkSubnetId: firewallSubnetId!
     enableDiagnostics: settings.diagnostics.enabled
     diagnosticStorageAccountId: diagnosticStorageAccountId!
     logAnalyticsWorkspaceId: logAnalyticsWorkspaceId
@@ -107,16 +98,6 @@ output AZURE_FIREWALL_NAME string = azureFirewall!.outputs.AZURE_FIREWALL_NAME
 @description('Azure Firewall ID output')
 output AZURE_FIREWALL_ID string = azureFirewall!.outputs.AZURE_FIREWALL_ID
 
-var bastionSubnetId = (settings.security.azureBastion.enabled)
-  ? resourceId(
-      subscription().subscriptionId,
-      networkRG.name,
-      'Microsoft.Network/virtualNetworks/subnets',
-      virtualNetwork.outputs.AZURE_VIRTUAL_NETWORK_NAME,
-      settings.security.azureBastion.subnetName
-    )
-  : null
-
 @description('Module to create Azure Bastion Host')
 module azureBastion './modules/bastion.bicep' = if (settings.security.azureBastion.enabled) {
   name: 'azureBastion-${dateTime}'
@@ -124,10 +105,11 @@ module azureBastion './modules/bastion.bicep' = if (settings.security.azureBasti
   params: {
     name: settings.security.azureBastion.name
     location: location
+    virtualNetworkName: virtualNetwork.outputs.AZURE_VIRTUAL_NETWORK_NAME
+    azureBastionSubnetAddressPrefix: settings.security.azureBastion.subnet.addressPrefix
     sku: settings.security.azureBastion.sku
     publicIPAllocationMethod: 'Static'
     privateIPAllocationMethod: 'Dynamic'
-    virtualNetworkSubnetId: bastionSubnetId!
     publicIPSkuName: 'Standard'
     publicIPSkuTier: 'Regional'
     enableDiagnostics: settings.diagnostics.enabled
