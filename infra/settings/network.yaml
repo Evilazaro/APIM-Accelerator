@@ -6,16 +6,16 @@ description: Configuration settings for the network infrastructure including VNe
 resourceGroup:
   name: apim-network-rg
 
-private: false
+private: true
 
 ipAddresses:
   addressSpaces:
     - 10.0.0.0/16
   subnets:
     - name: AppGatewaySubnet
-      addressPrefix: 10.0.3.0/24
+      addressPrefix: 10.0.1.0/24
     - name: apim-subnet
-      addressPrefix: 10.0.4.0/24
+      addressPrefix: 10.0.2.0/24
 
 diagnostics:
     enabled: true
@@ -23,21 +23,13 @@ diagnostics:
 security:
   encryption:
     enabled: true
-  azureBastion:
-    enabled: true
-    name: apim-bastion
-    sku: Basic
-    publicIPAddressName: bastion-public-ip
-    subnet:
-      name: AzureBastionSubnet
-      addressPrefix: 10.0.1.0/24
   azureFirewall:
     enabled: true
     name: apim-firewall
     sku: AZFW_VNet
     tier: Standard
     subnet:
-      addressPrefix: 10.0.2.0/24
+      addressPrefix: 10.0.3.0/24
     publicIPAddressName: firewall-public-ip
   ddosProtection:
     enabled: true

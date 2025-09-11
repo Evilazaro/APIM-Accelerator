@@ -97,33 +97,3 @@ output AZURE_FIREWALL_NAME string = azureFirewall!.outputs.AZURE_FIREWALL_NAME
 
 @description('Azure Firewall ID output')
 output AZURE_FIREWALL_ID string = azureFirewall!.outputs.AZURE_FIREWALL_ID
-
-@description('Module to create Azure Bastion Host')
-module azureBastion './modules/bastion.bicep' = if (settings.security.azureBastion.enabled) {
-  name: 'azureBastion-${dateTime}'
-  scope: networkRG
-  params: {
-    name: settings.security.azureBastion.name
-    location: location
-    virtualNetworkName: virtualNetwork.outputs.AZURE_VIRTUAL_NETWORK_NAME
-    azureBastionSubnetAddressPrefix: settings.security.azureBastion.subnet.addressPrefix
-    sku: settings.security.azureBastion.sku
-    publicIPAllocationMethod: 'Static'
-    privateIPAllocationMethod: 'Dynamic'
-    publicIPSkuName: 'Standard'
-    publicIPSkuTier: 'Regional'
-    enableDiagnostics: settings.diagnostics.enabled
-    diagnosticStorageAccountId: diagnosticStorageAccountId!
-    logAnalyticsWorkspaceId: logAnalyticsWorkspaceId
-    tags: tags
-  }
-  dependsOn: [
-    virtualNetwork
-  ]
-}
-
-@description('Azure Bastion Host ID output')
-output AZURE_BASTION_HOST_ID string = azureBastion!.outputs.AZURE_BASTION_HOST_ID
-
-@description('Azure Bastion Host Name output')
-output AZURE_BASTION_HOST_NAME string = azureBastion!.outputs.AZURE_BASTION_HOST_NAME
