@@ -1,9 +1,6 @@
 name: apimVirtualNetwork
 description: Configuration settings for the network infrastructure including VNet, subnets, Azure Bastion, Azure Firewall, and DDoS protection.
 
-resourceGroup:
-  name: apim-network-rg
-
 ipAddresses:
   addressSpaces:
     - 10.0.0.0/16
@@ -33,7 +30,6 @@ security:
   azureFirewall:
     enabled: true
     name: apimFirewall
-    subnetName: AppGatewaySubnet
   ddosProtection:
     enabled: true
     name: apimDdosPlan

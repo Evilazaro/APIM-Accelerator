@@ -1,3 +1,6 @@
+resourceGroups:
+  networking: apim-network-rg
+  monitoring: apim-monitoring-rg
 tags:
   CostCenter: "CC-1234"                # Tracks cost allocation
   BusinessUnit: "IT"                   # Business unit or department

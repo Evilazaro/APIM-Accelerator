@@ -1,5 +1,3 @@
-targetScope = 'subscription'
-
 @description('Azure region where all network infrastructure resources will be deployed')
 param location string
 
@@ -12,87 +10,241 @@ param logAnalyticsWorkspaceId string
 @description('Resource identifier of Storage Account for archiving VNet diagnostic data')
 param diagnosticStorageAccountId string
 
-@description('Timestamp string for unique resource naming in deployments')
-param dateTime string = utcNow('yyyyMMddHHmmss')
-
 // Load network settings from the external YAML file
 var settings = loadYamlContent('../../infra/settings/network.yaml')
 
-@description('Resource group for network infrastructure resources loaded from external YAML configuration')
-resource networkRG 'Microsoft.Resources/resourceGroups@2025-04-01' = {
-  name: settings.resourceGroup.name
+@description('Public IP Address Resource')
+resource publicIP 'Microsoft.Network/publicIPAddresses@2024-07-01' = {
+  name: '${settings.name}-pip'
+  location: location
+  tags: tags
+  properties: {
+    publicIPAllocationMethod: 'Static'
+    publicIPAddressVersion: 'IPv4'
+  }
+  sku: {
+    name: 'Standard'
+    tier: 'Regional'
+  }
+  zones: ['1', '2', '3']
+}
+
+@description('Azure DDoS Protection Plan resource to protect the Virtual Network against DDoS attacks')
+resource ddosProtectionPlan 'Microsoft.Network/ddosProtectionPlans@2024-07-01' = if (settings.security.ddosProtection.enabled) {
+  name: settings.security.ddosProtection.name
   location: location
   tags: tags
 }
 
-@description('Module deployment for Public IP Address with static allocation and diagnostic monitoring')
-module publicIP './modules/public-ip-address.bicep' = {
-  name: 'PublicIP-${dateTime}'
-  scope: networkRG
-  params: {
-    name: '${settings.name}-pip'
-    location: location
-    publicIPAllocationMethod: 'Static'
-    skuName: 'Standard'
-    skuTier: 'Regional'
-    publicIPAddressVersion: 'IPv4'
-    enableDiagnostics: settings.diagnostics.enabled
-    diagnosticStorageAccountId: diagnosticStorageAccountId
-    logAnalyticsWorkspaceId: logAnalyticsWorkspaceId
-    tags: tags
+var privateEndPointNsgRules = loadJsonContent('../../infra/settings/nsgrules/private-endpoint-nsg-rules.json')
+
+@description('Network Security Group for Private Endpoint subnet with rules loaded from external JSON configuration')
+resource privateEndPointNsg 'Microsoft.Network/networkSecurityGroups@2024-05-01' = {
+  name: settings.ipAddresses.subnets.privateEndpoint.networkSecurityGroup.name
+  location: location
+  tags: tags
+  properties: {
+    securityRules: privateEndPointNsgRules
   }
 }
 
-@description('Module deployment for Virtual Network with subnets, encryption, DDoS protection, and diagnostic monitoring')
-module virtualNetwork 'modules/vitual-network.bicep' = {
-  name: 'virtualNetwork-${dateTime}'
-  scope: networkRG
-  params: {
-    name: settings.name
-    location: location
-    addressPrefixes: settings.ipAddresses.addressSpaces
-    subnets: settings.ipAddresses.subnets
-    publicIpAddress: publicIP.outputs.AZURE_PUBLIC_IP_ADDRESS
-    enableDiagnostics: settings.diagnostics.enabled
-    enableEncryption: settings.security.encryption.enabled
-    ddosProtectionConfig: settings.security.ddosProtection
-    diagnosticStorageAccountId: diagnosticStorageAccountId!
-    logAnalyticsWorkspaceId: logAnalyticsWorkspaceId
-    tags: tags
+var apiManagementNsgRules = loadJsonContent('../../infra/settings/nsgrules/apim-nsg-rules.json')
+
+@description('Network Security Group for API Management subnet with rules for APIM service communication and dependencies')
+resource apiManagementNsg 'Microsoft.Network/networkSecurityGroups@2024-05-01' = {
+  name: settings.ipAddresses.subnets.apiManagement.networkSecurityGroup.name
+  location: location
+  tags: tags
+  properties: {
+    securityRules: apiManagementNsgRules
   }
 }
 
-@description('Name of the deployed Virtual Network resource for reference by dependent infrastructure modules')
-output AZURE_VIRTUAL_NETWORK_NAME string = virtualNetwork.outputs.AZURE_VIRTUAL_NETWORK_NAME
+var applicationGatewayNsgRules = loadJsonContent('../../infra/settings/nsgrules/application-gateway-nsg-rules.json')
+var customRules = [
+  {
+    name: 'AllowClientTrafficToSubnet'
+    properties: {
+      protocol: 'Tcp'
+      sourcePortRange: '*'
+      destinationPortRanges: [
+        '80'
+        '443'
+      ]
+      sourceAddressPrefix: '*'
+      destinationAddressPrefix: settings.ipAddresses.subnets.applicationGateway.addressPrefix
+      access: 'Allow'
+      priority: 110
+      direction: 'Inbound'
+    }
+  }
+  {
+    name: 'AllowClientTrafficToFrontendIP'
+    properties: {
+      protocol: 'Tcp'
+      sourcePortRange: '*'
+      destinationPortRanges: [
+        '80'
+        '443'
+      ]
+      sourceAddressPrefix: '*'
+      destinationAddressPrefix: '${publicIP.properties.ipAddress}/32'
+      access: 'Allow'
+      priority: 111
+      direction: 'Inbound'
+    }
+  }
+]
 
-@description('Resource identifier of the deployed Virtual Network for subnet association and resource dependencies')
-output AZURE_VIRTUAL_NETWORK_ID string = virtualNetwork.outputs.AZURE_VIRTUAL_NETWORK_ID
+@description('Network Security Group for Application Gateway subnet with rules for web traffic and health probes')
+resource applicationGatewayNsg 'Microsoft.Network/networkSecurityGroups@2024-05-01' = {
+  name: settings.ipAddresses.subnets.applicationGateway.networkSecurityGroup.name
+  location: location
+  tags: tags
+  properties: {
+    securityRules: union(applicationGatewayNsgRules, customRules)
+  }
+}
 
-// @description('Module to create Azure Firewall')
-// module azureFirewall './modules/firewall.bicep' = if (settings.security.azureFirewall.enabled) {
-//   name: 'azureFirewall-${dateTime}'
-//   scope: networkRG
-//   params: {
-//     name: settings.security.azureFirewall.name
-//     location: location
-//     virtualNetworkName: virtualNetwork.outputs.AZURE_VIRTUAL_NETWORK_NAME
-//     azureFirewallSubnetName: settings.security.azureFirewall.subnetName
-//     skuName: settings.security.azureFirewall.sku
-//     skuTier: settings.security.azureFirewall.tier
-//     publicIPName: publicIP.outputs.AZURE_PUBLIC_IP_NAME
-//     enableDiagnostics: settings.diagnostics.enabled
-//     diagnosticStorageAccountId: diagnosticStorageAccountId!
-//     logAnalyticsWorkspaceId: logAnalyticsWorkspaceId
-//     tags: tags
-//   }
-//   dependsOn: [
-//     virtualNetwork
-//     publicIP
-//   ]
-// }
+@description('Virtual Network resource with encryption, DDoS protection, and multiple subnets for APIM infrastructure')
+resource virtualNetwork 'Microsoft.Network/virtualNetworks@2024-07-01' = {
+  name: settings.name
+  location: location
+  tags: tags
+  properties: {
+    addressSpace: {
+      addressPrefixes: settings.ipAddresses.addressSpaces
+    }
+    encryption: (settings.security.encryption.enabled)
+      ? {
+          enabled: settings.security.encryption.enabled
+          enforcement: 'AllowUnencrypted'
+        }
+      : null
+    ddosProtectionPlan: {
+      id: settings.security.ddosProtection.enabled ? ddosProtectionPlan.id : null
+    }
+  }
+}
 
-// @description('Azure Firewall Name output')
-// output AZURE_FIREWALL_NAME string = azureFirewall!.outputs.AZURE_FIREWALL_NAME
+@description('Private Endpoint subnet resource with dedicated address space and associated Network Security Group')
+resource privateNetworkSubnet 'Microsoft.Network/virtualNetworks/subnets@2024-07-01' = {
+  name: settings.ipAddresses.subnets.privateEndpoint.name
+  parent: virtualNetwork
+  properties: {
+    addressPrefix: settings.ipAddresses.subnets.privateEndpoint.addressPrefix
+    networkSecurityGroup: {
+      id: privateEndPointNsg.id
+      properties: {
+        securityRules: privateEndPointNsgRules
+      }
+    }
+  }
+}
 
-// @description('Azure Firewall ID output')
-// output AZURE_FIREWALL_ID string = azureFirewall!.outputs.AZURE_FIREWALL_ID
+@description('API Management subnet resource with dedicated address space and associated Network Security Group for APIM service')
+resource apiManagementSubnet 'Microsoft.Network/virtualNetworks/subnets@2024-07-01' = {
+  name: settings.ipAddresses.subnets.apiManagement.name
+  parent: virtualNetwork
+  properties: {
+    addressPrefix: settings.ipAddresses.subnets.apiManagement.addressPrefix
+    networkSecurityGroup: {
+      id: apiManagementNsg.id
+      properties: {
+        securityRules: apiManagementNsgRules
+      }
+    }
+  }
+}
+
+@description('Application Gateway subnet resource with dedicated address space and associated Network Security Group for web traffic routing')
+resource applicationGatewaySubnet 'Microsoft.Network/virtualNetworks/subnets@2024-07-01' = {
+  name: settings.ipAddresses.subnets.applicationGateway.name
+  parent: virtualNetwork
+  properties: {
+    addressPrefix: settings.ipAddresses.subnets.applicationGateway.addressPrefix
+    networkSecurityGroup: {
+      id: applicationGatewayNsg.id
+      properties: {
+        securityRules: applicationGatewayNsgRules
+      }
+    }
+  }
+}
+
+@description('Diagnostic settings resource to enable logging and monitoring for the Virtual Network')
+resource vnetDiagnostics 'microsoft.insights/diagnosticSettings@2021-05-01-preview' = if (settings.diagnostics.enabled) {
+  scope: virtualNetwork
+  name: '${settings.name}-diagnostics'
+  properties: {
+    workspaceId: empty(logAnalyticsWorkspaceId) ? null : logAnalyticsWorkspaceId
+    storageAccountId: empty(diagnosticStorageAccountId) ? null : diagnosticStorageAccountId
+    logs: [
+      {
+        categoryGroup: 'allLogs'
+        enabled: true
+      }
+    ]
+    metrics: [
+      {
+        category: 'AllMetrics'
+        enabled: true
+      }
+    ]
+  }
+  dependsOn: [
+    virtualNetwork
+  ]
+}
+
+@description('Azure Firewall Resource')
+resource azureFirewall 'Microsoft.Network/azureFirewalls@2024-07-01' = {
+  name: settings.security.azureFirewall.name
+  location: location
+  tags: tags
+  properties: {
+    sku: {
+      name: 'AZFW_VNet'
+      tier: 'Standard'
+    }
+    ipConfigurations: [
+      {
+        name: 'firewallPubIPConfig'
+        id: publicIP.id
+        properties: {
+          publicIPAddress: {
+            id: publicIP.id
+          }
+          subnet: {
+            id: privateNetworkSubnet.id
+          }
+        }
+      }
+    ]
+  }
+}
+
+@description('Diagnostics settings for the Azure Firewall')
+resource firewallDiagnostics 'microsoft.insights/diagnosticSettings@2021-05-01-preview' = if (settings.diagnostics.enabled) {
+  scope: azureFirewall
+  name: '${azureFirewall.name}-diagnostics'
+  properties: {
+    workspaceId: empty(logAnalyticsWorkspaceId) ? null : logAnalyticsWorkspaceId
+    storageAccountId: empty(diagnosticStorageAccountId) ? null : diagnosticStorageAccountId
+    logs: [
+      {
+        categoryGroup: 'allLogs'
+        enabled: true
+      }
+    ]
+    metrics: [
+      {
+        category: 'AllMetrics'
+        enabled: true
+      }
+    ]
+  }
+  dependsOn: [
+    azureFirewall
+  ]
+}
