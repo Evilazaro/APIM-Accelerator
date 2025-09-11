@@ -57,11 +57,9 @@ resource virtualNetwork 'Microsoft.Network/virtualNetworks@2024-07-01' = {
         name: subnet.name
         properties: {
           addressPrefix: subnet.addressPrefix
-          networkSecurityGroup: (subnet.name != 'AzureFirewallSubnet' && subnet.name != 'AzureBastionSubnet')
-            ? {
-                id: nsgs[i]
-              }
-            : null
+          networkSecurityGroup: {
+            id: nsgs[i]
+          }
         }
       }
     ]

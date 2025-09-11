@@ -9,7 +9,7 @@ param tags object
 
 @description('Network Security Group Resource')
 resource securityGroup 'Microsoft.Network/networkSecurityGroups@2024-05-01' = [
-  for nsg in nsgs: if (nsg.name != 'AzureFirewallSubnet' && nsg.name != 'AzureBastionSubnet') {
+  for nsg in nsgs: {
     name: nsg.name
     location: location
     tags: tags

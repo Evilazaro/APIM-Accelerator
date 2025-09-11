@@ -43,6 +43,7 @@ resource storageAccount 'Microsoft.Storage/storageAccounts@2025-01-01' = {
   kind: kind
   properties: {
     accessTier: accessTier
+    publicNetworkAccess: 'Disabled'
   }
   tags: tags
 }
