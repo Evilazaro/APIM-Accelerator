@@ -4,43 +4,14 @@ param name string
 @description('Location of the Azure Firewall')
 param location string
 
-@description('Virtual Network Name')
+@description('Name of the virtual network where the Azure Firewall will be deployed')
 param virtualNetworkName string
 
-@description('Address Prefix for the Azure Firewall Subnet (AzureFirewallSubnet)')
-param azureFirewallSubnetAddressPrefix string
+@description('Subnet Name for the Azure Firewall')
+param azureFirewallSubnetName string
 
-@description('SKU Name of the Azure Firewall')
-param skuName string
-
-@description('SKU Tier of the Azure Firewall')
-@allowed([
-  'Basic'
-  'Standard'
-  'Premium'
-])
-param skuTier string
-
-@description('Public IP IP Allocation Method')
-@allowed([
-  'Static'
-  'Dynamic'
-])
-param publicIPAllocationMethod string
-
-@description('Public IP Sku Name')
-@allowed([
-  'Basic'
-  'Standard'
-])
-param publicIPSkuName string
-
-@description('Public IP Sku Tier')
-@allowed([
-  'Regional'
-  'Global'
-])
-param publicIPSkuTier string
+@description('Public IP Name for the Azure Firewall')
+param publicIPName string
 
 @description('Enable diagnostics for the Azure Firewall')
 param enableDiagnostics bool
@@ -54,30 +25,12 @@ param diagnosticStorageAccountId string
 @description('Tags for the Azure Firewall')
 param tags object
 
-@description('Module to create Public IP Address')
-module publicIP './public-ip-address.bicep' = {
-  name: 'firewall-PublicIP'
-  scope: resourceGroup()
-  params: {
-    name: '${name}-pip'
-    location: location
-    publicIPAllocationMethod: publicIPAllocationMethod
-    skuName: publicIPSkuName
-    skuTier: publicIPSkuTier
-    publicIPAddressVersion: 'IPv4'
-    enableDiagnostics: enableDiagnostics
-    diagnosticStorageAccountId: diagnosticStorageAccountId
-    logAnalyticsWorkspaceId: logAnalyticsWorkspaceId
-    tags: tags
-  }
+resource subnet 'Microsoft.Network/virtualNetworks/subnets@2024-07-01' existing = {
+  name: 'vnet/subnet'
 }
 
-@description('Azure Firewall Subnet')
-resource azureFirewallSubnet 'Microsoft.Network/virtualNetworks/subnets@2024-07-01' = {
-  name: '${virtualNetworkName}/AzureFirewallSubnet'
-  properties: {
-    addressPrefix: azureFirewallSubnetAddressPrefix
-  }
+resource publicIP 'Microsoft.Network/publicIPAddresses@2024-07-01' existing = {
+  name: publicIPName
 }
 
 @description('Azure Firewall Resource')
@@ -87,19 +40,19 @@ resource azureFirewall 'Microsoft.Network/azureFirewalls@2024-07-01' = {
   tags: tags
   properties: {
     sku: {
-      name: skuName
-      tier: skuTier
+      name: 'AZFW_VNet'
+      tier: 'Standard'
     }
     ipConfigurations: [
       {
-        name: 'ipConfig'
-        id: publicIP.outputs.AZURE_PUBLIC_IP_ADDRESS_ID
+        name: 'firewallPubIPConfig'
+        id: publicIP.id
         properties: {
           publicIPAddress: {
-            id: publicIP.outputs.AZURE_PUBLIC_IP_ADDRESS_ID
+            id: publicIP.id
           }
           subnet: {
-            id: azureFirewallSubnet.id
+            id: subnet.id
           }
         }
       }

@@ -59,10 +59,17 @@ resource publicIPAddress 'Microsoft.Network/publicIPAddresses@2024-07-01' = {
     name: skuName
     tier: skuTier
   }
+  zones: ['1', '2', '3']
 }
 
 @description('Public IP Address ID output')
 output AZURE_PUBLIC_IP_ADDRESS_ID string = publicIPAddress.id
+
+@description('Public IP Address Name output')
+output AZURE_PUBLIC_IP_NAME string = publicIPAddress.name
+
+@description('Public IP Address output')
+output AZURE_PUBLIC_IP_ADDRESS string = '${publicIPAddress.properties.ipAddress}/32'
 
 @description('Diagnostics settings for the Azure Public IP Address')
 resource diagnostics 'microsoft.insights/diagnosticSettings@2021-05-01-preview' = if (enableDiagnostics) {

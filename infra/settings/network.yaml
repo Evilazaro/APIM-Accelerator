@@ -1,36 +1,39 @@
-# yaml-language-server: $schema=./network.schema.json
-
-name: apim-virtual-network
+name: apimVirtualNetwork
 description: Configuration settings for the network infrastructure including VNet, subnets, Azure Bastion, Azure Firewall, and DDoS protection.
 
 resourceGroup:
   name: apim-network-rg
 
-private: true
-
 ipAddresses:
   addressSpaces:
     - 10.0.0.0/16
   subnets:
-    - name: AppGatewaySubnet
+    privateEndpoint:
+      name: privateEndPointSubnet
       addressPrefix: 10.0.1.0/24
-    - name: apim-subnet
+      networkSecurityGroup:
+        name: privateEndpointNsg
+    apiManagement:
+      name: apiManagementSubnet
       addressPrefix: 10.0.2.0/24
+      networkSecurityGroup:
+        name: apimApiManagementNSG
+    applicationGateway:
+      name: appGatewaySubnet
+      addressPrefix: 10.0.3.0/24
+      networkSecurityGroup:
+        name: apimAppGatewayNSG
 
 diagnostics:
-    enabled: true
+  enabled: true
 
 security:
   encryption:
     enabled: true
   azureFirewall:
     enabled: true
-    name: apim-firewall
-    sku: AZFW_VNet
-    tier: Standard
-    subnet:
-      addressPrefix: 10.0.3.0/24
-    publicIPAddressName: firewall-public-ip
+    name: apimFirewall
+    subnetName: AppGatewaySubnet
   ddosProtection:
     enabled: true
-    name: apim-ddos-plan
+    name: apimDdosPlan

@@ -1,49 +1,120 @@
-@description('Name of the Virtual Network')
+@description('Name of the Virtual Network that will host APIM and related networking resources')
 @minLength(3)
 @maxLength(80)
 param name string
 
-@description('Location for all resources.')
+@description('Azure region where the Virtual Network and all related resources will be deployed')
 param location string
 
-@description('The address prefixes for the virtual network.')
+@description('Array of IPv4 CIDR address ranges that define the Virtual Network address space')
 param addressPrefixes array
 
-@description('The subnets for the virtual network.')
-param subnets array
+@description('Object containing subnet definitions for private endpoints, API Management, and Application Gateway')
+param subnets object
 
-@description('Enable Virtual network encryption')
+@description('Boolean flag to enable Virtual Network encryption for enhanced security')
 param enableEncryption bool
 
-@description('The resource ID of the DDoS Protection Plan to associate with the virtual network.')
-param ddosProtectionPlanId string
-
-@description('Enable diagnostics for the Virtual Network')
+@description('Boolean flag to enable diagnostic logging and monitoring for the Virtual Network')
 param enableDiagnostics bool
 
-@description('Log Analytics Workspace ID for diagnostics (optional)')
+@description('Configuration object for DDoS Protection Plan including enablement flag and resource name')
+param ddosProtectionConfig DdosProtection
+
+param publicIpAddress string
+
+@description('Resource identifier of the Log Analytics Workspace for collecting diagnostic logs and metrics')
 param logAnalyticsWorkspaceId string
 
-@description('Storage Account ID for diagnostics (optional)')
+@description('Resource identifier of the Storage Account for archiving diagnostic data')
 param diagnosticStorageAccountId string
 
-@description('Tags for the Virtual Network')
+@description('Key-value pairs of metadata tags to apply to all Virtual Network resources')
 param tags object
 
-@description('Module to create Network Security Group')
-module networkSecurityGroups './network-security-groups.bicep' = {
-  name: 'networkSecurityGroups'
-  scope: resourceGroup()
-  params: {
-    location: location
-    nsgs: subnets
-    tags: tags
+type DdosProtection = {
+  enabled: bool
+  name: string
+}
+
+@description('Azure DDoS Protection Plan resource to protect the Virtual Network against DDoS attacks')
+resource ddosProtectionPlan 'Microsoft.Network/ddosProtectionPlans@2024-07-01' = if (ddosProtectionConfig.enabled) {
+  name: ddosProtectionConfig.name
+  location: location
+  tags: tags
+}
+
+var privateEndPointNsgRules = loadJsonContent('../../../infra/settings/nsgrules/private-endpoint-nsg-rules.json')
+
+@description('Network Security Group for Private Endpoint subnet with rules loaded from external JSON configuration')
+resource privateEndPointNsg 'Microsoft.Network/networkSecurityGroups@2024-05-01' = {
+  name: subnets.privateEndpoint.networkSecurityGroup.name
+  location: location
+  tags: tags
+  properties: {
+    securityRules: privateEndPointNsgRules
   }
 }
 
-var nsgs = networkSecurityGroups.outputs.AZURE_NETWORK_SECURITY_GROUP_IDs
+var apiManagementNsgRules = loadJsonContent('../../../infra/settings/nsgrules/apim-nsg-rules.json')
 
-@description('Virtual Network Resource')
+@description('Network Security Group for API Management subnet with rules for APIM service communication and dependencies')
+resource apiManagementNsg 'Microsoft.Network/networkSecurityGroups@2024-05-01' = {
+  name: subnets.apiManagement.networkSecurityGroup.name
+  location: location
+  tags: tags
+  properties: {
+    securityRules: apiManagementNsgRules
+  }
+}
+
+var applicationGatewayNsgRules = loadJsonContent('../../../infra/settings/nsgrules/application-gateway-nsg-rules.json')
+var customRules = [
+  {
+    name: 'AllowClientTrafficToSubnet'
+    properties: {
+      protocol: 'Tcp'
+      sourcePortRange: '*'
+      destinationPortRanges: [
+        '80'
+        '443'
+      ]
+      sourceAddressPrefix: '*'
+      destinationAddressPrefix: subnets.applicationGateway.addressPrefix
+      access: 'Allow'
+      priority: 110
+      direction: 'Inbound'
+    }
+  }
+  {
+    name: 'AllowClientTrafficToFrontendIP'
+    properties: {
+      protocol: 'Tcp'
+      sourcePortRange: '*'
+      destinationPortRanges: [
+        '80'
+        '443'
+      ]
+      sourceAddressPrefix: '*'
+      destinationAddressPrefix: publicIpAddress
+      access: 'Allow'
+      priority: 111
+      direction: 'Inbound'
+    }
+  }
+]
+
+@description('Network Security Group for Application Gateway subnet with rules for web traffic and health probes')
+resource applicationGatewayNsg 'Microsoft.Network/networkSecurityGroups@2024-05-01' = {
+  name: subnets.applicationGateway.networkSecurityGroup.name
+  location: location
+  tags: tags
+  properties: {
+    securityRules: union(applicationGatewayNsgRules, customRules)
+  }
+}
+
+@description('Virtual Network resource with encryption, DDoS protection, and multiple subnets for APIM infrastructure')
 resource virtualNetwork 'Microsoft.Network/virtualNetworks@2024-07-01' = {
   name: name
   location: location
@@ -52,47 +123,70 @@ resource virtualNetwork 'Microsoft.Network/virtualNetworks@2024-07-01' = {
     addressSpace: {
       addressPrefixes: addressPrefixes
     }
-    subnets: [
-      for (subnet, i) in subnets: {
-        name: subnet.name
-        properties: {
-          addressPrefix: subnet.addressPrefix
-          networkSecurityGroup: {
-            id: nsgs[i]
-          }
-        }
-      }
-    ]
     encryption: (enableEncryption)
       ? {
           enabled: enableEncryption
           enforcement: 'AllowUnencrypted'
         }
       : null
-    ddosProtectionPlan: empty(ddosProtectionPlanId)
-      ? null
-      : {
-          id: ddosProtectionPlanId
-        }
+    ddosProtectionPlan: {
+      id: ddosProtectionConfig.enabled ? ddosProtectionPlan.id : null
+    }
   }
 }
 
-@description('Virtual Network Name output')
+@description('Name of the deployed Virtual Network resource for reference by other modules')
 output AZURE_VIRTUAL_NETWORK_NAME string = virtualNetwork.name
 
-@description('Virtual Network ID output')
+@description('Resource identifier of the deployed Virtual Network for subnet and resource association')
 output AZURE_VIRTUAL_NETWORK_ID string = virtualNetwork.id
 
-@description('Virtual Network Subnets output')
-output AZURE_VIRTUAL_NETWORK_SUBNETS object[] = [
-  for (item, index) in subnets: {
-    name: item.name
-    id: virtualNetwork.properties.subnets[index].id
-    nsgId: nsgs[index]
+@description('Private Endpoint subnet resource with dedicated address space and associated Network Security Group')
+resource privateNetworkSubnet 'Microsoft.Network/virtualNetworks/subnets@2024-07-01' = {
+  name: subnets.privateEndpoint.name
+  parent: virtualNetwork
+  properties: {
+    addressPrefix: subnets.privateEndpoint.addressPrefix
+    networkSecurityGroup: {
+      id: privateEndPointNsg.id
+      properties: {
+        securityRules: privateEndPointNsgRules
+      }
+    }
   }
-]
+}
 
-@description('Diagnostics settings for the Virtual Network')
+@description('API Management subnet resource with dedicated address space and associated Network Security Group for APIM service')
+resource apiManagementSubnet 'Microsoft.Network/virtualNetworks/subnets@2024-07-01' = {
+  name: subnets.apiManagement.name
+  parent: virtualNetwork
+  properties: {
+    addressPrefix: subnets.apiManagement.addressPrefix
+    networkSecurityGroup: {
+      id: apiManagementNsg.id
+      properties: {
+        securityRules: apiManagementNsgRules
+      }
+    }
+  }
+}
+
+@description('Application Gateway subnet resource with dedicated address space and associated Network Security Group for web traffic routing')
+resource applicationGatewaySubnet 'Microsoft.Network/virtualNetworks/subnets@2024-07-01' = {
+  name: subnets.applicationGateway.name
+  parent: virtualNetwork
+  properties: {
+    addressPrefix: subnets.applicationGateway.addressPrefix
+    networkSecurityGroup: {
+      id: applicationGatewayNsg.id
+      properties: {
+        securityRules: applicationGatewayNsgRules
+      }
+    }
+  }
+}
+
+@description('Diagnostic settings resource to enable logging and monitoring for the Virtual Network')
 resource diagnostics 'microsoft.insights/diagnosticSettings@2021-05-01-preview' = if (enableDiagnostics) {
   scope: virtualNetwork
   name: '${name}-diagnostics'

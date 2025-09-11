@@ -38,7 +38,7 @@ output AZURE_APPLICATION_INSIGHTS_NAME string = monitoring!.outputs.AZURE_APPLIC
 output AZURE_APPLICATION_INSIGHTS_INSTRUMENTATION_KEY string = monitoring!.outputs.AZURE_APPLICATION_INSIGHTS_INSTRUMENTATION_KEY
 
 @description('Deploy the network resources')
-module network '../src/network/network.bicep' = {
+module network '../src/network/networking.bicep' = {
   name: 'network-${dateTime}'
   params: {
     location: location
@@ -51,26 +51,20 @@ module network '../src/network/network.bicep' = {
   ]
 }
 
-@description('DDoS Protection Plan ID output')
-output DDOS_PROTECTION_PLAN_ID string = network!.outputs.DDOS_PROTECTION_PLAN_ID
-
-@description('DDoS Protection Plan Name output')
-output DDOS_PROTECTION_PLAN_NAME string = network!.outputs.DDOS_PROTECTION_PLAN_NAME
-
 @description('Virtual Network Name output')
 output AZURE_VIRTUAL_NETWORK_NAME string = network.outputs.AZURE_VIRTUAL_NETWORK_NAME
 
 @description('Virtual Network ID output')
 output AZURE_VIRTUAL_NETWORK_ID string = network.outputs.AZURE_VIRTUAL_NETWORK_ID
 
-@description('Azure Firewall Name output')
-output AZURE_FIREWALL_NAME string = network!.outputs.AZURE_FIREWALL_NAME
+// @description('Azure Firewall Name output')
+// output AZURE_FIREWALL_NAME string = network!.outputs.AZURE_FIREWALL_NAME
 
-@description('Azure Firewall ID output')
-output AZURE_FIREWALL_ID string = network!.outputs.AZURE_FIREWALL_ID
+// @description('Azure Firewall ID output')
+// output AZURE_FIREWALL_ID string = network!.outputs.AZURE_FIREWALL_ID
 
-@description('Azure Bastion Host ID output')
-output AZURE_BASTION_HOST_ID string = network!.outputs.AZURE_BASTION_HOST_ID
+// @description('Azure Bastion Host ID output')
+// output AZURE_BASTION_HOST_ID string = network!.outputs.AZURE_BASTION_HOST_ID
 
-@description('Azure Bastion Host Name output')
-output AZURE_BASTION_HOST_NAME string = network!.outputs.AZURE_BASTION_HOST_NAME
+// @description('Azure Bastion Host Name output')
+// output AZURE_BASTION_HOST_NAME string = network!.outputs.AZURE_BASTION_HOST_NAME
