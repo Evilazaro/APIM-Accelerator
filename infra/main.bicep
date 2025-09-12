@@ -1,61 +1,48 @@
 targetScope = 'subscription'
 
-@description('Location for all resources')
+@description('Azure region where all resources will be deployed (e.g., eastus, westus2)')
 param location string
 
+@description('Timestamp used to ensure uniqueness of deployment names')
 param dateTime string = utcNow('yyyyMMddHHmmss')
 
 var resourceOgranization = loadYamlContent('settings/resourceOrganization.yaml')
 
-@description('Deploy the monitoring resources')
-module monitoring '../src/management/monitor.bicep' = {
+@description('Resource group that will contain monitoring and observability resources such as Log Analytics workspace and storage accounts')
+resource monitoringRG 'Microsoft.Resources/resourceGroups@2025-04-01' = {
+  name: resourceOgranization.resourceGroups.monitoring
+  location: location
+  tags: resourceOgranization.tags
+}
+
+@description('Resource group that will contain network infrastructure resources such as virtual networks, subnets, and network security groups')
+resource networkRG 'Microsoft.Resources/resourceGroups@2025-04-01' = {
+  name: resourceOgranization.resourceGroups.networking
+  location: location
+  tags: resourceOgranization.tags
+}
+
+@description('Deploys monitoring and observability infrastructure including Log Analytics workspace, diagnostic storage account, and related monitoring resources')
+module monitoring '../src/management/monitoring.bicep' = {
   name: 'monitoring-${dateTime}'
+  scope: monitoringRG
   params: {
     location: location
     tags: resourceOgranization.tags
   }
 }
 
-@description('Log Analytics Workspace ID output')
-output AZURE_LOG_ANALYTICS_WORKSPACE_ID string = monitoring.outputs.AZURE_LOG_ANALYTICS_WORKSPACE_ID
-
-@description('Log Analytics Workspace Name output')
-output AZURE_LOG_ANALYTICS_WORKSPACE_NAME string = monitoring.outputs.AZURE_LOG_ANALYTICS_WORKSPACE_NAME
-
-@description('Deploy the network resources')
-module network '../src/network/network.bicep' = {
+@description('Deploys network infrastructure including virtual networks, subnets, NSGs, and configures diagnostic logging integration with monitoring resources')
+module networking '../src/network/networking.bicep' = {
   name: 'network-${dateTime}'
+  scope: networkRG
   params: {
     location: location
-    diagnosticStorageAccountId: ''
     logAnalyticsWorkspaceId: monitoring.outputs.AZURE_LOG_ANALYTICS_WORKSPACE_ID
+    diagnosticStorageAccountId: monitoring!.outputs.AZURE_STORAGE_ACCOUNT_ID
     tags: resourceOgranization.tags
   }
   dependsOn: [
     monitoring
   ]
 }
-
-@description('DDoS Protection Plan ID output')
-output DDOS_PROTECTION_PLAN_ID string = network!.outputs.DDOS_PROTECTION_PLAN_ID
-
-@description('DDoS Protection Plan Name output')
-output DDOS_PROTECTION_PLAN_NAME string = network!.outputs.DDOS_PROTECTION_PLAN_NAME
-
-@description('Virtual Network Name output')
-output AZURE_VIRTUAL_NETWORK_NAME string = network.outputs.AZURE_VIRTUAL_NETWORK_NAME
-
-@description('Virtual Network ID output')
-output AZURE_VIRTUAL_NETWORK_ID string = network.outputs.AZURE_VIRTUAL_NETWORK_ID
-
-@description('Azure Firewall Name output')
-output AZURE_FIREWALL_NAME string = network!.outputs.AZURE_FIREWALL_NAME
-
-@description('Azure Firewall ID output')
-output AZURE_FIREWALL_ID string = network!.outputs.AZURE_FIREWALL_ID
-
-@description('Azure Bastion Host ID output')
-output AZURE_BASTION_HOST_ID string = network!.outputs.AZURE_BASTION_HOST_ID
-
-@description('Azure Bastion Host Name output')
-output AZURE_BASTION_HOST_NAME string = network!.outputs.AZURE_BASTION_HOST_NAME

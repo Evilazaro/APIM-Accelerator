@@ -1,7 +1,16 @@
-# yaml-language-server: $schema=./monitor.schema.json
-
 resourceGroup:
   name: apim-monitoring-rg
 
 logAnalytics:
   name: "apim-accelerator-law"
+
+storageAccount:
+  enabled: true
+  name: "apimacceleratordiag"
+
+applicationInsights:
+  enabled: true
+  name: "apim-accelerator-ai"
+
+diagnostics:
+  enabled: true
