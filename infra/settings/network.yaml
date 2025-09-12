@@ -1,40 +1,42 @@
 name: apimVirtualNetwork
 description: Configuration settings for the network infrastructure including VNet, subnets, Azure Bastion, Azure Firewall, and DDoS protection.
 
-ipAddresses:
-  addressSpaces:
-    - 10.0.0.0/16
-  subnets:
-    privateEndpoint:
-      name: privateEndPointSubnet
-      addressPrefix: 10.0.1.0/24
-      networkSecurityGroup:
-        name: privateEndpointNsg
-    apiManagement:
-      name: apiManagementSubnet
-      addressPrefix: 10.0.2.0/24
-      networkSecurityGroup:
-        name: apimApiManagementNSG
-    applicationGateway:
-      name: appGatewaySubnet
-      addressPrefix: 10.0.3.0/24
-      networkSecurityGroup:
-        name: apimAppGatewayNSG
-    azureFirewall:
-      name: azureFirewallSubnet
-      addressPrefix: 10.0.4.0/24
-      networkSecurityGroup:
-        name: 
-
-diagnostics:
-  enabled: true
-
+connectivity:
+  privateEndpoint: 
+    enable: true
+    name: apimPrivateEndpoint
+    subnetName: privateEndPointSubnet
+  ipAddresses:
+    addressSpaces:
+      - 10.0.0.0/16
+    subnets:
+      privateEndpoint:
+        name: privateEndPointSubnet
+        addressPrefix: 10.0.1.0/24
+        networkSecurityGroup:
+          name: privateEndpointNsg
+      apiManagement:
+        name: apiManagementSubnet
+        addressPrefix: 10.0.2.0/24
+        networkSecurityGroup:
+          name: apimApiManagementNSG
+      applicationGateway:
+        name: appGatewaySubnet
+        addressPrefix: 10.0.3.0/24
+        networkSecurityGroup:
+          name: apimAppGatewayNSG
+      azureFirewall:
+        name: azureFirewallSubnet
+        addressPrefix: 10.0.4.0/24
+        networkSecurityGroup:
+          name: 
+          
 security:
   encryption:
-    enabled: true
+    enable: true
   azureFirewall:
-    enabled: true
+    enable: true
     name: apimFirewall
   ddosProtection:
-    enabled: true
+    enable: true
     name: apimDdosPlan

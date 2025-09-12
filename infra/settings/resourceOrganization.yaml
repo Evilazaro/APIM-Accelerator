@@ -1,6 +1,8 @@
 resourceGroups:
-  networking: apim-network-rg
-  monitoring: apim-monitoring-rg
+  networking: apim-platform-network-rg
+  monitoring: apim-platform-monitoring-rg
+  security: apim-platform-security-rg
+  workload: apim-platform-workload-rg
 tags:
   CostCenter: "CC-1234"                # Tracks cost allocation
   BusinessUnit: "IT"                   # Business unit or department

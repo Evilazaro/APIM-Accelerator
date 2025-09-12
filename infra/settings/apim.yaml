@@ -1,0 +1,11 @@
+name: apim-accelerator
+sku:
+  name: Developer
+  capacity: 1
+identity:
+  type: SystemAssigned
+virtualNetworkType: 'Internal'
+publisherEmail: evalvesd@microsoft.com
+publisherName: Evilazaro
+virtualNetworkConfiguration:
+  subnetName: apim-subnet
