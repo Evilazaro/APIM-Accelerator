@@ -5,12 +5,11 @@ logAnalytics:
   name: "apim-accelerator-law"
 
 storageAccount:
-  enabled: true
   name: "apimacceleratordiag"
 
 applicationInsights:
-  enabled: true
+  enable: true
   name: "apim-accelerator-ai"
 
 diagnostics:
-  enabled: true
+  enable: true

@@ -23,7 +23,7 @@ output AZURE_LOG_ANALYTICS_WORKSPACE_ID string = logAnalyticsWorkspace.id
 output AZURE_LOG_ANALYTICS_WORKSPACE_NAME string = logAnalyticsWorkspace.name
 
 @description('Storage account for diagnostic logs, audit logs, and long-term retention of monitoring data with private network access')
-resource storageAccount 'Microsoft.Storage/storageAccounts@2025-01-01' = if (settings.storageAccount.enabled) {
+resource storageAccount 'Microsoft.Storage/storageAccounts@2025-01-01' = {
   name: settings.storageAccount.name
   location: location
   sku: {
@@ -57,7 +57,7 @@ resource appInsights 'Microsoft.Insights/components@2020-02-02' = {
 }
 
 @description('Diagnostic settings to route Application Insights logs and metrics to Log Analytics workspace and storage account for centralized monitoring')
-resource diagnostics 'microsoft.insights/diagnosticSettings@2021-05-01-preview' = if (settings.diagnostics.enabled) {
+resource diagnostics 'microsoft.insights/diagnosticSettings@2021-05-01-preview' = if (settings.diagnostics.enable) {
   scope: appInsights
   name: '${settings.applicationInsights.name}-diagnostics'
   properties: {
@@ -65,7 +65,51 @@ resource diagnostics 'microsoft.insights/diagnosticSettings@2021-05-01-preview' 
     storageAccountId: empty(storageAccount.id) ? null : storageAccount.id
     logs: [
       {
-        categoryGroup: 'allLogs'
+        category: 'AppRequests'
+        enabled: true
+      }
+      {
+        category: 'AppDependencies'
+        enabled: true
+      }
+      {
+        category: 'AppExceptions'
+        enabled: true
+      }
+      {
+        category: 'AppPageViews'
+        enabled: true
+      }
+      {
+        category: 'AppPerformanceCounters'
+        enabled: true
+      }
+      {
+        category: 'AppAvailabilityResults'
+        enabled: true
+      }
+      {
+        category: 'AppTraces'
+        enabled: true
+      }
+      {
+        category: 'AppEvents'
+        enabled: true
+      }
+      {
+        category: 'AppMetrics'
+        enabled: true
+      }
+      {
+        category: 'AppBrowserTimings'
+        enabled: true
+      }
+      {
+        category: 'AppSystemEvents'
+        enabled: true
+      }
+      {
+        category: 'OTelResources'
         enabled: true
       }
     ]
@@ -76,7 +120,4 @@ resource diagnostics 'microsoft.insights/diagnosticSettings@2021-05-01-preview' 
       }
     ]
   }
-  dependsOn: [
-    appInsights
-  ]
 }

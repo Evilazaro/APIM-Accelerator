@@ -4,6 +4,8 @@ param location string
 @description('Key-value pairs of metadata tags to apply to all network resources')
 param tags object
 
+param enableDiagnostics bool
+
 @description('Resource identifier of Log Analytics Workspace for collecting VNet diagnostic logs and metrics')
 param logAnalyticsWorkspaceId string
 
@@ -30,7 +32,7 @@ resource publicIP 'Microsoft.Network/publicIPAddresses@2024-07-01' = {
 }
 
 @description('Azure DDoS Protection Plan resource to protect the Virtual Network against DDoS attacks')
-resource ddosProtectionPlan 'Microsoft.Network/ddosProtectionPlans@2024-07-01' = if (settings.security.ddosProtection.enabled) {
+resource ddosProtectionPlan 'Microsoft.Network/ddosProtectionPlans@2024-07-01' = if (settings.security.ddosProtection.enable) {
   name: settings.security.ddosProtection.name
   location: location
   tags: tags
@@ -41,7 +43,7 @@ var privateEndPointNsgRules = loadJsonContent('../../infra/settings/nsgrules/pri
 
 @description('Network Security Group for Private Endpoint subnet to control inbound and outbound traffic for private connectivity')
 resource privateEndPointNsg 'Microsoft.Network/networkSecurityGroups@2024-05-01' = {
-  name: settings.ipAddresses.subnets.privateEndpoint.networkSecurityGroup.name
+  name: settings.connectivity.ipAddresses.subnets.privateEndpoint.networkSecurityGroup.name
   location: location
   tags: tags
   properties: {
@@ -54,7 +56,7 @@ var apiManagementNsgRules = loadJsonContent('../../infra/settings/nsgrules/apim-
 
 @description('Network Security Group for API Management subnet with rules for APIM service communication and dependencies')
 resource apiManagementNsg 'Microsoft.Network/networkSecurityGroups@2024-05-01' = {
-  name: settings.ipAddresses.subnets.apiManagement.networkSecurityGroup.name
+  name: settings.connectivity.ipAddresses.subnets.apiManagement.networkSecurityGroup.name
   location: location
   tags: tags
   properties: {
@@ -77,7 +79,7 @@ var customRules = [
         '443'
       ]
       sourceAddressPrefix: '*'
-      destinationAddressPrefix: settings.ipAddresses.subnets.applicationGateway.addressPrefix
+      destinationAddressPrefix: settings.connectivity.ipAddresses.subnets.applicationGateway.addressPrefix
       access: 'Allow'
       priority: 110
       direction: 'Inbound'
@@ -103,7 +105,7 @@ var customRules = [
 
 @description('Network Security Group for Application Gateway subnet with rules for web traffic and health probes')
 resource applicationGatewayNsg 'Microsoft.Network/networkSecurityGroups@2024-05-01' = {
-  name: settings.ipAddresses.subnets.applicationGateway.networkSecurityGroup.name
+  name: settings.connectivity.ipAddresses.subnets.applicationGateway.networkSecurityGroup.name
   location: location
   tags: tags
   properties: {
@@ -118,26 +120,34 @@ resource virtualNetwork 'Microsoft.Network/virtualNetworks@2024-07-01' = {
   tags: tags
   properties: {
     addressSpace: {
-      addressPrefixes: settings.ipAddresses.addressSpaces
+      addressPrefixes: settings.connectivity.ipAddresses.addressSpaces
     }
-    encryption: (settings.security.encryption.enabled)
+    encryption: (settings.security.encryption.enable)
       ? {
-          enabled: settings.security.encryption.enabled
+          enabled: settings.security.encryption.enable
           enforcement: 'AllowUnencrypted'
         }
       : null
     ddosProtectionPlan: {
-      id: settings.security.ddosProtection.enabled ? ddosProtectionPlan.id : null
+      id: settings.security.ddosProtection.enable ? ddosProtectionPlan.id : null
     }
   }
+  dependsOn: [
+    privateEndPointNsg
+    applicationGatewayNsg
+    apiManagementNsg
+  ]
 }
+
+output AZURE_VIRTUAL_NETWORK_ID string = virtualNetwork.id
+output AZURE_VIRTUAL_NETWORK_NAME string = virtualNetwork.name
 
 @description('Private Endpoint subnet resource with dedicated address space and associated Network Security Group')
 resource privateNetworkSubnet 'Microsoft.Network/virtualNetworks/subnets@2024-07-01' = {
-  name: settings.ipAddresses.subnets.privateEndpoint.name
+  name: settings.connectivity.ipAddresses.subnets.privateEndpoint.name
   parent: virtualNetwork
   properties: {
-    addressPrefix: settings.ipAddresses.subnets.privateEndpoint.addressPrefix
+    addressPrefix: settings.connectivity.ipAddresses.subnets.privateEndpoint.addressPrefix
     networkSecurityGroup: {
       id: privateEndPointNsg.id
       properties: {
@@ -145,14 +155,21 @@ resource privateNetworkSubnet 'Microsoft.Network/virtualNetworks/subnets@2024-07
       }
     }
   }
+  dependsOn: [
+    privateEndPointNsg
+    virtualNetwork
+  ]
 }
+
+output AZURE_PRIVATE_NETWORK_SUBNET_ID string = privateNetworkSubnet.id
+output AZURE_PRIVATE_NETWORK_SUBNET_NAME string = privateNetworkSubnet.name
 
 @description('API Management subnet resource with dedicated address space and associated Network Security Group for APIM service')
 resource apiManagementSubnet 'Microsoft.Network/virtualNetworks/subnets@2024-07-01' = {
-  name: settings.ipAddresses.subnets.apiManagement.name
+  name: settings.connectivity.ipAddresses.subnets.apiManagement.name
   parent: virtualNetwork
   properties: {
-    addressPrefix: settings.ipAddresses.subnets.apiManagement.addressPrefix
+    addressPrefix: settings.connectivity.ipAddresses.subnets.apiManagement.addressPrefix
     networkSecurityGroup: {
       id: apiManagementNsg.id
       properties: {
@@ -160,14 +177,18 @@ resource apiManagementSubnet 'Microsoft.Network/virtualNetworks/subnets@2024-07-
       }
     }
   }
+  dependsOn: [
+    apiManagementNsg
+    virtualNetwork
+  ]
 }
 
 @description('Application Gateway subnet resource with dedicated address space and associated Network Security Group for web traffic routing')
 resource applicationGatewaySubnet 'Microsoft.Network/virtualNetworks/subnets@2024-07-01' = {
-  name: settings.ipAddresses.subnets.applicationGateway.name
+  name: settings.connectivity.ipAddresses.subnets.applicationGateway.name
   parent: virtualNetwork
   properties: {
-    addressPrefix: settings.ipAddresses.subnets.applicationGateway.addressPrefix
+    addressPrefix: settings.connectivity.ipAddresses.subnets.applicationGateway.addressPrefix
     networkSecurityGroup: {
       id: applicationGatewayNsg.id
       properties: {
@@ -175,19 +196,29 @@ resource applicationGatewaySubnet 'Microsoft.Network/virtualNetworks/subnets@202
       }
     }
   }
+  dependsOn: [
+    applicationGatewayNsg
+    virtualNetwork
+  ]
 }
 
 @description('Azure Firewall subnet resource with dedicated address space')
 resource azureFirewallSubnet 'Microsoft.Network/virtualNetworks/subnets@2024-07-01' = {
-  name: settings.ipAddresses.subnets.azureFirewall.name
+  name: settings.connectivity.ipAddresses.subnets.azureFirewall.name
   parent: virtualNetwork
   properties: {
-    addressPrefix: settings.ipAddresses.subnets.azureFirewall.addressPrefix
+    addressPrefix: settings.connectivity.ipAddresses.subnets.azureFirewall.addressPrefix
   }
+  dependsOn: [
+    apiManagementNsg
+    privateEndPointNsg
+    applicationGatewayNsg
+    virtualNetwork
+  ]
 }
 
 @description('Diagnostic settings resource to enable logging and monitoring for the Virtual Network')
-resource vnetDiagnostics 'microsoft.insights/diagnosticSettings@2021-05-01-preview' = if (settings.diagnostics.enabled) {
+resource vnetDiagnostics 'microsoft.insights/diagnosticSettings@2021-05-01-preview' = if (enableDiagnostics) {
   scope: virtualNetwork
   name: '${settings.name}-diagnostics'
   properties: {
@@ -236,10 +267,14 @@ resource azureFirewall 'Microsoft.Network/azureFirewalls@2024-07-01' = {
       }
     ]
   }
+  dependsOn: [
+    virtualNetwork
+    azureFirewallSubnet
+  ]
 }
 
 @description('Diagnostic settings to route Azure Firewall logs and metrics to Log Analytics workspace and storage account for security monitoring')
-resource firewallDiagnostics 'microsoft.insights/diagnosticSettings@2021-05-01-preview' = if (settings.diagnostics.enabled) {
+resource firewallDiagnostics 'microsoft.insights/diagnosticSettings@2021-05-01-preview' = if (enableDiagnostics) {
   scope: azureFirewall
   name: '${azureFirewall.name}-diagnostics'
   properties: {
@@ -262,3 +297,5 @@ resource firewallDiagnostics 'microsoft.insights/diagnosticSettings@2021-05-01-p
     azureFirewall
   ]
 }
+
+

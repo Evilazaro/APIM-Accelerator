@@ -7,6 +7,7 @@ param location string
 param dateTime string = utcNow('yyyyMMddHHmmss')
 
 var resourceOgranization = loadYamlContent('settings/resourceOrganization.yaml')
+var commonSettings = loadYamlContent('settings/workload.yaml')
 
 @description('Resource group that will contain monitoring and observability resources such as Log Analytics workspace and storage accounts')
 resource monitoringRG 'Microsoft.Resources/resourceGroups@2025-04-01' = {
@@ -38,11 +39,35 @@ module networking '../src/network/networking.bicep' = {
   scope: networkRG
   params: {
     location: location
+    enableDiagnostics: commonSettings.monitoring.diagnostics.enable
     logAnalyticsWorkspaceId: monitoring.outputs.AZURE_LOG_ANALYTICS_WORKSPACE_ID
     diagnosticStorageAccountId: monitoring!.outputs.AZURE_STORAGE_ACCOUNT_ID
     tags: resourceOgranization.tags
   }
   dependsOn: [
+    monitoring
+  ]
+}
+
+resource securityRG 'Microsoft.Resources/resourceGroups@2025-04-01' = {
+  name: resourceOgranization.resourceGroups.security
+  location: location
+  tags: resourceOgranization.tags
+}
+
+module security '../src/security/security.bicep' = if (commonSettings.connectivity.privateEndpoint.enable) {
+  name: 'security-${dateTime}'
+  scope: securityRG
+  params: {
+    location: location
+    networkName: networking.outputs.AZURE_VIRTUAL_NETWORK_NAME
+    subnetName: networking.outputs.AZURE_PRIVATE_NETWORK_SUBNET_NAME
+    networkResourceGroup: resourceOgranization.resourceGroups.networking
+    monitoringResourceGroup: resourceOgranization.resourceGroups.monitoring
+    storageAccountName: monitoring.outputs.AZURE_STORAGE_ACCOUNT_NAME
+  }
+  dependsOn: [
+    networking
     monitoring
   ]
 }

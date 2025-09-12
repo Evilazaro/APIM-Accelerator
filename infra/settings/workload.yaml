@@ -1,0 +1,7 @@
+connectivity:
+  privateEndpoint: 
+    enable: true
+monitoring:
+  diagnostics:
+    enable: true
+apim:
