@@ -1,6 +1,3 @@
-resourceGroup:
-  name: apim-monitoring-rg
-
 logAnalytics:
   name: "apim-accelerator-law"
 

@@ -60,6 +60,9 @@ module security '../src/security/security.bicep' = if (commonSettings.connectivi
   scope: securityRG
   params: {
     location: location
+    enableDiagnostics: commonSettings.monitoring.diagnostics.enable
+    logAnalyticsWorkspaceId: monitoring.outputs.AZURE_LOG_ANALYTICS_WORKSPACE_ID
+    diagnosticStorageAccountId: monitoring!.outputs.AZURE_STORAGE_ACCOUNT_ID
     networkName: networking.outputs.AZURE_VIRTUAL_NETWORK_NAME
     subnetName: networking.outputs.AZURE_PRIVATE_NETWORK_SUBNET_NAME
     networkResourceGroup: resourceOgranization.resourceGroups.networking
@@ -67,7 +70,29 @@ module security '../src/security/security.bicep' = if (commonSettings.connectivi
     storageAccountName: monitoring.outputs.AZURE_STORAGE_ACCOUNT_NAME
   }
   dependsOn: [
-    networking
     monitoring
+    networking
+  ]
+}
+
+resource workloadRG 'Microsoft.Resources/resourceGroups@2025-04-01' = {
+  name: resourceOgranization.resourceGroups.workload
+  location: location
+  tags: resourceOgranization.tags
+}
+
+module workload '../src/core/api-management.bicep' = {
+  scope: workloadRG
+  name: 'workload-${dateTime}'
+  params: {
+    location: location
+    virtualNetworkName: networking.outputs.AZURE_VIRTUAL_NETWORK_NAME
+    apimSubnetName: networking.outputs.AZURE_PRIVATE_NETWORK_SUBNET_NAME
+    networkResourceGroup: resourceOgranization.resourceGroups.networking
+  }
+  dependsOn: [
+    monitoring
+    networking
+    security
   ]
 }

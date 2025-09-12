@@ -4,4 +4,3 @@ connectivity:
 monitoring:
   diagnostics:
     enable: true
-apim:
