@@ -1,6 +1,7 @@
 param location string
 param logAnalytics LogAnalyticsSettings
 param appInsights AppInsightsSettings
+param privateConnection bool
 param tags object
 
 type LogAnalyticsSettings = {
@@ -26,11 +27,12 @@ resource apimStorageAccount 'Microsoft.Storage/storageAccounts@2025-01-01' = {
     name: 'Standard_LRS'
   }
   kind: 'StorageV2'
+  tags: tags
   properties: {
     accessTier: 'Hot'
-    publicNetworkAccess: 'Disabled'
+    publicNetworkAccess: privateConnection ? 'Disabled' : 'Enabled'
+    allowBlobPublicAccess: privateConnection ? false : true
   }
-  tags: tags
 }
 
 resource apimLogAnalytics 'Microsoft.OperationalInsights/workspaces@2025-02-01' = {
