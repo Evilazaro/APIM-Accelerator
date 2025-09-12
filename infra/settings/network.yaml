@@ -20,6 +20,11 @@ ipAddresses:
       addressPrefix: 10.0.3.0/24
       networkSecurityGroup:
         name: apimAppGatewayNSG
+    azureFirewall:
+      name: azureFirewallSubnet
+      addressPrefix: 10.0.4.0/24
+      networkSecurityGroup:
+        name: 
 
 diagnostics:
   enabled: true

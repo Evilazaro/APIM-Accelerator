@@ -13,7 +13,7 @@ param diagnosticStorageAccountId string
 // Load network settings from the external YAML file
 var settings = loadYamlContent('../../infra/settings/network.yaml')
 
-@description('Public IP Address Resource')
+@description('Static public IP address with zone redundancy for Azure Firewall and Application Gateway frontend access')
 resource publicIP 'Microsoft.Network/publicIPAddresses@2024-07-01' = {
   name: '${settings.name}-pip'
   location: location
@@ -36,9 +36,10 @@ resource ddosProtectionPlan 'Microsoft.Network/ddosProtectionPlans@2024-07-01' =
   tags: tags
 }
 
+@description('Network security rules for private endpoint subnet traffic control')
 var privateEndPointNsgRules = loadJsonContent('../../infra/settings/nsgrules/private-endpoint-nsg-rules.json')
 
-@description('Network Security Group for Private Endpoint subnet with rules loaded from external JSON configuration')
+@description('Network Security Group for Private Endpoint subnet to control inbound and outbound traffic for private connectivity')
 resource privateEndPointNsg 'Microsoft.Network/networkSecurityGroups@2024-05-01' = {
   name: settings.ipAddresses.subnets.privateEndpoint.networkSecurityGroup.name
   location: location
@@ -48,6 +49,7 @@ resource privateEndPointNsg 'Microsoft.Network/networkSecurityGroups@2024-05-01'
   }
 }
 
+@description('Network security rules for API Management subnet enabling required APIM service communication')
 var apiManagementNsgRules = loadJsonContent('../../infra/settings/nsgrules/apim-nsg-rules.json')
 
 @description('Network Security Group for API Management subnet with rules for APIM service communication and dependencies')
@@ -60,7 +62,10 @@ resource apiManagementNsg 'Microsoft.Network/networkSecurityGroups@2024-05-01' =
   }
 }
 
+@description('Network security rules for Application Gateway subnet enabling web traffic and health probe access')
 var applicationGatewayNsgRules = loadJsonContent('../../infra/settings/nsgrules/application-gateway-nsg-rules.json')
+
+@description('Custom security rules for Application Gateway allowing client traffic to subnet and frontend IP')
 var customRules = [
   {
     name: 'AllowClientTrafficToSubnet'
@@ -172,6 +177,15 @@ resource applicationGatewaySubnet 'Microsoft.Network/virtualNetworks/subnets@202
   }
 }
 
+@description('Azure Firewall subnet resource with dedicated address space')
+resource azureFirewallSubnet 'Microsoft.Network/virtualNetworks/subnets@2024-07-01' = {
+  name: settings.ipAddresses.subnets.azureFirewall.name
+  parent: virtualNetwork
+  properties: {
+    addressPrefix: settings.ipAddresses.subnets.azureFirewall.addressPrefix
+  }
+}
+
 @description('Diagnostic settings resource to enable logging and monitoring for the Virtual Network')
 resource vnetDiagnostics 'microsoft.insights/diagnosticSettings@2021-05-01-preview' = if (settings.diagnostics.enabled) {
   scope: virtualNetwork
@@ -197,7 +211,7 @@ resource vnetDiagnostics 'microsoft.insights/diagnosticSettings@2021-05-01-previ
   ]
 }
 
-@description('Azure Firewall Resource')
+@description('Azure Firewall with Standard tier for network security, traffic filtering, and centralized network protection')
 resource azureFirewall 'Microsoft.Network/azureFirewalls@2024-07-01' = {
   name: settings.security.azureFirewall.name
   location: location
@@ -216,7 +230,7 @@ resource azureFirewall 'Microsoft.Network/azureFirewalls@2024-07-01' = {
             id: publicIP.id
           }
           subnet: {
-            id: privateNetworkSubnet.id
+            id: azureFirewallSubnet.id
           }
         }
       }
@@ -224,7 +238,7 @@ resource azureFirewall 'Microsoft.Network/azureFirewalls@2024-07-01' = {
   }
 }
 
-@description('Diagnostics settings for the Azure Firewall')
+@description('Diagnostic settings to route Azure Firewall logs and metrics to Log Analytics workspace and storage account for security monitoring')
 resource firewallDiagnostics 'microsoft.insights/diagnosticSettings@2021-05-01-preview' = if (settings.diagnostics.enabled) {
   scope: azureFirewall
   name: '${azureFirewall.name}-diagnostics'
