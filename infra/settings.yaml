@@ -37,6 +37,14 @@ management:
           - name: apim-accelerator-log-law-identity
     applicationInsights:
       name: apim-accelerator-app-insights
+security:
+  resourceGroup: apim-accelerator-security-rg
+  keyVault:
+    name: apim-accelerator-kv
+    identity:
+      type: SystemAssigned
+      userAssignedIdentities:
+        - name: apim-accelerator-kv-identity
 
 tags:
   CostCenter: "CC-1234" # Tracks cost allocation

@@ -1,3 +1,6 @@
+
+import * as IdentityTypes from '../shared/identity-types.bicep'
+
 param location string
 param logAnalytics LogAnalyticsSettings
 param appInsights AppInsightsSettings
@@ -6,14 +9,7 @@ param tags object
 
 type LogAnalyticsSettings = {
   name: string
-  identity: {
-    type: 'SystemAssigned' | 'UserAssigned' | 'None'
-    userAssignedIdentities: UserAssignedIdentity[]
-  }
-}
-
-type UserAssignedIdentity = {
-  name: string
+  identity: IdentityTypes.Identity
 }
 
 type AppInsightsSettings = {
