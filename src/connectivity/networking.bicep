@@ -20,9 +20,6 @@ resource apimPublicIp 'Microsoft.Network/publicIPAddresses@2024-07-01' = {
     publicIPAddressVersion: 'IPv4'
     publicIPAllocationMethod: 'Static'
   }
-  dependsOn: [
-    apimVnet
-  ]
 }
 
 resource apimVnet 'Microsoft.Network/virtualNetworks@2024-07-01' = {
@@ -34,6 +31,9 @@ resource apimVnet 'Microsoft.Network/virtualNetworks@2024-07-01' = {
       addressPrefixes: virtualNetwork.addressPrefixes
     }
   }
+  dependsOn: [
+    apimPublicIp
+  ]
 }
 
 output AZURE_VNET_NAME string = apimVnet.name
@@ -46,10 +46,11 @@ module apimSubnets 'subnets.bicep' = {
     location: location
     subnets: virtualNetwork.subnets
     virtualNetworkName: apimVnet.name
+    apimAppGwPipName: apimPublicIp.name
     tags: tags
   }
   dependsOn: [
-    apimPublicIp
+    apimVnet
   ]
 }
 
@@ -82,4 +83,8 @@ resource apimFirewall 'Microsoft.Network/azureFirewalls@2024-07-01' = {
       }
     ]
   }
+  dependsOn: [
+    apimVnet
+    apimSubnets
+  ]
 }

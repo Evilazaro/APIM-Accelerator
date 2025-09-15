@@ -15,8 +15,7 @@ module monitoring '../src/management/monitoring.bicep' = {
   scope: monitoringRG
   params: {
     location: location
-    logAnalytics: settings.management.monitoring.logAnalytics
-    appInsights: settings.management.monitoring.applicationInsights
+    monitoring: settings.management.monitoring
     publicNetworkAccess: settings.connectivity.publicNetworkAccess
     tags: settings.tags
   }

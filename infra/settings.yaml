@@ -1,8 +1,8 @@
 connectivity:
-  resourceGroup: eyapim-platform-connectivity-rg
+  resourceGroup: apim-platform-connectivity-rg
   publicNetworkAccess: false
   virtualNetwork:
-    name: eyapimplatvnet
+    name: apimplatvnet
     addressPrefixes:
       - 10.0.0.0/16
     subnets:
@@ -29,7 +29,9 @@ connectivity:
 
 management:
   monitoring:
-    resourceGroup: rg-eyapim-platform-monitoring-rg
+    createNew: true
+    resourceGroup: apim-platform-monitoring-rg
+    subnscriptionId: 6a4029ea-399b-4933-9701-436db72883d4
     logAnalytics:
       name: apim-platform-log-law
       identity:

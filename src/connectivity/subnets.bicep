@@ -1,5 +1,6 @@
 param location string
 param virtualNetworkName string
+param apimAppGwPipName string
 param subnets SubnetSettings
 param tags object
 
@@ -20,20 +21,10 @@ type SubnetSettings = {
   azureFirewall: Subnet
 }
 
-resource apimAppGwPip 'Microsoft.Network/publicIPAddresses@2024-07-01' = {
-  name: 'appgw-pip'
-  location: location
-  tags: tags
-  sku: {
-    name: 'Standard'
-  }
-  zones: ['1', '2', '3']
-  properties: {
-    publicIPAddressVersion: 'IPv4'
-    publicIPAllocationMethod: 'Static'
-  }
+resource apimAppGwPip 'Microsoft.Network/publicIPAddresses@2024-07-01' existing = {
+  name: apimAppGwPipName
+  scope: resourceGroup()
 }
-
 resource privateEndPointNsg 'Microsoft.Network/networkSecurityGroups@2024-07-01' = {
   name: subnets.privateEndpoint.networkSecurityGroup.name
   location: location
@@ -48,6 +39,10 @@ resource privateEndpointSubnet 'Microsoft.Network/virtualNetworks/subnets@2024-0
       id: privateEndPointNsg.id
     }
   }
+  dependsOn: [
+    apimAppGwPip
+    privateEndPointNsg
+  ]
 }
 
 output AZURE_PRIVATE_ENDPOINT_SUBNET_ID string = privateEndpointSubnet.id
@@ -152,6 +147,9 @@ resource apimNsg 'Microsoft.Network/networkSecurityGroups@2024-07-01' = {
       }
     ]
   }
+  dependsOn: [
+    apimAppGwPip
+  ]
 }
 
 resource apimSubnet 'Microsoft.Network/virtualNetworks/subnets@2024-07-01' = {
@@ -162,6 +160,10 @@ resource apimSubnet 'Microsoft.Network/virtualNetworks/subnets@2024-07-01' = {
       id: apimNsg.id
     }
   }
+  dependsOn: [
+    apimAppGwPip
+    apimNsg
+  ]
 }
 
 output AZURE_API_MANAGEMENT_SUBNET_ID string = apimSubnet.id
@@ -227,6 +229,9 @@ resource appGwNsg 'Microsoft.Network/networkSecurityGroups@2024-07-01' = {
       }
     ]
   }
+  dependsOn: [
+    apimAppGwPip
+  ]
 }
 
 resource appGwSubnet 'Microsoft.Network/virtualNetworks/subnets@2024-07-01' = {
@@ -237,6 +242,10 @@ resource appGwSubnet 'Microsoft.Network/virtualNetworks/subnets@2024-07-01' = {
       id: appGwNsg.id
     }
   }
+  dependsOn: [
+    apimAppGwPip
+    appGwNsg
+  ]
 }
 
 resource apimFirewallSubnet 'Microsoft.Network/virtualNetworks/subnets@2024-07-01' = {
@@ -244,6 +253,9 @@ resource apimFirewallSubnet 'Microsoft.Network/virtualNetworks/subnets@2024-07-0
   properties: {
     addressPrefix: subnets.azureFirewall.addressPrefix
   }
+  dependsOn: [
+    apimAppGwPip
+  ]
 }
 
 output AZURE_AZURE_FIREWALL_SUBNET_ID string = apimFirewallSubnet.id
