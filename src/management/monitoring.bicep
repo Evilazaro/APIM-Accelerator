@@ -1,68 +1,65 @@
-@description('Azure region where monitoring resources (Log Analytics, Storage, Application Insights) will be deployed')
-param location string
+import * as IdentityTypes from '../shared/identity-types.bicep'
 
-@description('Resource tags to be applied to all monitoring infrastructure resources for organization and cost tracking')
+param location string
+param logAnalytics LogAnalyticsSettings
+param appInsights AppInsightsSettings
+param publicNetworkAccess bool
 param tags object
 
-@description('Timestamp used to ensure uniqueness of resource deployments')
-param dateTime string = utcNow('yyyyMMddHHmmss')
-
-var settings = loadYamlContent('../../infra/settings/monitor.yaml')
-
-@description('Log Analytics workspace for centralized logging, monitoring, and analytics across all APIM and related infrastructure')
-resource logAnalyticsWorkspace 'Microsoft.OperationalInsights/workspaces@2025-02-01' = {
-  name: settings.logAnalytics.name
-  location: location
-  tags: tags
+type LogAnalyticsSettings = {
+  name: string
+  identity: IdentityTypes.Identity
 }
 
-@description('Resource ID of the Log Analytics workspace for use in diagnostic settings and monitoring configurations')
-output AZURE_LOG_ANALYTICS_WORKSPACE_ID string = logAnalyticsWorkspace.id
+type AppInsightsSettings = {
+  name: string
+}
 
-@description('Name of the Log Analytics workspace for reference in monitoring configurations')
-output AZURE_LOG_ANALYTICS_WORKSPACE_NAME string = logAnalyticsWorkspace.name
-
-@description('Storage account for diagnostic logs, audit logs, and long-term retention of monitoring data with private network access')
-resource storageAccount 'Microsoft.Storage/storageAccounts@2025-01-01' = {
-  name: settings.storageAccount.name
+resource apimStorageAccount 'Microsoft.Storage/storageAccounts@2025-01-01' = {
+  name: 'apimacceleratorstorage'
   location: location
   sku: {
     name: 'Standard_LRS'
   }
   kind: 'StorageV2'
+  tags: tags
   properties: {
     accessTier: 'Hot'
-    publicNetworkAccess: 'Disabled'
+    publicNetworkAccess: publicNetworkAccess ? 'Disabled' : 'Enabled'
+    allowBlobPublicAccess: publicNetworkAccess ? false : true
   }
-  tags: tags
 }
 
-@description('Resource ID of the diagnostic storage account for use in audit logging and long-term data retention')
-output AZURE_STORAGE_ACCOUNT_ID string = storageAccount.id
-
-@description('Name of the diagnostic storage account for reference in storage configurations')
-output AZURE_STORAGE_ACCOUNT_NAME string = storageAccount.name
-
-@description('Application Insights for application performance monitoring, request tracking, and telemetry collection integrated with Log Analytics')
-resource appInsights 'Microsoft.Insights/components@2020-02-02' = {
-  name: settings.applicationInsights.name
+resource apimLogAnalytics 'Microsoft.OperationalInsights/workspaces@2025-02-01' = {
+  name: logAnalytics.name
   location: location
   tags: tags
-  kind: 'other'
-  properties: {
-    Application_Type: 'web'
-    Request_Source: 'rest'
-    WorkspaceResourceId: logAnalyticsWorkspace.id
+  identity: {
+    type: logAnalytics.identity.type
   }
 }
 
-@description('Diagnostic settings to route Application Insights logs and metrics to Log Analytics workspace and storage account for centralized monitoring')
-resource diagnostics 'microsoft.insights/diagnosticSettings@2021-05-01-preview' = if (settings.diagnostics.enable) {
-  scope: appInsights
-  name: '${settings.applicationInsights.name}-diagnostics'
+output AZURE_LOG_ANALYTICS_WORKSPACE_NAME string = apimLogAnalytics.name
+
+resource apimAppInsights 'Microsoft.Insights/components@2020-02-02' = {
+  name: appInsights.name
+  location: location
+  kind: 'web'
+  tags: tags
   properties: {
-    workspaceId: empty(logAnalyticsWorkspace.id) ? null : logAnalyticsWorkspace.id
-    storageAccountId: empty(storageAccount.id) ? null : storageAccount.id
+    Application_Type: 'web'
+    WorkspaceResourceId: apimLogAnalytics.id
+  }
+}
+
+output AZURE_APPLICATION_INSIGHTS_NAME string = apimAppInsights.name
+
+resource apiAppInsightsDiagnostics 'Microsoft.Insights/diagnosticSettings@2021-05-01-preview' = {
+  scope: apimAppInsights
+  name: '${apimAppInsights.name}-diagnostics'
+  properties: {
+    workspaceId: apimLogAnalytics.id
+    storageAccountId: apimStorageAccount.id
     logs: [
       {
         category: 'AppRequests'

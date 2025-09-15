@@ -1,48 +1,39 @@
 targetScope = 'subscription'
 
-@description('Azure region where all resources will be deployed (e.g., eastus, westus2)')
 param location string
-
-@description('Timestamp used to ensure uniqueness of deployment names')
 param dateTime string = utcNow('yyyyMMddHHmmss')
 
-var resourceOgranization = loadYamlContent('settings/resourceOrganization.yaml')
-var commonSettings = loadYamlContent('settings/workload.yaml')
+var settings = loadYamlContent('./settings.yaml')
 
-@description('Resource group that will contain monitoring and observability resources such as Log Analytics workspace and storage accounts')
 resource monitoringRG 'Microsoft.Resources/resourceGroups@2025-04-01' = {
-  name: resourceOgranization.resourceGroups.monitoring
+  name: settings.management.monitoring.resourceGroup
   location: location
-  tags: resourceOgranization.tags
 }
 
-@description('Resource group that will contain network infrastructure resources such as virtual networks, subnets, and network security groups')
-resource networkRG 'Microsoft.Resources/resourceGroups@2025-04-01' = {
-  name: resourceOgranization.resourceGroups.networking
-  location: location
-  tags: resourceOgranization.tags
-}
-
-@description('Deploys monitoring and observability infrastructure including Log Analytics workspace, diagnostic storage account, and related monitoring resources')
 module monitoring '../src/management/monitoring.bicep' = {
   name: 'monitoring-${dateTime}'
   scope: monitoringRG
   params: {
     location: location
-    tags: resourceOgranization.tags
+    logAnalytics: settings.management.monitoring.logAnalytics
+    appInsights: settings.management.monitoring.applicationInsights
+    publicNetworkAccess: settings.connectivity.private
+    tags: settings.tags
   }
 }
 
-@description('Deploys network infrastructure including virtual networks, subnets, NSGs, and configures diagnostic logging integration with monitoring resources')
-module networking '../src/network/networking.bicep' = {
-  name: 'network-${dateTime}'
-  scope: networkRG
+resource networkingRG 'Microsoft.Resources/resourceGroups@2025-04-01' = {
+  name: settings.connectivity.resourceGroup
+  location: location
+}
+
+module networking '../src/connectivity/networking.bicep' = {
+  name: 'networking-${dateTime}'
+  scope: networkingRG
   params: {
     location: location
-    enableDiagnostics: commonSettings.monitoring.diagnostics.enable
-    logAnalyticsWorkspaceId: monitoring.outputs.AZURE_LOG_ANALYTICS_WORKSPACE_ID
-    diagnosticStorageAccountId: monitoring!.outputs.AZURE_STORAGE_ACCOUNT_ID
-    tags: resourceOgranization.tags
+    tags: settings.tags
+    virtualNetwork: settings.connectivity.virtualNetwork
   }
   dependsOn: [
     monitoring
@@ -50,49 +41,47 @@ module networking '../src/network/networking.bicep' = {
 }
 
 resource securityRG 'Microsoft.Resources/resourceGroups@2025-04-01' = {
-  name: resourceOgranization.resourceGroups.security
+  name: settings.security.resourceGroup
   location: location
-  tags: resourceOgranization.tags
 }
 
-module security '../src/security/security.bicep' = if (commonSettings.connectivity.privateEndpoint.enable) {
+module security '../src/security/security.bicep' = {
   name: 'security-${dateTime}'
   scope: securityRG
   params: {
     location: location
-    enableDiagnostics: commonSettings.monitoring.diagnostics.enable
-    logAnalyticsWorkspaceId: monitoring.outputs.AZURE_LOG_ANALYTICS_WORKSPACE_ID
-    diagnosticStorageAccountId: monitoring!.outputs.AZURE_STORAGE_ACCOUNT_ID
-    networkName: networking.outputs.AZURE_VIRTUAL_NETWORK_NAME
-    subnetName: networking.outputs.AZURE_PRIVATE_NETWORK_SUBNET_NAME
-    networkResourceGroup: resourceOgranization.resourceGroups.networking
-    monitoringResourceGroup: resourceOgranization.resourceGroups.monitoring
-    storageAccountName: monitoring.outputs.AZURE_STORAGE_ACCOUNT_NAME
+    virtualNetworkName: networking.outputs.AZURE_VNET_NAME
+    virtualNetworkResourceGroup: securityRG.name
+    subnetName: (settings.connectivity.private)
+      ? networking.outputs.AZURE_PRIVATE_ENDPOINT_SUBNET_NAME
+      : networking.outputs.AZURE_API_MANAGEMENT_SUBNET_NAME
+    publicNetworkAccess: settings.connectivity.private
+    tags: settings.tags
+    keyVault: settings.security.keyVault
   }
   dependsOn: [
-    monitoring
     networking
   ]
 }
 
 resource workloadRG 'Microsoft.Resources/resourceGroups@2025-04-01' = {
-  name: resourceOgranization.resourceGroups.workload
+  name: settings.workload.apiManagement.resourceGroup
   location: location
-  tags: resourceOgranization.tags
 }
 
-module workload '../src/core/api-management.bicep' = {
+module apimModule '../src/workload/apim.bicep' = {
   scope: workloadRG
-  name: 'workload-${dateTime}'
+  name: 'apim-${dateTime}'
   params: {
     location: location
-    virtualNetworkName: networking.outputs.AZURE_VIRTUAL_NETWORK_NAME
-    apimSubnetName: networking.outputs.AZURE_PRIVATE_NETWORK_SUBNET_NAME
-    networkResourceGroup: resourceOgranization.resourceGroups.networking
+    tags: settings.tags
+    apiManagement: settings.workload.apiManagement
+    publicNetworkAccess: settings.connectivity.private
+    subnetName: networking.outputs.AZURE_API_MANAGEMENT_SUBNET_NAME
+    virtualNetworkName: networking.outputs.AZURE_VNET_NAME
+    virtualNetworkResourceGroup: settings.connectivity.resourceGroup
+    appInsightsName: monitoring.outputs.AZURE_APPLICATION_INSIGHTS_NAME
+    logAnalyticsWorkspaceName: monitoring.outputs.AZURE_LOG_ANALYTICS_WORKSPACE_NAME
+    logAnalyticsWorkspaceResourceGroup: settings.management.monitoring.resourceGroup
   }
-  dependsOn: [
-    monitoring
-    networking
-    security
-  ]
 }
