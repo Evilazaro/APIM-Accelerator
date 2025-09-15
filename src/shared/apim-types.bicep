@@ -27,5 +27,8 @@ type Settings = {
 
 type RBACRole = {
   name: string
-  scope: 'subscription' | 'resourceGroup' | 'resource'
+  scope: {
+    type: 'subscription' | 'resourceGroup' | 'resource'
+    name: string
+  }
 }

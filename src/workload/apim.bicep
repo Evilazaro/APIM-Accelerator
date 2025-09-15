@@ -75,6 +75,17 @@ resource apim 'Microsoft.ApiManagement/service@2024-05-01' = {
   }
 }
 
+module roleAssignments '../identity/role-assignment.bicep' = [
+  for roleDef in apiManagement.identity.RBACRoleAssignment.roles: {
+    name: 'roleAssignment-${roleDef.name}'
+    params: {
+      principalId: apim.identity.principalId
+      roleDefinitionName: roleDef.name
+      scope: roleDef.scope
+    }
+  }
+]
+
 resource apimAppInsightsLogger 'Microsoft.ApiManagement/service/loggers@2024-05-01' = {
   parent: apim
   name: 'AppInsightsLogger'
@@ -113,15 +124,6 @@ resource apimlogToAnalytics 'Microsoft.Insights/diagnosticSettings@2021-05-01-pr
         enabled: true
       }
     ]
-  }
-}
-
-module kvAccess '../security/kvaccess.bicep' = {
-  name: 'KVAccess'
-  scope: resourceGroup(keyVaultResourceGroup)
-  params: {
-    keyVaultName: keyVaultName
-    managedIdentity: apim.identity
   }
 }
 
