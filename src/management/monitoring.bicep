@@ -17,7 +17,7 @@ type AppInsightsSettings = {
 type MonitoringSettings = {
   createNew: bool
   resourceGroup: string
-  subnscriptionId: string
+  subscriptionId: string
   logAnalytics: LogAnalyticsSettings
   applicationInsights: AppInsightsSettings
 }
@@ -49,7 +49,7 @@ resource apimLogAnalytics 'Microsoft.OperationalInsights/workspaces@2025-02-01' 
 output AZURE_LOG_ANALYTICS_WORKSPACE_NAME string = apimLogAnalytics.name
 
 resource apimAppInsights 'Microsoft.Insights/components@2020-02-02' = {
-  name: monitoring.appInsights.name
+  name: monitoring.applicationInsights.name
   location: location
   kind: 'web'
   tags: tags

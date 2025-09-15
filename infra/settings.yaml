@@ -1,5 +1,7 @@
 connectivity:
+  createNew: true
   resourceGroup: apim-platform-connectivity-rg
+  subscriptionId: ""
   publicNetworkAccess: false
   virtualNetwork:
     name: apimplatvnet
@@ -25,13 +27,13 @@ connectivity:
         name: azureFirewallSubnet
         addressPrefix: 10.0.4.0/24
         networkSecurityGroup:
-          name:
+          name: azureFirewallSubnetNSG
 
 management:
   monitoring:
     createNew: true
     resourceGroup: apim-platform-monitoring-rg
-    subnscriptionId: 6a4029ea-399b-4933-9701-436db72883d4
+    subscriptionId: ""
     logAnalytics:
       name: apim-platform-log-law
       identity:
@@ -47,7 +49,7 @@ security:
     name: apim-platform-kv
 
 workload:
-  apiManagement:  
+  apiManagement:
     resourceGroup: apim-platform-apim-rg
     name: apim-platform-apim
     identity:

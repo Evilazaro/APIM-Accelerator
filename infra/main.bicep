@@ -81,6 +81,6 @@ module apimModule '../src/workload/apim.bicep' = {
     virtualNetworkResourceGroup: settings.connectivity.resourceGroup
     appInsightsName: monitoring.outputs.AZURE_APPLICATION_INSIGHTS_NAME
     logAnalyticsWorkspaceName: monitoring.outputs.AZURE_LOG_ANALYTICS_WORKSPACE_NAME
-    logAnalyticsWorkspaceResourceGroup: settings.management.monitoring.resourceGroup
+    monitoringResourceGroupName: settings.management.monitoring.resourceGroup
   }
 }

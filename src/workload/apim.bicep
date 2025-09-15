@@ -6,7 +6,7 @@ param virtualNetworkName string
 param virtualNetworkResourceGroup string
 param appInsightsName string
 param logAnalyticsWorkspaceName string
-param logAnalyticsWorkspaceResourceGroup string
+param monitoringResourceGroupName string
 param subnetName string
 param tags object
 
@@ -25,12 +25,12 @@ type ApiManagementSettings = {
 
 resource logAnalyticsWorkspace 'Microsoft.OperationalInsights/workspaces@2025-02-01' existing = {
   name: logAnalyticsWorkspaceName
-  scope: resourceGroup(logAnalyticsWorkspaceResourceGroup)
+  scope: resourceGroup(monitoringResourceGroupName)
 }
 
 resource appInsights 'Microsoft.Insights/components@2020-02-02' existing = {
   name: appInsightsName
-  scope: resourceGroup(apiManagement.resourceGroup)
+  scope: resourceGroup(monitoringResourceGroupName)
 }
 
 resource apimSubnet 'Microsoft.Network/virtualNetworks/subnets@2024-07-01' existing = {
@@ -55,9 +55,11 @@ resource apim 'Microsoft.ApiManagement/service@2024-05-01' = {
     publisherName: apiManagement.publisherName
     publicNetworkAccess: publicNetworkAccess ? 'Enabled' : 'Disabled'
     virtualNetworkType: publicNetworkAccess ? 'External' : 'Internal'
-    virtualNetworkConfiguration: {
-      subnetResourceId: apimSubnet.id
-    }
+    virtualNetworkConfiguration: (!publicNetworkAccess)
+      ? {
+          subnetResourceId: apimSubnet.id
+        }
+      : null
   }
 }
 

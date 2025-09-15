@@ -25,6 +25,7 @@ resource apimAppGwPip 'Microsoft.Network/publicIPAddresses@2024-07-01' existing 
   name: apimAppGwPipName
   scope: resourceGroup()
 }
+
 resource privateEndPointNsg 'Microsoft.Network/networkSecurityGroups@2024-07-01' = {
   name: subnets.privateEndpoint.networkSecurityGroup.name
   location: location
@@ -39,10 +40,6 @@ resource privateEndpointSubnet 'Microsoft.Network/virtualNetworks/subnets@2024-0
       id: privateEndPointNsg.id
     }
   }
-  dependsOn: [
-    apimAppGwPip
-    privateEndPointNsg
-  ]
 }
 
 output AZURE_PRIVATE_ENDPOINT_SUBNET_ID string = privateEndpointSubnet.id
@@ -147,9 +144,6 @@ resource apimNsg 'Microsoft.Network/networkSecurityGroups@2024-07-01' = {
       }
     ]
   }
-  dependsOn: [
-    apimAppGwPip
-  ]
 }
 
 resource apimSubnet 'Microsoft.Network/virtualNetworks/subnets@2024-07-01' = {
@@ -160,10 +154,6 @@ resource apimSubnet 'Microsoft.Network/virtualNetworks/subnets@2024-07-01' = {
       id: apimNsg.id
     }
   }
-  dependsOn: [
-    apimAppGwPip
-    apimNsg
-  ]
 }
 
 output AZURE_API_MANAGEMENT_SUBNET_ID string = apimSubnet.id
@@ -234,6 +224,19 @@ resource appGwNsg 'Microsoft.Network/networkSecurityGroups@2024-07-01' = {
   ]
 }
 
+resource azureFirewallSubnet 'Microsoft.Network/virtualNetworks/subnets@2024-07-01' = {
+  name: '${virtualNetworkName}/${subnets.azureFirewall.name}'
+  properties: {
+    addressPrefix: subnets.azureFirewall.addressPrefix
+  }
+  dependsOn: [
+    apimAppGwPip
+  ]
+}
+
+output AZURE_AZURE_FIREWALL_SUBNET_ID string = azureFirewallSubnet.id
+output AZURE_AZURE_FIREWALL_SUBNET_NAME string = azureFirewallSubnet.name
+
 resource appGwSubnet 'Microsoft.Network/virtualNetworks/subnets@2024-07-01' = {
   name: '${virtualNetworkName}/${subnets.applicationGateway.name}'
   properties: {
@@ -248,15 +251,5 @@ resource appGwSubnet 'Microsoft.Network/virtualNetworks/subnets@2024-07-01' = {
   ]
 }
 
-resource apimFirewallSubnet 'Microsoft.Network/virtualNetworks/subnets@2024-07-01' = {
-  name: '${virtualNetworkName}/${subnets.azureFirewall.name}'
-  properties: {
-    addressPrefix: subnets.azureFirewall.addressPrefix
-  }
-  dependsOn: [
-    apimAppGwPip
-  ]
-}
-
-output AZURE_AZURE_FIREWALL_SUBNET_ID string = apimFirewallSubnet.id
-output AZURE_AZURE_FIREWALL_SUBNET_NAME string = apimFirewallSubnet.name
+output AZURE_APPLICATION_GATEWAY_SUBNET_ID string = appGwSubnet.id
+output AZURE_APPLICATION_GATEWAY_SUBNET_NAME string = appGwSubnet.name
