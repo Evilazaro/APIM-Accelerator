@@ -87,6 +87,11 @@ resource apimSubnet 'Microsoft.Network/virtualNetworks/subnets@2024-07-01' = {
       id: apimNsg.id
     }
   }
+  dependsOn: [
+    apimNsg
+    apimNsgDiagnostics
+    privateEndpointSubnet
+  ]
 }
 
 output AZURE_API_MANAGEMENT_SUBNET_ID string = apimSubnet.id

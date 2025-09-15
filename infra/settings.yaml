@@ -51,11 +51,14 @@ security:
 workload:
   apiManagement:
     resourceGroup: apim-apim-rg
-    name: apim-apim
+    name: contoso-apim-platform
     identity:
       type: SystemAssigned
       userAssignedIdentities:
         - name: apim-apim-identity
+      rbacRoles:
+        - name: "Key Vault Secrets Reader"
+        - name: "Key Vault Certificates Reader"
     sku:
       name: Developer
       capacity: 1

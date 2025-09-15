@@ -72,25 +72,6 @@ resource apimVnet 'Microsoft.Network/virtualNetworks@2024-07-01' = {
 output AZURE_VNET_NAME string = apimVnet.name
 output AZURE_VNET_ID string = apimVnet.id
 
-resource dnsZone 'Microsoft.Network/privateDnsZones@2024-06-01' = {
-  name: 'privatelink.azure-api.net'
-  location: 'global'
-  tags: tags
-}
-
-resource dnsZoneLink 'Microsoft.Network/privateDnsZones/virtualNetworkLinks@2024-06-01' = {
-  name: apimVnet.name
-  parent: dnsZone
-  location: 'global'
-  tags: tags
-  properties: {
-    virtualNetwork: {
-      id: apimVnet.id
-    }
-    registrationEnabled: false
-  }
-}
-
 module apimSubnets 'subnets.bicep' = {
   name: 'Subnets'
   scope: resourceGroup()

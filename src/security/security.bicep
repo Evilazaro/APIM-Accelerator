@@ -25,3 +25,5 @@ resource apimKeyVault 'Microsoft.KeyVault/vaults@2024-11-01' = {
     tenantId: subscription().tenantId
   }
 }
+
+output AZURE_KEY_VAULT_NAME string = apimKeyVault.name
