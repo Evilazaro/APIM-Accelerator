@@ -27,7 +27,7 @@ resource dnsZoneLink 'Microsoft.Network/privateDnsZones/virtualNetworkLinks@2024
   }
 }
 
-resource gatewayRecord 'Microsoft.Network/privateDnsZones/A@2020-06-01' = {
+resource gatewayRecord 'Microsoft.Network/privateDnsZones/A@2024-06-01' = {
   parent: dnsZone
   name: '@'
   dependsOn: [
@@ -43,7 +43,7 @@ resource gatewayRecord 'Microsoft.Network/privateDnsZones/A@2020-06-01' = {
   }
 }
 
-resource developerRecord 'Microsoft.Network/privateDnsZones/A@2020-06-01' = {
+resource developerRecord 'Microsoft.Network/privateDnsZones/A@2024-06-01' = {
   parent: dnsZone
   name: 'developer'
   dependsOn: [

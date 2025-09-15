@@ -12,6 +12,7 @@ var workloadSettings = allSettings.workload
 resource monitoringRG 'Microsoft.Resources/resourceGroups@2025-04-01' = {
   name: managementSettings.monitoring.resourceGroup
   location: location
+  tags: allSettings.tags
 }
 
 module monitoring '../src/management/monitoring.bicep' = {
@@ -28,6 +29,7 @@ module monitoring '../src/management/monitoring.bicep' = {
 resource networkingRG 'Microsoft.Resources/resourceGroups@2025-04-01' = {
   name: connectivitySettings.resourceGroup
   location: location
+  tags: allSettings.tags
 }
 
 module networking '../src/connectivity/networking.bicep' = {
@@ -49,6 +51,7 @@ module networking '../src/connectivity/networking.bicep' = {
 resource securityRG 'Microsoft.Resources/resourceGroups@2025-04-01' = {
   name: securitySettings.resourceGroup
   location: location
+  tags: allSettings.tags
 }
 
 module security '../src/security/security.bicep' = {

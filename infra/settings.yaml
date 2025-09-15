@@ -46,12 +46,12 @@ management:
 security:
   resourceGroup: apim-security-rg
   keyVault:
-    name: apim-kv3
+    name: apim-kv4
 
 workload:
   apiManagement:
     resourceGroup: apim-apim-rg
-    name: contoso-apim-platform
+    name: contoso-apim-platform2
     identity:
       type: SystemAssigned
       userAssignedIdentities:
