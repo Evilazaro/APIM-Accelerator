@@ -1,6 +1,6 @@
 connectivity:
   createNew: true
-  resourceGroup: apim-platform-connectivity-rg
+  resourceGroup: apim-connectivity-rg
   subscriptionId: ""
   publicNetworkAccess: false
   virtualNetwork:
@@ -32,30 +32,30 @@ connectivity:
 management:
   monitoring:
     createNew: true
-    resourceGroup: apim-platform-monitoring-rg
+    resourceGroup: apim-monitoring-rg
     subscriptionId: ""
     logAnalytics:
-      name: apim-platform-log-law
+      name: apim-log-law
       identity:
         type: SystemAssigned
         userAssignedIdentities:
-          - name: apim-platform-log-law-identity
+          - name: apim-log-law-identity
     applicationInsights:
-      name: apim-platform-app-insights
+      name: apim-app-insights
 
 security:
-  resourceGroup: apim-platform-security-rg
+  resourceGroup: apim-security-rg
   keyVault:
-    name: apim-platform-kv
+    name: apim-kv2
 
 workload:
   apiManagement:
-    resourceGroup: apim-platform-apim-rg
-    name: apim-platform-apim
+    resourceGroup: apim-apim-rg
+    name: apim-apim
     identity:
       type: SystemAssigned
       userAssignedIdentities:
-        - name: apim-platform-apim-identity
+        - name: apim-apim-identity
     sku:
       name: Developer
       capacity: 1

@@ -1,25 +1,10 @@
+import * as SubnetSettings from '../shared/network-types.bicep'
+
 param location string
 param virtualNetworkName string
 param apimAppGwPipName string
-param subnets SubnetSettings
+param subnets SubnetSettings.Subnets
 param tags object
-
-type Subnet = {
-  name: string
-  addressPrefix: string
-  networkSecurityGroup: NetworkSecurityGroup
-}
-
-type NetworkSecurityGroup = {
-  name: string
-}
-
-type SubnetSettings = {
-  privateEndpoint: Subnet
-  apiManagement: Subnet
-  applicationGateway: Subnet
-  azureFirewall: Subnet
-}
 
 resource apimAppGwPip 'Microsoft.Network/publicIPAddresses@2024-07-01' existing = {
   name: apimAppGwPipName
@@ -30,6 +15,9 @@ resource privateEndPointNsg 'Microsoft.Network/networkSecurityGroups@2024-07-01'
   name: subnets.privateEndpoint.networkSecurityGroup.name
   location: location
   tags: tags
+  dependsOn: [
+    apimAppGwPip
+  ]
 }
 
 resource privateEndpointSubnet 'Microsoft.Network/virtualNetworks/subnets@2024-07-01' = {
@@ -40,6 +28,9 @@ resource privateEndpointSubnet 'Microsoft.Network/virtualNetworks/subnets@2024-0
       id: privateEndPointNsg.id
     }
   }
+  dependsOn: [
+    apimAppGwPip
+  ]
 }
 
 output AZURE_PRIVATE_ENDPOINT_SUBNET_ID string = privateEndpointSubnet.id
@@ -144,6 +135,9 @@ resource apimNsg 'Microsoft.Network/networkSecurityGroups@2024-07-01' = {
       }
     ]
   }
+  dependsOn: [
+    apimAppGwPip
+  ]
 }
 
 resource apimSubnet 'Microsoft.Network/virtualNetworks/subnets@2024-07-01' = {
@@ -154,6 +148,9 @@ resource apimSubnet 'Microsoft.Network/virtualNetworks/subnets@2024-07-01' = {
       id: apimNsg.id
     }
   }
+  dependsOn: [
+    apimAppGwPip
+  ]
 }
 
 output AZURE_API_MANAGEMENT_SUBNET_ID string = apimSubnet.id

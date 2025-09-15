@@ -1,12 +1,7 @@
+import * as Network from '../shared/network-types.bicep'
 param location string
-param virtualNetwork VirtualNetworkSettings
+param virtualNetwork Network.VirtualNetwork
 param tags object
-
-type VirtualNetworkSettings = {
-  name: string
-  addressPrefixes: string[]
-  subnets: object
-}
 
 resource apimPublicIp 'Microsoft.Network/publicIPAddresses@2024-07-01' = {
   name: 'apim-pip'

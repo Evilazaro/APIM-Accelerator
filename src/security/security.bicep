@@ -24,14 +24,14 @@ resource apimKeyVault 'Microsoft.KeyVault/vaults@2024-11-01' = {
       name: 'standard'
       family: 'A'
     }
-    publicNetworkAccess: publicNetworkAccess ? 'Disabled' : 'Enabled'
-    networkAcls: {
+    publicNetworkAccess: publicNetworkAccess ? 'Enabled' : 'Disabled'
+    networkAcls: (!publicNetworkAccess) ? {
       virtualNetworkRules: [
         {
           id: keyVaultSubnet.id
         }
       ]
-    }
+    }: null
     tenantId: subscription().tenantId
   }
 }

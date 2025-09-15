@@ -51,9 +51,7 @@ module security '../src/security/security.bicep' = {
     location: location
     virtualNetworkName: networking.outputs.AZURE_VNET_NAME
     virtualNetworkResourceGroup: securityRG.name
-    subnetName: (settings.connectivity.publicNetworkAccess)
-      ? networking.outputs.AZURE_PRIVATE_ENDPOINT_SUBNET_NAME
-      : networking.outputs.AZURE_API_MANAGEMENT_SUBNET_NAME
+    subnetName: networking.outputs.AZURE_API_MANAGEMENT_SUBNET_NAME
     publicNetworkAccess: settings.connectivity.publicNetworkAccess
     tags: settings.tags
     keyVault: settings.security.keyVault
@@ -78,7 +76,7 @@ module apimModule '../src/workload/apim.bicep' = {
     publicNetworkAccess: settings.connectivity.publicNetworkAccess
     subnetName: networking.outputs.AZURE_API_MANAGEMENT_SUBNET_NAME
     virtualNetworkName: networking.outputs.AZURE_VNET_NAME
-    virtualNetworkResourceGroup: settings.connectivity.resourceGroup
+    virtualNetworkResourceGroup: networkingRG.name
     appInsightsName: monitoring.outputs.AZURE_APPLICATION_INSIGHTS_NAME
     logAnalyticsWorkspaceName: monitoring.outputs.AZURE_LOG_ANALYTICS_WORKSPACE_NAME
     monitoringResourceGroupName: settings.management.monitoring.resourceGroup
