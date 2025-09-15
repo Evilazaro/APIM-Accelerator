@@ -1,7 +1,23 @@
-import * as Network from '../shared/network-types.bicep'
+import * as Networking from '../shared/networking-types.bicep'
+
 param location string
-param virtualNetwork Network.VirtualNetwork
+param networking Networking.Settings
+param logAnalytcsWorkspaceName string
+param monitoringStorageAccountName string
+param monitoringResourceGroup string
 param tags object
+
+var vnetSettings = networking.virtualNetwork
+
+resource logAnalyticsWorkspace 'Microsoft.OperationalInsights/workspaces@2025-02-01' existing = {
+  name: logAnalytcsWorkspaceName
+  scope: resourceGroup(monitoringResourceGroup)
+}
+
+resource monitoringStorageAccount 'Microsoft.Storage/storageAccounts@2025-01-01' existing = {
+  name: monitoringStorageAccountName
+  scope: resourceGroup(monitoringResourceGroup)
+}
 
 resource apimPublicIp 'Microsoft.Network/publicIPAddresses@2024-07-01' = {
   name: 'apim-pip'
@@ -17,31 +33,75 @@ resource apimPublicIp 'Microsoft.Network/publicIPAddresses@2024-07-01' = {
   }
 }
 
+resource publicIPDiagnostics 'Microsoft.Insights/diagnosticSettings@2021-05-01-preview' = {
+  name: 'publicIp-diag'
+  scope: apimPublicIp
+  properties: {
+    workspaceId: logAnalyticsWorkspace.id
+    storageAccountId: monitoringStorageAccount.id
+    logs: [
+      {
+        categoryGroup: 'allLogs'
+        enabled: true
+      }
+      {
+        categoryGroup: 'audit'
+        enabled: true
+      }
+    ]
+    metrics: [
+      {
+        category: 'AllMetrics'
+        enabled: true
+      }
+    ]
+  }
+}
+
 resource apimVnet 'Microsoft.Network/virtualNetworks@2024-07-01' = {
-  name: virtualNetwork.name
+  name: vnetSettings.name
   location: location
   tags: tags
   properties: {
     addressSpace: {
-      addressPrefixes: virtualNetwork.addressPrefixes
+      addressPrefixes: vnetSettings.addressPrefixes
     }
   }
-  dependsOn: [
-    apimPublicIp
-  ]
 }
 
 output AZURE_VNET_NAME string = apimVnet.name
 output AZURE_VNET_ID string = apimVnet.id
+
+resource dnsZone 'Microsoft.Network/privateDnsZones@2024-06-01' = {
+  name: 'privatelink.azure-api.net'
+  location: 'global'
+  tags: tags
+}
+
+resource dnsZoneLink 'Microsoft.Network/privateDnsZones/virtualNetworkLinks@2024-06-01' = {
+  name: apimVnet.name
+  parent: dnsZone
+  location: 'global'
+  tags: tags
+  properties: {
+    virtualNetwork: {
+      id: apimVnet.id
+    }
+    registrationEnabled: false
+  }
+}
 
 module apimSubnets 'subnets.bicep' = {
   name: 'Subnets'
   scope: resourceGroup()
   params: {
     location: location
-    subnets: virtualNetwork.subnets
+    subnets: vnetSettings.subnets
     virtualNetworkName: apimVnet.name
     apimAppGwPipName: apimPublicIp.name
+    logAnalytcsWorkspaceName: logAnalytcsWorkspaceName
+    monitoringStorageAccountName: monitoringStorageAccountName
+    monitoringResourceGroup: monitoringResourceGroup
     tags: tags
   }
   dependsOn: [
@@ -55,31 +115,48 @@ output AZURE_PRIVATE_ENDPOINT_SUBNET_NAME string = apimSubnets.outputs.AZURE_PRI
 output AZURE_API_MANAGEMENT_SUBNET_ID string = apimSubnets.outputs.AZURE_API_MANAGEMENT_SUBNET_ID
 output AZURE_API_MANAGEMENT_SUBNET_NAME string = apimSubnets.outputs.AZURE_API_MANAGEMENT_SUBNET_NAME
 
-resource apimFirewall 'Microsoft.Network/azureFirewalls@2024-07-01' = {
-  name: 'azfw'
-  location: location
-  tags: tags
+resource vnetDiagnosticSettings 'Microsoft.Insights/diagnosticSettings@2021-05-01-preview' = {
+  name: 'vnet-diag'
+  scope: apimVnet
   properties: {
-    sku: {
-      name: 'AZFW_VNet'
-      tier: 'Standard'
-    }
-    ipConfigurations: [
+    workspaceId: logAnalyticsWorkspace.id
+    storageAccountId: monitoringStorageAccount.id
+    logs: [
       {
-        name: 'ipconfig'
-        properties: {
-          subnet: {
-            id: apimSubnets.outputs.AZURE_AZURE_FIREWALL_SUBNET_ID
-          }
-          publicIPAddress: {
-            id: apimPublicIp.id
-          }
-        }
+        categoryGroup: 'allLogs'
+        enabled: true
+      }
+    ]
+    metrics: [
+      {
+        category: 'AllMetrics'
+        enabled: true
       }
     ]
   }
-  dependsOn: [
-    apimVnet
-    apimSubnets
-  ]
 }
+
+// resource apimFirewall 'Microsoft.Network/azureFirewalls@2024-07-01' = {
+//   name: 'azfw'
+//   location: location
+//   tags: tags
+//   properties: {
+//     sku: {
+//       name: 'AZFW_VNet'
+//       tier: 'Standard'
+//     }
+//     ipConfigurations: [
+//       {
+//         name: 'ipconfig'
+//         properties: {
+//           subnet: {
+//             id: apimSubnets.outputs.AZURE_AZURE_FIREWALL_SUBNET_ID
+//           }
+//           publicIPAddress: {
+//             id: apimPublicIp.id
+//           }
+//         }
+//       }
+//     ]
+//   }
+// }

@@ -1,9 +1,8 @@
 import * as APIM from '../shared/apim-types.bicep'
 
 param location string
-param apiManagement APIM.ApiManagementSettings
+param apiManagement APIM.Settings
 param publicNetworkAccess bool
-param virtualNetworkName string
 param virtualNetworkResourceGroup string
 param appInsightsName string
 param logAnalyticsWorkspaceName string
@@ -22,7 +21,7 @@ resource appInsights 'Microsoft.Insights/components@2020-02-02' existing = {
 }
 
 resource apimSubnet 'Microsoft.Network/virtualNetworks/subnets@2024-07-01' existing = {
-  name: '${virtualNetworkName}/${subnetName}'
+  name: subnetName
   scope: resourceGroup(virtualNetworkResourceGroup)
 }
 
@@ -30,7 +29,6 @@ resource apim 'Microsoft.ApiManagement/service@2024-05-01' = {
   name: apiManagement.name
   location: location
   tags: tags
-  zones: (apiManagement.sku.name == 'Premium') ? apiManagement.sku.zones : null
   identity: {
     type: apiManagement.identity.type
   }
@@ -51,43 +49,43 @@ resource apim 'Microsoft.ApiManagement/service@2024-05-01' = {
   }
 }
 
-// resource apimAppInsightsLogger 'Microsoft.ApiManagement/service/loggers@2024-05-01' = {
-//   parent: apim
-//   name: 'AppInsightsLogger'
-//   properties: {
-//     loggerType: 'applicationInsights'
-//     resourceId: appInsights.id
-//     credentials: {
-//       instrumentationKey: appInsights.properties.InstrumentationKey
-//     }
-//   }
-// }
+resource apimAppInsightsLogger 'Microsoft.ApiManagement/service/loggers@2024-05-01' = {
+  parent: apim
+  name: 'AppInsightsLogger'
+  properties: {
+    loggerType: 'applicationInsights'
+    resourceId: appInsights.id
+    credentials: {
+      instrumentationKey: appInsights.properties.InstrumentationKey
+    }
+  }
+}
 
-// resource apimLogAnalyticsLogger 'Microsoft.ApiManagement/service/loggers@2024-05-01' = {
-//   name: 'LogAnalyticsLogger'
-//   parent: apim
-//   properties: {
-//     loggerType: 'azureMonitor'
-//     resourceId: logAnalyticsWorkspace.id
-//   }
-// }
+resource apimLogAnalyticsLogger 'Microsoft.ApiManagement/service/loggers@2024-05-01' = {
+  name: 'LogAnalyticsLogger'
+  parent: apim
+  properties: {
+    loggerType: 'azureMonitor'
+    resourceId: logAnalyticsWorkspace.id
+  }
+}
 
-// resource apimlogToAnalytics 'Microsoft.Insights/diagnosticSettings@2021-05-01-preview' = {
-//   scope: apim
-//   name: 'logToAnalytics'
-//   properties: {
-//     workspaceId: logAnalyticsWorkspace.id
-//     logs: [
-//       {
-//         category: 'GatewayLogs'
-//         enabled: true
-//       }
-//     ]
-//     metrics: [
-//       {
-//         category: 'AllMetrics'
-//         enabled: true
-//       }
-//     ]
-//   }
-// }
+resource apimlogToAnalytics 'Microsoft.Insights/diagnosticSettings@2021-05-01-preview' = {
+  scope: apim
+  name: 'logToAnalytics'
+  properties: {
+    workspaceId: logAnalyticsWorkspace.id
+    logs: [
+      {
+        categoryGroup: 'allLogs'
+        enabled: true
+      }
+    ]
+    metrics: [
+      {
+        category: 'AllMetrics'
+        enabled: true
+      }
+    ]
+  }
+}

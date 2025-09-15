@@ -16,9 +16,16 @@ type Subnets = {
   azureFirewall: Subnet
 }
 
-@export()
 type VirtualNetwork = {
   name: string
   addressPrefixes: string[]
   subnets: Subnets
+}
+
+@export()
+type Settings = {
+  resourceGroup: string
+  subscriptionId: string
+  publicNetworkAccess: bool
+  virtualNetwork: VirtualNetwork
 }

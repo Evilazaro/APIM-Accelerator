@@ -1,10 +1,23 @@
-import * as SubnetSettings from '../shared/network-types.bicep'
+import * as SubnetSettings from '../shared/networking-types.bicep'
 
 param location string
 param virtualNetworkName string
 param apimAppGwPipName string
 param subnets SubnetSettings.Subnets
+param logAnalytcsWorkspaceName string
+param monitoringStorageAccountName string
+param monitoringResourceGroup string
 param tags object
+
+resource logAnalyticsWorkspace 'Microsoft.OperationalInsights/workspaces@2025-02-01' existing = {
+  name: logAnalytcsWorkspaceName
+  scope: resourceGroup(monitoringResourceGroup)
+}
+
+resource monitoringStorageAccount 'Microsoft.Storage/storageAccounts@2025-01-01' existing = {
+  name: monitoringStorageAccountName
+  scope: resourceGroup(monitoringResourceGroup)
+}
 
 resource apimAppGwPip 'Microsoft.Network/publicIPAddresses@2024-07-01' existing = {
   name: apimAppGwPipName
@@ -15,9 +28,21 @@ resource privateEndPointNsg 'Microsoft.Network/networkSecurityGroups@2024-07-01'
   name: subnets.privateEndpoint.networkSecurityGroup.name
   location: location
   tags: tags
-  dependsOn: [
-    apimAppGwPip
-  ]
+}
+
+resource privateEndPointDiagnostics 'Microsoft.Insights/diagnosticSettings@2021-05-01-preview' = {
+  name: 'privateEndpoint-nsg-diag'
+  scope: privateEndPointNsg
+  properties: {
+    workspaceId: logAnalyticsWorkspace.id
+    storageAccountId: monitoringStorageAccount.id
+    logs: [
+      {
+        categoryGroup: 'allLogs'
+        enabled: true
+      }
+    ]
+  }
 }
 
 resource privateEndpointSubnet 'Microsoft.Network/virtualNetworks/subnets@2024-07-01' = {
@@ -28,9 +53,6 @@ resource privateEndpointSubnet 'Microsoft.Network/virtualNetworks/subnets@2024-0
       id: privateEndPointNsg.id
     }
   }
-  dependsOn: [
-    apimAppGwPip
-  ]
 }
 
 output AZURE_PRIVATE_ENDPOINT_SUBNET_ID string = privateEndpointSubnet.id
@@ -40,104 +62,21 @@ resource apimNsg 'Microsoft.Network/networkSecurityGroups@2024-07-01' = {
   name: subnets.apiManagement.networkSecurityGroup.name
   location: location
   tags: tags
+}
+
+resource apimNsgDiagnostics 'Microsoft.Insights/diagnosticSettings@2021-05-01-preview' = {
+  name: 'apim-nsg-diag'
+  scope: apimNsg
   properties: {
-    securityRules: [
+    workspaceId: logAnalyticsWorkspace.id
+    storageAccountId: monitoringStorageAccount.id
+    logs: [
       {
-        name: 'AllowApimManagement'
-        properties: {
-          priority: 2000
-          sourceAddressPrefix: 'ApiManagement'
-          protocol: 'Tcp'
-          destinationPortRange: '3443'
-          access: 'Allow'
-          direction: 'Inbound'
-          sourcePortRange: '*'
-          destinationAddressPrefix: 'VirtualNetwork'
-        }
-      }
-      {
-        name: 'AllowAzureLoadBalancer'
-        properties: {
-          priority: 2010
-          sourceAddressPrefix: 'AzureLoadBalancer'
-          protocol: 'Tcp'
-          destinationPortRange: '6390'
-          access: 'Allow'
-          direction: 'Inbound'
-          sourcePortRange: '*'
-          destinationAddressPrefix: 'VirtualNetwork'
-        }
-      }
-      {
-        name: 'AllowAzureTrafficManager'
-        properties: {
-          priority: 2020
-          sourceAddressPrefix: 'AzureTrafficManager'
-          protocol: 'Tcp'
-          destinationPortRange: '443'
-          access: 'Allow'
-          direction: 'Inbound'
-          sourcePortRange: '*'
-          destinationAddressPrefix: 'VirtualNetwork'
-        }
-      }
-      {
-        name: 'AllowStorage'
-        properties: {
-          priority: 2000
-          sourceAddressPrefix: 'VirtualNetwork'
-          protocol: 'Tcp'
-          destinationPortRange: '443'
-          access: 'Allow'
-          direction: 'Outbound'
-          sourcePortRange: '*'
-          destinationAddressPrefix: 'Storage'
-        }
-      }
-      {
-        name: 'AllowSql'
-        properties: {
-          priority: 2010
-          sourceAddressPrefix: 'VirtualNetwork'
-          protocol: 'Tcp'
-          destinationPortRange: '1433'
-          access: 'Allow'
-          direction: 'Outbound'
-          sourcePortRange: '*'
-          destinationAddressPrefix: 'SQL'
-        }
-      }
-      {
-        name: 'AllowKeyVault'
-        properties: {
-          priority: 2020
-          sourceAddressPrefix: 'VirtualNetwork'
-          protocol: 'Tcp'
-          destinationPortRange: '443'
-          access: 'Allow'
-          direction: 'Outbound'
-          sourcePortRange: '*'
-          destinationAddressPrefix: 'AzureKeyVault'
-        }
-      }
-      {
-        name: 'AllowMonitor'
-        properties: {
-          priority: 2030
-          sourceAddressPrefix: 'VirtualNetwork'
-          protocol: 'Tcp'
-          destinationPortRanges: ['1886', '443']
-          access: 'Allow'
-          direction: 'Outbound'
-          sourcePortRange: '*'
-          destinationAddressPrefix: 'AzureMonitor'
-        }
+        categoryGroup: 'allLogs'
+        enabled: true
       }
     ]
   }
-  dependsOn: [
-    apimAppGwPip
-  ]
 }
 
 resource apimSubnet 'Microsoft.Network/virtualNetworks/subnets@2024-07-01' = {
@@ -148,9 +87,6 @@ resource apimSubnet 'Microsoft.Network/virtualNetworks/subnets@2024-07-01' = {
       id: apimNsg.id
     }
   }
-  dependsOn: [
-    apimAppGwPip
-  ]
 }
 
 output AZURE_API_MANAGEMENT_SUBNET_ID string = apimSubnet.id
@@ -216,9 +152,21 @@ resource appGwNsg 'Microsoft.Network/networkSecurityGroups@2024-07-01' = {
       }
     ]
   }
-  dependsOn: [
-    apimAppGwPip
-  ]
+}
+
+resource appGwNsgDiagnostics 'Microsoft.Insights/diagnosticSettings@2021-05-01-preview' = {
+  name: 'appGw-nsg-diag'
+  scope: appGwNsg
+  properties: {
+    workspaceId: logAnalyticsWorkspace.id
+    storageAccountId: monitoringStorageAccount.id
+    logs: [
+      {
+        categoryGroup: 'allLogs'
+        enabled: true
+      }
+    ]
+  }
 }
 
 resource azureFirewallSubnet 'Microsoft.Network/virtualNetworks/subnets@2024-07-01' = {
@@ -226,9 +174,6 @@ resource azureFirewallSubnet 'Microsoft.Network/virtualNetworks/subnets@2024-07-
   properties: {
     addressPrefix: subnets.azureFirewall.addressPrefix
   }
-  dependsOn: [
-    apimAppGwPip
-  ]
 }
 
 output AZURE_AZURE_FIREWALL_SUBNET_ID string = azureFirewallSubnet.id
@@ -242,10 +187,6 @@ resource appGwSubnet 'Microsoft.Network/virtualNetworks/subnets@2024-07-01' = {
       id: appGwNsg.id
     }
   }
-  dependsOn: [
-    apimAppGwPip
-    appGwNsg
-  ]
 }
 
 output AZURE_APPLICATION_GATEWAY_SUBNET_ID string = appGwSubnet.id

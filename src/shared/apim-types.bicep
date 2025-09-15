@@ -1,7 +1,7 @@
 import * as Identity from 'identity-types.bicep'
 
 @export()
-type ApiManagementSettings = {
+type Settings = {
   name: string
   identity: Identity.Identity
   sku: {
