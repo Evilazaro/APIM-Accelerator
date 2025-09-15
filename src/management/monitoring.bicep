@@ -1,10 +1,9 @@
-
 import * as IdentityTypes from '../shared/identity-types.bicep'
 
 param location string
 param logAnalytics LogAnalyticsSettings
 param appInsights AppInsightsSettings
-param privateConnection bool
+param publicNetworkAccess bool
 param tags object
 
 type LogAnalyticsSettings = {
@@ -26,8 +25,8 @@ resource apimStorageAccount 'Microsoft.Storage/storageAccounts@2025-01-01' = {
   tags: tags
   properties: {
     accessTier: 'Hot'
-    publicNetworkAccess: privateConnection ? 'Disabled' : 'Enabled'
-    allowBlobPublicAccess: privateConnection ? false : true
+    publicNetworkAccess: publicNetworkAccess ? 'Disabled' : 'Enabled'
+    allowBlobPublicAccess: publicNetworkAccess ? false : true
   }
 }
 
@@ -40,6 +39,8 @@ resource apimLogAnalytics 'Microsoft.OperationalInsights/workspaces@2025-02-01' 
   }
 }
 
+output AZURE_LOG_ANALYTICS_WORKSPACE_NAME string = apimLogAnalytics.name
+
 resource apimAppInsights 'Microsoft.Insights/components@2020-02-02' = {
   name: appInsights.name
   location: location
@@ -50,6 +51,8 @@ resource apimAppInsights 'Microsoft.Insights/components@2020-02-02' = {
     WorkspaceResourceId: apimLogAnalytics.id
   }
 }
+
+output AZURE_APPLICATION_INSIGHTS_NAME string = apimAppInsights.name
 
 resource apiAppInsightsDiagnostics 'Microsoft.Insights/diagnosticSettings@2021-05-01-preview' = {
   scope: apimAppInsights

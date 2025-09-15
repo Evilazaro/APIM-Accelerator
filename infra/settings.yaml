@@ -41,10 +41,21 @@ security:
   resourceGroup: apim-accelerator-security-rg
   keyVault:
     name: apim-accelerator-kv
+
+workload:
+  apiManagement:  
+    resourceGroup: apim-accelerator-apim-rg
+    name: apim-accelerator-apim
     identity:
       type: SystemAssigned
       userAssignedIdentities:
-        - name: apim-accelerator-kv-identity
+        - name: apim-accelerator-apim-identity
+    sku:
+      name: Developer
+      capacity: 1
+      zones: []
+    publisherEmail: publisher@example.com
+    publisherName: Contoso API Team
 
 tags:
   CostCenter: "CC-1234" # Tracks cost allocation

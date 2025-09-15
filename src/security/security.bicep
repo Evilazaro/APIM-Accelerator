@@ -1,15 +1,13 @@
-import * as IdentityTypes from '../shared/identity-types.bicep'
 param location string
 param virtualNetworkName string
 param virtualNetworkResourceGroup string
 param subnetName string
 param keyVault KeyVaultSettings
-param privateConnection bool
+param publicNetworkAccess bool
 param tags object
 
 type KeyVaultSettings = {
   name: string
-  identity: IdentityTypes.Identity
 }
 
 resource keyVaultSubnet 'Microsoft.Network/virtualNetworks/subnets@2024-07-01' existing = {
@@ -26,7 +24,7 @@ resource apimKeyVault 'Microsoft.KeyVault/vaults@2024-11-01' = {
       name: 'standard'
       family: 'A'
     }
-    publicNetworkAccess: privateConnection ? 'Disabled' : 'Enabled'
+    publicNetworkAccess: publicNetworkAccess ? 'Disabled' : 'Enabled'
     networkAcls: {
       virtualNetworkRules: [
         {
@@ -38,7 +36,7 @@ resource apimKeyVault 'Microsoft.KeyVault/vaults@2024-11-01' = {
   }
 }
 
-resource keyVaultPrivateEndpoint 'Microsoft.Network/privateEndpoints@2024-07-01' = if (privateConnection) {
+resource keyVaultPrivateEndpoint 'Microsoft.Network/privateEndpoints@2024-07-01' = if (publicNetworkAccess) {
   name: '${apimKeyVault.name}-pe'
   location: location
   tags: tags

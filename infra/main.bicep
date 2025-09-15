@@ -17,7 +17,7 @@ module monitoring '../src/management/monitoring.bicep' = {
     location: location
     logAnalytics: settings.management.monitoring.logAnalytics
     appInsights: settings.management.monitoring.applicationInsights
-    privateConnection: settings.connectivity.private
+    publicNetworkAccess: settings.connectivity.private
     tags: settings.tags
   }
 }
@@ -55,11 +55,33 @@ module security '../src/security/security.bicep' = {
     subnetName: (settings.connectivity.private)
       ? networking.outputs.AZURE_PRIVATE_ENDPOINT_SUBNET_NAME
       : networking.outputs.AZURE_API_MANAGEMENT_SUBNET_NAME
-    privateConnection: settings.connectivity.private
+    publicNetworkAccess: settings.connectivity.private
     tags: settings.tags
     keyVault: settings.security.keyVault
   }
   dependsOn: [
     networking
   ]
+}
+
+resource workloadRG 'Microsoft.Resources/resourceGroups@2025-04-01' = {
+  name: settings.workload.apiManagement.resourceGroup
+  location: location
+}
+
+module apimModule '../src/workload/apim.bicep' = {
+  scope: workloadRG
+  name: 'apim-${dateTime}'
+  params: {
+    location: location
+    tags: settings.tags
+    apiManagement: settings.workload.apiManagement
+    publicNetworkAccess: settings.connectivity.private
+    subnetName: networking.outputs.AZURE_API_MANAGEMENT_SUBNET_NAME
+    virtualNetworkName: networking.outputs.AZURE_VNET_NAME
+    virtualNetworkResourceGroup: settings.connectivity.resourceGroup
+    appInsightsName: monitoring.outputs.AZURE_APPLICATION_INSIGHTS_NAME
+    logAnalyticsWorkspaceName: monitoring.outputs.AZURE_LOG_ANALYTICS_WORKSPACE_NAME
+    logAnalyticsWorkspaceResourceGroup: settings.management.monitoring.resourceGroup
+  }
 }
