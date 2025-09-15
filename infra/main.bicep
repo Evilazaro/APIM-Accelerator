@@ -77,20 +77,7 @@ module workload '../src/workload/apim.bicep' = {
   params: {
     location: location
     tags: allSettings.tags
-    apiManagement: {
-      name: workloadSettings.apiManagement.name
-      sku: {
-        name: workloadSettings.apiManagement.sku.name
-        zones: workloadSettings.apiManagement.sku.zones
-        capacity: workloadSettings.apiManagement.sku.capacity
-      }
-      identity: {
-        type: workloadSettings.apiManagement.identity.type
-        userAssignedIdentities: workloadSettings.apiManagement.identity.userAssignedIdentities
-      }
-      publisherEmail: workloadSettings.apiManagement.publisherEmail
-      publisherName: workloadSettings.apiManagement.publisherName
-    }
+    apiManagement: workloadSettings.apiManagement
     appInsightsName: monitoring.outputs.AZURE_APPLICATION_INSIGHTS_NAME
     logAnalyticsWorkspaceName: monitoring.outputs.AZURE_LOG_ANALYTICS_WORKSPACE_NAME
     monitoringResourceGroupName: monitoringRG.name

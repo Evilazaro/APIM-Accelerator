@@ -56,9 +56,12 @@ workload:
       type: SystemAssigned
       userAssignedIdentities:
         - name: apim-apim-identity
-      rbacRoles:
-        - name: "Key Vault Secrets Reader"
-        - name: "Key Vault Certificates Reader"
+      RBACRoleAssignment:
+        roles:
+          - name: "Key Vault Secrets Reader"
+            scope: resourceGroup
+          - name: "Key Vault Certificates Reader"
+            scope: resourceGroup
     sku:
       name: Developer
       capacity: 1

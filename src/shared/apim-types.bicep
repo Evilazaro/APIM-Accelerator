@@ -1,9 +1,21 @@
-import * as Identity from 'identity-types.bicep'
+type IdentityType = 'SystemAssigned' | 'UserAssigned' | 'None'
+
+type UserAssignedIdentity = {
+  name: string
+}
+
+type Identity = {
+  type: IdentityType
+  userAssignedIdentities: UserAssignedIdentity[]
+  RBACRoleAssignment: {
+    roles: RBACRole[]
+  }
+}
 
 @export()
 type Settings = {
   name: string
-  identity: Identity.Identity
+  identity: Identity
   sku: {
     name: 'Developer' | 'Basic' | 'Standard' | 'Premium' | 'Consumption'
     capacity: int
@@ -11,4 +23,9 @@ type Settings = {
   }
   publisherEmail: string
   publisherName: string
+}
+
+type RBACRole = {
+  name: string
+  scope: 'subscription' | 'resourceGroup' | 'resource'
 }
