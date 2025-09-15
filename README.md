@@ -1,2 +1,2 @@
-# APIM-Accelerator
-APIM-Accelerator
+# apim-platform
+apim-platform

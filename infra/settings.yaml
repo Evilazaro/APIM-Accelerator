@@ -1,8 +1,8 @@
 connectivity:
-  resourceGroup: apim-accelerator-connectivity-rg
-  private: true
+  resourceGroup: eyapim-platform-connectivity-rg
+  publicNetworkAccess: false
   virtualNetwork:
-    name: apimAcceleratorVNet
+    name: eyapimplatvnet
     addressPrefixes:
       - 10.0.0.0/16
     subnets:
@@ -26,30 +26,32 @@ connectivity:
         addressPrefix: 10.0.4.0/24
         networkSecurityGroup:
           name:
+
 management:
   monitoring:
-    resourceGroup: rg-apim-accelerator-monitoring-rg
+    resourceGroup: rg-eyapim-platform-monitoring-rg
     logAnalytics:
-      name: apim-accelerator-log-law
+      name: apim-platform-log-law
       identity:
         type: SystemAssigned
         userAssignedIdentities:
-          - name: apim-accelerator-log-law-identity
+          - name: apim-platform-log-law-identity
     applicationInsights:
-      name: apim-accelerator-app-insights
+      name: apim-platform-app-insights
+
 security:
-  resourceGroup: apim-accelerator-security-rg
+  resourceGroup: apim-platform-security-rg
   keyVault:
-    name: apim-accelerator-kv
+    name: apim-platform-kv
 
 workload:
   apiManagement:  
-    resourceGroup: apim-accelerator-apim-rg
-    name: apim-accelerator-apim
+    resourceGroup: apim-platform-apim-rg
+    name: apim-platform-apim
     identity:
       type: SystemAssigned
       userAssignedIdentities:
-        - name: apim-accelerator-apim-identity
+        - name: apim-platform-apim-identity
     sku:
       name: Developer
       capacity: 1
