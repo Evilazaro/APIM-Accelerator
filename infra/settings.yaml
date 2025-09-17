@@ -32,12 +32,12 @@ management:
 security:
   resourceGroup: apim-plat-security-rg
   keyVault:
-    name: apim-plat-kv
+    name: apim-plat-kv10
 
 workload:
   apiManagement:
     resourceGroup: apim-plat-apim-rg
-    name: apim-plat-apim
+    name: apim-plat-apim10
     identity:
       type: SystemAssigned
       systemAssigned:
@@ -50,17 +50,17 @@ workload:
               id: "b24988ac-6180-42a0-ab88-20f7382dd24c" # Contributor Role ID
             - roleName: "Reader"
               id: "acdd72a7-3385-48ef-bd42-f606fba81ae7" # Reader Role ID
-      userAssignedIdentities:
-        - name: apim-plat-identity
-          scope:
-            type: resourceGroup
-            name: apim-plat-apim-rg
-          rbacRoleAssignment:
-            roles:
-              - roleName: "Contributor"
-                id: "b24988ac-6180-42a0-ab88-20f7382dd24c" # Contributor Role ID
-              - roleName: "Reader"
-                id: "acdd72a7-3385-48ef-bd42-f606fba81ae7" # Reader Role ID
+      userAssigned:
+        name: apim-plat-identity
+        scope:
+          type: resourceGroup
+          name: apim-plat-apim-rg
+        rbacRoleAssignment:
+          roles:
+            - roleName: "Contributor"
+              id: "b24988ac-6180-42a0-ab88-20f7382dd24c" # Contributor Role ID
+            - roleName: "Reader"
+              id: "acdd72a7-3385-48ef-bd42-f606fba81ae7" # Reader Role ID
 
     sku:
       name: Developer

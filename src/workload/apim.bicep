@@ -25,6 +25,25 @@ resource apimSubnet 'Microsoft.Network/virtualNetworks/subnets@2024-07-01' exist
   scope: resourceGroup(virtualNetworkResourceGroup)
 }
 
+module userAssignedIdentity '../identity/userAssignedIdentity.bicep' = {
+  name: 'apim-userAssignedIdentities'
+  scope: resourceGroup()
+  params: {
+    location: location
+    tags: tags
+    userAssignedIdentity: apiManagement.identity.userAssigned
+  }
+}
+
+module systemAssignedIdentity '../identity/sytemAssignedIdentity.bicep' = {
+  name: 'apim-systemAssignedIdentities'
+  scope: resourceGroup()
+  params: {
+    principalId: apim.identity.principalId
+    systemAssignedIdentity: apiManagement.identity.systemAssigned
+  }
+}
+
 resource apim 'Microsoft.ApiManagement/service@2024-05-01' = {
   name: apiManagement.name
   location: location
@@ -46,6 +65,9 @@ resource apim 'Microsoft.ApiManagement/service@2024-05-01' = {
         }
       : null
   }
+  dependsOn: [
+    userAssignedIdentity
+  ]
 }
 
 resource apimAppInsightsLogger 'Microsoft.ApiManagement/service/loggers@2024-05-01' = {

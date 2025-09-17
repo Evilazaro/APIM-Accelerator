@@ -24,7 +24,7 @@ type SystemAssignedIdentity = {
 type Identity = {
   type: IdentityType
   systemAssigned: SystemAssignedIdentity
-  userAssignedIdentities: UserAssignedIdentity[]
+  userAssigned: UserAssignedIdentity
 }
 
 type Roles = {

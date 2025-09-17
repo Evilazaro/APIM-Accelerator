@@ -1,21 +1,9 @@
-type IdentityType = 'SystemAssigned' | 'UserAssigned' | 'None'
-
-type UserAssignedIdentity = {
-  name: string
-}
-
-type Identity = {
-  type: IdentityType
-  userAssignedIdentities: UserAssignedIdentity[]
-  rbacRoleAssignment: {
-    roles: RBACRole[]
-  }
-}
+import * as Identity from '../shared/identity-types.bicep'
 
 @export()
 type Settings = {
   name: string
-  identity: Identity
+  identity: Identity.Identity
   sku: {
     name: 'Developer' | 'Basic' | 'Standard' | 'Premium' | 'Consumption'
     capacity: int
@@ -23,12 +11,4 @@ type Settings = {
   }
   publisherEmail: string
   publisherName: string
-}
-
-type RBACRole = {
-  roleName: string
-  scope: {
-    type: 'subscription' | 'resourceGroup' | 'resource'
-    name: string
-  }
 }

@@ -4,7 +4,7 @@ param principalId string
 param systemAssignedIdentity Identity.SystemAssignedIdentity
 
 module roleAssignmentsSub 'roleAssignmentSub.bicep' = if (systemAssignedIdentity.scope.type == 'subscription') {
-  name: 'roleAssignment-systemAssigned'
+  name: 'roleAssignment-systemAssignedSub'
   scope: subscription()
   params: {
     principalId: principalId
@@ -13,7 +13,7 @@ module roleAssignmentsSub 'roleAssignmentSub.bicep' = if (systemAssignedIdentity
 }
 
 module roleAssignmentsRg 'roleAssignmentRg.bicep' = if (systemAssignedIdentity.scope.type == 'resourceGroup') {
-  name: 'roleAssignment-systemAssigned'
+  name: 'roleAssignment-systemAssignedRg'
   scope: resourceGroup(systemAssignedIdentity.scope.name)
   params: {
     principalId: principalId

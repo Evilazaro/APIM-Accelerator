@@ -1,41 +1,35 @@
 import * as Identity from '../shared/identity-types.bicep'
 
 param location string
-param userAssignmentIdentities Identity.UserAssignedIdentity[]
+param userAssignedIdentity Identity.UserAssignedIdentity
 param tags object
 
-resource managedIdentity 'Microsoft.ManagedIdentity/userAssignedIdentities@2025-01-31-preview' = [
-  for identity in userAssignmentIdentities: {
-    name: identity.name
-    location: location
-    tags: tags
-  }
-]
+resource managedIdentity 'Microsoft.ManagedIdentity/userAssignedIdentities@2025-01-31-preview' = {
+  name: userAssignedIdentity.name
+  location: location
+  tags: tags
+}
 
-module roleAssignmentsSub 'roleAssignmentSub.bicep' = [
-  for (identity, index) in userAssignmentIdentities: if (identity.scope.type == 'subscription') {
-    name: 'roleAssignment-${identity.name}'
-    scope: subscription()
-    params: {
-      principalId: managedIdentity[index].properties.principalId
-      roles: identity.rbacRoleAssignment.roles
-    }
-    dependsOn: [
-      managedIdentity
-    ]
+module roleAssignmentsSub 'roleAssignmentSub.bicep' = if (userAssignedIdentity.scope.type == 'subscription') {
+  name: 'roleAssignmentSub-${userAssignedIdentity.name}'
+  scope: subscription()
+  params: {
+    principalId: managedIdentity.properties.principalId
+    roles: userAssignedIdentity.rbacRoleAssignment.roles
   }
-]
+  dependsOn: [
+    managedIdentity
+  ]
+}
 
-module roleAssignmentsRg 'roleAssignmentRg.bicep' = [
-  for (identity, index) in userAssignmentIdentities: if (identity.scope.type == 'resourceGroup') {
-    name: 'roleAssignment-${identity.name}'
-    scope: resourceGroup(identity.scope.name)
-    params: {
-      principalId: managedIdentity[index].properties.principalId
-      roles: identity.rbacRoleAssignment.roles
-    }
-    dependsOn: [
-      managedIdentity
-    ]
+module roleAssignmentsRg 'roleAssignmentRg.bicep' = if (userAssignedIdentity.scope.type == 'resourceGroup') {
+  name: 'roleAssignmentRg-${userAssignedIdentity.name}'
+  scope: resourceGroup(userAssignedIdentity.scope.name)
+  params: {
+    principalId: managedIdentity.properties.principalId
+    roles: userAssignedIdentity.rbacRoleAssignment.roles
   }
-]
+  dependsOn: [
+    managedIdentity
+  ]
+}
