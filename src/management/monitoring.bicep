@@ -15,8 +15,8 @@ resource apimStorageAccount 'Microsoft.Storage/storageAccounts@2025-01-01' = {
   tags: tags
   properties: {
     accessTier: 'Hot'
-    publicNetworkAccess: publicNetworkAccess ? 'Disabled' : 'Enabled'
-    allowBlobPublicAccess: publicNetworkAccess ? false : true
+    publicNetworkAccess: publicNetworkAccess ? 'Enabled' : 'Disabled'
+    allowBlobPublicAccess: publicNetworkAccess ? true : false
   }
 }
 
