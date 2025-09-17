@@ -54,6 +54,9 @@ module apimSubnets 'subnets.bicep' = {
 output AZURE_API_MANAGEMENT_SUBNET_ID string = apimSubnets.outputs.AZURE_API_MANAGEMENT_SUBNET_ID
 output AZURE_API_MANAGEMENT_SUBNET_NAME string = apimSubnets.outputs.AZURE_API_MANAGEMENT_SUBNET_NAME
 
+output AZURE_APPLICATION_GATEWAY_SUBNET_ID string = apimSubnets.outputs.AZURE_APPLICATION_GATEWAY_SUBNET_ID
+output AZURE_APPLICATION_GATEWAY_SUBNET_NAME string = apimSubnets.outputs.AZURE_APPLICATION_GATEWAY_SUBNET_NAME
+
 resource vnetDiagnosticSettings 'Microsoft.Insights/diagnosticSettings@2021-05-01-preview' = {
   name: 'vnet-diag'
   scope: apimVnet

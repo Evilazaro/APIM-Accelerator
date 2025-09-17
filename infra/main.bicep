@@ -49,6 +49,16 @@ module networking '../src/connectivity/networking.bicep' = {
   ]
 }
 
+module identity '../src/identity/identity.bicep' = {
+  name: 'identity-${dateTime}'
+  scope: networkingRG
+  params: {
+    name: '${networking.outputs.AZURE_APPLICATION_GATEWAY_SUBNET_NAME}-uami'
+    location: location
+    tags: allSettings.tags
+  }
+}
+
 resource securityRG 'Microsoft.Resources/resourceGroups@2025-04-01' = {
   name: securitySettings.resourceGroup
   location: location
