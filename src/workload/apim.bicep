@@ -66,6 +66,9 @@ resource apimLogAnalyticsLogger 'Microsoft.ApiManagement/service/loggers@2024-05
   properties: {
     loggerType: 'azureMonitor'
     resourceId: logAnalyticsWorkspace.id
+    credentials: {
+      name: logAnalyticsWorkspace.name
+    }
   }
 }
 

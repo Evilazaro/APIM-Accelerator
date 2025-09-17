@@ -4,6 +4,10 @@ type IdentityType = 'SystemAssigned' | 'UserAssigned' | 'None'
 @export()
 type UserAssignedIdentity = {
   name: string
+  scope: {
+    type: 'subscription' | 'resourceGroup'
+    name: string // Required if type is resourceGroup
+  }
   rbacRoleAssignment: RBACRoleAssignment
 }
 
@@ -16,12 +20,15 @@ type Identity = {
 
 type Roles = {
   roleName: string
-  scope: {
-    type: 'subscription' | 'resourceGroup' | 'resource'
-    name: string
-  }
+  id: string
 }
 
 type RBACRoleAssignment = {
   roles: Roles[]
+}
+
+@export()
+type IdentitySettings = {
+  resourceGroup: string
+  userAssignedIdentities: UserAssignedIdentity[]
 }

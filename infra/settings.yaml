@@ -1,64 +1,63 @@
 connectivity:
   createNew: true
-  resourceGroup: apim-connectivity-rg
+  resourceGroup: apim-plat-connectivity-rg
   subscriptionId: ""
   publicNetworkAccess: true
   virtualNetwork:
-    name: apimplatvnet
+    name: apim-plat-vnet
     addressPrefixes:
       - 10.0.0.0/16
     subnets:
       apiManagement:
-        name: apiManagementSubnet
+        name: apim-plat-subnet
         addressPrefix: 10.0.1.0/24
         networkSecurityGroup:
-          name: apimApiManagementNSG
+          name: apim-plat-nsg
       applicationGateway:
-        name: appGatewaySubnet
+        name: apim-plat-app-gateway-subnet
         addressPrefix: 10.0.2.0/24
         networkSecurityGroup:
-          name: apimAppGatewayNSG
-
-identity:
-  userAssignedIdentities:
-    applicationGateway:
-      name: apim-app-gateway-identity
-      rbacRoleAssignment:
-        roles: []
+          name: apim-plat-app-gateway-nsg
 
 management:
   monitoring:
     createNew: true
-    resourceGroup: apim-monitoring-rg
+    resourceGroup: apim-plat-monitoring-rg
     subscriptionId: ""
     logAnalytics:
-      name: apim-log-law
+      name: apim-plat-log-analytics
       identity:
         type: SystemAssigned
         rbacRoleAssignment:
           roles: []
-        userAssignedIdentities:
-          - name: apim-log-law-identity
-            rbacRoleAssignment:
-              roles: []
     applicationInsights:
-      name: apim-app-insights
+      name: apim-plat-app-insights
 
 security:
-  resourceGroup: apim-security-rg
+  resourceGroup: apim-plat-security-rg
   keyVault:
-    name: apim-kv10
+    name: apim-plat-kv
 
 workload:
   apiManagement:
-    resourceGroup: apim-apim-rg
-    name: contoso-apim-platform10
+    resourceGroup: apim-plat-apim-rg
+    name: apim-plat-apim
     identity:
       type: SystemAssigned
-      userAssignedIdentities:
-        - name: apim-apim-identity
       rbacRoleAssignment:
         roles: []
+      userAssignedIdentities:
+        - name: apim-plat-identity
+          scope:
+            type: resourceGroup
+            name: apim-plat-apim-rg
+          rbacRoleAssignment:
+            roles:
+              - roleName: "Contributor"
+                id: "b24988ac-6180-42a0-ab88-20f7382dd24c" # Contributor Role ID
+              - roleName: "Reader"
+                id: "acdd72a7-3385-48ef-bd42-f606fba81ae7" # Reader Role ID
+
     sku:
       name: Developer
       capacity: 1

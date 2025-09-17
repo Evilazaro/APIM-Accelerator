@@ -1,11 +1,17 @@
-param principalId string
-param roleName string
+import * as Identity from '../shared/identity-types.bicep'
 
-resource roleAssignment 'Microsoft.Authorization/roleAssignments@2020-04-01-preview' = {
-  name: guid(subscription().id, principalId, roleName, resourceGroup().id)
-  scope: resourceGroup()
-  properties: {
-    principalId: principalId
-    roleDefinitionId: subscriptionResourceId('Microsoft.Authorization/roleDefinitions', roleName)
+param principalId string
+param roles Identity.Identity.rbacRoleAssignment.roles
+
+resource roleAssignment 'Microsoft.Authorization/roleAssignments@2020-04-01-preview' = [
+  for role in roles: {
+    name: guid(subscription().id, resourceGroup().id, principalId, role.roleName)
+    scope: resourceGroup()
+    properties: {
+      description: 'Role assignment for APIM Accelerator. Role: ${role.roleName}'
+      principalId: principalId
+      principalType: 'ServicePrincipal'
+      roleDefinitionId: subscriptionResourceId('Microsoft.Authorization/roleDefinitions', role.id)
+    }
   }
-}
+]

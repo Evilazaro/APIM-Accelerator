@@ -1,8 +1,6 @@
-import * as Identity from 'identity-types.bicep'
 
 type LogAnalyticsSettings = {
   name: string
-  identity: Identity.Identity
 }
 
 type AppInsightsSettings = {
