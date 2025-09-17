@@ -41,7 +41,7 @@ security:
 workload:
   apiManagement:
     resourceGroup: apim-apim-rg
-    name: contoso-apim-platform2
+    name: contoso-apim-platform10
     identity:
       type: SystemAssigned
       userAssignedIdentities:
