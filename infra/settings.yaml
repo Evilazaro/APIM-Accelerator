@@ -65,7 +65,10 @@ workload:
     sku:
       name: Developer
       capacity: 1
-      zones: []
+      zones:
+        - 1
+        - 2
+        - 3
     publisherEmail: publisher@example.com
     publisherName: Contoso API Team
 
