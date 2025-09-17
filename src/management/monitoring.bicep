@@ -22,6 +22,27 @@ resource apimStorageAccount 'Microsoft.Storage/storageAccounts@2025-01-01' = {
 
 output AZURE_MONITORING_STORAGE_ACCOUNT_NAME string = apimStorageAccount.name
 
+resource apimStorageAccountDiagnostics 'Microsoft.Insights/diagnosticSettings@2021-05-01-preview' = {
+  name: '${apimStorageAccount.name}-diagnostics'
+  scope: apimStorageAccount
+  properties: {
+    workspaceId: apimLogAnalytics.id
+    storageAccountId: apimStorageAccount.id
+    logs: [
+      {
+        categoryGroup: 'AllLogs'
+        enabled: true
+      }
+    ]
+    metrics: [
+      {
+        category: 'AllMetrics'
+        enabled: true
+      }
+    ]
+  }
+}
+
 resource apimLogAnalytics 'Microsoft.OperationalInsights/workspaces@2025-02-01' = {
   name: monitoring.logAnalytics.name
   location: location
@@ -32,6 +53,27 @@ resource apimLogAnalytics 'Microsoft.OperationalInsights/workspaces@2025-02-01' 
 }
 
 output AZURE_LOG_ANALYTICS_WORKSPACE_NAME string = apimLogAnalytics.name
+
+resource apimLogAnalyticsDiagnostics 'Microsoft.Insights/diagnosticSettings@2021-05-01-preview' = {
+  name: '${apimLogAnalytics.name}-diagnostics'
+  scope: apimLogAnalytics
+  properties: {
+    workspaceId: apimLogAnalytics.id
+    storageAccountId: apimStorageAccount.id
+    logs: [
+      {
+        categoryGroup: 'AllLogs'
+        enabled: true
+      }
+    ]
+    metrics: [
+      {
+        category: 'AllMetrics'
+        enabled: true
+      }
+    ]
+  }
+}
 
 resource apimAppInsights 'Microsoft.Insights/components@2020-02-02' = {
   name: monitoring.applicationInsights.name

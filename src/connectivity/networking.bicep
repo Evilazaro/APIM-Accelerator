@@ -9,15 +9,15 @@ param tags object
 
 var vnetSettings = networking.virtualNetwork
 
-// resource logAnalyticsWorkspace 'Microsoft.OperationalInsights/workspaces@2025-02-01' existing = {
-//   name: logAnalytcsWorkspaceName
-//   scope: resourceGroup(monitoringResourceGroup)
-// }
+resource logAnalyticsWorkspace 'Microsoft.OperationalInsights/workspaces@2025-02-01' existing = {
+  name: logAnalytcsWorkspaceName
+  scope: resourceGroup(monitoringResourceGroup)
+}
 
-// resource monitoringStorageAccount 'Microsoft.Storage/storageAccounts@2025-01-01' existing = {
-//   name: monitoringStorageAccountName
-//   scope: resourceGroup(monitoringResourceGroup)
-// }
+resource monitoringStorageAccount 'Microsoft.Storage/storageAccounts@2025-01-01' existing = {
+  name: monitoringStorageAccountName
+  scope: resourceGroup(monitoringResourceGroup)
+}
 
 resource apimVnet 'Microsoft.Network/virtualNetworks@2024-07-01' = {
   name: vnetSettings.name
@@ -56,23 +56,23 @@ output AZURE_VNET_ID string = apimVnet.id
 // output AZURE_API_MANAGEMENT_SUBNET_ID string = apimSubnets.outputs.AZURE_API_MANAGEMENT_SUBNET_ID
 // output AZURE_API_MANAGEMENT_SUBNET_NAME string = apimSubnets.outputs.AZURE_API_MANAGEMENT_SUBNET_NAME
 
-// resource vnetDiagnosticSettings 'Microsoft.Insights/diagnosticSettings@2021-05-01-preview' = {
-//   name: 'vnet-diag'
-//   scope: apimVnet
-//   properties: {
-//     workspaceId: logAnalyticsWorkspace.id
-//     storageAccountId: monitoringStorageAccount.id
-//     logs: [
-//       {
-//         categoryGroup: 'allLogs'
-//         enabled: true
-//       }
-//     ]
-//     metrics: [
-//       {
-//         category: 'AllMetrics'
-//         enabled: true
-//       }
-//     ]
-//   }
-// }
+resource vnetDiagnosticSettings 'Microsoft.Insights/diagnosticSettings@2021-05-01-preview' = {
+  name: 'vnet-diag'
+  scope: apimVnet
+  properties: {
+    workspaceId: logAnalyticsWorkspace.id
+    storageAccountId: monitoringStorageAccount.id
+    logs: [
+      {
+        categoryGroup: 'allLogs'
+        enabled: true
+      }
+    ]
+    metrics: [
+      {
+        category: 'AllMetrics'
+        enabled: true
+      }
+    ]
+  }
+}
