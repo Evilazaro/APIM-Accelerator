@@ -33,28 +33,25 @@ resource apimVnet 'Microsoft.Network/virtualNetworks@2024-07-01' = {
 output AZURE_VNET_NAME string = apimVnet.name
 output AZURE_VNET_ID string = apimVnet.id
 
-// module apimSubnets 'subnets.bicep' = {
-//   name: 'Subnets'
-//   scope: resourceGroup()
-//   params: {
-//     location: location
-//     subnets: vnetSettings.subnets
-//     virtualNetworkName: apimVnet.name
-//     logAnalytcsWorkspaceName: logAnalytcsWorkspaceName
-//     monitoringStorageAccountName: monitoringStorageAccountName
-//     monitoringResourceGroup: monitoringResourceGroup
-//     tags: tags
-//   }
-//   dependsOn: [
-//     apimVnet
-//   ]
-// }
+module apimSubnets 'subnets.bicep' = {
+  name: 'Subnets'
+  scope: resourceGroup()
+  params: {
+    location: location
+    subnets: vnetSettings.subnets
+    virtualNetworkName: apimVnet.name
+    logAnalytcsWorkspaceName: logAnalytcsWorkspaceName
+    monitoringStorageAccountName: monitoringStorageAccountName
+    monitoringResourceGroup: monitoringResourceGroup
+    tags: tags
+  }
+  dependsOn: [
+    apimVnet
+  ]
+}
 
-// output AZURE_PRIVATE_ENDPOINT_SUBNET_ID string = apimSubnets.outputs.AZURE_PRIVATE_ENDPOINT_SUBNET_ID
-// output AZURE_PRIVATE_ENDPOINT_SUBNET_NAME string = apimSubnets.outputs.AZURE_PRIVATE_ENDPOINT_SUBNET_NAME
-
-// output AZURE_API_MANAGEMENT_SUBNET_ID string = apimSubnets.outputs.AZURE_API_MANAGEMENT_SUBNET_ID
-// output AZURE_API_MANAGEMENT_SUBNET_NAME string = apimSubnets.outputs.AZURE_API_MANAGEMENT_SUBNET_NAME
+output AZURE_API_MANAGEMENT_SUBNET_ID string = apimSubnets.outputs.AZURE_API_MANAGEMENT_SUBNET_ID
+output AZURE_API_MANAGEMENT_SUBNET_NAME string = apimSubnets.outputs.AZURE_API_MANAGEMENT_SUBNET_NAME
 
 resource vnetDiagnosticSettings 'Microsoft.Insights/diagnosticSettings@2021-05-01-preview' = {
   name: 'vnet-diag'

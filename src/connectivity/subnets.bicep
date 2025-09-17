@@ -36,6 +36,12 @@ resource apimNsgDiagnostics 'Microsoft.Insights/diagnosticSettings@2021-05-01-pr
         enabled: true
       }
     ]
+    metrics: [
+      {
+        category: 'AllMetrics'
+        enabled: true
+      }
+    ]
   }
 }
 
@@ -71,6 +77,12 @@ resource appGwNsgDiagnostics 'Microsoft.Insights/diagnosticSettings@2021-05-01-p
     logs: [
       {
         categoryGroup: 'allLogs'
+        enabled: true
+      }
+    ]
+    metrics: [
+      {
+        category: 'AllMetrics'
         enabled: true
       }
     ]

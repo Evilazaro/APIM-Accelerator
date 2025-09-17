@@ -28,12 +28,7 @@ resource apimStorageAccountDiagnostics 'Microsoft.Insights/diagnosticSettings@20
   properties: {
     workspaceId: apimLogAnalytics.id
     storageAccountId: apimStorageAccount.id
-    logs: [
-      {
-        categoryGroup: 'AllLogs'
-        enabled: true
-      }
-    ]
+
     metrics: [
       {
         category: 'AllMetrics'
