@@ -3,7 +3,7 @@ import * as Identity from '../shared/identity-types.bicep'
 targetScope = 'subscription'
 
 param principalId string
-param roles Identity.Identity.rbacRoleAssignment.roles
+param roles Identity.RBACRoleAssignment.roles
 
 resource roleAssignment 'Microsoft.Authorization/roleAssignments@2020-04-01-preview' = [
   for role in roles: {

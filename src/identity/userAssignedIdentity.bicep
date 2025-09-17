@@ -1,11 +1,11 @@
 import * as Identity from '../shared/identity-types.bicep'
 
 param location string
-param identity Identity.IdentitySettings
+param userAssignmentIdentities Identity.UserAssignedIdentity[]
 param tags object
 
 resource managedIdentity 'Microsoft.ManagedIdentity/userAssignedIdentities@2025-01-31-preview' = [
-  for identity in identity.userAssignedIdentities: {
+  for identity in userAssignmentIdentities: {
     name: identity.name
     location: location
     tags: tags
@@ -13,7 +13,7 @@ resource managedIdentity 'Microsoft.ManagedIdentity/userAssignedIdentities@2025-
 ]
 
 module roleAssignmentsSub 'roleAssignmentSub.bicep' = [
-  for (identity, index) in identity.userAssignedIdentities: if (identity.scope.type == 'subscription') {
+  for (identity, index) in userAssignmentIdentities: if (identity.scope.type == 'subscription') {
     name: 'roleAssignment-${identity.name}'
     scope: subscription()
     params: {
@@ -27,7 +27,7 @@ module roleAssignmentsSub 'roleAssignmentSub.bicep' = [
 ]
 
 module roleAssignmentsRg 'roleAssignmentRg.bicep' = [
-  for (identity, index) in identity.userAssignedIdentities: if (identity.scope.type == 'resourceGroup') {
+  for (identity, index) in userAssignmentIdentities: if (identity.scope.type == 'resourceGroup') {
     name: 'roleAssignment-${identity.name}'
     scope: resourceGroup(identity.scope.name)
     params: {

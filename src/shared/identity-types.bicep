@@ -12,9 +12,18 @@ type UserAssignedIdentity = {
 }
 
 @export()
+type SystemAssignedIdentity = {
+  scope: {
+    type: 'subscription' | 'resourceGroup'
+    name: string // Required if type is resourceGroup
+  }
+  rbacRoleAssignment: RBACRoleAssignment
+}
+
+@export()
 type Identity = {
   type: IdentityType
-  rbacRoleAssignment: RBACRoleAssignment
+  systemAssigned: SystemAssignedIdentity
   userAssignedIdentities: UserAssignedIdentity[]
 }
 
@@ -23,12 +32,7 @@ type Roles = {
   id: string
 }
 
+@export()
 type RBACRoleAssignment = {
   roles: Roles[]
-}
-
-@export()
-type IdentitySettings = {
-  resourceGroup: string
-  userAssignedIdentities: UserAssignedIdentity[]
 }
