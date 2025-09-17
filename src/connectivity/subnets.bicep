@@ -1,43 +1,48 @@
+import * as SubnetSettings from '../shared/networking-types.bicep'
+
 param location string
 param virtualNetworkName string
-param subnets SubnetSettings
+param apimAppGwPipName string
+param subnets SubnetSettings.Subnets
+param logAnalytcsWorkspaceName string
+param monitoringStorageAccountName string
+param monitoringResourceGroup string
 param tags object
 
-type Subnet = {
-  name: string
-  addressPrefix: string
-  networkSecurityGroup: NetworkSecurityGroup
+resource logAnalyticsWorkspace 'Microsoft.OperationalInsights/workspaces@2025-02-01' existing = {
+  name: logAnalytcsWorkspaceName
+  scope: resourceGroup(monitoringResourceGroup)
 }
 
-type NetworkSecurityGroup = {
-  name: string
+resource monitoringStorageAccount 'Microsoft.Storage/storageAccounts@2025-01-01' existing = {
+  name: monitoringStorageAccountName
+  scope: resourceGroup(monitoringResourceGroup)
 }
 
-type SubnetSettings = {
-  privateEndpoint: Subnet
-  apiManagement: Subnet
-  applicationGateway: Subnet
-  azureFirewall: Subnet
-}
-
-resource apimAppGwPip 'Microsoft.Network/publicIPAddresses@2024-07-01' = {
-  name: 'appgw-pip'
-  location: location
-  tags: tags
-  sku: {
-    name: 'Standard'
-  }
-  zones: ['1', '2', '3']
-  properties: {
-    publicIPAddressVersion: 'IPv4'
-    publicIPAllocationMethod: 'Static'
-  }
+resource apimAppGwPip 'Microsoft.Network/publicIPAddresses@2024-07-01' existing = {
+  name: apimAppGwPipName
+  scope: resourceGroup()
 }
 
 resource privateEndPointNsg 'Microsoft.Network/networkSecurityGroups@2024-07-01' = {
   name: subnets.privateEndpoint.networkSecurityGroup.name
   location: location
   tags: tags
+}
+
+resource privateEndPointDiagnostics 'Microsoft.Insights/diagnosticSettings@2021-05-01-preview' = {
+  name: 'privateEndpoint-nsg-diag'
+  scope: privateEndPointNsg
+  properties: {
+    workspaceId: logAnalyticsWorkspace.id
+    storageAccountId: monitoringStorageAccount.id
+    logs: [
+      {
+        categoryGroup: 'allLogs'
+        enabled: true
+      }
+    ]
+  }
 }
 
 resource privateEndpointSubnet 'Microsoft.Network/virtualNetworks/subnets@2024-07-01' = {
@@ -154,6 +159,21 @@ resource apimNsg 'Microsoft.Network/networkSecurityGroups@2024-07-01' = {
   }
 }
 
+resource apimNsgDiagnostics 'Microsoft.Insights/diagnosticSettings@2021-05-01-preview' = {
+  name: 'apim-nsg-diag'
+  scope: apimNsg
+  properties: {
+    workspaceId: logAnalyticsWorkspace.id
+    storageAccountId: monitoringStorageAccount.id
+    logs: [
+      {
+        categoryGroup: 'allLogs'
+        enabled: true
+      }
+    ]
+  }
+}
+
 resource apimSubnet 'Microsoft.Network/virtualNetworks/subnets@2024-07-01' = {
   name: '${virtualNetworkName}/${subnets.apiManagement.name}'
   properties: {
@@ -162,6 +182,11 @@ resource apimSubnet 'Microsoft.Network/virtualNetworks/subnets@2024-07-01' = {
       id: apimNsg.id
     }
   }
+  dependsOn: [
+    apimNsg
+    apimNsgDiagnostics
+    privateEndpointSubnet
+  ]
 }
 
 output AZURE_API_MANAGEMENT_SUBNET_ID string = apimSubnet.id
@@ -229,6 +254,31 @@ resource appGwNsg 'Microsoft.Network/networkSecurityGroups@2024-07-01' = {
   }
 }
 
+resource appGwNsgDiagnostics 'Microsoft.Insights/diagnosticSettings@2021-05-01-preview' = {
+  name: 'appGw-nsg-diag'
+  scope: appGwNsg
+  properties: {
+    workspaceId: logAnalyticsWorkspace.id
+    storageAccountId: monitoringStorageAccount.id
+    logs: [
+      {
+        categoryGroup: 'allLogs'
+        enabled: true
+      }
+    ]
+  }
+}
+
+resource azureFirewallSubnet 'Microsoft.Network/virtualNetworks/subnets@2024-07-01' = {
+  name: '${virtualNetworkName}/${subnets.azureFirewall.name}'
+  properties: {
+    addressPrefix: subnets.azureFirewall.addressPrefix
+  }
+}
+
+output AZURE_AZURE_FIREWALL_SUBNET_ID string = azureFirewallSubnet.id
+output AZURE_AZURE_FIREWALL_SUBNET_NAME string = azureFirewallSubnet.name
+
 resource appGwSubnet 'Microsoft.Network/virtualNetworks/subnets@2024-07-01' = {
   name: '${virtualNetworkName}/${subnets.applicationGateway.name}'
   properties: {
@@ -239,12 +289,5 @@ resource appGwSubnet 'Microsoft.Network/virtualNetworks/subnets@2024-07-01' = {
   }
 }
 
-resource apimFirewallSubnet 'Microsoft.Network/virtualNetworks/subnets@2024-07-01' = {
-  name: '${virtualNetworkName}/${subnets.azureFirewall.name}'
-  properties: {
-    addressPrefix: subnets.azureFirewall.addressPrefix
-  }
-}
-
-output AZURE_AZURE_FIREWALL_SUBNET_ID string = apimFirewallSubnet.id
-output AZURE_AZURE_FIREWALL_SUBNET_NAME string = apimFirewallSubnet.name
+output AZURE_APPLICATION_GATEWAY_SUBNET_ID string = appGwSubnet.id
+output AZURE_APPLICATION_GATEWAY_SUBNET_NAME string = appGwSubnet.name

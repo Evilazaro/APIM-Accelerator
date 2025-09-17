@@ -1,19 +1,9 @@
-import * as IdentityTypes from '../shared/identity-types.bicep'
+import * as Monitoring from '../shared/management-types.bicep'
 
 param location string
-param logAnalytics LogAnalyticsSettings
-param appInsights AppInsightsSettings
+param monitoring Monitoring.Settings
 param publicNetworkAccess bool
 param tags object
-
-type LogAnalyticsSettings = {
-  name: string
-  identity: IdentityTypes.Identity
-}
-
-type AppInsightsSettings = {
-  name: string
-}
 
 resource apimStorageAccount 'Microsoft.Storage/storageAccounts@2025-01-01' = {
   name: 'apimacceleratorstorage'
@@ -30,19 +20,21 @@ resource apimStorageAccount 'Microsoft.Storage/storageAccounts@2025-01-01' = {
   }
 }
 
+output AZURE_MONITORING_STORAGE_ACCOUNT_NAME string = apimStorageAccount.name
+
 resource apimLogAnalytics 'Microsoft.OperationalInsights/workspaces@2025-02-01' = {
-  name: logAnalytics.name
+  name: monitoring.logAnalytics.name
   location: location
   tags: tags
   identity: {
-    type: logAnalytics.identity.type
+    type: monitoring.logAnalytics.identity.type
   }
 }
 
 output AZURE_LOG_ANALYTICS_WORKSPACE_NAME string = apimLogAnalytics.name
 
 resource apimAppInsights 'Microsoft.Insights/components@2020-02-02' = {
-  name: appInsights.name
+  name: monitoring.applicationInsights.name
   location: location
   kind: 'web'
   tags: tags

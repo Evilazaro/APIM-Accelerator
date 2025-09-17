@@ -1,40 +1,28 @@
-import * as IdentityTypes from '../shared/identity-types.bicep'
+import * as APIM from '../shared/apim-types.bicep'
+
 param location string
-param apiManagement ApiManagementSettings
+param apiManagement APIM.Settings
 param publicNetworkAccess bool
 param virtualNetworkName string
 param virtualNetworkResourceGroup string
 param appInsightsName string
 param logAnalyticsWorkspaceName string
-param logAnalyticsWorkspaceResourceGroup string
+param monitoringResourceGroupName string
 param subnetName string
 param tags object
 
-type ApiManagementSettings = {
-  resourceGroup: string
-  name: string
-  identity: IdentityTypes.Identity
-  sku: {
-    name: 'Developer' | 'Basic' | 'Standard' | 'Premium' | 'Consumption'
-    capacity: int
-    zones: array
-  }
-  publisherEmail: string
-  publisherName: string
-}
-
 resource logAnalyticsWorkspace 'Microsoft.OperationalInsights/workspaces@2025-02-01' existing = {
   name: logAnalyticsWorkspaceName
-  scope: resourceGroup(logAnalyticsWorkspaceResourceGroup)
+  scope: resourceGroup(monitoringResourceGroupName)
 }
 
 resource appInsights 'Microsoft.Insights/components@2020-02-02' existing = {
   name: appInsightsName
-  scope: resourceGroup(apiManagement.resourceGroup)
+  scope: resourceGroup(monitoringResourceGroupName)
 }
 
 resource apimSubnet 'Microsoft.Network/virtualNetworks/subnets@2024-07-01' existing = {
-  name: '${virtualNetworkName}/${subnetName}'
+  name: subnetName
   scope: resourceGroup(virtualNetworkResourceGroup)
 }
 
@@ -42,7 +30,6 @@ resource apim 'Microsoft.ApiManagement/service@2024-05-01' = {
   name: apiManagement.name
   location: location
   tags: tags
-  zones: (apiManagement.sku.name == 'Premium') ? apiManagement.sku.zones : null
   identity: {
     type: apiManagement.identity.type
   }
@@ -53,13 +40,39 @@ resource apim 'Microsoft.ApiManagement/service@2024-05-01' = {
   properties: {
     publisherEmail: apiManagement.publisherEmail
     publisherName: apiManagement.publisherName
-    publicNetworkAccess: publicNetworkAccess ? 'Enabled' : 'Disabled'
     virtualNetworkType: publicNetworkAccess ? 'External' : 'Internal'
-    virtualNetworkConfiguration: {
-      subnetResourceId: apimSubnet.id
-    }
+    virtualNetworkConfiguration: (!publicNetworkAccess)
+      ? {
+          subnetResourceId: apimSubnet.id
+        }
+      : null
   }
 }
+
+module dnsConfig '../connectivity/dns-config.bicep' = {
+  scope: resourceGroup()
+  params: {
+    tags: tags
+    domain: apiManagement.name
+    virtualNetworkName: virtualNetworkName
+    virtualNetworkResourceGroup: virtualNetworkResourceGroup
+    privateIPAddresse: apim.properties.privateIPAddresses[0]
+  }
+  dependsOn: [
+    apim
+  ]
+}
+
+module roleAssignments '../identity/role-assignment.bicep' = [
+  for roleDef in apiManagement.identity.RBACRoleAssignment.roles: {
+    name: 'roleAssignment-${roleDef.name}'
+    params: {
+      principalId: apim.identity.principalId
+      roleDefinitionName: roleDef.name
+      scope: roleDef.scope
+    }
+  }
+]
 
 resource apimAppInsightsLogger 'Microsoft.ApiManagement/service/loggers@2024-05-01' = {
   parent: apim
@@ -89,7 +102,7 @@ resource apimlogToAnalytics 'Microsoft.Insights/diagnosticSettings@2021-05-01-pr
     workspaceId: logAnalyticsWorkspace.id
     logs: [
       {
-        category: 'GatewayLogs'
+        categoryGroup: 'allLogs'
         enabled: true
       }
     ]

@@ -1,8 +1,10 @@
 connectivity:
-  resourceGroup: apim-accelerator-connectivity-rg
-  private: true
+  createNew: true
+  resourceGroup: apim-connectivity-rg
+  subscriptionId: ""
+  publicNetworkAccess: false
   virtualNetwork:
-    name: apimAcceleratorVNet
+    name: apimplatvnet
     addressPrefixes:
       - 10.0.0.0/16
     subnets:
@@ -25,31 +27,45 @@ connectivity:
         name: azureFirewallSubnet
         addressPrefix: 10.0.4.0/24
         networkSecurityGroup:
-          name:
+          name: azureFirewallSubnetNSG
+
 management:
   monitoring:
-    resourceGroup: rg-apim-accelerator-monitoring-rg
+    createNew: true
+    resourceGroup: apim-monitoring-rg
+    subscriptionId: ""
     logAnalytics:
-      name: apim-accelerator-log-law
+      name: apim-log-law
       identity:
         type: SystemAssigned
         userAssignedIdentities:
-          - name: apim-accelerator-log-law-identity
+          - name: apim-log-law-identity
     applicationInsights:
-      name: apim-accelerator-app-insights
+      name: apim-app-insights
+
 security:
-  resourceGroup: apim-accelerator-security-rg
+  resourceGroup: apim-security-rg
   keyVault:
-    name: apim-accelerator-kv
+    name: apim-kv4
 
 workload:
-  apiManagement:  
-    resourceGroup: apim-accelerator-apim-rg
-    name: apim-accelerator-apim
+  apiManagement:
+    resourceGroup: apim-apim-rg
+    name: contoso-apim-platform2
     identity:
       type: SystemAssigned
       userAssignedIdentities:
-        - name: apim-accelerator-apim-identity
+        - name: apim-apim-identity
+      RBACRoleAssignment:
+        roles:
+          - name: "Key Vault Secrets User"
+            scope: 
+              type: resourceGroup
+              name: apim-security-rg
+          - name: "Key Vault Certificate User"
+            scope: 
+              type: resourceGroup
+              name: apim-security-rg
     sku:
       name: Developer
       capacity: 1
