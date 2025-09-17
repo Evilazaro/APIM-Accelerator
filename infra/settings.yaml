@@ -36,7 +36,7 @@ management:
 security:
   resourceGroup: apim-security-rg
   keyVault:
-    name: apim-kv4
+    name: apim-kv10
 
 workload:
   apiManagement:

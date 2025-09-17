@@ -74,24 +74,3 @@ resource vnetDiagnosticSettings 'Microsoft.Insights/diagnosticSettings@2021-05-0
     ]
   }
 }
-
-resource azureFirewall 'Microsoft.Network/azureFirewalls@2024-07-01' = if (!publicNetworkAccess) {
-  name: '${vnetSettings.name}-fw'
-  location: location
-  tags: tags
-  properties: {
-    sku: {
-      name: 'AZFW_VNet'
-      tier: 'Standard'
-    }
-    ipConfigurations: [
-      {
-        properties: {
-          subnet: {
-            id: apimSubnets.outputs.AZURE_APPLICATION_GATEWAY_SUBNET_ID
-          }
-        }
-      }
-    ]
-  }
-}

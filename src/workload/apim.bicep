@@ -3,7 +3,6 @@ import * as APIM from '../shared/apim-types.bicep'
 param location string
 param apiManagement APIM.Settings
 param publicNetworkAccess bool
-param virtualNetworkName string
 param virtualNetworkResourceGroup string
 param appInsightsName string
 param logAnalyticsWorkspaceName string
@@ -41,38 +40,11 @@ resource apim 'Microsoft.ApiManagement/service@2024-05-01' = {
     publisherEmail: apiManagement.publisherEmail
     publisherName: apiManagement.publisherName
     virtualNetworkType: publicNetworkAccess ? 'External' : 'Internal'
-    virtualNetworkConfiguration: (!publicNetworkAccess)
-      ? {
-          subnetResourceId: apimSubnet.id
-        }
-      : null
-  }
-}
-
-module dnsConfig '../connectivity/dns-config.bicep' = {
-  scope: resourceGroup()
-  params: {
-    tags: tags
-    domain: apiManagement.name
-    virtualNetworkName: virtualNetworkName
-    virtualNetworkResourceGroup: virtualNetworkResourceGroup
-    privateIPAddresse: apim.properties.privateIPAddresses[0]
-  }
-  dependsOn: [
-    apim
-  ]
-}
-
-module roleAssignments '../identity/role-assignment.bicep' = [
-  for roleDef in apiManagement.identity.RBACRoleAssignment.roles: {
-    name: 'roleAssignment-${roleDef.name}'
-    params: {
-      principalId: apim.identity.principalId
-      roleDefinitionName: roleDef.name
-      scope: roleDef.scope
+    virtualNetworkConfiguration: {
+      subnetResourceId: apimSubnet.id
     }
   }
-]
+}
 
 resource apimAppInsightsLogger 'Microsoft.ApiManagement/service/loggers@2024-05-01' = {
   parent: apim

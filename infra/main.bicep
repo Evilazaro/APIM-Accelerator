@@ -69,25 +69,24 @@ module security '../src/security/security.bicep' = {
   ]
 }
 
-// resource workloadRG 'Microsoft.Resources/resourceGroups@2025-04-01' = {
-//   name: workloadSettings.apiManagement.resourceGroup
-//   location: location
-//   tags: allSettings.tags
-// }
+resource workloadRG 'Microsoft.Resources/resourceGroups@2025-04-01' = {
+  name: workloadSettings.apiManagement.resourceGroup
+  location: location
+  tags: allSettings.tags
+}
 
-// module workload '../src/workload/apim.bicep' = {
-//   scope: workloadRG
-//   name: 'workload-${dateTime}'
-//   params: {
-//     location: location
-//     tags: allSettings.tags
-//     apiManagement: workloadSettings.apiManagement
-//     appInsightsName: monitoring.outputs.AZURE_APPLICATION_INSIGHTS_NAME
-//     logAnalyticsWorkspaceName: monitoring.outputs.AZURE_LOG_ANALYTICS_WORKSPACE_NAME
-//     monitoringResourceGroupName: monitoringRG.name
-//     publicNetworkAccess: connectivitySettings.publicNetworkAccess
-//     subnetName: networking.outputs.AZURE_API_MANAGEMENT_SUBNET_NAME
-//     virtualNetworkResourceGroup: connectivitySettings.resourceGroup
-//     virtualNetworkName: networking.outputs.AZURE_VNET_NAME
-//   }
-// }
+module workload '../src/workload/apim.bicep' = {
+  scope: workloadRG
+  name: 'workload-${dateTime}'
+  params: {
+    location: location
+    tags: allSettings.tags
+    apiManagement: workloadSettings.apiManagement
+    appInsightsName: monitoring.outputs.AZURE_APPLICATION_INSIGHTS_NAME
+    logAnalyticsWorkspaceName: monitoring.outputs.AZURE_LOG_ANALYTICS_WORKSPACE_NAME
+    monitoringResourceGroupName: monitoringRG.name
+    publicNetworkAccess: connectivitySettings.publicNetworkAccess
+    subnetName: networking.outputs.AZURE_API_MANAGEMENT_SUBNET_NAME
+    virtualNetworkResourceGroup: connectivitySettings.resourceGroup
+  }
+}
