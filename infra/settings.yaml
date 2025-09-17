@@ -19,6 +19,13 @@ connectivity:
         networkSecurityGroup:
           name: apimAppGatewayNSG
 
+identity:
+  userAssignedIdentities:
+    applicationGateway:
+      name: apim-app-gateway-identity
+      rbacRoleAssignment:
+        roles: []
+
 management:
   monitoring:
     createNew: true
@@ -28,8 +35,12 @@ management:
       name: apim-log-law
       identity:
         type: SystemAssigned
+        rbacRoleAssignment:
+          roles: []
         userAssignedIdentities:
           - name: apim-log-law-identity
+            rbacRoleAssignment:
+              roles: []
     applicationInsights:
       name: apim-app-insights
 
@@ -46,16 +57,8 @@ workload:
       type: SystemAssigned
       userAssignedIdentities:
         - name: apim-apim-identity
-      RBACRoleAssignment:
-        roles:
-          - name: "Key Vault Secrets User"
-            scope: 
-              type: resourceGroup
-              name: apim-security-rg
-          - name: "Key Vault Certificate User"
-            scope: 
-              type: resourceGroup
-              name: apim-security-rg
+      rbacRoleAssignment:
+        roles: []
     sku:
       name: Developer
       capacity: 1

@@ -8,6 +8,7 @@ var managementSettings = allSettings.management
 var connectivitySettings = allSettings.connectivity
 var securitySettings = allSettings.security
 var workloadSettings = allSettings.workload
+var identitySettings = allSettings.identity
 
 resource monitoringRG 'Microsoft.Resources/resourceGroups@2025-04-01' = {
   name: managementSettings.monitoring.resourceGroup
@@ -53,9 +54,10 @@ module identity '../src/identity/identity.bicep' = {
   name: 'identity-${dateTime}'
   scope: networkingRG
   params: {
-    name: '${networking.outputs.AZURE_APPLICATION_GATEWAY_SUBNET_NAME}-uami'
     location: location
     tags: allSettings.tags
+    applicationGateway: identitySettings.userAssignedIdentities.applicationGateway
+    publicNetworkAccess: connectivitySettings.publicNetworkAccess
   }
 }
 

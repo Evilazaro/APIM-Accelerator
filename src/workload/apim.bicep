@@ -40,9 +40,11 @@ resource apim 'Microsoft.ApiManagement/service@2024-05-01' = {
     publisherEmail: apiManagement.publisherEmail
     publisherName: apiManagement.publisherName
     virtualNetworkType: publicNetworkAccess ? 'External' : 'Internal'
-    virtualNetworkConfiguration: {
-      subnetResourceId: apimSubnet.id
-    }
+    virtualNetworkConfiguration: (!publicNetworkAccess)
+      ? {
+          subnetResourceId: apimSubnet.id
+        }
+      : null
   }
 }
 

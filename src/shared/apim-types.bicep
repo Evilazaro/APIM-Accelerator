@@ -7,7 +7,7 @@ type UserAssignedIdentity = {
 type Identity = {
   type: IdentityType
   userAssignedIdentities: UserAssignedIdentity[]
-  RBACRoleAssignment: {
+  rbacRoleAssignment: {
     roles: RBACRole[]
   }
 }
@@ -26,7 +26,7 @@ type Settings = {
 }
 
 type RBACRole = {
-  name: string
+  roleName: string
   scope: {
     type: 'subscription' | 'resourceGroup' | 'resource'
     name: string
