@@ -16,12 +16,6 @@ resource apimKeyVault 'Microsoft.KeyVault/vaults@2024-11-01' = {
       family: 'A'
     }
     publicNetworkAccess: publicNetworkAccess ? 'Enabled' : 'Disabled'
-    networkAcls: {
-      bypass: 'AzureServices'
-      defaultAction: publicNetworkAccess ? 'Allow' : 'Deny'
-      virtualNetworkRules: []
-      ipRules: []
-    }
     tenantId: subscription().tenantId
   }
 }
