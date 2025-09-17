@@ -42,9 +42,6 @@ resource apimLogAnalytics 'Microsoft.OperationalInsights/workspaces@2025-02-01' 
   name: monitoring.logAnalytics.name
   location: location
   tags: tags
-  identity: {
-    type: monitoring.logAnalytics.identity.type
-  }
 }
 
 output AZURE_LOG_ANALYTICS_WORKSPACE_NAME string = apimLogAnalytics.name

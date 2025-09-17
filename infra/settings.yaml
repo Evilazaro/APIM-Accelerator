@@ -26,10 +26,6 @@ management:
     subscriptionId: ""
     logAnalytics:
       name: apim-plat-log-analytics
-      identity:
-        type: SystemAssigned
-        rbacRoleAssignment:
-          roles: []
     applicationInsights:
       name: apim-plat-app-insights
 
