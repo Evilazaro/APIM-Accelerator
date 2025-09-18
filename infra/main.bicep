@@ -87,6 +87,5 @@ module workload '../src/workload/apim.bicep' = {
     publicNetworkAccess: connectivitySettings.publicNetworkAccess
     subnetName: networking.outputs.AZURE_API_MANAGEMENT_SUBNET_NAME
     virtualNetworkResourceGroup: connectivitySettings.resourceGroup
-    virtualNetworkName: networking.outputs.AZURE_VNET_NAME
   }
 }

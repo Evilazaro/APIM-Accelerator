@@ -1,75 +1,72 @@
 connectivity:
   createNew: true
-  resourceGroup: apim-connectivity-rg
-  subscriptionId: ""
-  publicNetworkAccess: false
+  resourceGroup: apim-plat-connectivity-rg
+  publicNetworkAccess: true
   virtualNetwork:
-    name: apimplatvnet
+    name: apim-plat-vnet
     addressPrefixes:
       - 10.0.0.0/16
     subnets:
-      privateEndpoint:
-        name: privateEndPointSubnet
+      apiManagement:
+        name: apim-plat-subnet
         addressPrefix: 10.0.1.0/24
         networkSecurityGroup:
-          name: privateEndpointNsg
-      apiManagement:
-        name: apiManagementSubnet
+          name: apim-plat-nsg
+      applicationGateway:
+        name: apim-plat-app-gateway-subnet
         addressPrefix: 10.0.2.0/24
         networkSecurityGroup:
-          name: apimApiManagementNSG
-      applicationGateway:
-        name: appGatewaySubnet
-        addressPrefix: 10.0.3.0/24
-        networkSecurityGroup:
-          name: apimAppGatewayNSG
-      azureFirewall:
-        name: azureFirewallSubnet
-        addressPrefix: 10.0.4.0/24
-        networkSecurityGroup:
-          name: azureFirewallSubnetNSG
+          name: apim-plat-app-gateway-nsg
 
 management:
   monitoring:
     createNew: true
-    resourceGroup: apim-monitoring-rg
-    subscriptionId: ""
+    resourceGroup: apim-plat-monitoring-rg
     logAnalytics:
-      name: apim-log-law
-      identity:
-        type: SystemAssigned
-        userAssignedIdentities:
-          - name: apim-log-law-identity
+      name: apim-plat-log-analytics
     applicationInsights:
-      name: apim-app-insights
+      name: apim-plat-app-insights
 
 security:
-  resourceGroup: apim-security-rg
+  resourceGroup: apim-plat-security-rg
   keyVault:
-    name: apim-kv4
+    name: apim-plat-kv11
 
 workload:
   apiManagement:
-    resourceGroup: apim-apim-rg
-    name: contoso-apim-platform2
+    resourceGroup: apim-plat-apim-rg
+    name: apim-plat-apim11
     identity:
       type: SystemAssigned
-      userAssignedIdentities:
-        - name: apim-apim-identity
-      RBACRoleAssignment:
-        roles:
-          - name: "Key Vault Secrets User"
-            scope: 
-              type: resourceGroup
-              name: apim-security-rg
-          - name: "Key Vault Certificate User"
-            scope: 
-              type: resourceGroup
-              name: apim-security-rg
+      systemAssigned:
+        scope:
+          type: resourceGroup
+          name: apim-plat-apim-rg
+        rbacRoleAssignment:
+          roles:
+            - roleName: "Contributor"
+              id: "b24988ac-6180-42a0-ab88-20f7382dd24c" # Contributor Role ID
+            - roleName: "Reader"
+              id: "acdd72a7-3385-48ef-bd42-f606fba81ae7" # Reader Role ID
+      userAssigned:
+        name: apim-plat-identity
+        scope:
+          type: resourceGroup
+          name: apim-plat-apim-rg
+        rbacRoleAssignment:
+          roles:
+            - roleName: "Contributor"
+              id: "b24988ac-6180-42a0-ab88-20f7382dd24c" # Contributor Role ID
+            - roleName: "Reader"
+              id: "acdd72a7-3385-48ef-bd42-f606fba81ae7" # Reader Role ID
+
     sku:
-      name: Developer
+      name: Premium
       capacity: 1
-      zones: []
+      zones:
+        - 1
+        - 2
+        - 3
     publisherEmail: publisher@example.com
     publisherName: Contoso API Team
 

@@ -5,7 +5,7 @@ param monitoring Monitoring.Settings
 param publicNetworkAccess bool
 param tags object
 
-resource apimStorageAccount 'Microsoft.Storage/storageAccounts@2025-01-01' = {
+resource storageAccount 'Microsoft.Storage/storageAccounts@2025-01-01' = {
   name: 'apimacceleratorstorage'
   location: location
   sku: {
@@ -15,43 +15,77 @@ resource apimStorageAccount 'Microsoft.Storage/storageAccounts@2025-01-01' = {
   tags: tags
   properties: {
     accessTier: 'Hot'
-    publicNetworkAccess: publicNetworkAccess ? 'Disabled' : 'Enabled'
-    allowBlobPublicAccess: publicNetworkAccess ? false : true
+    publicNetworkAccess: publicNetworkAccess ? 'Enabled' : 'Disabled'
+    allowBlobPublicAccess: publicNetworkAccess ? true : false
   }
 }
 
-output AZURE_MONITORING_STORAGE_ACCOUNT_NAME string = apimStorageAccount.name
+output AZURE_MONITORING_STORAGE_ACCOUNT_NAME string = storageAccount.name
 
-resource apimLogAnalytics 'Microsoft.OperationalInsights/workspaces@2025-02-01' = {
+resource storageAccountDiag 'Microsoft.Insights/diagnosticSettings@2021-05-01-preview' = {
+  name: '${storageAccount.name}-diagnostics'
+  scope: storageAccount
+  properties: {
+    workspaceId: logAnalytics.id
+    storageAccountId: storageAccount.id
+
+    metrics: [
+      {
+        category: 'AllMetrics'
+        enabled: true
+      }
+    ]
+  }
+}
+
+resource logAnalytics 'Microsoft.OperationalInsights/workspaces@2025-02-01' = {
   name: monitoring.logAnalytics.name
   location: location
   tags: tags
-  identity: {
-    type: monitoring.logAnalytics.identity.type
+}
+
+output AZURE_LOG_ANALYTICS_WORKSPACE_NAME string = logAnalytics.name
+
+resource logAnalyticsDiag 'Microsoft.Insights/diagnosticSettings@2021-05-01-preview' = {
+  name: '${logAnalytics.name}-diagnostics'
+  scope: logAnalytics
+  properties: {
+    workspaceId: logAnalytics.id
+    storageAccountId: storageAccount.id
+    logs: [
+      {
+        categoryGroup: 'AllLogs'
+        enabled: true
+      }
+    ]
+    metrics: [
+      {
+        category: 'AllMetrics'
+        enabled: true
+      }
+    ]
   }
 }
 
-output AZURE_LOG_ANALYTICS_WORKSPACE_NAME string = apimLogAnalytics.name
-
-resource apimAppInsights 'Microsoft.Insights/components@2020-02-02' = {
+resource appInsights 'Microsoft.Insights/components@2020-02-02' = {
   name: monitoring.applicationInsights.name
   location: location
   kind: 'web'
   tags: tags
   properties: {
     Application_Type: 'web'
-    WorkspaceResourceId: apimLogAnalytics.id
+    WorkspaceResourceId: logAnalytics.id
   }
 }
 
-output AZURE_APPLICATION_INSIGHTS_NAME string = apimAppInsights.name
+output AZURE_APPLICATION_INSIGHTS_NAME string = appInsights.name
 
-resource apiAppInsightsDiagnostics 'Microsoft.Insights/diagnosticSettings@2021-05-01-preview' = {
-  scope: apimAppInsights
-  name: '${apimAppInsights.name}-diagnostics'
+resource appInsightsDiag 'Microsoft.Insights/diagnosticSettings@2021-05-01-preview' = {
+  scope: appInsights
+  name: '${appInsights.name}-diagnostics'
   properties: {
-    workspaceId: apimLogAnalytics.id
-    storageAccountId: apimStorageAccount.id
+    workspaceId: logAnalytics.id
+    storageAccountId: storageAccount.id
     logs: [
       {
         category: 'AppRequests'

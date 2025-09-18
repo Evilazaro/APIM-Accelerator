@@ -10,10 +10,8 @@ type NetworkSecurityGroup = {
 
 @export()
 type Subnets = {
-  privateEndpoint: Subnet
   apiManagement: Subnet
   applicationGateway: Subnet
-  azureFirewall: Subnet
 }
 
 type VirtualNetwork = {
@@ -25,7 +23,6 @@ type VirtualNetwork = {
 @export()
 type Settings = {
   resourceGroup: string
-  subscriptionId: string
   publicNetworkAccess: bool
   virtualNetwork: VirtualNetwork
 }
