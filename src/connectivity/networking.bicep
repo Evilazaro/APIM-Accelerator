@@ -5,17 +5,16 @@ param networking Networking.Settings
 param logAnalytcsWorkspaceName string
 param monitoringStorageAccountName string
 param monitoringResourceGroup string
-param publicNetworkAccess bool
 param tags object
 
 var vnetSettings = networking.virtualNetwork
 
-resource logAnalyticsWorkspace 'Microsoft.OperationalInsights/workspaces@2025-02-01' existing = {
+resource logAnalytics 'Microsoft.OperationalInsights/workspaces@2025-02-01' existing = {
   name: logAnalytcsWorkspaceName
   scope: resourceGroup(monitoringResourceGroup)
 }
 
-resource monitoringStorageAccount 'Microsoft.Storage/storageAccounts@2025-01-01' existing = {
+resource monStorageAccount 'Microsoft.Storage/storageAccounts@2025-01-01' existing = {
   name: monitoringStorageAccountName
   scope: resourceGroup(monitoringResourceGroup)
 }
@@ -57,12 +56,12 @@ output AZURE_API_MANAGEMENT_SUBNET_NAME string = apimSubnets.outputs.AZURE_API_M
 output AZURE_APPLICATION_GATEWAY_SUBNET_ID string = apimSubnets.outputs.AZURE_APPLICATION_GATEWAY_SUBNET_ID
 output AZURE_APPLICATION_GATEWAY_SUBNET_NAME string = apimSubnets.outputs.AZURE_APPLICATION_GATEWAY_SUBNET_NAME
 
-resource vnetDiagnosticSettings 'Microsoft.Insights/diagnosticSettings@2021-05-01-preview' = {
+resource vnetDiag 'Microsoft.Insights/diagnosticSettings@2021-05-01-preview' = {
   name: 'vnet-diag'
   scope: apimVnet
   properties: {
-    workspaceId: logAnalyticsWorkspace.id
-    storageAccountId: monitoringStorageAccount.id
+    workspaceId: logAnalytics.id
+    storageAccountId: monStorageAccount.id
     logs: [
       {
         categoryGroup: 'allLogs'

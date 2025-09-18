@@ -5,7 +5,7 @@ param monitoring Monitoring.Settings
 param publicNetworkAccess bool
 param tags object
 
-resource apimStorageAccount 'Microsoft.Storage/storageAccounts@2025-01-01' = {
+resource storageAccount 'Microsoft.Storage/storageAccounts@2025-01-01' = {
   name: 'apimacceleratorstorage'
   location: location
   sku: {
@@ -20,14 +20,14 @@ resource apimStorageAccount 'Microsoft.Storage/storageAccounts@2025-01-01' = {
   }
 }
 
-output AZURE_MONITORING_STORAGE_ACCOUNT_NAME string = apimStorageAccount.name
+output AZURE_MONITORING_STORAGE_ACCOUNT_NAME string = storageAccount.name
 
-resource apimStorageAccountDiagnostics 'Microsoft.Insights/diagnosticSettings@2021-05-01-preview' = {
-  name: '${apimStorageAccount.name}-diagnostics'
-  scope: apimStorageAccount
+resource storageAccountDiag 'Microsoft.Insights/diagnosticSettings@2021-05-01-preview' = {
+  name: '${storageAccount.name}-diagnostics'
+  scope: storageAccount
   properties: {
-    workspaceId: apimLogAnalytics.id
-    storageAccountId: apimStorageAccount.id
+    workspaceId: logAnalytics.id
+    storageAccountId: storageAccount.id
 
     metrics: [
       {
@@ -38,20 +38,20 @@ resource apimStorageAccountDiagnostics 'Microsoft.Insights/diagnosticSettings@20
   }
 }
 
-resource apimLogAnalytics 'Microsoft.OperationalInsights/workspaces@2025-02-01' = {
+resource logAnalytics 'Microsoft.OperationalInsights/workspaces@2025-02-01' = {
   name: monitoring.logAnalytics.name
   location: location
   tags: tags
 }
 
-output AZURE_LOG_ANALYTICS_WORKSPACE_NAME string = apimLogAnalytics.name
+output AZURE_LOG_ANALYTICS_WORKSPACE_NAME string = logAnalytics.name
 
-resource apimLogAnalyticsDiagnostics 'Microsoft.Insights/diagnosticSettings@2021-05-01-preview' = {
-  name: '${apimLogAnalytics.name}-diagnostics'
-  scope: apimLogAnalytics
+resource logAnalyticsDiag 'Microsoft.Insights/diagnosticSettings@2021-05-01-preview' = {
+  name: '${logAnalytics.name}-diagnostics'
+  scope: logAnalytics
   properties: {
-    workspaceId: apimLogAnalytics.id
-    storageAccountId: apimStorageAccount.id
+    workspaceId: logAnalytics.id
+    storageAccountId: storageAccount.id
     logs: [
       {
         categoryGroup: 'AllLogs'
@@ -67,25 +67,25 @@ resource apimLogAnalyticsDiagnostics 'Microsoft.Insights/diagnosticSettings@2021
   }
 }
 
-resource apimAppInsights 'Microsoft.Insights/components@2020-02-02' = {
+resource appInsights 'Microsoft.Insights/components@2020-02-02' = {
   name: monitoring.applicationInsights.name
   location: location
   kind: 'web'
   tags: tags
   properties: {
     Application_Type: 'web'
-    WorkspaceResourceId: apimLogAnalytics.id
+    WorkspaceResourceId: logAnalytics.id
   }
 }
 
-output AZURE_APPLICATION_INSIGHTS_NAME string = apimAppInsights.name
+output AZURE_APPLICATION_INSIGHTS_NAME string = appInsights.name
 
-resource apiAppInsightsDiagnostics 'Microsoft.Insights/diagnosticSettings@2021-05-01-preview' = {
-  scope: apimAppInsights
-  name: '${apimAppInsights.name}-diagnostics'
+resource appInsightsDiag 'Microsoft.Insights/diagnosticSettings@2021-05-01-preview' = {
+  scope: appInsights
+  name: '${appInsights.name}-diagnostics'
   properties: {
-    workspaceId: apimLogAnalytics.id
-    storageAccountId: apimStorageAccount.id
+    workspaceId: logAnalytics.id
+    storageAccountId: storageAccount.id
     logs: [
       {
         category: 'AppRequests'

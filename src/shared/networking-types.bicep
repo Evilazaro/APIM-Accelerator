@@ -23,7 +23,6 @@ type VirtualNetwork = {
 @export()
 type Settings = {
   resourceGroup: string
-  subscriptionId: string
   publicNetworkAccess: bool
   virtualNetwork: VirtualNetwork
 }

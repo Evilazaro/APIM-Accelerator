@@ -8,12 +8,12 @@ param monitoringStorageAccountName string
 param monitoringResourceGroup string
 param tags object
 
-resource logAnalyticsWorkspace 'Microsoft.OperationalInsights/workspaces@2025-02-01' existing = {
+resource logAnalytics 'Microsoft.OperationalInsights/workspaces@2025-02-01' existing = {
   name: logAnalytcsWorkspaceName
   scope: resourceGroup(monitoringResourceGroup)
 }
 
-resource monitoringStorageAccount 'Microsoft.Storage/storageAccounts@2025-01-01' existing = {
+resource monStorageAccount 'Microsoft.Storage/storageAccounts@2025-01-01' existing = {
   name: monitoringStorageAccountName
   scope: resourceGroup(monitoringResourceGroup)
 }
@@ -24,12 +24,12 @@ resource apimNsg 'Microsoft.Network/networkSecurityGroups@2024-07-01' = {
   tags: tags
 }
 
-resource apimNsgDiagnostics 'Microsoft.Insights/diagnosticSettings@2021-05-01-preview' = {
+resource apimNsgDiag 'Microsoft.Insights/diagnosticSettings@2021-05-01-preview' = {
   name: 'apim-nsg-diag'
   scope: apimNsg
   properties: {
-    workspaceId: logAnalyticsWorkspace.id
-    storageAccountId: monitoringStorageAccount.id
+    workspaceId: logAnalytics.id
+    storageAccountId: monStorageAccount.id
     logs: [
       {
         categoryGroup: 'allLogs'
@@ -49,7 +49,7 @@ resource apimSubnet 'Microsoft.Network/virtualNetworks/subnets@2024-07-01' = {
   }
   dependsOn: [
     apimNsg
-    apimNsgDiagnostics
+    apimNsgDiag
   ]
 }
 
@@ -62,12 +62,12 @@ resource appGwNsg 'Microsoft.Network/networkSecurityGroups@2024-07-01' = {
   tags: tags
 }
 
-resource appGwNsgDiagnostics 'Microsoft.Insights/diagnosticSettings@2021-05-01-preview' = {
+resource appGwNsgDiag 'Microsoft.Insights/diagnosticSettings@2021-05-01-preview' = {
   name: 'appGw-nsg-diag'
   scope: appGwNsg
   properties: {
-    workspaceId: logAnalyticsWorkspace.id
-    storageAccountId: monitoringStorageAccount.id
+    workspaceId: logAnalytics.id
+    storageAccountId: monStorageAccount.id
     logs: [
       {
         categoryGroup: 'allLogs'

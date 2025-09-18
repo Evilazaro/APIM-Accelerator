@@ -5,7 +5,7 @@ type Settings = {
   name: string
   identity: Identity.Identity
   sku: {
-    name: 'Developer' | 'Basic' | 'Standard' | 'Premium' | 'Consumption'
+    name: 'BasicV2' | 'Consumption' | 'Developer' | 'Isolated' | 'Premium' | 'StandardV2' 
     capacity: int
     zones: array
   }

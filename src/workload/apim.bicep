@@ -35,81 +35,82 @@ module userAssignedIdentity '../identity/userAssignedIdentity.bicep' = {
   }
 }
 
-module systemAssignedIdentity '../identity/sytemAssignedIdentity.bicep' = {
-  name: 'apim-systemAssignedIdentities'
-  scope: resourceGroup()
-  params: {
-    principalId: apim.identity.principalId
-    systemAssignedIdentity: apiManagement.identity.systemAssigned
-  }
-}
+// module systemAssignedIdentity '../identity/sytemAssignedIdentity.bicep' = {
+//   name: 'apim-systemAssignedIdentities'
+//   scope: resourceGroup()
+//   params: {
+//     principalId: apim.identity.principalId
+//     systemAssignedIdentity: apiManagement.identity.systemAssigned
+//   }
+// }
 
-resource apim 'Microsoft.ApiManagement/service@2024-05-01' = {
-  name: apiManagement.name
-  location: location
-  tags: tags
-  identity: {
-    type: apiManagement.identity.type
-  }
-  sku: {
-    name: apiManagement.sku.name
-    capacity: apiManagement.sku.capacity
-  }
-  properties: {
-    publisherEmail: apiManagement.publisherEmail
-    publisherName: apiManagement.publisherName
-    virtualNetworkType: publicNetworkAccess ? 'External' : 'Internal'
-    virtualNetworkConfiguration: (!publicNetworkAccess)
-      ? {
-          subnetResourceId: apimSubnet.id
-        }
-      : null
-  }
-  dependsOn: [
-    userAssignedIdentity
-  ]
-}
+// resource apim 'Microsoft.ApiManagement/service@2024-05-01' = {
+//   name: apiManagement.name
+//   location: location
+//   tags: tags
+//   zones: (apiManagement.sku.name == 'Premium') ? apiManagement.sku.zones : null
+//   identity: {
+//     type: apiManagement.identity.type
+//   }
+//   sku: {
+//     name: apiManagement.sku.name
+//     capacity: apiManagement.sku.capacity
+//   }
+//   properties: {
+//     publisherEmail: apiManagement.publisherEmail
+//     publisherName: apiManagement.publisherName
+//     virtualNetworkType: publicNetworkAccess ? 'External' : 'Internal'
+//     virtualNetworkConfiguration: (!publicNetworkAccess)
+//       ? {
+//           subnetResourceId: apimSubnet.id
+//         }
+//       : null
+//   }
+//   dependsOn: [
+//     userAssignedIdentity
+//   ]
+// }
 
-resource apimAppInsightsLogger 'Microsoft.ApiManagement/service/loggers@2024-05-01' = {
-  parent: apim
-  name: 'AppInsightsLogger'
-  properties: {
-    loggerType: 'applicationInsights'
-    resourceId: appInsights.id
-    credentials: {
-      instrumentationKey: appInsights.properties.InstrumentationKey
-    }
-  }
-}
+// resource apimAppInsightsLogger 'Microsoft.ApiManagement/service/loggers@2024-05-01' = {
+//   parent: apim
+//   name: 'AppInsightsLogger'
+//   properties: {
+//     loggerType: 'applicationInsights'
+//     resourceId: appInsights.id
+//     credentials: {
+//       instrumentationKey: appInsights.properties.InstrumentationKey
+//     }
+//   }
+// }
 
-resource apimLogAnalyticsLogger 'Microsoft.ApiManagement/service/loggers@2024-05-01' = {
-  name: 'LogAnalyticsLogger'
-  parent: apim
-  properties: {
-    loggerType: 'azureMonitor'
-    resourceId: logAnalyticsWorkspace.id
-    credentials: {
-      name: logAnalyticsWorkspace.name
-    }
-  }
-}
+// resource apimLogAnalyticsLogger 'Microsoft.ApiManagement/service/loggers@2024-05-01' = {
+//   name: 'LogAnalyticsLogger'
+//   parent: apim
+//   properties: {
+//     loggerType: 'azureMonitor'
+//     resourceId: logAnalyticsWorkspace.id
+//     credentials: {
+//       name: logAnalyticsWorkspace.name
+//     }
+//   }
+// }
 
-resource apimlogToAnalytics 'Microsoft.Insights/diagnosticSettings@2021-05-01-preview' = {
-  scope: apim
-  name: 'logToAnalytics'
-  properties: {
-    workspaceId: logAnalyticsWorkspace.id
-    logs: [
-      {
-        categoryGroup: 'allLogs'
-        enabled: true
-      }
-    ]
-    metrics: [
-      {
-        category: 'AllMetrics'
-        enabled: true
-      }
-    ]
-  }
-}
+// resource apimlogToAnalytics 'Microsoft.Insights/diagnosticSettings@2021-05-01-preview' = {
+//   scope: apim
+//   name: 'logToAnalytics'
+//   properties: {
+//     workspaceId: logAnalyticsWorkspace.id
+//     logs: [
+//       {
+//         categoryGroup: 'allLogs'
+//         enabled: true
+//       }
+//     ]
+//     metrics: [
+//       {
+//         category: 'AllMetrics'
+//         enabled: true
+//       }
+//     ]
+//   }
+// }

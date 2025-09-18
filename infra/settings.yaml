@@ -1,7 +1,6 @@
 connectivity:
   createNew: true
   resourceGroup: apim-plat-connectivity-rg
-  subscriptionId: ""
   publicNetworkAccess: true
   virtualNetwork:
     name: apim-plat-vnet
@@ -23,7 +22,6 @@ management:
   monitoring:
     createNew: true
     resourceGroup: apim-plat-monitoring-rg
-    subscriptionId: ""
     logAnalytics:
       name: apim-plat-log-analytics
     applicationInsights:
@@ -32,12 +30,12 @@ management:
 security:
   resourceGroup: apim-plat-security-rg
   keyVault:
-    name: apim-plat-kv10
+    name: apim-plat-kv11
 
 workload:
   apiManagement:
     resourceGroup: apim-plat-apim-rg
-    name: apim-plat-apim10
+    name: apim-plat-apim11
     identity:
       type: SystemAssigned
       systemAssigned:
@@ -63,7 +61,7 @@ workload:
               id: "acdd72a7-3385-48ef-bd42-f606fba81ae7" # Reader Role ID
 
     sku:
-      name: Developer
+      name: Premium
       capacity: 1
       zones:
         - 1

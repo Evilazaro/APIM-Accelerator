@@ -42,7 +42,6 @@ module networking '../src/connectivity/networking.bicep' = {
     logAnalytcsWorkspaceName: monitoring.outputs.AZURE_LOG_ANALYTICS_WORKSPACE_NAME
     monitoringStorageAccountName: monitoring.outputs.AZURE_MONITORING_STORAGE_ACCOUNT_NAME
     monitoringResourceGroup: monitoringRG.name
-    publicNetworkAccess: connectivitySettings.publicNetworkAccess
   }
   dependsOn: [
     monitoring
