@@ -9,3 +9,21 @@ resource managedIdentity 'Microsoft.ManagedIdentity/userAssignedIdentities@2025-
   location: location
   tags: tags
 }
+
+module roleAssignmentsSub 'roleAssignmentSub.bicep' = if (userAssignedIdentity.scope.type == 'subscription') {
+  name: 'roleAssignmentsSub-${userAssignedIdentity.name}'
+  scope: subscription()
+  params: {
+    principalId: managedIdentity.properties.principalId
+    rbacRoles: userAssignedIdentity.rbacRoleAssignment.roles
+  }
+}
+
+module roleAssignmentsRg 'roleAssignmentRg.bicep' = if (userAssignedIdentity.scope.type == 'resourceGroup') {
+  name: 'roleAssignmentsRg-${userAssignedIdentity.name}'
+  scope: resourceGroup(userAssignedIdentity.scope.name)
+  params: {
+    principalId: managedIdentity.properties.principalId
+    rbacRoles: userAssignedIdentity.rbacRoleAssignment.roles
+  }
+}

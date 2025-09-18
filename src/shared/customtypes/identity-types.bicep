@@ -27,14 +27,14 @@ type Identity = {
   userAssigned: UserAssignedIdentity
 }
 
-type Roles = {
+type Role = {
   roleName: string
   id: string
 }
 
 @export()
 type RBACRoleAssignment = {
-  roles: Roles[]
+  roles: Role[]
 }
 
 @export()

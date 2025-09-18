@@ -2,17 +2,27 @@ shared:
   identity:
     resourceGroup: apim-plat-identity-rg
     usersAssigned:
-        - name: apim-plat-identity
-          scope:
-            type: resourceGroup
-            name: apim-plat-apim-rg
-          rbacRoleAssignment:
-            roles:
-              - roleName: "Contributor"
-                id: "b24988ac-6180-42a0-ab88-20f7382dd24c" # Contributor Role ID
-              - roleName: "Reader"
-                id: "acdd72a7-3385-48ef-bd42-f606fba81ae7" # Reader Role ID
-  
+      - name: apim-plat-identity
+        scope:
+          type: subscription
+          name: apim-plat-apim-rg
+        rbacRoleAssignment:
+          roles:
+            - roleName: "Contributor"
+              id: "b24988ac-6180-42a0-ab88-20f7382dd24c" # Contributor Role ID
+            - roleName: "User Access Administrator"
+              id: "18d7d88d-d35e-4fb5-a5c3-7773c20a72d9" # User Access Administrator Role ID
+      - name: apim-keyvault-identity
+        scope:
+          type: resourceGroup
+          name: apim-plat-security-rg
+        rbacRoleAssignment:
+          roles:
+            - roleName: "Key Vault Secrets User"
+              id: "4633458b-17de-408a-b874-0445c86b69e6" # Key Vault Secrets User Role ID
+            - roleName: "Key Vault Secrets Officer"
+              id: "b86a8fe4-44ce-4948-aee5-eccb2c155cd7" # Key Vault Secrets Officer Role ID
+
   connectivity:
     resourceGroup: apim-plat-connectivity-rg
     publicNetworkAccess: true
