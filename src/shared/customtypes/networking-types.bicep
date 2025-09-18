@@ -1,3 +1,4 @@
+@export()
 type Subnet = {
   name: string
   addressPrefix: string
@@ -6,18 +7,13 @@ type Subnet = {
 
 type NetworkSecurityGroup = {
   name: string
-}
-
-@export()
-type Subnets = {
-  apiManagement: Subnet
-  applicationGateway: Subnet
+  rules: array
 }
 
 type VirtualNetwork = {
   name: string
   addressPrefixes: string[]
-  subnets: Subnets
+  subnets: Subnet[]
 }
 
 @export()

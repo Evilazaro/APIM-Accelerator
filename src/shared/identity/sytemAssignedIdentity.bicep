@@ -1,4 +1,4 @@
-import * as Identity from '../shared/identity-types.bicep'
+import * as Identity from '../identity-types.bicep'
 
 param principalId string
 param systemAssignedIdentity Identity.SystemAssignedIdentity

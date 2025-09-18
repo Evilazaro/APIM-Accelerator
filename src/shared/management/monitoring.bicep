@@ -1,4 +1,4 @@
-import * as Monitoring from '../shared/management-types.bicep'
+import * as Monitoring from '../management-types.bicep'
 
 param location string
 param monitoring Monitoring.Settings

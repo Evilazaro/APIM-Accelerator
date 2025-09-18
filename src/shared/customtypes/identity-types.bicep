@@ -36,3 +36,9 @@ type Roles = {
 type RBACRoleAssignment = {
   roles: Roles[]
 }
+
+@export()
+type SharedIdentity = {
+  resourceGroup: string
+  usersAssigned: UserAssignedIdentity[]
+}
