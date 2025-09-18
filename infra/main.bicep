@@ -8,7 +8,7 @@ var identitySettings = allSettings.shared.identity
 var monitoringSettings = allSettings.shared.monitoring
 var connectivitySettings = allSettings.shared.connectivity
 var securitySettings = allSettings.shared.security
-var workloadSettings = allSettings.core.apiManagement
+var apimCoreSettings = allSettings.core.apiManagement
 
 resource identityRG 'Microsoft.Resources/resourceGroups@2025-04-01' = {
   name: identitySettings.resourceGroup
@@ -86,7 +86,7 @@ module security '../src/shared/security/security.bicep' = {
 }
 
 resource workloadRG 'Microsoft.Resources/resourceGroups@2025-04-01' = {
-  name: workloadSettings.resourceGroup
+  name: apimCoreSettings.resourceGroup
   location: location
   tags: allSettings.tags
 }
@@ -97,12 +97,16 @@ module workload '../src/core/apim.bicep' = {
   params: {
     location: location
     tags: allSettings.tags
-    apiManagement: workloadSettings
+    apiManagement: apimCoreSettings
     appInsightsName: monitoring.outputs.AZURE_APPLICATION_INSIGHTS_NAME
     logAnalyticsWorkspaceName: monitoring.outputs.AZURE_LOG_ANALYTICS_WORKSPACE_NAME
     monitoringResourceGroupName: monitoringRG.name
     publicNetworkAccess: connectivitySettings.publicNetworkAccess
-    subnetName: workloadSettings.virtualNetwork.subnetName
+    subnetName: apimCoreSettings.virtualNetwork.subnetName
     virtualNetworkResourceGroup: connectivitySettings.resourceGroup
+    virtualNetworkName: networking.outputs.AZURE_VNET_NAME
   }
+  dependsOn: [
+    identity
+  ]
 }

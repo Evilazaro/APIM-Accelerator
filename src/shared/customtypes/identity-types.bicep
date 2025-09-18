@@ -1,5 +1,5 @@
 @export()
-type IdentityType = 'SystemAssigned' | 'UserAssigned' | 'None'
+type IdentityType = 'SystemAssigned' | 'UserAssigned' | 'None' | 'SystemAssigned, UserAssigned'
 
 @export()
 type UserAssignedIdentity = {

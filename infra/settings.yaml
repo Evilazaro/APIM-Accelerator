@@ -59,7 +59,7 @@ core:
     resourceGroup: apim-plat-apim-rg
     name: apim-plat-apim11
     identity:
-      type: SystemAssigned
+      type: 'SystemAssigned, UserAssigned'
       systemAssigned:
         scope:
           type: resourceGroup
@@ -85,7 +85,7 @@ core:
       virtualNetworkName: apim-plat-vnet
     sku:
       name: Premium
-      capacity: 1
+      capacity: 3
       zones:
         - 1
         - 2
