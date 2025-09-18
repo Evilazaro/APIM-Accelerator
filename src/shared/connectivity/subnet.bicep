@@ -1,4 +1,4 @@
-import * as SubnetSettings from '../networking-types.bicep'
+import * as SubnetSettings from '../customtypes/networking-types.bicep'
 
 param location string
 param virtualNetworkName string

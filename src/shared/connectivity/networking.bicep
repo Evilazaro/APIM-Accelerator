@@ -1,4 +1,4 @@
-import * as Networking from '../networking-types.bicep'
+import * as Networking from '../customtypes/networking-types.bicep'
 
 param location string
 param networking Networking.Settings

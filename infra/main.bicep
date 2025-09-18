@@ -8,7 +8,7 @@ var identitySettings = allSettings.shared.identity
 var monitoringSettings = allSettings.shared.monitoring
 var connectivitySettings = allSettings.shared.connectivity
 var securitySettings = allSettings.shared.security
-var workloadSettings = allSettings.workload
+var workloadSettings = allSettings.core.apiManagement
 
 resource identityRG 'Microsoft.Resources/resourceGroups@2025-04-01' = {
   name: identitySettings.resourceGroup
@@ -43,27 +43,27 @@ module monitoring '../src/shared/management/monitoring.bicep' = {
   }
 }
 
-// resource networkingRG 'Microsoft.Resources/resourceGroups@2025-04-01' = {
-//   name: connectivitySettings.resourceGroup
-//   location: location
-//   tags: allSettings.tags
-// }
+resource networkingRG 'Microsoft.Resources/resourceGroups@2025-04-01' = {
+  name: connectivitySettings.resourceGroup
+  location: location
+  tags: allSettings.tags
+}
 
-// module networking '../src/shared/connectivity/networking.bicep' = {
-//   name: 'networking-${dateTime}'
-//   scope: networkingRG
-//   params: {
-//     location: location
-//     tags: allSettings.tags
-//     networking: connectivitySettings
-//     logAnalytcsWorkspaceName: monitoring.outputs.AZURE_LOG_ANALYTICS_WORKSPACE_NAME
-//     monitoringStorageAccountName: monitoring.outputs.AZURE_MONITORING_STORAGE_ACCOUNT_NAME
-//     monitoringResourceGroup: monitoringRG.name
-//   }
-//   dependsOn: [
-//     monitoring
-//   ]
-// }
+module networking '../src/shared/connectivity/networking.bicep' = {
+  name: 'networking-${dateTime}'
+  scope: networkingRG
+  params: {
+    location: location
+    tags: allSettings.tags
+    networking: connectivitySettings
+    logAnalytcsWorkspaceName: monitoring.outputs.AZURE_LOG_ANALYTICS_WORKSPACE_NAME
+    monitoringStorageAccountName: monitoring.outputs.AZURE_MONITORING_STORAGE_ACCOUNT_NAME
+    monitoringResourceGroup: monitoringRG.name
+  }
+  dependsOn: [
+    monitoring
+  ]
+}
 
 // resource securityRG 'Microsoft.Resources/resourceGroups@2025-04-01' = {
 //   name: securitySettings.resourceGroup
@@ -85,24 +85,24 @@ module monitoring '../src/shared/management/monitoring.bicep' = {
 //   ]
 // }
 
-// resource workloadRG 'Microsoft.Resources/resourceGroups@2025-04-01' = {
-//   name: workloadSettings.apiManagement.resourceGroup
-//   location: location
-//   tags: allSettings.tags
-// }
+resource workloadRG 'Microsoft.Resources/resourceGroups@2025-04-01' = {
+  name: workloadSettings.resourceGroup
+  location: location
+  tags: allSettings.tags
+}
 
-// module workload '../src/shared/workload/apim.bicep' = {
-//   scope: workloadRG
-//   name: 'workload-${dateTime}'
-//   params: {
-//     location: location
-//     tags: allSettings.tags
-//     apiManagement: workloadSettings.apiManagement
-//     appInsightsName: monitoring.outputs.AZURE_APPLICATION_INSIGHTS_NAME
-//     logAnalyticsWorkspaceName: monitoring.outputs.AZURE_LOG_ANALYTICS_WORKSPACE_NAME
-//     monitoringResourceGroupName: monitoringRG.name
-//     publicNetworkAccess: connectivitySettings.publicNetworkAccess
-//     subnetName: networking.outputs.AZURE_API_MANAGEMENT_SUBNET_NAME
-//     virtualNetworkResourceGroup: connectivitySettings.resourceGroup
-//   }
-// }
+module workload '../src/core/apim.bicep' = {
+  scope: workloadRG
+  name: 'workload-${dateTime}'
+  params: {
+    location: location
+    tags: allSettings.tags
+    apiManagement: workloadSettings
+    appInsightsName: monitoring.outputs.AZURE_APPLICATION_INSIGHTS_NAME
+    logAnalyticsWorkspaceName: monitoring.outputs.AZURE_LOG_ANALYTICS_WORKSPACE_NAME
+    monitoringResourceGroupName: monitoringRG.name
+    publicNetworkAccess: connectivitySettings.publicNetworkAccess
+    subnetName: ''
+    virtualNetworkResourceGroup: connectivitySettings.resourceGroup
+  }
+}

@@ -12,6 +12,14 @@ type UserAssignedIdentity = {
 }
 
 @export()
+type UserAssignedApim = {
+  resourceGroup: string
+  identities: {
+    name: string
+  }[]
+}
+
+@export()
 type SystemAssignedIdentity = {
   scope: {
     type: 'subscription' | 'resourceGroup'
@@ -24,7 +32,13 @@ type SystemAssignedIdentity = {
 type Identity = {
   type: IdentityType
   systemAssigned: SystemAssignedIdentity
-  userAssigned: UserAssignedIdentity
+}
+
+@export()
+type IdentityAPIM = {
+  type: IdentityType
+  systemAssigned: SystemAssignedIdentity
+  usersAssigned: UserAssignedApim
 }
 
 type Role = {

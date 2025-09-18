@@ -1,4 +1,4 @@
-import * as APIM from '../shared/apim-types.bicep'
+import * as APIM from '../shared/customtypes/apim-types.bicep'
 
 param location string
 param apiManagement APIM.Settings
@@ -25,24 +25,16 @@ resource apimSubnet 'Microsoft.Network/virtualNetworks/subnets@2024-07-01' exist
   scope: resourceGroup(virtualNetworkResourceGroup)
 }
 
-module userAssignedIdentity '../identity/userAssignedIdentity.bicep' = {
-  name: 'apim-userAssignedIdentities'
-  scope: resourceGroup()
-  params: {
-    location: location
-    tags: tags
-    userAssignedIdentity: apiManagement.identity.userAssigned
-  }
-}
+var apiManagementIdentityResourceId = [
+  for identity in apiManagement.usersAssigned.identities: subscriptionResourceId(
+    subscription().id,
+    'Microsoft.ManagedIdentity/userAssignedIdentities',
+    apiManagement.usersAssigned.resourceGroup,
+    identity.name
+  )
+]
 
-// module systemAssignedIdentity '../identity/sytemAssignedIdentity.bicep' = {
-//   name: 'apim-systemAssignedIdentities'
-//   scope: resourceGroup()
-//   params: {
-//     principalId: apim.identity.principalId
-//     systemAssignedIdentity: apiManagement.identity.systemAssigned
-//   }
-// }
+output apiManagementIdentityResourceId array = apiManagementIdentityResourceId
 
 // resource apim 'Microsoft.ApiManagement/service@2024-05-01' = {
 //   name: apiManagement.name
@@ -51,6 +43,9 @@ module userAssignedIdentity '../identity/userAssignedIdentity.bicep' = {
 //   zones: (apiManagement.sku.name == 'Premium') ? apiManagement.sku.zones : null
 //   identity: {
 //     type: apiManagement.identity.type
+//     userAssignedIdentities: {
+//       '${apiManagementIdentityResourceId}': {}
+//     }
 //   }
 //   sku: {
 //     name: apiManagement.sku.name
@@ -66,9 +61,6 @@ module userAssignedIdentity '../identity/userAssignedIdentity.bicep' = {
 //         }
 //       : null
 //   }
-//   dependsOn: [
-//     userAssignedIdentity
-//   ]
 // }
 
 // resource apimAppInsightsLogger 'Microsoft.ApiManagement/service/loggers@2024-05-01' = {
