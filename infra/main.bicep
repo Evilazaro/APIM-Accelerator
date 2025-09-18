@@ -4,23 +4,40 @@ param location string
 param dateTime string = utcNow('yyyyMMddHHmmss')
 
 var allSettings = loadYamlContent('./settings.yaml')
-var managementSettings = allSettings.management
-var connectivitySettings = allSettings.connectivity
-var securitySettings = allSettings.security
-var workloadSettings = allSettings.workload
+var identitySettings = allSettings.shared.identity
+var monitoringSettings = allSettings.shared.monitoring
+var connectivitySettings = allSettings.shared.connectivity
+var securitySettings = allSettings.shared.security
+var apimCoreSettings = allSettings.core.apiManagement
 
-resource monitoringRG 'Microsoft.Resources/resourceGroups@2025-04-01' = {
-  name: managementSettings.monitoring.resourceGroup
+resource identityRG 'Microsoft.Resources/resourceGroups@2025-04-01' = {
+  name: identitySettings.resourceGroup
   location: location
   tags: allSettings.tags
 }
 
-module monitoring '../src/management/monitoring.bicep' = {
+module identity '../src/shared/identity/identity.bicep' = {
+  scope: identityRG
+  name: 'identity-${dateTime}'
+  params: {
+    identity: identitySettings
+    location: location
+    tags: allSettings.tags
+  }
+}
+
+resource monitoringRG 'Microsoft.Resources/resourceGroups@2025-04-01' = {
+  name: monitoringSettings.resourceGroup
+  location: location
+  tags: allSettings.tags
+}
+
+module monitoring '../src/shared/management/monitoring.bicep' = {
   name: 'monitoring-${dateTime}'
   scope: monitoringRG
   params: {
     location: location
-    monitoring: managementSettings.monitoring
+    monitoring: monitoringSettings
     publicNetworkAccess: connectivitySettings.publicNetworkAccess
     tags: allSettings.tags
   }
@@ -32,7 +49,7 @@ resource networkingRG 'Microsoft.Resources/resourceGroups@2025-04-01' = {
   tags: allSettings.tags
 }
 
-module networking '../src/connectivity/networking.bicep' = {
+module networking '../src/shared/connectivity/networking.bicep' = {
   name: 'networking-${dateTime}'
   scope: networkingRG
   params: {
@@ -54,7 +71,7 @@ resource securityRG 'Microsoft.Resources/resourceGroups@2025-04-01' = {
   tags: allSettings.tags
 }
 
-module security '../src/security/security.bicep' = {
+module security '../src/shared/security/security.bicep' = {
   name: 'security-${dateTime}'
   scope: securityRG
   params: {
@@ -69,23 +86,27 @@ module security '../src/security/security.bicep' = {
 }
 
 resource workloadRG 'Microsoft.Resources/resourceGroups@2025-04-01' = {
-  name: workloadSettings.apiManagement.resourceGroup
+  name: apimCoreSettings.resourceGroup
   location: location
   tags: allSettings.tags
 }
 
-module workload '../src/workload/apim.bicep' = {
+module workload '../src/core/apim.bicep' = {
   scope: workloadRG
   name: 'workload-${dateTime}'
   params: {
     location: location
     tags: allSettings.tags
-    apiManagement: workloadSettings.apiManagement
+    apiManagement: apimCoreSettings
     appInsightsName: monitoring.outputs.AZURE_APPLICATION_INSIGHTS_NAME
     logAnalyticsWorkspaceName: monitoring.outputs.AZURE_LOG_ANALYTICS_WORKSPACE_NAME
     monitoringResourceGroupName: monitoringRG.name
     publicNetworkAccess: connectivitySettings.publicNetworkAccess
-    subnetName: networking.outputs.AZURE_API_MANAGEMENT_SUBNET_NAME
+    subnetName: apimCoreSettings.virtualNetwork.subnetName
     virtualNetworkResourceGroup: connectivitySettings.resourceGroup
+    virtualNetworkName: networking.outputs.AZURE_VNET_NAME
   }
+  dependsOn: [
+    identity
+  ]
 }

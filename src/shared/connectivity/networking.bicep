@@ -1,4 +1,4 @@
-import * as Networking from '../shared/networking-types.bicep'
+import * as Networking from '../customtypes/networking-types.bicep'
 
 param location string
 param networking Networking.Settings
@@ -33,28 +33,23 @@ resource apimVnet 'Microsoft.Network/virtualNetworks@2024-07-01' = {
 output AZURE_VNET_NAME string = apimVnet.name
 output AZURE_VNET_ID string = apimVnet.id
 
-module apimSubnets 'subnets.bicep' = {
-  name: 'Subnets'
-  scope: resourceGroup()
-  params: {
-    location: location
-    subnets: vnetSettings.subnets
-    virtualNetworkName: apimVnet.name
-    logAnalytcsWorkspaceName: logAnalytcsWorkspaceName
-    monitoringStorageAccountName: monitoringStorageAccountName
-    monitoringResourceGroup: monitoringResourceGroup
-    tags: tags
+module apimSubnets 'subnet.bicep' = [
+  for subnet in vnetSettings.subnets: {
+    name: 'subnet-${subnet.name}'
+    params: {
+      location: location
+      virtualNetworkName: apimVnet.name
+      subnet: subnet
+      logAnalytcsWorkspaceName: logAnalytcsWorkspaceName
+      monitoringStorageAccountName: monitoringStorageAccountName
+      monitoringResourceGroup: monitoringResourceGroup
+      tags: tags
+    }
+    dependsOn: [
+      apimVnet
+    ]
   }
-  dependsOn: [
-    apimVnet
-  ]
-}
-
-output AZURE_API_MANAGEMENT_SUBNET_ID string = apimSubnets.outputs.AZURE_API_MANAGEMENT_SUBNET_ID
-output AZURE_API_MANAGEMENT_SUBNET_NAME string = apimSubnets.outputs.AZURE_API_MANAGEMENT_SUBNET_NAME
-
-output AZURE_APPLICATION_GATEWAY_SUBNET_ID string = apimSubnets.outputs.AZURE_APPLICATION_GATEWAY_SUBNET_ID
-output AZURE_APPLICATION_GATEWAY_SUBNET_NAME string = apimSubnets.outputs.AZURE_APPLICATION_GATEWAY_SUBNET_NAME
+]
 
 resource vnetDiag 'Microsoft.Insights/diagnosticSettings@2021-05-01-preview' = {
   name: 'vnet-diag'

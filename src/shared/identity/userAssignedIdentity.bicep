@@ -1,4 +1,4 @@
-import * as Identity from '../shared/identity-types.bicep'
+import * as Identity from '../customtypes/identity-types.bicep'
 
 param location string
 param userAssignedIdentity Identity.UserAssignedIdentity
@@ -11,25 +11,19 @@ resource managedIdentity 'Microsoft.ManagedIdentity/userAssignedIdentities@2025-
 }
 
 module roleAssignmentsSub 'roleAssignmentSub.bicep' = if (userAssignedIdentity.scope.type == 'subscription') {
-  name: 'roleAssignmentSub-${userAssignedIdentity.name}'
+  name: 'roleAssignmentsSub-${userAssignedIdentity.name}'
   scope: subscription()
   params: {
     principalId: managedIdentity.properties.principalId
-    roles: userAssignedIdentity.rbacRoleAssignment.roles
+    rbacRoles: userAssignedIdentity.rbacRoleAssignment.roles
   }
-  dependsOn: [
-    managedIdentity
-  ]
 }
 
 module roleAssignmentsRg 'roleAssignmentRg.bicep' = if (userAssignedIdentity.scope.type == 'resourceGroup') {
-  name: 'roleAssignmentRg-${userAssignedIdentity.name}'
+  name: 'roleAssignmentsRg-${userAssignedIdentity.name}'
   scope: resourceGroup(userAssignedIdentity.scope.name)
   params: {
     principalId: managedIdentity.properties.principalId
-    roles: userAssignedIdentity.rbacRoleAssignment.roles
+    rbacRoles: userAssignedIdentity.rbacRoleAssignment.roles
   }
-  dependsOn: [
-    managedIdentity
-  ]
 }

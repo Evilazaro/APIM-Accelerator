@@ -1,9 +1,10 @@
-import * as Identity from '../shared/identity-types.bicep'
+import * as Identity from 'identity-types.bicep'
 
 @export()
 type Settings = {
+  resourceGroup: string
   name: string
-  identity: Identity.Identity
+  identity: Identity.IdentityAPIM
   sku: {
     name: 'BasicV2' | 'Consumption' | 'Developer' | 'Isolated' | 'Premium' | 'StandardV2' 
     capacity: int

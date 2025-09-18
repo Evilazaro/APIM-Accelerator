@@ -1,5 +1,5 @@
 @export()
-type IdentityType = 'SystemAssigned' | 'UserAssigned' | 'None'
+type IdentityType = 'SystemAssigned' | 'UserAssigned' | 'None' | 'SystemAssigned, UserAssigned'
 
 @export()
 type UserAssignedIdentity = {
@@ -9,6 +9,14 @@ type UserAssignedIdentity = {
     name: string // Required if type is resourceGroup
   }
   rbacRoleAssignment: RBACRoleAssignment
+}
+
+@export()
+type UserAssignedApim = {
+  resourceGroup: string
+  identities: {
+    name: string
+  }[]
 }
 
 @export()
@@ -24,15 +32,27 @@ type SystemAssignedIdentity = {
 type Identity = {
   type: IdentityType
   systemAssigned: SystemAssignedIdentity
-  userAssigned: UserAssignedIdentity
 }
 
-type Roles = {
+@export()
+type IdentityAPIM = {
+  type: IdentityType
+  systemAssigned: SystemAssignedIdentity
+  usersAssigned: UserAssignedApim
+}
+
+type Role = {
   roleName: string
   id: string
 }
 
 @export()
 type RBACRoleAssignment = {
-  roles: Roles[]
+  roles: Role[]
+}
+
+@export()
+type SharedIdentity = {
+  resourceGroup: string
+  usersAssigned: UserAssignedIdentity[]
 }
