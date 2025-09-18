@@ -5,7 +5,7 @@ param dateTime string = utcNow('yyyyMMddHHmmss')
 
 var allSettings = loadYamlContent('./settings.yaml')
 var identitySettings = allSettings.shared.identity
-var managementSettings = allSettings.shared.management
+var monitoringSettings = allSettings.shared.monitoring
 var connectivitySettings = allSettings.shared.connectivity
 var securitySettings = allSettings.shared.security
 var workloadSettings = allSettings.workload
@@ -26,22 +26,22 @@ module identity '../src/shared/identity/identity.bicep' = {
   }
 }
 
-// resource monitoringRG 'Microsoft.Resources/resourceGroups@2025-04-01' = {
-//   name: managementSettings.monitoring.resourceGroup
-//   location: location
-//   tags: allSettings.tags
-// }
+resource monitoringRG 'Microsoft.Resources/resourceGroups@2025-04-01' = {
+  name: monitoringSettings.resourceGroup
+  location: location
+  tags: allSettings.tags
+}
 
-// module monitoring '../src/shared/management/monitoring.bicep' = {
-//   name: 'monitoring-${dateTime}'
-//   scope: monitoringRG
-//   params: {
-//     location: location
-//     monitoring: managementSettings.monitoring
-//     publicNetworkAccess: connectivitySettings.publicNetworkAccess
-//     tags: allSettings.tags
-//   }
-// }
+module monitoring '../src/shared/management/monitoring.bicep' = {
+  name: 'monitoring-${dateTime}'
+  scope: monitoringRG
+  params: {
+    location: location
+    monitoring: monitoringSettings
+    publicNetworkAccess: connectivitySettings.publicNetworkAccess
+    tags: allSettings.tags
+  }
+}
 
 // resource networkingRG 'Microsoft.Resources/resourceGroups@2025-04-01' = {
 //   name: connectivitySettings.resourceGroup

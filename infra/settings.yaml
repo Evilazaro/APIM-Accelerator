@@ -42,13 +42,12 @@ shared:
             name: apim-plat-app-gateway-nsg
             rules: []
 
-  management:
-    monitoring:
-      resourceGroup: apim-plat-monitoring-rg
-      logAnalytics:
-        name: apim-plat-log-analytics
-      applicationInsights:
-        name: apim-plat-app-insights
+  monitoring:
+    resourceGroup: apim-plat-monitoring-rg
+    logAnalytics:
+      name: apim-plat-log-analytics
+    applicationInsights:
+      name: apim-plat-app-insights
 
   security:
     resourceGroup: apim-plat-security-rg
