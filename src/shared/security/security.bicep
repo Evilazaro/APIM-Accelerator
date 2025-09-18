@@ -1,4 +1,4 @@
-import * as Security from '../shared/key-vault-types.bicep'
+import * as Security from '../customtypes/key-vault-types.bicep'
 
 param location string
 param keyVault Security.KeyVault

@@ -26,42 +26,40 @@ resource apimSubnet 'Microsoft.Network/virtualNetworks/subnets@2024-07-01' exist
 }
 
 var apiManagementIdentityResourceId = [
-  for identity in apiManagement.usersAssigned.identities: subscriptionResourceId(
-    subscription().id,
+  for identity in apiManagement.identity.usersAssigned.identities: resourceId(
+    apiManagement.identity.usersAssigned.resourceGroup,
     'Microsoft.ManagedIdentity/userAssignedIdentities',
-    apiManagement.usersAssigned.resourceGroup,
     identity.name
   )
 ]
-
 output apiManagementIdentityResourceId array = apiManagementIdentityResourceId
 
-// resource apim 'Microsoft.ApiManagement/service@2024-05-01' = {
-//   name: apiManagement.name
-//   location: location
-//   tags: tags
-//   zones: (apiManagement.sku.name == 'Premium') ? apiManagement.sku.zones : null
-//   identity: {
-//     type: apiManagement.identity.type
-//     userAssignedIdentities: {
-//       '${apiManagementIdentityResourceId}': {}
-//     }
-//   }
-//   sku: {
-//     name: apiManagement.sku.name
-//     capacity: apiManagement.sku.capacity
-//   }
-//   properties: {
-//     publisherEmail: apiManagement.publisherEmail
-//     publisherName: apiManagement.publisherName
-//     virtualNetworkType: publicNetworkAccess ? 'External' : 'Internal'
-//     virtualNetworkConfiguration: (!publicNetworkAccess)
-//       ? {
-//           subnetResourceId: apimSubnet.id
-//         }
-//       : null
-//   }
-// }
+resource apim 'Microsoft.ApiManagement/service@2024-05-01' = {
+  name: apiManagement.name
+  location: location
+  tags: tags
+  zones: (apiManagement.sku.name == 'Premium') ? apiManagement.sku.zones : null
+  identity: {
+    type: apiManagement.identity.type
+    userAssignedIdentities: {
+      '${apiManagementIdentityResourceId}': {}
+    }
+  }
+  sku: {
+    name: apiManagement.sku.name
+    capacity: apiManagement.sku.capacity
+  }
+  properties: {
+    publisherEmail: apiManagement.publisherEmail
+    publisherName: apiManagement.publisherName
+    virtualNetworkType: publicNetworkAccess ? 'External' : 'Internal'
+    virtualNetworkConfiguration: (!publicNetworkAccess)
+      ? {
+          subnetResourceId: apimSubnet.id
+        }
+      : null
+  }
+}
 
 // resource apimAppInsightsLogger 'Microsoft.ApiManagement/service/loggers@2024-05-01' = {
 //   parent: apim

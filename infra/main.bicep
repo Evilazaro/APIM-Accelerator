@@ -65,25 +65,25 @@ module networking '../src/shared/connectivity/networking.bicep' = {
   ]
 }
 
-// resource securityRG 'Microsoft.Resources/resourceGroups@2025-04-01' = {
-//   name: securitySettings.resourceGroup
-//   location: location
-//   tags: allSettings.tags
-// }
+resource securityRG 'Microsoft.Resources/resourceGroups@2025-04-01' = {
+  name: securitySettings.resourceGroup
+  location: location
+  tags: allSettings.tags
+}
 
-// module security '../src/shared/security/security.bicep' = {
-//   name: 'security-${dateTime}'
-//   scope: securityRG
-//   params: {
-//     location: location
-//     publicNetworkAccess: connectivitySettings.publicNetworkAccess
-//     tags: allSettings.tags
-//     keyVault: securitySettings.keyVault
-//   }
-//   dependsOn: [
-//     networking
-//   ]
-// }
+module security '../src/shared/security/security.bicep' = {
+  name: 'security-${dateTime}'
+  scope: securityRG
+  params: {
+    location: location
+    publicNetworkAccess: connectivitySettings.publicNetworkAccess
+    tags: allSettings.tags
+    keyVault: securitySettings.keyVault
+  }
+  dependsOn: [
+    networking
+  ]
+}
 
 resource workloadRG 'Microsoft.Resources/resourceGroups@2025-04-01' = {
   name: workloadSettings.resourceGroup
@@ -102,7 +102,7 @@ module workload '../src/core/apim.bicep' = {
     logAnalyticsWorkspaceName: monitoring.outputs.AZURE_LOG_ANALYTICS_WORKSPACE_NAME
     monitoringResourceGroupName: monitoringRG.name
     publicNetworkAccess: connectivitySettings.publicNetworkAccess
-    subnetName: ''
+    subnetName: workloadSettings.virtualNetwork.subnetName
     virtualNetworkResourceGroup: connectivitySettings.resourceGroup
   }
 }

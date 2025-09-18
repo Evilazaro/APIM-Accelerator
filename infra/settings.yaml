@@ -80,7 +80,9 @@ core:
         identities:
           - name: apim-plat-identity
           - name: apim-keyvault-identity
-
+    virtualNetwork:
+      subnetName: apim-plat-subnet
+      virtualNetworkName: apim-plat-vnet
     sku:
       name: Premium
       capacity: 1
