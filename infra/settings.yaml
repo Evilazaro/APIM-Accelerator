@@ -2,16 +2,14 @@ shared:
   identity:
     resourceGroup: apim-plat-identity-rg
     usersAssigned:
-      - name: apim-plat-identity
+      - name: apim-plat-script-identity
         scope:
           type: subscription
-          name: apim-plat-apim-rg
+          name: ''
         rbacRoleAssignment:
           roles:
-            - roleName: "Contributor"
-              id: "b24988ac-6180-42a0-ab88-20f7382dd24c" # Contributor Role ID
-            - roleName: "User Access Administrator"
-              id: "18d7d88d-d35e-4fb5-a5c3-7773c20a72d9" # User Access Administrator Role ID
+            - roleName: "Storage Account Contributor"
+              id: "17d1049b-9a84-46fb-8f53-869881c3d3ab" # Storage Account Contributor Role ID
       - name: apim-keyvault-identity
         scope:
           type: resourceGroup
@@ -52,24 +50,20 @@ shared:
   security:
     resourceGroup: apim-plat-security-rg
     keyVault:
-      name: apim-plat-kv11
+      name: apim-plat-kv
 
 core:
   apiManagement:
     resourceGroup: apim-plat-apim-rg
-    name: apim-plat-apim11
+    name: apim-plat
     identity:
       type: 'SystemAssigned, UserAssigned'
       systemAssigned:
         scope:
           type: resourceGroup
-          name: apim-plat-apim-rg
+          name: apim-plat-security-rg
         rbacRoleAssignment:
           roles:
-            - roleName: "Contributor"
-              id: "b24988ac-6180-42a0-ab88-20f7382dd24c" # Contributor Role ID
-            - roleName: "User Access Administrator"
-              id: "18d7d88d-d35e-4fb5-a5c3-7773c20a72d9" # User Access Administrator Role ID
             - roleName: "Key Vault Secrets User"
               id: "4633458b-17de-408a-b874-0445c86b69e6" # Key Vault Secrets User Role ID
             - roleName: "Key Vault Secrets Officer"
@@ -78,8 +72,8 @@ core:
       usersAssigned:
         resourceGroup: apim-plat-identity-rg
         identities:
-          - name: apim-plat-identity
           - name: apim-keyvault-identity
+          - name: apim-plat-script-identity
     
     virtualNetwork:
       subnetName: apim-plat-subnet
