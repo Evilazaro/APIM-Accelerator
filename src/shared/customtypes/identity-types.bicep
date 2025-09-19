@@ -7,7 +7,7 @@ type IdentityType = 'SystemAssigned' | 'UserAssigned' | 'None' | 'SystemAssigned
 type UserAssignedIdentity = {
   name: string
   scope: {
-    type: 'subscription' | 'resourceGroup'
+    type: 'subscription' | 'resourceGroup' | 'deploymentScript'
     name: string // Required if type is resourceGroup
   }
   rbacRoleAssignment: RBACRoleAssignment

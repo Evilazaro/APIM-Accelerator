@@ -7,7 +7,7 @@ type Settings = {
   name: string
   identity: Identity.IdentityAPIM
   sku: {
-    name: 'BasicV2' | 'Consumption' | 'Developer' | 'Isolated' | 'Premium' | 'StandardV2' 
+    name: 'BasicV2' | 'Consumption' | 'Developer' | 'Isolated' | 'Premium' | 'StandardV2'
     capacity: int
     zones: array
   }

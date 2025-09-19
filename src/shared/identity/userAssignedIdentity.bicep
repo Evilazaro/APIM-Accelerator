@@ -17,7 +17,7 @@ resource managedIdentity 'Microsoft.ManagedIdentity/userAssignedIdentities@2025-
 }
 
 @description('Assigns subscription-scoped RBAC roles for cross-resource group operations.')
-module roleAssignmentsSub 'roleAssignmentSub.bicep' = if (userAssignedIdentity.scope.type == 'subscription') {
+module roleAssignmentsSub 'roleAssignmentSub.bicep' = if (userAssignedIdentity.scope.type == 'subscription' || userAssignedIdentity.scope.type == 'deploymentScript') {
   name: 'roleAssignmentsSub-${userAssignedIdentity.name}'
   scope: subscription()
   params: {

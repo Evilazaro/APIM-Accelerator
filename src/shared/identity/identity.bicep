@@ -21,3 +21,4 @@ module userAssignedIdentities 'userAssignedIdentity.bicep' = [
     }
   }
 ]
+
