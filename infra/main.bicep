@@ -108,6 +108,5 @@ module workload '../src/core/apim.bicep' = {
   }
   dependsOn: [
     identity
-    security
   ]
 }
