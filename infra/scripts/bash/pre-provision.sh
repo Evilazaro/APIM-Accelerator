@@ -135,8 +135,8 @@ main() {
     # Extract APIM configuration using yq -r (keeping original command format)
     local apim_name
     local apim_resource_group
-    apim_name=$(yq -r '.core.apiManagement.name' ../../settings.yaml)
-    apim_resource_group=$(yq -r '.core.apiManagement.resourceGroup' ../../settings.yaml)
+    apim_name=$(yq -r '.core.apiManagement.name' ./infra/settings.yaml)
+    apim_resource_group=$(yq -r '.core.apiManagement.resourceGroup' ./infra/settings.yaml)
     
     # Validate APIM configuration values
     if [[ -z "$apim_name" || "$apim_name" == "null" ]]; then
@@ -157,9 +157,9 @@ main() {
     # Extract Key Vault configuration using yq -r (keeping original command format)
     local key_vault_name
     local key_vault_resource_group
-    key_vault_name=$(yq -r '.shared.security.keyVault.name' ../../settings.yaml)
-    key_vault_resource_group=$(yq -r '.shared.security.resourceGroup' ../../settings.yaml)
-    
+    key_vault_name=$(yq -r '.shared.security.keyVault.name' ./infra/settings.yaml)
+    key_vault_resource_group=$(yq -r '.shared.security.resourceGroup' ./infra/settings.yaml)
+
     # Validate Key Vault configuration values
     if [[ -z "$key_vault_name" || "$key_vault_name" == "null" ]]; then
         echo "Error: Key Vault name not found in settings.yaml" >&2
