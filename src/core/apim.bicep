@@ -38,7 +38,9 @@ resource apim 'Microsoft.ApiManagement/service@2024-05-01' = {
   name: apiManagement.name
   location: location
   tags: tags
-  zones: (apiManagement.sku.name == 'Premium') ? apiManagement.sku.zones : null
+  zones: (apiManagement.sku.name == 'Premium' && !empty(apiManagement.sku.zones) && length(apiManagement.sku.zones) == apiManagement.sku.capacity)
+    ? apiManagement.sku.zones
+    : (apiManagement.sku.name == 'Premium' && !empty(apiManagement.sku.zones) ? ['${apiManagement.sku.capacity}'] : null)
   identity: {
     type: apiManagement.identity.type
     userAssignedIdentities: toObject(apiManagementIdentityResourceIds, arg => arg, arg => {})
@@ -51,13 +53,24 @@ resource apim 'Microsoft.ApiManagement/service@2024-05-01' = {
     publisherEmail: apiManagement.publisherEmail
     publisherName: apiManagement.publisherName
     virtualNetworkType: publicNetworkAccess ? 'External' : 'Internal'
-    virtualNetworkConfiguration: (!publicNetworkAccess)
-      ? {
-          subnetResourceId: apimSubnet.id
-        }
-      : null
+    virtualNetworkConfiguration: {
+      subnetResourceId: apimSubnet.id
+    }
   }
 }
+
+// module apimPrivateEndpoint '../shared/connectivity/private-endpoint.bicep' = if (!publicNetworkAccess) {
+//   name: 'apimPrivateEndpoint'
+//   scope: resourceGroup()
+//   params: {
+//     name: '${apim.name}-pe'
+//     location: location
+//     tags: tags
+//     virtualNetworkName: virtualNetworkName
+//     virtualNetworkResourceGroup: virtualNetworkResourceGroup
+//     subnetName: subnetName
+//   }
+// }
 
 resource apimAppInsightsLogger 'Microsoft.ApiManagement/service/loggers@2024-05-01' = {
   parent: apim

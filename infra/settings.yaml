@@ -15,7 +15,7 @@ shared:
 
   connectivity:
     resourceGroup: apim-plat-connectivity-rg
-    publicNetworkAccess: true
+    publicNetworkAccess: false
     virtualNetwork:
       name: apim-plat-vnet
       addressPrefixes:
@@ -67,16 +67,16 @@ core:
           - name: apim-keyvault-identity
 
     virtualNetwork:
+      name:
       subnetName: apim-plat-subnet
-      virtualNetworkName: apim-plat-vnet
 
     sku:
       name: Premium
       capacity: 3
       zones:
-        - 1
-        - 2
-        - 3
+        - "1"
+        - "2"
+        - "3"
     publisherEmail: publisher@example.com
     publisherName: Contoso API Team
 

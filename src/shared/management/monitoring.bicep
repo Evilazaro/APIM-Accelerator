@@ -20,11 +20,18 @@ resource storageAccount 'Microsoft.Storage/storageAccounts@2025-01-01' = {
     name: 'Standard_LRS'
   }
   kind: 'StorageV2'
+  identity: {
+    type: 'SystemAssigned'
+  }
   tags: tags
   properties: {
     accessTier: 'Hot'
     publicNetworkAccess: publicNetworkAccess ? 'Enabled' : 'Disabled'
     allowBlobPublicAccess: publicNetworkAccess ? true : false
+    networkAcls: {
+      defaultAction: publicNetworkAccess ? 'Allow' : 'Deny'
+      bypass: 'AzureServices'
+    }
   }
 }
 
@@ -53,6 +60,9 @@ resource logAnalytics 'Microsoft.OperationalInsights/workspaces@2025-02-01' = {
   name: monitoring.logAnalytics.name
   location: location
   tags: tags
+  identity: {
+    type: 'SystemAssigned'
+  }
 }
 
 @description('Log Analytics workspace name for referencing in diagnostic settings and monitoring integrations.')

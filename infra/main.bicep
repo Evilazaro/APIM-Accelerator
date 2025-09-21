@@ -77,6 +77,7 @@ module security '../src/shared/security/security.bicep' = {
   params: {
     location: location
     publicNetworkAccess: connectivitySettings.publicNetworkAccess
+    virtualNetworkResourceGroupName: networkingRG.name
     tags: allSettings.tags
     keyVault: securitySettings.keyVault
   }
@@ -91,22 +92,22 @@ resource workloadRG 'Microsoft.Resources/resourceGroups@2025-04-01' = {
   tags: allSettings.tags
 }
 
-module workload '../src/core/apim.bicep' = {
-  scope: workloadRG
-  name: 'workload-${dateTime}'
-  params: {
-    location: location
-    tags: allSettings.tags
-    apiManagement: apimCoreSettings
-    appInsightsName: monitoring.outputs.AZURE_APPLICATION_INSIGHTS_NAME
-    logAnalyticsWorkspaceName: monitoring.outputs.AZURE_LOG_ANALYTICS_WORKSPACE_NAME
-    monitoringResourceGroupName: monitoringRG.name
-    publicNetworkAccess: connectivitySettings.publicNetworkAccess
-    subnetName: apimCoreSettings.virtualNetwork.subnetName
-    virtualNetworkResourceGroup: connectivitySettings.resourceGroup
-    virtualNetworkName: networking.outputs.AZURE_VNET_NAME
-  }
-  dependsOn: [
-    identity
-  ]
-}
+// module workload '../src/core/apim.bicep' = {
+//   scope: workloadRG
+//   name: 'workload-${dateTime}'
+//   params: {
+//     location: location
+//     tags: allSettings.tags
+//     apiManagement: apimCoreSettings
+//     appInsightsName: monitoring.outputs.AZURE_APPLICATION_INSIGHTS_NAME
+//     logAnalyticsWorkspaceName: monitoring.outputs.AZURE_LOG_ANALYTICS_WORKSPACE_NAME
+//     monitoringResourceGroupName: monitoringRG.name
+//     publicNetworkAccess: connectivitySettings.publicNetworkAccess
+//     subnetName: apimCoreSettings.virtualNetwork.subnetName
+//     virtualNetworkResourceGroup: connectivitySettings.resourceGroup
+//     virtualNetworkName: networking.outputs.AZURE_VNET_NAME
+//   }
+//   dependsOn: [
+//     identity
+//   ]
+// }
