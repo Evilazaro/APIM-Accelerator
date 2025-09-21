@@ -33,23 +33,23 @@ resource apimVnet 'Microsoft.Network/virtualNetworks@2024-07-01' = {
 output AZURE_VNET_NAME string = apimVnet.name
 output AZURE_VNET_ID string = apimVnet.id
 
-module apimSubnets 'subnet.bicep' = [
-  for subnet in vnetSettings.subnets: {
-    name: 'subnet-${subnet.name}'
-    params: {
-      location: location
-      virtualNetworkName: apimVnet.name
-      subnet: subnet
-      logAnalytcsWorkspaceName: logAnalytcsWorkspaceName
-      monitoringStorageAccountName: monitoringStorageAccountName
-      monitoringResourceGroup: monitoringResourceGroup
-      tags: tags
-    }
-    dependsOn: [
-      apimVnet
-    ]
+module apimSubnets 'subnets.bicep' = {
+  name: 'subnets'
+  scope: resourceGroup()
+  params: {
+    location: location
+    virtualNetworkName: apimVnet.name
+    subnets: networking.virtualNetwork.subnets
+    logAnalytcsWorkspaceName: logAnalytcsWorkspaceName
+    monitoringStorageAccountName: monitoringStorageAccountName
+    monitoringResourceGroup: monitoringResourceGroup
+    tags: tags
   }
-]
+  dependsOn: [
+    apimVnet
+  ]
+}
+output AZURE_APIM_SUBNET_NAME string = apimSubnets.outputs.AZURE_APIM_SUBNET_NAME
 
 resource vnetDiag 'Microsoft.Insights/diagnosticSettings@2021-05-01-preview' = {
   name: 'vnet-diag'

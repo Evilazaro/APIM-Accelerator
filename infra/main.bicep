@@ -102,9 +102,8 @@ module workload '../src/core/apim.bicep' = {
     logAnalyticsWorkspaceName: monitoring.outputs.AZURE_LOG_ANALYTICS_WORKSPACE_NAME
     monitoringResourceGroupName: monitoringRG.name
     publicNetworkAccess: connectivitySettings.publicNetworkAccess
-    subnetName: apimCoreSettings.virtualNetwork.subnetName
+    subnetName: networking.outputs.AZURE_APIM_SUBNET_NAME
     virtualNetworkResourceGroup: connectivitySettings.resourceGroup
-    virtualNetworkName: networking.outputs.AZURE_VNET_NAME
   }
   dependsOn: [
     identity

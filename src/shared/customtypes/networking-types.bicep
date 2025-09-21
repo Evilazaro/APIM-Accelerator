@@ -9,14 +9,16 @@ type Subnet = {
 @description('Network security group configuration with security rules for traffic control.')
 type NetworkSecurityGroup = {
   name: string
-  rules: array
 }
 
 @description('Virtual network configuration with address spaces and subnet definitions.')
 type VirtualNetwork = {
   name: string
   addressPrefixes: string[]
-  subnets: Subnet[]
+  subnets: {
+    apiManagement: Subnet
+    applicationGateway: Subnet
+  }
 }
 
 @export()

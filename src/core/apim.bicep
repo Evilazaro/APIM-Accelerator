@@ -3,7 +3,6 @@ import * as APIM from '../shared/customtypes/apim-types.bicep'
 param location string
 param apiManagement APIM.Settings
 param publicNetworkAccess bool
-param virtualNetworkName string
 param virtualNetworkResourceGroup string
 param appInsightsName string
 param logAnalyticsWorkspaceName string
@@ -22,7 +21,7 @@ resource appInsights 'Microsoft.Insights/components@2020-02-02' existing = {
 }
 
 resource apimSubnet 'Microsoft.Network/virtualNetworks/subnets@2024-07-01' existing = {
-  name: '${virtualNetworkName}/${subnetName}'
+  name: subnetName
   scope: resourceGroup(virtualNetworkResourceGroup)
 }
 
@@ -38,7 +37,9 @@ resource apim 'Microsoft.ApiManagement/service@2024-05-01' = {
   name: apiManagement.name
   location: location
   tags: tags
-  zones: (apiManagement.sku.name == 'Premium') ? apiManagement.sku.zones : null
+  zones: (apiManagement.sku.name == 'Premium' && !empty(apiManagement.sku.zones) && length(apiManagement.sku.zones) == apiManagement.sku.capacity)
+    ? apiManagement.sku.zones
+    : (apiManagement.sku.name == 'Premium' && !empty(apiManagement.sku.zones) ? ['${apiManagement.sku.capacity}'] : null)
   identity: {
     type: apiManagement.identity.type
     userAssignedIdentities: toObject(apiManagementIdentityResourceIds, arg => arg, arg => {})
@@ -51,11 +52,9 @@ resource apim 'Microsoft.ApiManagement/service@2024-05-01' = {
     publisherEmail: apiManagement.publisherEmail
     publisherName: apiManagement.publisherName
     virtualNetworkType: publicNetworkAccess ? 'External' : 'Internal'
-    virtualNetworkConfiguration: (!publicNetworkAccess)
-      ? {
-          subnetResourceId: apimSubnet.id
-        }
-      : null
+    virtualNetworkConfiguration: {
+      subnetResourceId: apimSubnet.id
+    }
   }
 }
 
@@ -68,6 +67,20 @@ resource apimAppInsightsLogger 'Microsoft.ApiManagement/service/loggers@2024-05-
     credentials: {
       instrumentationKey: appInsights.properties.InstrumentationKey
     }
+  }
+}
+
+resource applicationinsights 'Microsoft.ApiManagement/service/diagnostics@2024-05-01' = {
+  parent: apim
+  name: 'applicationinsights'
+  properties: {
+    loggerId: apimAppInsightsLogger.id
+    alwaysLog: 'allErrors'
+    sampling: {
+      percentage: 100
+      samplingType: 'fixed'
+    }
+    metrics: true
   }
 }
 

@@ -20,11 +20,18 @@ resource storageAccount 'Microsoft.Storage/storageAccounts@2025-01-01' = {
     name: 'Standard_LRS'
   }
   kind: 'StorageV2'
+  identity: {
+    type: 'SystemAssigned'
+  }
   tags: tags
   properties: {
     accessTier: 'Hot'
     publicNetworkAccess: publicNetworkAccess ? 'Enabled' : 'Disabled'
     allowBlobPublicAccess: publicNetworkAccess ? true : false
+    networkAcls: {
+      defaultAction: publicNetworkAccess ? 'Allow' : 'Deny'
+      bypass: 'AzureServices'
+    }
   }
 }
 
@@ -38,7 +45,6 @@ resource storageAccountDiag 'Microsoft.Insights/diagnosticSettings@2021-05-01-pr
   properties: {
     workspaceId: logAnalytics.id
     storageAccountId: storageAccount.id
-
     metrics: [
       {
         category: 'AllMetrics'
@@ -53,6 +59,13 @@ resource logAnalytics 'Microsoft.OperationalInsights/workspaces@2025-02-01' = {
   name: monitoring.logAnalytics.name
   location: location
   tags: tags
+  identity: {
+    type: 'SystemAssigned'
+  }
+  properties: {
+    publicNetworkAccessForIngestion: publicNetworkAccess ? 'Enabled' : 'Disabled'
+    publicNetworkAccessForQuery: publicNetworkAccess ? 'Enabled' : 'Disabled'
+  }
 }
 
 @description('Log Analytics workspace name for referencing in diagnostic settings and monitoring integrations.')
@@ -89,6 +102,8 @@ resource appInsights 'Microsoft.Insights/components@2020-02-02' = {
   properties: {
     Application_Type: 'web'
     WorkspaceResourceId: logAnalytics.id
+    publicNetworkAccessForIngestion: publicNetworkAccess ? 'Enabled' : 'Disabled'
+    publicNetworkAccessForQuery: publicNetworkAccess ? 'Enabled' : 'Disabled'
   }
 }
 

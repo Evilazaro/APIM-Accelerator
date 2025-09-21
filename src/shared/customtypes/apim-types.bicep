@@ -9,7 +9,7 @@ type Settings = {
   sku: {
     name: 'BasicV2' | 'Consumption' | 'Developer' | 'Isolated' | 'Premium' | 'StandardV2'
     capacity: int
-    zones: array
+    zones: string[]
   }
   publisherEmail: string
   publisherName: string
