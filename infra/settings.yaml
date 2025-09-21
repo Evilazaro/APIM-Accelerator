@@ -21,16 +21,16 @@ shared:
       addressPrefixes:
         - 10.0.0.0/16
       subnets:
-        - name: apim-plat-subnet
+        apiManagement:
+          name: apim-plat-subnet
           addressPrefix: 10.0.1.0/24
           networkSecurityGroup:
             name: apim-plat-nsg
-            rules: []
-        - name: apim-plat-app-gateway-subnet
+        applicationGateway:
+          name: apim-plat-app-gateway-subnet
           addressPrefix: 10.0.2.0/24
           networkSecurityGroup:
             name: apim-plat-app-gateway-nsg
-            rules: []
 
   monitoring:
     resourceGroup: apim-plat-monitoring-rg
@@ -65,10 +65,6 @@ core:
         resourceGroup: apim-plat-identity-rg
         identities:
           - name: apim-keyvault-identity
-
-    virtualNetwork:
-      name:
-      subnetName: apim-plat-subnet
 
     sku:
       name: Premium

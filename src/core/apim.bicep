@@ -3,7 +3,6 @@ import * as APIM from '../shared/customtypes/apim-types.bicep'
 param location string
 param apiManagement APIM.Settings
 param publicNetworkAccess bool
-param virtualNetworkName string
 param virtualNetworkResourceGroup string
 param appInsightsName string
 param logAnalyticsWorkspaceName string
@@ -22,7 +21,7 @@ resource appInsights 'Microsoft.Insights/components@2020-02-02' existing = {
 }
 
 resource apimSubnet 'Microsoft.Network/virtualNetworks/subnets@2024-07-01' existing = {
-  name: '${virtualNetworkName}/${subnetName}'
+  name: subnetName
   scope: resourceGroup(virtualNetworkResourceGroup)
 }
 
@@ -59,19 +58,6 @@ resource apim 'Microsoft.ApiManagement/service@2024-05-01' = {
   }
 }
 
-// module apimPrivateEndpoint '../shared/connectivity/private-endpoint.bicep' = if (!publicNetworkAccess) {
-//   name: 'apimPrivateEndpoint'
-//   scope: resourceGroup()
-//   params: {
-//     name: '${apim.name}-pe'
-//     location: location
-//     tags: tags
-//     virtualNetworkName: virtualNetworkName
-//     virtualNetworkResourceGroup: virtualNetworkResourceGroup
-//     subnetName: subnetName
-//   }
-// }
-
 resource apimAppInsightsLogger 'Microsoft.ApiManagement/service/loggers@2024-05-01' = {
   parent: apim
   name: 'AppInsightsLogger'
@@ -81,6 +67,20 @@ resource apimAppInsightsLogger 'Microsoft.ApiManagement/service/loggers@2024-05-
     credentials: {
       instrumentationKey: appInsights.properties.InstrumentationKey
     }
+  }
+}
+
+resource applicationinsights 'Microsoft.ApiManagement/service/diagnostics@2024-05-01' = {
+  parent: apim
+  name: 'applicationinsights'
+  properties: {
+    loggerId: apimAppInsightsLogger.id
+    alwaysLog: 'allErrors'
+    sampling: {
+      percentage: 100
+      samplingType: 'fixed'
+    }
+    metrics: true
   }
 }
 

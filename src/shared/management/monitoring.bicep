@@ -45,7 +45,6 @@ resource storageAccountDiag 'Microsoft.Insights/diagnosticSettings@2021-05-01-pr
   properties: {
     workspaceId: logAnalytics.id
     storageAccountId: storageAccount.id
-
     metrics: [
       {
         category: 'AllMetrics'
@@ -62,6 +61,10 @@ resource logAnalytics 'Microsoft.OperationalInsights/workspaces@2025-02-01' = {
   tags: tags
   identity: {
     type: 'SystemAssigned'
+  }
+  properties: {
+    publicNetworkAccessForIngestion: publicNetworkAccess ? 'Enabled' : 'Disabled'
+    publicNetworkAccessForQuery: publicNetworkAccess ? 'Enabled' : 'Disabled'
   }
 }
 
@@ -99,6 +102,8 @@ resource appInsights 'Microsoft.Insights/components@2020-02-02' = {
   properties: {
     Application_Type: 'web'
     WorkspaceResourceId: logAnalytics.id
+    publicNetworkAccessForIngestion: publicNetworkAccess ? 'Enabled' : 'Disabled'
+    publicNetworkAccessForQuery: publicNetworkAccess ? 'Enabled' : 'Disabled'
   }
 }
 

@@ -1,0 +1,101 @@
+[
+  {
+    "name": "apim-plat-nsg",
+    "rules": [
+      {
+        "name": "AllowApimManagement",
+        "properties": {
+          "priority": 2000,
+          "sourceAddressPrefix": "ApiManagement",
+          "protocol": "Tcp",
+          "destinationPortRange": "3443",
+          "access": "Allow",
+          "direction": "Inbound",
+          "sourcePortRange": "*",
+          "destinationAddressPrefix": "VirtualNetwork"
+        }
+      },
+      {
+        "name": "AllowAzureLoadBalancer",
+        "properties": {
+          "priority": 2010,
+          "sourceAddressPrefix": "AzureLoadBalancer",
+          "protocol": "Tcp",
+          "destinationPortRange": "6390",
+          "access": "Allow",
+          "direction": "Inbound",
+          "sourcePortRange": "*",
+          "destinationAddressPrefix": "VirtualNetwork"
+        }
+      },
+      {
+        "name": "AllowAzureTrafficManager",
+        "properties": {
+          "priority": 2020,
+          "sourceAddressPrefix": "AzureTrafficManager",
+          "protocol": "Tcp",
+          "destinationPortRange": "443",
+          "access": "Allow",
+          "direction": "Inbound",
+          "sourcePortRange": "*",
+          "destinationAddressPrefix": "VirtualNetwork"
+        }
+      },
+      {
+        "name": "AllowStorage",
+        "properties": {
+          "priority": 2000,
+          "sourceAddressPrefix": "VirtualNetwork",
+          "protocol": "Tcp",
+          "destinationPortRange": "443",
+          "access": "Allow",
+          "direction": "Outbound",
+          "sourcePortRange": "*",
+          "destinationAddressPrefix": "Storage"
+        }
+      },
+      {
+        "name": "AllowSql",
+        "properties": {
+          "priority": 2010,
+          "sourceAddressPrefix": "VirtualNetwork",
+          "protocol": "Tcp",
+          "destinationPortRange": "1433",
+          "access": "Allow",
+          "direction": "Outbound",
+          "sourcePortRange": "*",
+          "destinationAddressPrefix": "SQL"
+        }
+      },
+      {
+        "name": "AllowKeyVault",
+        "properties": {
+          "priority": 2020,
+          "sourceAddressPrefix": "VirtualNetwork",
+          "protocol": "Tcp",
+          "destinationPortRange": "443",
+          "access": "Allow",
+          "direction": "Outbound",
+          "sourcePortRange": "*",
+          "destinationAddressPrefix": "AzureKeyVault"
+        }
+      },
+      {
+        "name": "AllowMonitor",
+        "properties": {
+          "priority": 2030,
+          "sourceAddressPrefix": "VirtualNetwork",
+          "protocol": "Tcp",
+          "destinationPortRanges": [
+            "1886",
+            "443"
+          ],
+          "access": "Allow",
+          "direction": "Outbound",
+          "sourcePortRange": "*",
+          "destinationAddressPrefix": "AzureMonitor"
+        }
+      }
+    ]
+  }
+]
