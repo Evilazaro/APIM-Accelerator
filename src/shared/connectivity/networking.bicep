@@ -14,12 +14,12 @@ resource logAnalytics 'Microsoft.OperationalInsights/workspaces@2025-02-01' exis
   scope: resourceGroup(monitoringResourceGroup)
 }
 
-resource monStorageAccount 'Microsoft.Storage/storageAccounts@2025-01-01' existing = {
+resource storageAccount 'Microsoft.Storage/storageAccounts@2025-01-01' existing = {
   name: monitoringStorageAccountName
   scope: resourceGroup(monitoringResourceGroup)
 }
 
-resource apimVnet 'Microsoft.Network/virtualNetworks@2024-07-01' = {
+resource virtualNetwork 'Microsoft.Network/virtualNetworks@2024-07-01' = {
   name: vnetSettings.name
   location: location
   tags: tags
@@ -30,15 +30,15 @@ resource apimVnet 'Microsoft.Network/virtualNetworks@2024-07-01' = {
   }
 }
 
-output AZURE_VNET_NAME string = apimVnet.name
-output AZURE_VNET_ID string = apimVnet.id
+output AZURE_VNET_NAME string = virtualNetwork.name
+output AZURE_VNET_ID string = virtualNetwork.id
 
-module apimSubnets 'subnets.bicep' = {
+module subnets 'subnets.bicep' = {
   name: 'subnets'
   scope: resourceGroup()
   params: {
     location: location
-    virtualNetworkName: apimVnet.name
+    virtualNetworkName: virtualNetwork.name
     subnets: networking.virtualNetwork.subnets
     logAnalytcsWorkspaceName: logAnalytcsWorkspaceName
     monitoringStorageAccountName: monitoringStorageAccountName
@@ -46,17 +46,17 @@ module apimSubnets 'subnets.bicep' = {
     tags: tags
   }
   dependsOn: [
-    apimVnet
+    virtualNetwork
   ]
 }
-output AZURE_APIM_SUBNET_NAME string = apimSubnets.outputs.AZURE_APIM_SUBNET_NAME
+output AZURE_APIM_SUBNET_NAME string = subnets.outputs.AZURE_APIM_SUBNET_NAME
 
 resource vnetDiag 'Microsoft.Insights/diagnosticSettings@2021-05-01-preview' = {
   name: 'vnet-diag'
-  scope: apimVnet
+  scope: virtualNetwork
   properties: {
     workspaceId: logAnalytics.id
-    storageAccountId: monStorageAccount.id
+    storageAccountId: storageAccount.id
     logs: [
       {
         categoryGroup: 'allLogs'

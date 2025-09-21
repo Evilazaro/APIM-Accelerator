@@ -93,14 +93,14 @@ module security '../src/shared/security/security.bicep' = {
   ]
 }
 
-resource workloadRG 'Microsoft.Resources/resourceGroups@2025-04-01' = {
+resource apimRG 'Microsoft.Resources/resourceGroups@2025-04-01' = {
   name: apimCoreSettings.resourceGroup
   location: location
   tags: allSettings.tags
 }
 
-module workload '../src/core/apim.bicep' = {
-  scope: workloadRG
+module apim '../src/core/apim.bicep' = {
+  scope: apimRG
   name: 'workload-${dateTime}'
   params: {
     location: location

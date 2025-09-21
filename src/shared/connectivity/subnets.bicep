@@ -13,7 +13,7 @@ resource logAnalytics 'Microsoft.OperationalInsights/workspaces@2025-02-01' exis
   scope: resourceGroup(monitoringResourceGroup)
 }
 
-resource monStorageAccount 'Microsoft.Storage/storageAccounts@2025-01-01' existing = {
+resource storageAccount 'Microsoft.Storage/storageAccounts@2025-01-01' existing = {
   name: monitoringStorageAccountName
   scope: resourceGroup(monitoringResourceGroup)
 }
@@ -124,7 +124,7 @@ resource apimSubnetNsgDiag 'Microsoft.Insights/diagnosticSettings@2021-05-01-pre
   scope: apimSubnetNsg
   properties: {
     workspaceId: logAnalytics.id
-    storageAccountId: monStorageAccount.id
+    storageAccountId: storageAccount.id
     logs: [
       {
         categoryGroup: 'allLogs'
@@ -161,7 +161,7 @@ resource appGwSubnetNsgDia 'Microsoft.Insights/diagnosticSettings@2021-05-01-pre
   scope: appGatewayNsg
   properties: {
     workspaceId: logAnalytics.id
-    storageAccountId: monStorageAccount.id
+    storageAccountId: storageAccount.id
     logs: [
       {
         categoryGroup: 'allLogs'
