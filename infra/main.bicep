@@ -43,6 +43,10 @@ module monitoring '../src/shared/management/monitoring.bicep' = {
   }
 }
 
+output AZURE_MONITORING_STORAGE_ACCOUNT_NAME string = monitoring.outputs.AZURE_MONITORING_STORAGE_ACCOUNT_NAME
+output AZURE_LOG_ANALYTICS_WORKSPACE_NAME string = monitoring.outputs.AZURE_LOG_ANALYTICS_WORKSPACE_NAME
+output AZURE_APPLICATION_INSIGHTS_NAME string = monitoring.outputs.AZURE_APPLICATION_INSIGHTS_NAME
+
 resource networkingRG 'Microsoft.Resources/resourceGroups@2025-04-01' = {
   name: connectivitySettings.resourceGroup
   location: location
@@ -58,12 +62,16 @@ module networking '../src/shared/connectivity/networking.bicep' = {
     networking: connectivitySettings
     logAnalytcsWorkspaceName: monitoring.outputs.AZURE_LOG_ANALYTICS_WORKSPACE_NAME
     monitoringStorageAccountName: monitoring.outputs.AZURE_MONITORING_STORAGE_ACCOUNT_NAME
-    monitoringResourceGroup: monitoringRG.name
+    monitoringResourceGroup: monitoring.outputs.MONITORING_RESOURCE_GROUP_NAME
   }
   dependsOn: [
     monitoring
   ]
 }
+
+output AZURE_VNET_NAME string = networking.outputs.AZURE_VNET_NAME
+output AZURE_VNET_ID string = networking.outputs.AZURE_VNET_ID
+output AZURE_APIM_SUBNET_NAME string = networking.outputs.AZURE_APIM_SUBNET_NAME
 
 resource securityRG 'Microsoft.Resources/resourceGroups@2025-04-01' = {
   name: securitySettings.resourceGroup
@@ -100,10 +108,10 @@ module workload '../src/core/apim.bicep' = {
     apiManagement: apimCoreSettings
     appInsightsName: monitoring.outputs.AZURE_APPLICATION_INSIGHTS_NAME
     logAnalyticsWorkspaceName: monitoring.outputs.AZURE_LOG_ANALYTICS_WORKSPACE_NAME
-    monitoringResourceGroupName: monitoringRG.name
+    monitoringResourceGroupName: monitoring.outputs.MONITORING_RESOURCE_GROUP_NAME
     publicNetworkAccess: connectivitySettings.publicNetworkAccess
     subnetName: networking.outputs.AZURE_APIM_SUBNET_NAME
-    virtualNetworkResourceGroup: connectivitySettings.resourceGroup
+    virtualNetworkResourceGroup: networking.outputs.NETWORKING_RESOURCE_GROUP_NANE
   }
   dependsOn: [
     identity

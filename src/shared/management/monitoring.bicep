@@ -175,3 +175,5 @@ resource appInsightsDiag 'Microsoft.Insights/diagnosticSettings@2021-05-01-previ
     ]
   }
 }
+
+output MONITORING_RESOURCE_GROUP_NAME string = resourceGroup().name

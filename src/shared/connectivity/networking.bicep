@@ -71,3 +71,5 @@ resource vnetDiag 'Microsoft.Insights/diagnosticSettings@2021-05-01-preview' = {
     ]
   }
 }
+
+output NETWORKING_RESOURCE_GROUP_NANE string = resourceGroup().name
