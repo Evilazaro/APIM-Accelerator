@@ -1,7 +1,7 @@
 import * as Identity from 'identity-types.bicep'
 
 @export()
-@description('Azure API Management configuration settings for Landing Zone deployment.')
+@description('Strongly-typed settings model for provisioning an Azure API Management instance (name, SKU/capacity/zones, managed identity, and publisher metadata) within the Landing Zone accelerator.')
 type Settings = {
   resourceGroup: string
   name: string

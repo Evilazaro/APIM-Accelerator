@@ -8,16 +8,19 @@ param monitoringStorageAccountName string
 param monitoringResourceGroup string
 param tags object
 
+@description('Existing Log Analytics workspace centralizing NSG and subnet diagnostic logs for monitoring and compliance.')
 resource logAnalytics 'Microsoft.OperationalInsights/workspaces@2025-02-01' existing = {
   name: logAnalytcsWorkspaceName
   scope: resourceGroup(monitoringResourceGroup)
 }
 
+@description('Existing Storage Account used for longer-term archival of NSG diagnostic logs from networking resources.')
 resource storageAccount 'Microsoft.Storage/storageAccounts@2025-01-01' existing = {
   name: monitoringStorageAccountName
   scope: resourceGroup(monitoringResourceGroup)
 }
 
+@description('Network Security Group securing the API Management subnet with inbound platform endpoint allowances (management, load balancer, traffic manager) and outbound dependencies (Storage, SQL, Key Vault, Monitor).')
 resource apimSubnetNsg 'Microsoft.Network/networkSecurityGroups@2024-07-01' = {
   name: subnets.apiManagement.networkSecurityGroup.name
   location: location
@@ -119,6 +122,7 @@ resource apimSubnetNsg 'Microsoft.Network/networkSecurityGroups@2024-07-01' = {
   }
 }
 
+@description('Diagnostic Settings streaming NSG flow and rule logs for the API Management NSG to Log Analytics and Storage.')
 resource apimSubnetNsgDiag 'Microsoft.Insights/diagnosticSettings@2021-05-01-preview' = {
   name: 'apim-nsg-diag'
   scope: apimSubnetNsg
@@ -134,6 +138,7 @@ resource apimSubnetNsgDiag 'Microsoft.Insights/diagnosticSettings@2021-05-01-pre
   }
 }
 
+@description('Subnet delegated for API Management deployment; associates NSG for controlled ingress/egress.')
 resource apimSubnet 'Microsoft.Network/virtualNetworks/subnets@2024-07-01' = {
   name: '${virtualNetworkName}/${subnets.apiManagement.name}'
   properties: {
@@ -150,12 +155,14 @@ resource apimSubnet 'Microsoft.Network/virtualNetworks/subnets@2024-07-01' = {
 
 output AZURE_APIM_SUBNET_NAME string = apimSubnet.name
 
+@description('Network Security Group applied to Application Gateway subnet (rules defined externally or default).')
 resource appGatewayNsg 'Microsoft.Network/networkSecurityGroups@2024-07-01' = {
   name: subnets.applicationGateway.networkSecurityGroup.name
   location: location
   tags: tags
 }
 
+@description('Diagnostic Settings exporting Application Gateway subnet NSG logs to Log Analytics and Storage.')
 resource appGwSubnetNsgDia 'Microsoft.Insights/diagnosticSettings@2021-05-01-preview' = {
   name: 'appgw-nsg-diag'
   scope: appGatewayNsg
@@ -171,6 +178,7 @@ resource appGwSubnetNsgDia 'Microsoft.Insights/diagnosticSettings@2021-05-01-pre
   }
 }
 
+@description('Subnet hosting the Application Gateway; links to its NSG for traffic control.')
 resource appGatewaySubnet 'Microsoft.Network/virtualNetworks/subnets@2024-07-01' = {
   name: '${virtualNetworkName}/${subnets.applicationGateway.name}'
   properties: {

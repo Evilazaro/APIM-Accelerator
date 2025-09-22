@@ -1,18 +1,18 @@
 import * as Monitoring from '../customtypes/management-types.bicep'
 
-@description('Azure region for monitoring resource deployment, aligned with landing zone regional strategy.')
+@description('Azure region where monitoring resources (Log Analytics, Application Insights, Storage) are deployed.')
 param location string
 
-@description('Monitoring configuration containing Log Analytics and Application Insights settings for APIM observability.')
+@description('Strongly-typed monitoring settings model referencing Log Analytics and Application Insights resources for APIM observability.')
 param monitoring Monitoring.Settings
 
-@description('Controls public network access to monitoring resources. Disable for zero-trust security compliance.')
+@description('Boolean flag controlling public network access to monitoring resources (disable to enforce zero‑trust posture).')
 param publicNetworkAccess bool
 
-@description('Resource tags for governance, cost management, and operational tracking.')
+@description('Standard resource tags applied for governance, cost management, and operational tracking.')
 param tags object
 
-@description('Storage account for monitoring data retention, archival, and compliance requirements.')
+@description('Storage Account used for retention, archival, and export of monitoring and diagnostic data (hot access tier).')
 resource storageAccount 'Microsoft.Storage/storageAccounts@2025-01-01' = {
   name: 'apimacceleratorstorage'
   location: location
@@ -35,10 +35,10 @@ resource storageAccount 'Microsoft.Storage/storageAccounts@2025-01-01' = {
   }
 }
 
-@description('Storage account name for referencing in diagnostic settings and monitoring configurations.')
+@description('Outputs the monitoring Storage Account name for downstream diagnostic and integration references.')
 output AZURE_MONITORING_STORAGE_ACCOUNT_NAME string = storageAccount.name
 
-@description('Diagnostic settings for storage account monitoring and operational observability.')
+@description('Diagnostic Settings capturing storage account metrics and forwarding to Log Analytics and archival Storage.')
 resource storageAccountDiag 'Microsoft.Insights/diagnosticSettings@2021-05-01-preview' = {
   name: '${storageAccount.name}-diagnostics'
   scope: storageAccount
@@ -54,7 +54,7 @@ resource storageAccountDiag 'Microsoft.Insights/diagnosticSettings@2021-05-01-pr
   }
 }
 
-@description('Central Log Analytics workspace for logs, metrics, and security analytics across APIM Landing Zone.')
+@description('Log Analytics workspace aggregating platform, network, and application telemetry for APIM Landing Zone analytics.')
 resource logAnalytics 'Microsoft.OperationalInsights/workspaces@2025-02-01' = {
   name: monitoring.logAnalytics.name
   location: location
@@ -68,10 +68,10 @@ resource logAnalytics 'Microsoft.OperationalInsights/workspaces@2025-02-01' = {
   }
 }
 
-@description('Log Analytics workspace name for referencing in diagnostic settings and monitoring integrations.')
+@description('Outputs the Log Analytics workspace name for diagnostic settings and integration parameters.')
 output AZURE_LOG_ANALYTICS_WORKSPACE_NAME string = logAnalytics.name
 
-@description('Diagnostic settings for Log Analytics workspace self-monitoring and meta-observability.')
+@description('Diagnostic Settings enabling workspace self-monitoring (logs + metrics) to Log Analytics and Storage for auditing.')
 resource logAnalyticsDiag 'Microsoft.Insights/diagnosticSettings@2021-05-01-preview' = {
   name: '${logAnalytics.name}-diagnostics'
   scope: logAnalytics
@@ -93,7 +93,7 @@ resource logAnalyticsDiag 'Microsoft.Insights/diagnosticSettings@2021-05-01-prev
   }
 }
 
-@description('Application Insights for performance monitoring, distributed tracing, and dependency analysis.')
+@description('Application Insights component providing performance monitoring, distributed tracing, and dependency analysis integrated with Log Analytics.')
 resource appInsights 'Microsoft.Insights/components@2020-02-02' = {
   name: monitoring.applicationInsights.name
   location: location
@@ -107,10 +107,10 @@ resource appInsights 'Microsoft.Insights/components@2020-02-02' = {
   }
 }
 
-@description('Application Insights name for telemetry integration across APIM and related services.')
+@description('Outputs the Application Insights resource name for telemetry instrumentation references.')
 output AZURE_APPLICATION_INSIGHTS_NAME string = appInsights.name
 
-@description('Comprehensive diagnostic settings for Application Insights telemetry and performance monitoring.')
+@description('Diagnostic Settings exporting comprehensive Application Insights telemetry categories and metrics to Log Analytics and Storage.')
 resource appInsightsDiag 'Microsoft.Insights/diagnosticSettings@2021-05-01-preview' = {
   scope: appInsights
   name: '${appInsights.name}-diagnostics'

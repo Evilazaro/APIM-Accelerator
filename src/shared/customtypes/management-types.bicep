@@ -1,15 +1,15 @@
-@description('Log Analytics workspace configuration for centralized logging and monitoring.')
+@description('Settings object referencing a Log Analytics workspace used for centralized platform and APIM telemetry queries.')
 type LogAnalyticsSettings = {
   name: string
 }
 
-@description('Application Insights configuration for performance monitoring and telemetry.')
+@description('Settings object referencing an Application Insights resource used for APIM request, dependency, and performance telemetry.')
 type AppInsightsSettings = {
   name: string
 }
 
 @export()
-@description('Management and monitoring configuration settings for APIM Landing Zone observability.')
+@description('Composite observability settings grouping resource group and references to Log Analytics and Application Insights for the APIM Landing Zone.')
 type Settings = {
   resourceGroup: string
   logAnalytics: LogAnalyticsSettings

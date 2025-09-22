@@ -1,17 +1,17 @@
 @export()
-@description('Subnet configuration with address space and network security group association.')
+@description('Subnet definition including CIDR prefix and associated Network Security Group for traffic filtering.')
 type Subnet = {
   name: string
   addressPrefix: string
   networkSecurityGroup: NetworkSecurityGroup
 }
 
-@description('Network security group configuration with security rules for traffic control.')
+@description('Network Security Group reference used to apply ingress and egress rules to attached subnets.')
 type NetworkSecurityGroup = {
   name: string
 }
 
-@description('Virtual network configuration with address spaces and subnet definitions.')
+@description('Virtual Network configuration specifying address space and required subnets (APIM and Application Gateway).')
 type VirtualNetwork = {
   name: string
   addressPrefixes: string[]
@@ -22,7 +22,7 @@ type VirtualNetwork = {
 }
 
 @export()
-@description('Networking configuration settings for APIM Landing Zone network topology.')
+@description('Composite networking settings model (resource group, public access flag, and virtual network definition) for the APIM Landing Zone.')
 type Settings = {
   resourceGroup: string
   publicNetworkAccess: bool

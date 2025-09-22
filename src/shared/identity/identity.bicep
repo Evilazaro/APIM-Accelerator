@@ -1,15 +1,15 @@
 import * as Identity from '../customtypes/identity-types.bicep'
 
-@description('Azure region for identity resource deployment, aligned with landing zone regional strategy.')
+@description('Azure region for deploying managed identity resources, aligned to Landing Zone regional strategy.')
 param location string
 
-@description('Shared identity configuration containing user-assigned managed identities for APIM services.')
+@description('Shared identity settings object containing reusable user-assigned managed identities for APIM and related services.')
 param identity Identity.SharedIdentity
 
-@description('Resource tags for governance, cost management, and operational tracking.')
+@description('Standard resource tags applied for governance, cost management, and operational tracking.')
 param tags object
 
-@description('Deploys user-assigned managed identities for secure, credential-free access across APIM Landing Zone.')
+@description('Looped module deployment creating user-assigned managed identities enabling credential-free access for APIM components.')
 module userAssignedIdentities 'userAssignedIdentity.bicep' = [
   for userAssigned in identity.usersAssigned: {
     name: 'userAssignedIdentities-${userAssigned.name}'

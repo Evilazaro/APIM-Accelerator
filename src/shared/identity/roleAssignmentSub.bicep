@@ -2,13 +2,13 @@ import * as Identity from '../customtypes/identity-types.bicep'
 
 targetScope = 'subscription'
 
-@description('Object ID of the managed identity principal for subscription-scoped role assignments.')
+@description('Object (principal) ID of the managed identity receiving subscription‑scoped RBAC role assignments.')
 param principalId string
 
-@description('RBAC roles to assign at subscription scope for cross-resource group APIM operations.')
+@description('Collection of RBAC role references to grant least‑privilege access at subscription scope across resource groups.')
 param rbacRoles Identity.RBACRoleAssignment.roles
 
-@description('Creates subscription-scoped RBAC role assignments for centralized identity management.')
+@description('Iterative deployment of RBAC role assignments at subscription scope binding each specified role to the managed identity.')
 resource roleAssignment 'Microsoft.Authorization/roleAssignments@2020-04-01-preview' = [
   for role in rbacRoles: {
     name: guid(tenant().tenantId, subscription().id, principalId, role.roleName)

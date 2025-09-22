@@ -1,9 +1,9 @@
 @export()
-@description('Supported Azure managed identity types for Landing Zone resources.')
+@description('Enumeration of supported managed identity configurations (system, user, combined, or none) used across Landing Zone resources.')
 type IdentityType = 'SystemAssigned' | 'UserAssigned' | 'None' | 'SystemAssigned, UserAssigned'
 
 @export()
-@description('User-assigned managed identity configuration with scope and RBAC role assignments.')
+@description('User-assigned managed identity definition including deployment scope and RBAC role assignments to grant least-privilege access.')
 type UserAssignedIdentity = {
   name: string
   scope: {
@@ -14,7 +14,7 @@ type UserAssignedIdentity = {
 }
 
 @export()
-@description('APIM-specific user-assigned identity configuration for service integration.')
+@description('API Management specific collection of user-assigned identities (resource group + identity names) for service integration scenarios.')
 type UserAssignedApim = {
   resourceGroup: string
   identities: {
@@ -23,7 +23,7 @@ type UserAssignedApim = {
 }
 
 @export()
-@description('System-assigned managed identity configuration with scope and RBAC assignments.')
+@description('System-assigned managed identity scope definition plus RBAC role assignments automatically bound to the hosting resource.')
 type SystemAssignedIdentity = {
   scope: {
     type: 'subscription' | 'resourceGroup'
@@ -33,34 +33,34 @@ type SystemAssignedIdentity = {
 }
 
 @export()
-@description('Generic identity configuration supporting system-assigned managed identities.')
+@description('Generic identity wrapper pairing selected identity type with optional system-assigned identity settings.')
 type Identity = {
   type: IdentityType
   systemAssigned: SystemAssignedIdentity
 }
 
 @export()
-@description('APIM identity configuration supporting both system and user-assigned identities.')
+@description('Composite API Management identity configuration supporting system-assigned and user-assigned identities in a single model.')
 type IdentityAPIM = {
   type: IdentityType
   systemAssigned: SystemAssignedIdentity
   usersAssigned: UserAssignedApim
 }
 
-@description('Azure RBAC role definition with name and identifier.')
+@description('Azure RBAC role reference containing display name and unique role definition identifier.')
 type Role = {
   roleName: string
   id: string
 }
 
 @export()
-@description('RBAC role assignment configuration for managed identity permissions.')
+@description('Collection of RBAC role references to be assigned to the managed identity at its declared scope.')
 type RBACRoleAssignment = {
   roles: Role[]
 }
 
 @export()
-@description('Shared identity configuration for cross-service user-assigned identities.')
+@description('Shared user-assigned identity grouping reused across multiple services (resource group context + identity list).')
 type SharedIdentity = {
   resourceGroup: string
   usersAssigned: UserAssignedIdentity[]

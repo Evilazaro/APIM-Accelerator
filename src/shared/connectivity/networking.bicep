@@ -9,16 +9,19 @@ param tags object
 
 var vnetSettings = networking.virtualNetwork
 
+@description('Existing Log Analytics workspace used to centralize and retain platform diagnostics and virtual network logs for observability.')
 resource logAnalytics 'Microsoft.OperationalInsights/workspaces@2025-02-01' existing = {
   name: logAnalytcsWorkspaceName
   scope: resourceGroup(monitoringResourceGroup)
 }
 
+@description('Existing Storage Account leveraged for archival retention of platform and virtual network diagnostic logs and metrics.')
 resource storageAccount 'Microsoft.Storage/storageAccounts@2025-01-01' existing = {
   name: monitoringStorageAccountName
   scope: resourceGroup(monitoringResourceGroup)
 }
 
+@description('Virtual Network hosting APIM and related services; defines address space and provides network isolation and segmentation.')
 resource virtualNetwork 'Microsoft.Network/virtualNetworks@2024-07-01' = {
   name: vnetSettings.name
   location: location
@@ -33,6 +36,7 @@ resource virtualNetwork 'Microsoft.Network/virtualNetworks@2024-07-01' = {
 output AZURE_VNET_NAME string = virtualNetwork.name
 output AZURE_VNET_ID string = virtualNetwork.id
 
+@description('Module deploying required subnets (including APIM subnet) with delegated settings, NSGs, route tables, and diagnostics as defined in virtual network settings.')
 module subnets 'subnets.bicep' = {
   name: 'subnets'
   scope: resourceGroup()
@@ -51,6 +55,7 @@ module subnets 'subnets.bicep' = {
 }
 output AZURE_APIM_SUBNET_NAME string = subnets.outputs.AZURE_APIM_SUBNET_NAME
 
+@description('Diagnostic Settings forwarding Virtual Network platform logs (allLogs) and metrics (AllMetrics) to Log Analytics and Storage for monitoring and compliance.')
 resource vnetDiag 'Microsoft.Insights/diagnosticSettings@2021-05-01-preview' = {
   name: 'vnet-diag'
   scope: virtualNetwork

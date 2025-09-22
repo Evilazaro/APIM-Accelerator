@@ -1,5 +1,5 @@
 @export()
-@description('Azure Key Vault configuration for secure storage of APIM secrets and certificates.')
+@description('Settings model referencing an Azure Key Vault used to store API Management secrets, keys, and TLS certificates securely.')
 type KeyVault = {
   name: string
 }
