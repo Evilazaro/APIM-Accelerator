@@ -66,7 +66,7 @@ README.md                 # Project documentation (this file)
 | ALZ Design Area | Implemented By |
 |-----------------|----------------|
 | [Identity & Access](https://learn.microsoft.com/azure/cloud-adoption-framework/ready/landing-zone/design-area/identity-access) | Managed identities + roleAssignment modules |
-| [Network Topology & Connectivity](https://learn.microsoft.com/azure/cloud-adoption-framework/ready/landing-zone/design-area/network-topology-connectivity) | VNet + subnets + NSGs + diagnostics |
+| [Network Topology & Connectivity](https://learn.microsoft.com/en-us/azure/cloud-adoption-framework/ready/landing-zone/design-area/network-topology-and-connectivity) | VNet + subnets + NSGs + diagnostics |
 | [Security](https://learn.microsoft.com/azure/cloud-adoption-framework/ready/landing-zone/design-area/security) | Key Vault + restricted public access toggles |
 | [Management & Monitoring](https://learn.microsoft.com/azure/cloud-adoption-framework/ready/landing-zone/design-area/management) | Log Analytics + App Insights + diagnostic settings |
 | [Governance](https://learn.microsoft.com/azure/cloud-adoption-framework/ready/landing-zone/design-area/governance) | Tagging strategy + modular separation of resource groups |
@@ -76,7 +76,7 @@ Before deploying, ensure you have:
 
 | Requirement | Version / Notes |
 |-------------|-----------------|
-| [Azure Subscription](https://learn.microsoft.com/azure/cloud-adoption-framework/ready/landing-zone/design-area/subscriptions) | Owner / User Access Admin rights recommended for initial deployment |
+| [Azure Subscription](https://learn.microsoft.com/en-us/azure/cloud-adoption-framework/ready/landing-zone/design-area/resource-org-subscriptions) | Owner / User Access Admin rights recommended for initial deployment |
 | [Azure CLI (`az`)](https://learn.microsoft.com/cli/azure/install-azure-cli) | Latest (>= 2.60) |
 | [Bicep CLI](https://learn.microsoft.com/azure/azure-resource-manager/bicep/install) | Included with latest Azure CLI (verify with `az bicep version`) |
 | [Azure Dev CLI (`azd`)](https://learn.microsoft.com/azure/developer/azure-developer-cli/) | Optional (for `azure.yaml` workflow) |
