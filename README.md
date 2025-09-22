@@ -65,22 +65,22 @@ README.md                 # Project documentation (this file)
 ### Design Mapping to Azure Landing Zone
 | ALZ Design Area | Implemented By |
 |-----------------|----------------|
-| Identity & Access | Managed identities + roleAssignment modules |
-| Network Topology & Connectivity | VNet + subnets + NSGs + diagnostics |
-| Security | Key Vault + restricted public access toggles |
-| Management & Monitoring | Log Analytics + App Insights + diagnostic settings |
-| Governance | Tagging strategy + modular separation of resource groups |
+| [Identity & Access](https://learn.microsoft.com/azure/cloud-adoption-framework/ready/landing-zone/design-area/identity-access) | Managed identities + roleAssignment modules |
+| [Network Topology & Connectivity](https://learn.microsoft.com/azure/cloud-adoption-framework/ready/landing-zone/design-area/network-topology-connectivity) | VNet + subnets + NSGs + diagnostics |
+| [Security](https://learn.microsoft.com/azure/cloud-adoption-framework/ready/landing-zone/design-area/security) | Key Vault + restricted public access toggles |
+| [Management & Monitoring](https://learn.microsoft.com/azure/cloud-adoption-framework/ready/landing-zone/design-area/management) | Log Analytics + App Insights + diagnostic settings |
+| [Governance](https://learn.microsoft.com/azure/cloud-adoption-framework/ready/landing-zone/design-area/governance) | Tagging strategy + modular separation of resource groups |
 
 ## 4. Prerequisites
 Before deploying, ensure you have:
 
 | Requirement | Version / Notes |
 |-------------|-----------------|
-| Azure Subscription | Owner / User Access Admin rights recommended for initial deployment |
-| Azure CLI (`az`) | Latest (>= 2.60) |
-| Bicep CLI | Included with latest Azure CLI (verify with `az bicep version`) |
-| Azure Dev CLI (`azd`) | Optional (for `azure.yaml` workflow) |
-| Permissions | Ability to create RGs, role assignments, managed identities |
+| [Azure Subscription](https://learn.microsoft.com/azure/cloud-adoption-framework/ready/landing-zone/design-area/subscriptions) | Owner / User Access Admin rights recommended for initial deployment |
+| [Azure CLI (`az`)](https://learn.microsoft.com/cli/azure/install-azure-cli) | Latest (>= 2.60) |
+| [Bicep CLI](https://learn.microsoft.com/azure/azure-resource-manager/bicep/install) | Included with latest Azure CLI (verify with `az bicep version`) |
+| [Azure Dev CLI (`azd`)](https://learn.microsoft.com/azure/developer/azure-developer-cli/) | Optional (for `azure.yaml` workflow) |
+| [RBAC Permissions](https://learn.microsoft.com/azure/role-based-access-control/overview) | Ability to create RGs, role assignments, managed identities |
 
 Login & set subscription:
 ```bash
@@ -98,6 +98,108 @@ All environment‑specific values reside in `infra/settings.yaml`. Adjust before
 - `tags` – Governance and metadata (ownership, cost, compliance, lifecycle).
 
 Tip: Keep a per-environment variant (e.g., `settings.prod.yaml`) and pre-process if needed.
+
+### Example (Default configuration)
+```yaml
+shared:
+  identity:
+    resourceGroup: apim-plat-identity-rg
+    usersAssigned:
+      - name: apim-keyvault-identity
+        scope:
+          type: resourceGroup
+          name: apim-plat-security-rg
+        rbacRoleAssignment:
+          roles:
+            - roleName: "Key Vault Secrets User"
+              id: "4633458b-17de-408a-b874-0445c86b69e6" # Key Vault Secrets User Role ID
+            - roleName: "Key Vault Secrets Officer"
+              id: "b86a8fe4-44ce-4948-aee5-eccb2c155cd7" # Key Vault Secrets Officer Role ID
+
+  connectivity:
+    resourceGroup: apim-plat-connectivity-rg
+    publicNetworkAccess: false
+    virtualNetwork:
+      name: apim-plat-vnet
+      addressPrefixes:
+        - 10.0.0.0/16
+      subnets:
+        apiManagement:
+          name: apim-plat-subnet
+          addressPrefix: 10.0.1.0/24
+          networkSecurityGroup:
+            name: apim-plat-nsg
+        applicationGateway:
+          name: apim-plat-app-gateway-subnet
+          addressPrefix: 10.0.2.0/24
+          networkSecurityGroup:
+            name: apim-plat-app-gateway-nsg
+
+  monitoring:
+    resourceGroup: apim-plat-monitoring-rg
+    logAnalytics:
+      name: apim-plat-log-analytics
+    applicationInsights:
+      name: apim-plat-app-insights
+
+  security:
+    resourceGroup: apim-plat-security-rg
+    keyVault:
+      name: apim-plat-kv
+
+core:
+  apiManagement:
+    resourceGroup: apim-plat-rg
+    name: apim-plat
+    identity:
+      type: "SystemAssigned, UserAssigned"
+      systemAssigned:
+        scope:
+          type: resourceGroup
+          name: apim-plat-security-rg
+        rbacRoleAssignment:
+          roles:
+            - roleName: "Key Vault Secrets User"
+              id: "4633458b-17de-408a-b874-0445c86b69e6" # Key Vault Secrets User Role ID
+            - roleName: "Key Vault Secrets Officer"
+              id: "b86a8fe4-44ce-4948-aee5-eccb2c155cd7" # Key Vault Secrets Officer Role ID
+
+      usersAssigned:
+        resourceGroup: apim-plat-identity-rg
+        identities:
+          - name: apim-keyvault-identity
+
+    sku:
+      name: Premium
+      capacity: 3
+      zones:
+        - "1"
+        - "2"
+        - "3"
+    publisherEmail: publisher@example.com
+    publisherName: Contoso API Team
+
+tags:
+  CostCenter: "CC-1234" # Tracks cost allocation
+  BusinessUnit: "IT" # Business unit or department
+  Owner: "jdoe@contoso.com" # Resource/application owner
+  ApplicationName: "APIM Platform" # Workload/application name
+
+  Environment: "Production" # Environment (Dev, Test, QA, Prod)
+  Lifecycle: "Operational" # Lifecycle stage
+  ProjectName: "APIMForAll" # Project or initiative name
+  ServiceClass: "Critical" # Workload tier (Critical, Standard, Experimental)
+
+  DataClassification: "Confidential" # Data sensitivity (Public, Internal, Confidential, HighlyConfidential)
+  RegulatoryCompliance: "GDPR" # Compliance requirements (GDPR, HIPAA, PCI, None)
+
+  SupportContact: "cloudops@contoso.com" # Incident support team or contact
+
+  ChargebackModel: "Dedicated" # Chargeback/Showback model
+  BudgetCode: "FY25-Q1-InitiativeX" # Budget or initiative code
+  ServiceOwner: "asmith@contoso.com" # Service manager accountable
+```
+Use this as a structural reference—substitute names, addresses, capacity, and tagging to fit your environment.
 
 ## 6. Deployment Options
 ### Option A: Azure CLI (Subscription Scope)
