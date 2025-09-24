@@ -1,7 +1,7 @@
 shared:
   identity:
     resourceGroup:
-      createNew: true
+      createNew: false
       name: apim-plat-rg
     usersAssigned:
       - name: apim-keyvault-identity
