@@ -3,7 +3,10 @@ import * as Identity from 'identity-types.bicep'
 @export()
 @description('Strongly-typed settings model for provisioning an Azure API Management instance (name, SKU/capacity/zones, managed identity, and publisher metadata) within the Landing Zone accelerator.')
 type Settings = {
-  resourceGroup: string
+  resourceGroup: {
+    createNew: bool
+    name: string
+  }
   name: string
   identity: Identity.IdentityAPIM
   sku: {

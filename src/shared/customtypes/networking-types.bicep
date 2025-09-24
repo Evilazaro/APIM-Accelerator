@@ -24,7 +24,10 @@ type VirtualNetwork = {
 @export()
 @description('Composite networking settings model (resource group, public access flag, and virtual network definition) for the APIM Landing Zone.')
 type Settings = {
-  resourceGroup: string
+  resourceGroup: {
+    createNew: bool
+    name: string
+  }
   publicNetworkAccess: bool
   virtualNetwork: VirtualNetwork
 }

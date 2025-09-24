@@ -62,6 +62,9 @@ type RBACRoleAssignment = {
 @export()
 @description('Shared user-assigned identity grouping reused across multiple services (resource group context + identity list).')
 type SharedIdentity = {
-  resourceGroup: string
+  resourceGroup: {
+    createNew: bool
+    name: string
+  }
   usersAssigned: UserAssignedIdentity[]
 }

@@ -1,11 +1,13 @@
 shared:
   identity:
-    resourceGroup: apim-plat-identity-rg
+    resourceGroup:
+      createNew: true
+      name: apim-plat-rg
     usersAssigned:
       - name: apim-keyvault-identity
         scope:
           type: resourceGroup
-          name: apim-plat-security-rg
+          name: apim-plat-rg
         rbacRoleAssignment:
           roles:
             - roleName: "Key Vault Secrets User"
@@ -14,8 +16,10 @@ shared:
               id: "b86a8fe4-44ce-4948-aee5-eccb2c155cd7" # Key Vault Secrets Officer Role ID
 
   connectivity:
-    resourceGroup: apim-plat-connectivity-rg
-    publicNetworkAccess: false
+    resourceGroup:
+      createNew: false
+      name: apim-plat-rg
+    publicNetworkAccess: true
     virtualNetwork:
       name: apim-plat-vnet
       addressPrefixes:
@@ -33,27 +37,33 @@ shared:
             name: apim-plat-app-gateway-nsg
 
   monitoring:
-    resourceGroup: apim-plat-monitoring-rg
+    resourceGroup:
+      createNew: false
+      name: apim-plat-rg
     logAnalytics:
       name: apim-plat-log-analytics
     applicationInsights:
       name: apim-plat-app-insights
 
   security:
-    resourceGroup: apim-plat-security-rg
+    resourceGroup:
+      createNew: false
+      name: apim-plat-rg
     keyVault:
       name: apim-plat-kv
 
 core:
   apiManagement:
-    resourceGroup: apim-plat-rg
+    resourceGroup:
+      createNew: true
+      name: apim-plat-rg
     name: apim-plat
     identity:
       type: "SystemAssigned, UserAssigned"
       systemAssigned:
         scope:
           type: resourceGroup
-          name: apim-plat-security-rg
+          name: apim-plat-rg
         rbacRoleAssignment:
           roles:
             - roleName: "Key Vault Secrets User"
@@ -62,7 +72,7 @@ core:
               id: "b86a8fe4-44ce-4948-aee5-eccb2c155cd7" # Key Vault Secrets Officer Role ID
 
       usersAssigned:
-        resourceGroup: apim-plat-identity-rg
+        resourceGroup: apim-plat-rg
         identities:
           - name: apim-keyvault-identity
 

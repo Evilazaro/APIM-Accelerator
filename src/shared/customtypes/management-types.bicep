@@ -11,7 +11,10 @@ type AppInsightsSettings = {
 @export()
 @description('Composite observability settings grouping resource group and references to Log Analytics and Application Insights for the APIM Landing Zone.')
 type Settings = {
-  resourceGroup: string
+  resourceGroup: {
+    createNew: bool
+    name: string
+  }
   logAnalytics: LogAnalyticsSettings
   applicationInsights: AppInsightsSettings
 }
