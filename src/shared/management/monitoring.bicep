@@ -14,7 +14,7 @@ param tags object
 
 @description('Storage Account used for retention, archival, and export of monitoring and diagnostic data (hot access tier).')
 resource storageAccount 'Microsoft.Storage/storageAccounts@2025-01-01' = {
-  name: 'apimacceleratorstorage'
+  name: 'apimaccmon${uniqueString(resourceGroup().id, resourceGroup().name)}'
   location: location
   sku: {
     name: 'Standard_LRS'
