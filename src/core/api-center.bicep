@@ -5,7 +5,6 @@ param name string
 param location string = 'eastus'
 param apiManagementName string
 param apiManagementResourceId string
-param apiManagementPrincipalId string
 param tags object
 
 @description('The name of an API to register in the API center.')
@@ -25,6 +24,9 @@ param apiType string = 'rest'
 resource apiCenterService 'Microsoft.ApiCenter/services@2024-03-01' = {
   name: name
   location: location
+  identity: {
+    type: 'SystemAssigned'
+  }
   tags: tags
   sku: {
     name: 'Standard'
@@ -41,7 +43,7 @@ resource apimRoleAssignments 'Microsoft.Authorization/roleAssignments@2022-04-01
     name: guid(apiCenterService.id, apiCenterService.name, role)
     scope: resourceGroup()
     properties: {
-      principalId: apiManagementPrincipalId
+      principalId: apiCenterService.identity.principalId
       principalType: 'ServicePrincipal'
       roleDefinitionId: subscriptionResourceId('Microsoft.Authorization/roleDefinitions', role)
     }

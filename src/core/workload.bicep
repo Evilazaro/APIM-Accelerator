@@ -41,7 +41,6 @@ module governance 'api-center.bicep' = {
     name: apiCenterName
     apiManagementName: corePlatform.outputs.AZURE_API_MANAGEMENT_NAME
     apiManagementResourceId: corePlatform.outputs.AZURE_API_MANAGEMENT_ID
-    apiManagementPrincipalId: corePlatform.outputs.AZURE_API_MANAGEMENT_PRINCIPAL_ID
     tags: tags
   }
   dependsOn: [

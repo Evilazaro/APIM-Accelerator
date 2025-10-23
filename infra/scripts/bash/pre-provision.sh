@@ -112,6 +112,59 @@ parse_arguments() {
 
 
 #===============================================================================
+# Function: normalize_location
+# Description: Converts display location names to programmatic location names
+# Arguments: $1 - Display location name (e.g., "East US 2")
+# Returns: Normalized location name (e.g., "eastus2")
+#===============================================================================
+normalize_location() {
+    local display_location="$1"
+    local normalized_location
+    
+    # Convert common display names to programmatic names
+    case "${display_location}" in
+        "East US 2") normalized_location="eastus2" ;;
+        "East US") normalized_location="eastus" ;;
+        "West US 2") normalized_location="westus2" ;;
+        "West US") normalized_location="westus" ;;
+        "West US 3") normalized_location="westus3" ;;
+        "Central US") normalized_location="centralus" ;;
+        "North Central US") normalized_location="northcentralus" ;;
+        "South Central US") normalized_location="southcentralus" ;;
+        "West Central US") normalized_location="westcentralus" ;;
+        "Canada Central") normalized_location="canadacentral" ;;
+        "Canada East") normalized_location="canadaeast" ;;
+        "Brazil South") normalized_location="brazilsouth" ;;
+        "North Europe") normalized_location="northeurope" ;;
+        "West Europe") normalized_location="westeurope" ;;
+        "UK South") normalized_location="uksouth" ;;
+        "UK West") normalized_location="ukwest" ;;
+        "France Central") normalized_location="francecentral" ;;
+        "Germany West Central") normalized_location="germanywestcentral" ;;
+        "Norway East") normalized_location="norwayeast" ;;
+        "Switzerland North") normalized_location="switzerlandnorth" ;;
+        "UAE North") normalized_location="uaenorth" ;;
+        "South Africa North") normalized_location="southafricanorth" ;;
+        "Australia East") normalized_location="australiaeast" ;;
+        "Australia Southeast") normalized_location="australiasoutheast" ;;
+        "Southeast Asia") normalized_location="southeastasia" ;;
+        "East Asia") normalized_location="eastasia" ;;
+        "Japan East") normalized_location="japaneast" ;;
+        "Japan West") normalized_location="japanwest" ;;
+        "Korea Central") normalized_location="koreacentral" ;;
+        "Central India") normalized_location="centralindia" ;;
+        "South India") normalized_location="southindia" ;;
+        "West India") normalized_location="westindia" ;;
+        *) 
+            # If no match found, try to normalize by removing spaces and converting to lowercase
+            normalized_location="$(echo "${display_location}" | tr '[:upper:]' '[:lower:]' | tr -d ' ')"
+            ;;
+    esac
+    
+    echo "${normalized_location}"
+}
+
+#===============================================================================
 # Function: purge_soft_deleted_apim
 # Description: Purges all soft-deleted APIM instances in the subscription to allow clean redeployment
 #===============================================================================
@@ -137,14 +190,32 @@ purge_soft_deleted_apim() {
     local failed_count=0
     while IFS=$'\t' read -r apim_name apim_location; do
         if [[ -n "${apim_name}" && -n "${apim_location}" ]]; then
-            log_info "Purging soft-deleted API Management instance: ${apim_name} in location: ${apim_location}"
+            # Normalize the location name for the purge command
+            local normalized_location
+            normalized_location="$(normalize_location "${apim_location}")"
             
-            if az apim deletedservice purge --service-name "${apim_name}" --location "${apim_location}" --yes >/dev/null 2>&1; then
-                log_info "Successfully purged: ${apim_name}"
+            log_info "Purging soft-deleted API Management instance: ${apim_name}"
+            log_info "Display location: ${apim_location} -> Normalized: ${normalized_location}"
+            
+            # Try with normalized location first
+            local purge_error
+            if purge_error="$(az apim deletedservice purge --service-name "${apim_name}" --location "${normalized_location}" 2>&1)"; then
+                log_info "Successfully purged: ${apim_name} using normalized location"
                 ((purge_count++))
             else
-                log_warning "Failed to purge soft-deleted API Management instance: ${apim_name} in ${apim_location}"
-                ((failed_count++))
+                log_warning "Failed with normalized location, trying original location format..."
+                log_warning "Error: ${purge_error}"
+                
+                # Try with original location format as fallback
+                if purge_error="$(az apim deletedservice purge --service-name "${apim_name}" --location "${apim_location}" 2>&1)"; then
+                    log_info "Successfully purged: ${apim_name} using original location format"
+                    ((purge_count++))
+                else
+                    log_warning "Failed to purge soft-deleted API Management instance: ${apim_name}"
+                    log_warning "Location tried: '${normalized_location}' and '${apim_location}'"
+                    log_warning "Error: ${purge_error}"
+                    ((failed_count++))
+                fi
             fi
         fi
     done <<< "${deleted_apims_data}"
@@ -157,6 +228,10 @@ purge_soft_deleted_apim() {
     if [[ ${failed_count} -gt 0 ]]; then
         log_warning "Failed to purge ${failed_count} soft-deleted API Management instance(s)"
         log_warning "Some instances may require manual cleanup or additional permissions"
+        log_warning "You can try manual purge using: az apim deletedservice purge --service-name <name> --location <location> --yes"
+        
+        # Don't exit with error code - continue with deployment
+        log_info "Continuing with deployment despite purge failures..."
     fi
     
     if [[ ${purge_count} -eq 0 && ${failed_count} -eq 0 ]]; then
