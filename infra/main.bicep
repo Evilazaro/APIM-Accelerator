@@ -35,6 +35,8 @@ module workload '../src/core/workload.bicep' = {
   params: {
     solutionName: settings.solutionName
     location: location
+    appInsightsInstrumentationKey: monitoring.outputs.AZURE_APPLICATION_INSIGHTS_INSTRUMENTATION_KEY
+    appInsightsResourceId: monitoring.outputs.AZURE_APPLICATION_INSIGHTS_ID
     tags: settings.tags
   }
 }

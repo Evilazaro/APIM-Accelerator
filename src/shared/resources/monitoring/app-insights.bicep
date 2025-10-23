@@ -19,3 +19,4 @@ resource appInsights 'Microsoft.Insights/components@2020-02-02' = {
 
 output AZURE_APPLICATION_INSIGHTS_ID string = appInsights.id
 output AZURE_APPLICATION_INSIGHTS_NAME string = appInsights.name
+output AZURE_APPLICATION_INSIGHTS_INSTRUMENTATION_KEY string = appInsights.properties.InstrumentationKey

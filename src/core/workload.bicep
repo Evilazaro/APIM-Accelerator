@@ -3,6 +3,8 @@ metadata description = 'This module deploys the Workload API Management platform
 
 param solutionName string
 param location string
+param appInsightsInstrumentationKey string
+param appInsightsResourceId string
 param tags object
 
 var workloadSettings = loadYamlContent('../../infra/workload.yaml')
@@ -19,6 +21,8 @@ module corePlatform 'api-management.bicep' = {
     location: location
     publisherEmail: workloadSettings.apiManagement.publisherEmail
     publisherName: workloadSettings.apiManagement.publisherName
+    appInsightsInstrumentationKey: appInsightsInstrumentationKey
+    appInsightsResourceId: appInsightsResourceId
     tags: tags
   }
 }
