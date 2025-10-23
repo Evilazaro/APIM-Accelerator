@@ -1,3 +1,6 @@
+metadata name = 'Log Analytics Workspaces'
+metadata description = 'This module deploys a Log Analytics Workspace.'
+
 param name string
 param location string
 param tags object 
