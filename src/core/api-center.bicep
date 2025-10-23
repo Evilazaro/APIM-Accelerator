@@ -40,7 +40,14 @@ var roles = [
 
 resource apimRoleAssignments 'Microsoft.Authorization/roleAssignments@2022-04-01' = [
   for role in roles: {
-    name: guid(apiCenterService.id, apiCenterService.name, role)
+    name: guid(
+      subscription().id,
+      resourceGroup().id,
+      resourceGroup().name,
+      apiCenterService.id,
+      apiCenterService.name,
+      role
+    )
     scope: resourceGroup()
     properties: {
       principalId: apiCenterService.identity.principalId

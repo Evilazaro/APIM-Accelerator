@@ -198,22 +198,19 @@ purge_soft_deleted_apim() {
             log_info "Display location: ${apim_location} -> Normalized: ${normalized_location}"
             
             # Try with normalized location first
-            local purge_error
-            if purge_error="$(az apim deletedservice purge --service-name "${apim_name}" --location "${normalized_location}" 2>&1)"; then
+            if echo 'y' | az apim deletedservice purge --service-name "${apim_name}" --location "${normalized_location}" >/dev/null 2>&1; then
                 log_info "Successfully purged: ${apim_name} using normalized location"
                 ((purge_count++))
             else
                 log_warning "Failed with normalized location, trying original location format..."
-                log_warning "Error: ${purge_error}"
                 
                 # Try with original location format as fallback
-                if purge_error="$(az apim deletedservice purge --service-name "${apim_name}" --location "${apim_location}" 2>&1)"; then
+                if echo 'y' | az apim deletedservice purge --service-name "${apim_name}" --location "${apim_location}" >/dev/null 2>&1; then
                     log_info "Successfully purged: ${apim_name} using original location format"
                     ((purge_count++))
                 else
                     log_warning "Failed to purge soft-deleted API Management instance: ${apim_name}"
                     log_warning "Location tried: '${normalized_location}' and '${apim_location}'"
-                    log_warning "Error: ${purge_error}"
                     ((failed_count++))
                 fi
             fi
@@ -256,6 +253,9 @@ main() {
     purge_soft_deleted_apim
     
     log_info "Pre-provisioning script completed successfully"
+    
+    # Explicitly exit with success code
+    exit 0
 }
 
 # Execute main function if script is run directly (not sourced)
