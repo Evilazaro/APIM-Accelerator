@@ -175,7 +175,7 @@ purge_soft_deleted_apim() {
         if [[ -n "${apim_name}" ]]; then
             log_info "Purging soft-deleted API Management instance: ${apim_name}"
             
-            if az apim deletedservice purge --service-name "${apim_name}" --location "${AZURE_LOCATION}" --yes >/dev/null 2>&1; then
+            if az apim deletedservice purge --service-name "${apim_name}" --location "${AZURE_LOCATION}"  >/dev/null 2>&1; then
                 log_info "Successfully purged: ${apim_name}"
                 ((purge_count++))
             else
