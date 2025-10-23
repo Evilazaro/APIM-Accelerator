@@ -5,9 +5,11 @@ param solutionName string
 param location string
 param tags object
 
-var apimSettings = loadYamlContent('../../infra/workload.yaml')
+var workloadSettings = loadYamlContent('../../infra/workload.yaml')
 
-var apimName = (empty(apimSettings.name)) ? '${solutionName}-apim' : apimSettings.name
+var apimName = (empty(workloadSettings.apiManagement.name))
+  ? '${solutionName}-apim'
+  : workloadSettings.apiManagement.name
 
 module corePlatform 'api-management.bicep' = {
   name: 'deploy-api-management'
@@ -15,11 +17,28 @@ module corePlatform 'api-management.bicep' = {
   params: {
     name: apimName
     location: location
-    publisherEmail: apimSettings.publisherEmail
-    publisherName: apimSettings.publisherName
+    publisherEmail: workloadSettings.apiManagement.publisherEmail
+    publisherName: workloadSettings.apiManagement.publisherName
     tags: tags
   }
 }
 
 output AZURE_API_MANAGEMENT_ID string = corePlatform.outputs.AZURE_API_MANAGEMENT_ID
 output AZURE_API_MANAGEMENT_NAME string = corePlatform.outputs.AZURE_API_MANAGEMENT_NAME
+
+var apiCenterName = (empty(workloadSettings.apiCenter.name))
+  ? '${solutionName}-apicenter'
+  : workloadSettings.apiCenter.name
+
+module governance 'api-center.bicep' = {
+  name: 'deploy-api-center'
+  scope: resourceGroup()
+  params: {
+    name: apiCenterName
+    apiManagementName: corePlatform.outputs.AZURE_API_MANAGEMENT_NAME
+    tags: tags
+  }
+  dependsOn: [
+    corePlatform
+  ]
+}

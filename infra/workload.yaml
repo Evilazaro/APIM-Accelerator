@@ -1,3 +1,7 @@
-name: ""
-publisherEmail: "evalvesd@microsoft.com"
-publisherName: "Evalves Alves"
+apiManagement:
+  name: ""
+  publisherEmail: "evalvesd@microsoft.com"
+  publisherName: "Evalves Alves"
+
+apiCenter:
+  name: ""
