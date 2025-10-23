@@ -65,6 +65,16 @@ log_error() {
 }
 
 #===============================================================================
+# Function: log_warning
+# Description: Logs warning messages with timestamp
+# Arguments: $1 - Warning message to log
+#===============================================================================
+log_warning() {
+    local message="$1"
+    echo "[$(date '+%Y-%m-%d %H:%M:%S')] WARNING: ${message}" >&2
+}
+
+#===============================================================================
 # Function: validate_prerequisites
 # Description: Validates required tools and files are available
 #===============================================================================
@@ -155,37 +165,54 @@ load_configuration() {
 
 #===============================================================================
 # Function: purge_soft_deleted_apim
-# Description: Purges soft-deleted APIM instances to allow clean redeployment
+# Description: Purges all soft-deleted APIM instances in the subscription to allow clean redeployment
 #===============================================================================
 purge_soft_deleted_apim() {
-    log_info "Checking for soft-deleted API Management instances..."
+    log_info "Checking for all soft-deleted API Management instances in subscription..."
     
-    # Query for soft-deleted APIM instances matching our name
-    local deleted_apims
-    deleted_apims="$(az apim deletedservice list --query "[?name=='${AZURE_API_MANAGEMENT_NAME}'].name" -o tsv 2>/dev/null || echo "")"
+    # Query for all soft-deleted APIM instances in the subscription
+    local deleted_apims_data
+    deleted_apims_data="$(az apim deletedservice list --query "[].[name,location]" -o tsv 2>/dev/null || echo "")"
     
-    if [[ -z "${deleted_apims}" ]]; then
-        log_info "No soft-deleted API Management instances found for '${AZURE_API_MANAGEMENT_NAME}'"
+    if [[ -z "${deleted_apims_data}" ]]; then
+        log_info "No soft-deleted API Management instances found in subscription"
         return 0
     fi
     
+    # Count total instances found
+    local total_instances
+    total_instances="$(echo "${deleted_apims_data}" | wc -l | tr -d '[:space:]')"
+    log_info "Found ${total_instances} soft-deleted API Management instance(s) to purge"
+    
     # Process each soft-deleted instance
     local purge_count=0
-    while IFS= read -r apim_name; do
-        if [[ -n "${apim_name}" ]]; then
-            log_info "Purging soft-deleted API Management instance: ${apim_name}"
+    local failed_count=0
+    while IFS=$'\t' read -r apim_name apim_location; do
+        if [[ -n "${apim_name}" && -n "${apim_location}" ]]; then
+            log_info "Purging soft-deleted API Management instance: ${apim_name} in location: ${apim_location}"
             
-            if az apim deletedservice purge --service-name "${apim_name}" --location "${AZURE_LOCATION}"  >/dev/null 2>&1; then
+            if az apim deletedservice purge --service-name "${apim_name}" --location "${apim_location}" --yes >/dev/null 2>&1; then
                 log_info "Successfully purged: ${apim_name}"
                 ((purge_count++))
             else
-                log_error "Failed to purge soft-deleted API Management instance: ${apim_name}"
+                log_warning "Failed to purge soft-deleted API Management instance: ${apim_name} in ${apim_location}"
+                ((failed_count++))
             fi
         fi
-    done <<< "${deleted_apims}"
+    done <<< "${deleted_apims_data}"
     
+    # Report results
     if [[ ${purge_count} -gt 0 ]]; then
-        log_info "Purged ${purge_count} soft-deleted API Management instance(s)"
+        log_info "Successfully purged ${purge_count} soft-deleted API Management instance(s)"
+    fi
+    
+    if [[ ${failed_count} -gt 0 ]]; then
+        log_warning "Failed to purge ${failed_count} soft-deleted API Management instance(s)"
+        log_warning "Some instances may require manual cleanup or additional permissions"
+    fi
+    
+    if [[ ${purge_count} -eq 0 && ${failed_count} -eq 0 ]]; then
+        log_info "No soft-deleted API Management instances required purging"
     fi
 }
 
