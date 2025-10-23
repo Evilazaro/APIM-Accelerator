@@ -1,0 +1,7 @@
+provisionNew: true
+resourceGroup:
+  name: apim-plat-monitoring-rg
+logAnalytics:
+  name: apim-plat-log-analytics
+applicationInsights:
+  name: apim-plat-app-insights
