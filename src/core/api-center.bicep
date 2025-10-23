@@ -59,6 +59,16 @@ resource apiCenterWorkspace 'Microsoft.ApiCenter/services/workspaces@2024-03-01'
   }
 }
 
+resource apiResource 'Microsoft.ApiCenter/services/workspaces/apiSources@2024-06-01-preview' = {
+  name: apim.name
+  parent: apiCenterWorkspace
+  properties: {
+    azureApiManagementSource: {
+      resourceId: apim.id
+    }
+  }
+}
+
 resource apiCenterAPI 'Microsoft.ApiCenter/services/workspaces/apis@2024-03-01' = {
   parent: apiCenterWorkspace
   name: apiName
