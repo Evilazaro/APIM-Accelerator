@@ -3,7 +3,7 @@ metadata description = 'This module deploys a Log Analytics Workspace.'
 
 param name string
 param location string
-param tags object 
+param tags object
 
 resource logAnalyticsWorkspace 'Microsoft.OperationalInsights/workspaces@2025-02-01' = {
   name: name

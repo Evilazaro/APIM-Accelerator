@@ -2,6 +2,9 @@ solutionName: apimLz
 resourceGroup:
   name: ""
 
+publisherEmail: "evalvesd@microsoft.com"
+publisherName: "Evalves Alves"
+
 tags:
   CostCenter: "CC-1234" # Tracks cost allocation
   BusinessUnit: "IT" # Business unit or department

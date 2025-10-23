@@ -29,3 +29,18 @@ output AZURE_LOG_ANALYTICS_WORKSPACE_ID string = monitoring.outputs.AZURE_LOG_AN
 output AZURE_LOG_ANALYTICS_WORKSPACE_NAME string = monitoring.outputs.AZURE_LOG_ANALYTICS_WORKSPACE_NAME
 output AZURE_APPLICATION_INSIGHTS_ID string = monitoring.outputs.AZURE_APPLICATION_INSIGHTS_ID
 output AZURE_APPLICATION_INSIGHTS_NAME string = monitoring.outputs.AZURE_APPLICATION_INSIGHTS_NAME
+
+module workload '../src/core/api-management.bicep' = {
+  name: 'deploy-api-management'
+  scope: resourceGroup
+  params: {
+    name: settings.solutionName
+    location: location
+    tags: settings.tags
+    publisherEmail: settings.publisherEmail
+    publisherName: settings.publisherName
+  }
+}
+
+output AZURE_API_MANAGEMENT_ID string = workload.outputs.AZURE_API_MANAGEMENT_ID
+output AZURE_API_MANAGEMENT_NAME string = workload.outputs.AZURE_API_MANAGEMENT_NAME
