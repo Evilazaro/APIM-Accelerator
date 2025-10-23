@@ -4,6 +4,8 @@ metadata description = 'This module deploys an API Center resource.'
 param name string
 param location string = 'eastus'
 param apiManagementName string
+param apiManagementResourceId string
+param apiManagementPrincipalId string
 param tags object
 
 @description('The name of an API to register in the API center.')
@@ -34,16 +36,12 @@ var roles = [
   '71522526-b88f-4d52-b57f-d31fc3546d0d'
 ]
 
-resource apim 'Microsoft.ApiManagement/service@2022-08-01' existing = {
-  name: apiManagementName
-}
-
 resource apimRoleAssignments 'Microsoft.Authorization/roleAssignments@2022-04-01' = [
   for role in roles: {
     name: guid(apiCenterService.id, apiCenterService.name, role)
-    scope: apim
+    scope: resourceGroup()
     properties: {
-      principalId: apim.identity.principalId
+      principalId: apiManagementPrincipalId
       principalType: 'ServicePrincipal'
       roleDefinitionId: subscriptionResourceId('Microsoft.Authorization/roleDefinitions', role)
     }
@@ -60,11 +58,11 @@ resource apiCenterWorkspace 'Microsoft.ApiCenter/services/workspaces@2024-03-01'
 }
 
 resource apiResource 'Microsoft.ApiCenter/services/workspaces/apiSources@2024-06-01-preview' = {
-  name: apim.name
+  name: apiManagementName
   parent: apiCenterWorkspace
   properties: {
     azureApiManagementSource: {
-      resourceId: apim.id
+      resourceId: apiManagementResourceId
     }
   }
 }

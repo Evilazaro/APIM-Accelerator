@@ -29,6 +29,7 @@ resource apim 'Microsoft.ApiManagement/service@2024-10-01-preview' = {
 
 output AZURE_API_MANAGEMENT_ID string = apim.id
 output AZURE_API_MANAGEMENT_NAME string = apim.name
+output AZURE_API_MANAGEMENT_PRINCIPAL_ID string = apim.identity.principalId
 
 resource apimLogger 'Microsoft.ApiManagement/service/loggers@2024-06-01-preview' = {
   parent: apim

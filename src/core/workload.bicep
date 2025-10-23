@@ -10,7 +10,7 @@ param tags object
 var workloadSettings = loadYamlContent('../../infra/workload.yaml')
 
 var apimName = (empty(workloadSettings.apiManagement.name))
-  ? '${solutionName}-apim'
+  ? '${solutionName}-${uniqueString(subscription().id, resourceGroup().id, resourceGroup().name, solutionName,location)}-apim'
   : workloadSettings.apiManagement.name
 
 module corePlatform 'api-management.bicep' = {
@@ -31,7 +31,7 @@ output AZURE_API_MANAGEMENT_ID string = corePlatform.outputs.AZURE_API_MANAGEMEN
 output AZURE_API_MANAGEMENT_NAME string = corePlatform.outputs.AZURE_API_MANAGEMENT_NAME
 
 var apiCenterName = (empty(workloadSettings.apiCenter.name))
-  ? '${solutionName}-apicenter'
+  ? '${solutionName}-${uniqueString(subscription().id, resourceGroup().id, resourceGroup().name, solutionName,location)}-apicenter'
   : workloadSettings.apiCenter.name
 
 module governance 'api-center.bicep' = {
@@ -40,6 +40,8 @@ module governance 'api-center.bicep' = {
   params: {
     name: apiCenterName
     apiManagementName: corePlatform.outputs.AZURE_API_MANAGEMENT_NAME
+    apiManagementResourceId: corePlatform.outputs.AZURE_API_MANAGEMENT_ID
+    apiManagementPrincipalId: corePlatform.outputs.AZURE_API_MANAGEMENT_PRINCIPAL_ID
     tags: tags
   }
   dependsOn: [
