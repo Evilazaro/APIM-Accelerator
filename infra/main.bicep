@@ -30,7 +30,7 @@ output AZURE_APPLICATION_INSIGHTS_ID string = monitoring.outputs.AZURE_APPLICATI
 output AZURE_APPLICATION_INSIGHTS_NAME string = monitoring.outputs.AZURE_APPLICATION_INSIGHTS_NAME
 
 module workload '../src/core/workload.bicep' = {
-  name: 'deploy-api-management'
+  name: 'deploy-workload'
   scope: resourceGroup
   params: {
     solutionName: settings.solutionName
