@@ -2,7 +2,7 @@
 
 name: apim-platform
 
-# hooks:
-#   preprovision: 
-#     shell: sh
-#     run: ./infra/scripts/bash/pre-provision.sh ${AZURE_LOCATION}
+hooks:
+  preprovision:
+    shell: sh
+    run: ./infra/scripts/bash/pre-provision.sh ${AZURE_ENV_NAME} ${AZURE_LOCATION}

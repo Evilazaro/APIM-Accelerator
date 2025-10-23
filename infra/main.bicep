@@ -19,7 +19,6 @@ module monitoring '../src/shared/resources/monitoring/monitoring.bicep' = {
   scope: resourceGroup
   params: {
     solutionName: settings.solutionName
-    environmentName: environmentName
     location: location
     tags: settings.tags
   }

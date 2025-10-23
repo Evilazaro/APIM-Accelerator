@@ -1,9 +1,8 @@
 param solutionName string
-param environmentName string
 param location string
 param tags object
 
-var settings = loadYamlContent('../../../../infra/monitoring-settings.yaml')
+var settings = loadYamlContent('../../../../infra/monitoring.yaml')
 
 var logAnalyticsName = (empty(settings.logAnalytics.name))
   ? '${solutionName}-law'
