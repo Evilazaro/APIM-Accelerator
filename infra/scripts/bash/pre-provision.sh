@@ -3,23 +3,17 @@
 #===============================================================================
 # Azure API Management Landing Zone Accelerator - Pre-Provision Script
 #===============================================================================
-# Description: Purges soft-deleted Azure resources (APIM) to enable clean
-#              redeployment for demo and testing scenarios
+# Description: Purges all soft-deleted Azure API Management instances in the
+#              subscription to enable clean redeployment for demo and testing scenarios
 # 
-# This script dynamically extracts configuration from YAML files and generates
-# resource names following the same naming conventions as the Bicep templates.
-# 
-# Configuration Sources:
-#   - infra/settings.yaml   : General solution configuration
-#   - infra/workload.yaml   : APIM-specific configuration  
-#   - infra/monitoring.yaml : Monitoring resources configuration
+# This script queries the entire subscription for soft-deleted APIM instances
+# and purges them all to prevent naming conflicts during new deployments.
 #
-# Usage:       ./pre-provision.sh <environment_name> [location]
+# Usage:       ./pre-provision.sh [environment_name] [location]
 # Example:     ./pre-provision.sh "dev" "eastus2"
 #
 # Requirements:
-#   - yq (YAML processor) must be installed
-#   - Azure CLI must be authenticated
+#   - Azure CLI must be installed and authenticated
 #===============================================================================
 
 set -euo pipefail  # Exit on error, undefined variables, and pipe failures
@@ -27,10 +21,6 @@ IFS=$'\n\t'       # Set secure Internal Field Separator
 
 # Script configuration
 readonly SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
-readonly INFRA_DIR="${SCRIPT_DIR}/../../.."
-readonly SETTINGS_FILE="${INFRA_DIR}/infra/settings.yaml"
-readonly WORKLOAD_FILE="${INFRA_DIR}/infra/workload.yaml"
-readonly MONITORING_FILE="${INFRA_DIR}/infra/monitoring.yaml"
 
 # Default values
 readonly DEFAULT_ENV_NAME="dev"
@@ -39,9 +29,6 @@ readonly DEFAULT_LOCATION="eastus2"
 # Global variables
 AZURE_ENV_NAME=""
 AZURE_LOCATION=""
-SOLUTION_NAME=""
-AZURE_RESOURCE_GROUP_NAME=""
-AZURE_API_MANAGEMENT_NAME=""
 
 #===============================================================================
 # Function: log_info
@@ -81,28 +68,20 @@ log_warning() {
 validate_prerequisites() {
     log_info "Validating prerequisites..."
     
-    # Check if yq is installed
-    if ! command -v yq >/dev/null 2>&1; then
-        log_error "yq (YAML processor) is not installed. Please install yq to continue."
-    fi
-    
     # Check if Azure CLI is installed
     if ! command -v az >/dev/null 2>&1; then
         log_error "Azure CLI is not installed. Please install Azure CLI to continue."
     fi
     
-    # Check if configuration files exist
-    local config_files=("${SETTINGS_FILE}" "${WORKLOAD_FILE}" "${MONITORING_FILE}")
-    for file in "${config_files[@]}"; do
-        if [[ ! -f "${file}" ]]; then
-            log_error "Configuration file not found: ${file}"
-        fi
-    done
-    
     # Verify Azure CLI authentication
     if ! az account show >/dev/null 2>&1; then
         log_error "Azure CLI is not authenticated. Please run 'az login' to authenticate."
     fi
+    
+    # Get current subscription info for logging
+    local subscription_name
+    subscription_name="$(az account show --query name -o tsv 2>/dev/null || echo "Unknown")"
+    log_info "Operating on subscription: ${subscription_name}"
     
     log_info "Prerequisites validation completed successfully"
 }
@@ -130,38 +109,7 @@ parse_arguments() {
     log_info "Location: ${AZURE_LOCATION}"
 }
 
-#===============================================================================
-# Function: load_configuration
-# Description: Loads configuration from YAML files and validates values
-#===============================================================================
-load_configuration() {
-    log_info "Loading configuration from YAML files..."
-    
-    # Load solution name from settings.yaml
-    SOLUTION_NAME="$(yq -r '.solutionName' "${SETTINGS_FILE}" 2>/dev/null || echo "")"
-    if [[ -z "${SOLUTION_NAME}" || "${SOLUTION_NAME}" == "null" ]]; then
-        log_error "Solution name not found or is empty in ${SETTINGS_FILE}"
-    fi
-    log_info "Solution Name: ${SOLUTION_NAME}"
-    
-    # Load resource group name (with fallback to generated name)
-    AZURE_RESOURCE_GROUP_NAME="$(yq -r '.resourceGroup.name' "${SETTINGS_FILE}" 2>/dev/null || echo "")"
-    if [[ -z "${AZURE_RESOURCE_GROUP_NAME}" || "${AZURE_RESOURCE_GROUP_NAME}" == "null" ]]; then
-        AZURE_RESOURCE_GROUP_NAME="${SOLUTION_NAME}-${AZURE_ENV_NAME}-${AZURE_LOCATION}-rg"
-        log_info "Generated Resource Group Name: ${AZURE_RESOURCE_GROUP_NAME}"
-    else
-        log_info "Configured Resource Group Name: ${AZURE_RESOURCE_GROUP_NAME}"
-    fi
-    
-    # Load API Management name (with fallback to generated name)
-    AZURE_API_MANAGEMENT_NAME="$(yq -r '.name' "${WORKLOAD_FILE}" 2>/dev/null || echo "")"
-    if [[ -z "${AZURE_API_MANAGEMENT_NAME}" || "${AZURE_API_MANAGEMENT_NAME}" == "null" ]]; then
-        AZURE_API_MANAGEMENT_NAME="${SOLUTION_NAME}-apim"
-        log_info "Generated API Management Name: ${AZURE_API_MANAGEMENT_NAME}"
-    else
-        log_info "Configured API Management Name: ${AZURE_API_MANAGEMENT_NAME}"
-    fi
-}
+
 
 #===============================================================================
 # Function: purge_soft_deleted_apim
@@ -229,8 +177,7 @@ main() {
     validate_prerequisites
     parse_arguments "$@"
     
-    # Load configuration and purge resources
-    load_configuration
+    # Purge all soft-deleted APIM instances
     purge_soft_deleted_apim
     
     log_info "Pre-provisioning script completed successfully"
