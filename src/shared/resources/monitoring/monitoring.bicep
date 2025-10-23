@@ -6,7 +6,7 @@ param tags object
 var settings = loadYamlContent('../../../../infra/monitoring-settings.yaml')
 
 var logAnalyticsName = (empty(settings.logAnalytics.name))
-  ? '${solutionName}-${uniqueString(subscription().id,resourceGroup().name,environmentName,location)}-law'
+  ? '${solutionName}-law'
   : settings.logAnalytics.name
 
 module operationsManagement 'log-analytics-workspace-resource.bicep' = {
@@ -23,7 +23,7 @@ output AZURE_LOG_ANALYTICS_WORKSPACE_ID string = operationsManagement.outputs.AZ
 output AZURE_LOG_ANALYTICS_WORKSPACE_NAME string = operationsManagement.outputs.AZURE_LOG_ANALYTICS_WORKSPACE_NAME
 
 var appInsightsName = (empty(settings.applicationInsights.name))
-  ? '${solutionName}-${uniqueString(subscription().id,resourceGroup().name,environmentName,location)}-appi'
+  ? '${solutionName}-appi'
   : settings.applicationInsights.name
 
 module insights 'app-insights.bicep' = {

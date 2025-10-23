@@ -7,7 +7,7 @@ param publisherEmail string
 param publisherName string
 param tags object
 
-resource apiManagement 'Microsoft.ApiManagement/service@2024-10-01-preview' = {
+resource apim 'Microsoft.ApiManagement/service@2024-10-01-preview' = {
   name: name
   location: location
   sku: {
@@ -25,5 +25,5 @@ resource apiManagement 'Microsoft.ApiManagement/service@2024-10-01-preview' = {
   }
 }
 
-output AZURE_API_MANAGEMENT_ID string = apiManagement.id
-output AZURE_API_MANAGEMENT_NAME string = apiManagement.name
+output AZURE_API_MANAGEMENT_ID string = apim.id
+output AZURE_API_MANAGEMENT_NAME string = apim.name
