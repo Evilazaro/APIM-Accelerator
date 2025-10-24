@@ -14,41 +14,75 @@ var apimName = (empty(workloadSettings.apiManagement.name))
   ? '${solutionName}-${uniqueString(subscription().id, resourceGroup().id, resourceGroup().name, solutionName,location)}-apim'
   : workloadSettings.apiManagement.name
 
-module platform 'api-management.bicep' = {
-  name: 'deploy-api-management'
-  scope: resourceGroup()
-  params: {
-    name: apimName
-    location: location
+resource apim 'Microsoft.ApiManagement/service@2024-10-01-preview' = {
+  name: apimName
+  location: location
+  sku: {
+    name: 'Developer'
+    capacity: 1
+  }
+  identity: {
+    type: 'SystemAssigned'
+  }
+  tags: tags
+  properties: {
     publisherEmail: workloadSettings.apiManagement.publisherEmail
     publisherName: workloadSettings.apiManagement.publisherName
-    appInsightsResourceId: appInsightsResourceId
-    logAnalyticsWorkspaceId: logAnalyticsWorkspaceId
-    appInsightsInstrumentationKey: appInsightsInstrumentationKey
+    developerPortalStatus: 'Enabled'
+  }
+}
+
+output AZURE_API_MANAGEMENT_ID string = apim.id
+output AZURE_API_MANAGEMENT_NAME string = apim.name
+output AZURE_API_MANAGEMENT_PRINCIPAL_ID string = apim.identity.principalId
+
+module developerPortal 'apim-developer-portal.bicep' = {
+  name: 'deploy-apim-developer-portal'
+  scope: resourceGroup()
+  params: {
+    location: location
+    apiManagementName: apim.name
     tags: tags
   }
 }
 
-output AZURE_API_MANAGEMENT_ID string = platform.outputs.AZURE_API_MANAGEMENT_ID
-output AZURE_API_MANAGEMENT_NAME string = platform.outputs.AZURE_API_MANAGEMENT_NAME
+resource apimDiagnosticSettings 'Microsoft.Insights/diagnosticSettings@2021-05-01-preview' = {
+  name: '${apim.name}-diag'
+  scope: apim
+  properties: {
+    workspaceId: logAnalyticsWorkspaceId
 
-// var apiCenterName = (empty(workloadSettings.apiCenter.name))
-//   ? '${solutionName}-${uniqueString(subscription().id, resourceGroup().id, resourceGroup().name, solutionName,location)}-apicenter'
-//   : workloadSettings.apiCenter.name
+    logAnalyticsDestinationType: 'Dedicated'
 
-// module inventory 'api-center.bicep' = {
-//   name: 'deploy-api-center'
-//   scope: resourceGroup()
-//   params: {
-//     name: apiCenterName
-//     apiManagementName: platform.outputs.AZURE_API_MANAGEMENT_NAME
-//     apiManagementResourceId: platform.outputs.AZURE_API_MANAGEMENT_ID
-//     tags: tags
-//   }
-//   dependsOn: [
-//     platform
-//   ]
-// }
+    logs: [
+      {
+        categoryGroup: 'allLogs'
+        enabled: true
+      }
+    ]
 
-// output AZURE_API_CENTER_ID string = inventory.outputs.AZURE_API_CENTER_ID
-// output AZURE_API_CENTER_NAME string = inventory.outputs.AZURE_API_CENTER_NAME
+    metrics: [
+      {
+        category: 'AllMetrics'
+        enabled: true
+        timeGrain: null
+      }
+    ]
+  }
+}
+
+resource apimLogger 'Microsoft.ApiManagement/service/loggers@2024-05-01' = {
+  name: '${apim.name}-logger'
+  parent: apim
+  properties: {
+    loggerType: 'applicationInsights'
+    description: 'Application Insights logger'
+    resourceId: appInsightsResourceId
+    isBuffered: true
+
+    credentials: {
+      instrumentationKey: appInsightsInstrumentationKey
+    }
+  }
+}
+

@@ -1,7 +1,7 @@
 metadata name = 'API Center'
 metadata description = 'This module deploys an API Center resource.'
 
-param name string
+param solutionName string
 param location string = 'eastus'
 param apiManagementName string
 param apiManagementResourceId string
@@ -18,8 +18,10 @@ param tags object
 ])
 param apiType string = 'rest'
 
+var apiCenterName = '${solutionName}-${uniqueString(subscription().id, resourceGroup().id, resourceGroup().name, solutionName,location)}-apicenter'
+
 resource apiCenterService 'Microsoft.ApiCenter/services@2024-03-01' = {
-  name: name
+  name: apiCenterName
   location: location
   identity: {
     type: 'SystemAssigned'

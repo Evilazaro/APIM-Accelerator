@@ -44,3 +44,15 @@ module core '../src/core/main.bicep' = {
 
 output AZURE_API_MANAGEMENT_ID string = core.outputs.AZURE_API_MANAGEMENT_ID
 output AZURE_API_MANAGEMENT_NAME string = core.outputs.AZURE_API_MANAGEMENT_NAME
+
+module inventory '../src/shared/resources/inventory/main.bicep' = {
+  name: 'deploy-inventory'
+  scope: resourceGroup
+  params: {
+    solutionName: settings.solutionName
+    location: location
+    apiManagementName: core.outputs.AZURE_API_MANAGEMENT_NAME
+    apiManagementResourceId: core.outputs.AZURE_API_MANAGEMENT_ID
+    tags: settings.tags
+  }
+}
