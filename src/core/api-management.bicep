@@ -8,6 +8,9 @@ param publisherName string
 param appInsightsResourceId string
 param appInsightsInstrumentationKey string
 param logAnalyticsWorkspaceId string
+@secure()
+param clientSecretClientId string
+param identityProviderClientId string
 param tags object
 
 resource apim 'Microsoft.ApiManagement/service@2024-10-01-preview' = {
@@ -32,30 +35,13 @@ output AZURE_API_MANAGEMENT_ID string = apim.id
 output AZURE_API_MANAGEMENT_NAME string = apim.name
 output AZURE_API_MANAGEMENT_PRINCIPAL_ID string = apim.identity.principalId
 
-module identity '../shared/resources/identity/main.bicep' = {
-  name: 'deploy-apim-identity'
-  scope: resourceGroup()
-  params: {
-    apiManagementName: apim.name
-  }
-  dependsOn: [
-    apim
-  ]
-}
-
-output AZURE_CLIENT_SECRET_ID string = identity.outputs.AZURE_CLIENT_SECRET_ID
-output AZURE_CLIENT_SECRET_NAME string = identity.outputs.AZURE_CLIENT_SECRET_NAME
-output AZURE_CLIENT_SECRET_PRINCIPAL_ID string = identity.outputs.AZURE_CLIENT_SECRET_PRINCIPAL_ID
-output AZURE_CLIENT_SECRET_CLIENT_ID string = identity.outputs.AZURE_CLIENT_SECRET_CLIENT_ID
-output AZURE_API_MANAGEMENT_IDENTITY_PRINCIPAL_ID string = identity.outputs.AZURE_API_MANAGEMENT_IDENTITY_PRINCIPAL_ID
-
 module developerPortal 'apim-developer-portal.bicep' = {
   name: 'deploy-apim-developer-portal'
   scope: resourceGroup()
   params: {
     apiManagementName: apim.name
-    clientSecretClientId: identity.outputs.AZURE_CLIENT_SECRET_CLIENT_ID
-    identityProviderClientId: identity.outputs.AZURE_CLIENT_SECRET_CLIENT_ID
+    clientSecretClientId: clientSecretClientId
+    identityProviderClientId: identityProviderClientId
   }
 }
 

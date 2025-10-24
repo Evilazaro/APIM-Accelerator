@@ -1,7 +1,9 @@
-param apiManagementName string
+param solutionName string
+param location string
 
-resource apim 'Microsoft.ApiManagement/service@2024-10-01-preview' existing = {
-  name: apiManagementName
+resource managedIdentity 'Microsoft.ManagedIdentity/userAssignedIdentities@2025-01-31-preview' = {
+  name: '${solutionName}-${uniqueString(subscription().id,resourceGroup().id,resourceGroup().name,solutionName,location)}-mi'
+  location: location
 }
 
 var roles = [
@@ -10,24 +12,31 @@ var roles = [
 
 resource roleAssignments 'Microsoft.Authorization/roleAssignments@2022-04-01' = [
   for role in roles: {
-    name: guid(subscription().id, resourceGroup().id, resourceGroup().name, apim.id, apim.name, role)
-    scope: apim
+    name: guid(
+      subscription().id,
+      resourceGroup().id,
+      resourceGroup().name,
+      managedIdentity.id,
+      managedIdentity.name,
+      role
+    )
+    scope: resourceGroup()
     properties: {
       roleDefinitionId: subscriptionResourceId('Microsoft.Authorization/roleDefinitions', role)
-      principalId: apim.identity.principalId
+      principalId: managedIdentity.properties.principalId
       principalType: 'ServicePrincipal'
     }
     dependsOn: [
-      apim
+      managedIdentity
     ]
   }
 ]
 
 resource clientSecret 'Microsoft.ManagedIdentity/identities@2025-01-31-preview' existing = {
-  scope: apim
+  scope: managedIdentity
   name: 'default'
   dependsOn: [
-    apim
+    managedIdentity
   ]
 }
 
@@ -35,4 +44,4 @@ output AZURE_CLIENT_SECRET_ID string = clientSecret.id
 output AZURE_CLIENT_SECRET_NAME string = clientSecret.name
 output AZURE_CLIENT_SECRET_PRINCIPAL_ID string = clientSecret.properties.principalId
 output AZURE_CLIENT_SECRET_CLIENT_ID string = clientSecret.properties.clientId
-output AZURE_API_MANAGEMENT_IDENTITY_PRINCIPAL_ID string = apim.identity.principalId
+output AZURE_API_MANAGEMENT_IDENTITY_PRINCIPAL_ID string = managedIdentity.properties.principalId

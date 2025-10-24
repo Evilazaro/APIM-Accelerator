@@ -22,32 +22,22 @@ resource apimIdentityProvider 'Microsoft.ApiManagement/service/identityProviders
   }
 }
 
-// resource devPortalConfig 'Microsoft.ApiManagement/service/portalconfigs@2024-10-01-preview' = {
-//   name: 'devPortalConfig'
-//   parent: apim
-//   properties: {
-//     signin: {
-//       require: true
-//     }
-//     signup: {
-//       termsOfService: {
-//         requireConsent: true
-//         text: 'By signing up, you agree to our terms of service.'
-//       }
-//     }
-//     cors: {
-//       allowedOrigins: [
-//         '*'
-//       ]
-//     }
-//     enableBasicAuth: false
-//   }
-//   dependsOn: [
-//     apim
-//     devPortalSignInSetting
-//     devPortalSignUpSetting
-//   ]
-// }
+resource devPortalConfig 'Microsoft.ApiManagement/service/portalconfigs@2024-10-01-preview' = {
+  name: 'devPortalConfig'
+  parent: apim
+  properties: {
+    cors: {
+      allowedOrigins: [
+        '*'
+      ]
+    }
+  }
+  dependsOn: [
+    apim
+    devPortalSignInSetting
+    devPortalSignUpSetting
+  ]
+}
 
 resource devPortalSignInSetting 'Microsoft.ApiManagement/service/portalsettings@2024-06-01-preview' = {
   parent: apim

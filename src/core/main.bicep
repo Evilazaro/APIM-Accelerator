@@ -6,6 +6,9 @@ param location string
 param appInsightsResourceId string
 param appInsightsInstrumentationKey string
 param logAnalyticsWorkspaceId string
+@secure()
+param clientSecretClientId string
+param identityProviderClientId string
 param tags object
 
 var workloadSettings = loadYamlContent('../../infra/workload.yaml')
@@ -25,6 +28,8 @@ module platform 'api-management.bicep' = {
     appInsightsResourceId: appInsightsResourceId
     logAnalyticsWorkspaceId: logAnalyticsWorkspaceId
     appInsightsInstrumentationKey: appInsightsInstrumentationKey
+    clientSecretClientId: clientSecretClientId
+    identityProviderClientId: identityProviderClientId
     tags: tags
   }
 }
