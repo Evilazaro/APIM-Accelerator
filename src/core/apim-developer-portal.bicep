@@ -1,5 +1,6 @@
 param apiManagementName string
 param location string
+param tags object
 
 resource apim 'Microsoft.ApiManagement/service@2024-10-01-preview' existing = {
   name: apiManagementName
@@ -11,6 +12,7 @@ module identity '../shared/resources/identity/main.bicep' = {
   params: {
     solutionName: apim.name
     location: location
+    tags: tags
   }
 }
 

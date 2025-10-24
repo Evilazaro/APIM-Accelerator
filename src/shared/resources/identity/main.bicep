@@ -1,9 +1,11 @@
 param solutionName string
 param location string
+param tags object
 
 resource managedIdentity 'Microsoft.ManagedIdentity/userAssignedIdentities@2025-01-31-preview' = {
   name: '${solutionName}-${uniqueString(subscription().id,resourceGroup().id,resourceGroup().name,solutionName,location)}-mi'
   location: location
+  tags: tags
 }
 
 var roles = [

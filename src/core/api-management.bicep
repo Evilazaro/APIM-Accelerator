@@ -38,6 +38,7 @@ module developerPortal 'apim-developer-portal.bicep' = {
   params: {
     location: location
     apiManagementName: apim.name
+    tags: tags
   }
 }
 
