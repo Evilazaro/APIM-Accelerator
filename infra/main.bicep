@@ -24,22 +24,25 @@ module monitoring '../src/shared/resources/monitoring/monitoring.bicep' = {
   }
 }
 
-output AZURE_LOG_ANALYTICS_WORKSPACE_ID string = monitoring.outputs.AZURE_LOG_ANALYTICS_WORKSPACE_ID
-output AZURE_LOG_ANALYTICS_WORKSPACE_NAME string = monitoring.outputs.AZURE_LOG_ANALYTICS_WORKSPACE_NAME
-output AZURE_APPLICATION_INSIGHTS_ID string = monitoring.outputs.AZURE_APPLICATION_INSIGHTS_ID
-output AZURE_APPLICATION_INSIGHTS_NAME string = monitoring.outputs.AZURE_APPLICATION_INSIGHTS_NAME
+// output AZURE_LOG_ANALYTICS_WORKSPACE_ID string = monitoring.outputs.AZURE_LOG_ANALYTICS_WORKSPACE_ID
+// output AZURE_LOG_ANALYTICS_WORKSPACE_NAME string = monitoring.outputs.AZURE_LOG_ANALYTICS_WORKSPACE_NAME
+// output AZURE_APPLICATION_INSIGHTS_ID string = monitoring.outputs.AZURE_APPLICATION_INSIGHTS_ID
+// output AZURE_APPLICATION_INSIGHTS_NAME string = monitoring.outputs.AZURE_APPLICATION_INSIGHTS_NAME
 
-module workload '../src/core/workload.bicep' = {
-  name: 'deploy-workload'
-  scope: resourceGroup
-  params: {
-    solutionName: settings.solutionName
-    location: location
-    appInsightsInstrumentationKey: monitoring.outputs.AZURE_APPLICATION_INSIGHTS_INSTRUMENTATION_KEY
-    appInsightsResourceId: monitoring.outputs.AZURE_APPLICATION_INSIGHTS_ID
-    tags: settings.tags
-  }
-}
+// module workload '../src/core/workload.bicep' = {
+//   name: 'deploy-workload'
+//   scope: resourceGroup
+//   params: {
+//     solutionName: settings.solutionName
+//     location: location
+//     appInsightsInstrumentationKey: monitoring.outputs.AZURE_APPLICATION_INSIGHTS_INSTRUMENTATION_KEY
+//     appInsightsResourceId: monitoring.outputs.AZURE_APPLICATION_INSIGHTS_ID
+//     logAnalyticsWorkspaceId: monitoring.outputs.AZURE_LOG_ANALYTICS_WORKSPACE_ID
+//     tags: settings.tags
+//   }
+// }
 
-output AZURE_API_MANAGEMENT_ID string = workload.outputs.AZURE_API_MANAGEMENT_ID
-output AZURE_API_MANAGEMENT_NAME string = workload.outputs.AZURE_API_MANAGEMENT_NAME
+// output AZURE_API_MANAGEMENT_ID string = workload.outputs.AZURE_API_MANAGEMENT_ID
+// output AZURE_API_MANAGEMENT_NAME string = workload.outputs.AZURE_API_MANAGEMENT_NAME
+// output AZURE_API_CENTER_ID string = workload.outputs.AZURE_API_CENTER_ID
+// output AZURE_API_CENTER_NAME string = workload.outputs.AZURE_API_CENTER_NAME

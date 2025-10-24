@@ -34,6 +34,9 @@ resource apiCenterService 'Microsoft.ApiCenter/services@2024-03-01' = {
   properties: {}
 }
 
+output AZURE_API_CENTER_ID string = apiCenterService.id
+output AZURE_API_CENTER_NAME string = apiCenterService.name
+
 var roles = [
   '71522526-b88f-4d52-b57f-d31fc3546d0d'
 ]
@@ -73,31 +76,5 @@ resource apiResource 'Microsoft.ApiCenter/services/workspaces/apiSources@2024-06
     azureApiManagementSource: {
       resourceId: apiManagementResourceId
     }
-  }
-}
-
-resource apiCenterAPI 'Microsoft.ApiCenter/services/workspaces/apis@2024-03-01' = {
-  parent: apiCenterWorkspace
-  name: apiName
-  properties: {
-    title: apiName
-    kind: apiType
-    externalDocumentation: [
-      {
-        description: 'API Center documentation'
-        title: 'API Center documentation'
-        url: 'https://learn.microsoft.com/azure/api-center/overview'
-      }
-    ]
-    contacts: [
-      {
-        email: 'apideveloper@contoso.com'
-        name: 'API Developer'
-        url: 'https://learn.microsoft.com/azure/api-center/overview'
-      }
-    ]
-    customProperties: {}
-    summary: 'This is a test API, deployed using a template!'
-    description: 'This is a test API, deployed using a template!'
   }
 }

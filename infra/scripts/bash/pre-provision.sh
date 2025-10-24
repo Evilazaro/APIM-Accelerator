@@ -3,11 +3,13 @@
 #===============================================================================
 # Azure API Management Landing Zone Accelerator - Pre-Provision Script
 #===============================================================================
-# Description: Purges all soft-deleted Azure API Management instances in the
-#              subscription to enable clean redeployment for demo and testing scenarios
+# Description: Purges soft-deleted Azure API Management instances and cleans up
+#              Azure API Center instances to enable clean redeployment for demo 
+#              and testing scenarios
 # 
-# This script queries the entire subscription for soft-deleted APIM instances
-# and purges them all to prevent naming conflicts during new deployments.
+# This script queries the entire subscription for:
+# - Soft-deleted APIM instances and purges them to prevent naming conflicts
+# - Existing API Center instances and provides cleanup options
 #
 # Usage:       ./pre-provision.sh [environment_name] [location]
 # Example:     ./pre-provision.sh "dev" "eastus2"
@@ -237,13 +239,61 @@ purge_soft_deleted_apim() {
 }
 
 #===============================================================================
+# Function: cleanup_api_center_instances
+# Description: Lists and optionally cleans up Azure API Center instances that might conflict with deployment
+# Note: API Center instances do not have soft-delete functionality, so this function
+#       focuses on listing existing instances for manual cleanup decisions
+#===============================================================================
+cleanup_api_center_instances() {
+    log_info "Checking for Azure API Center instances in subscription..."
+    
+    # Check if API Center extension is available
+    if ! az extension list --query "[?name=='apic'].name" -o tsv | grep -q "apic"; then
+        log_info "Azure API Center CLI extension not installed. Skipping API Center cleanup."
+        log_info "To install: az extension add --name apic"
+        return 0
+    fi
+    
+    # Query for all API Center instances in the subscription
+    local api_center_instances
+    api_center_instances="$(az apic list --query "[].[name,resourceGroup,location]" -o tsv 2>/dev/null || echo "")"
+    
+    if [[ -z "${api_center_instances}" ]]; then
+        log_info "No Azure API Center instances found in subscription"
+        return 0
+    fi
+    
+    # Count total instances found
+    local total_instances
+    total_instances="$(echo "${api_center_instances}" | wc -l | tr -d '[:space:]')"
+    log_info "Found ${total_instances} Azure API Center instance(s) in subscription"
+    log_info "Note: API Center instances do not support soft-delete functionality"
+    
+    # List instances for visibility
+    local instance_count=0
+    while IFS=$'\t' read -r apic_name apic_rg apic_location; do
+        if [[ -n "${apic_name}" && -n "${apic_rg}" && -n "${apic_location}" ]]; then
+            ((instance_count++))
+            log_info "API Center ${instance_count}: ${apic_name} (Resource Group: ${apic_rg}, Location: ${apic_location})"
+        fi
+    done <<< "${api_center_instances}"
+    
+    # Provide manual cleanup instructions
+    if [[ ${instance_count} -gt 0 ]]; then
+        log_info "API Center instances found. If cleanup is needed, use:"
+        log_info "  az apic delete --name <instance-name> --resource-group <resource-group> --yes"
+        log_info "Continuing with deployment as API Center instances don't block APIM deployment..."
+    fi
+}
+
+#===============================================================================
 # Function: main
 # Description: Main script execution function
 # Arguments: $@ - All script arguments
 #===============================================================================
 main() {
-    log_info "Starting Azure APIM pre-provisioning script"
-    log_info "============================================="
+    log_info "Starting Azure API pre-provisioning cleanup script"
+    log_info "=================================================="
     
     # Validate prerequisites and parse arguments
     validate_prerequisites
@@ -252,7 +302,10 @@ main() {
     # Purge all soft-deleted APIM instances
     purge_soft_deleted_apim
     
-    log_info "Pre-provisioning script completed successfully"
+    # Check and provide info about API Center instances
+    cleanup_api_center_instances
+    
+    log_info "Pre-provisioning cleanup script completed successfully"
     
     # Explicitly exit with success code
     exit 0

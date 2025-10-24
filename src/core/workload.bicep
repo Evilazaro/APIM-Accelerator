@@ -5,6 +5,7 @@ param solutionName string
 param location string
 param appInsightsInstrumentationKey string
 param appInsightsResourceId string
+param logAnalyticsWorkspaceId string
 param tags object
 
 var workloadSettings = loadYamlContent('../../infra/workload.yaml')
@@ -23,6 +24,7 @@ module corePlatform 'api-management.bicep' = {
     publisherName: workloadSettings.apiManagement.publisherName
     appInsightsInstrumentationKey: appInsightsInstrumentationKey
     appInsightsResourceId: appInsightsResourceId
+    logAnalyticsWorkspaceId: logAnalyticsWorkspaceId
     tags: tags
   }
 }
@@ -47,3 +49,6 @@ module governance 'api-center.bicep' = {
     corePlatform
   ]
 }
+
+output AZURE_API_CENTER_ID string = governance.outputs.AZURE_API_CENTER_ID
+output AZURE_API_CENTER_NAME string = governance.outputs.AZURE_API_CENTER_NAME
