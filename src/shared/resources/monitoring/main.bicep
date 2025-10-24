@@ -20,6 +20,9 @@ resource storageAccount 'Microsoft.Storage/storageAccounts@2023-05-01' = {
   tags: tags
 }
 
+output AZURE_STORAGE_ACCOUNT_ID string = storageAccount.id
+output AZURE_STORAGE_ACCOUNT_NAME string = storageAccount.name
+
 var logAnalyticsName = (empty(settings.logAnalytics.name))
   ? '${solutionName}-${uniqueString(subscription().id, resourceGroup().id, resourceGroup().name, solutionName,location)}-law'
   : settings.logAnalytics.name

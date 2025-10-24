@@ -34,7 +34,6 @@ resource apim 'Microsoft.ApiManagement/service@2024-10-01-preview' = {
 
 output AZURE_API_MANAGEMENT_ID string = apim.id
 output AZURE_API_MANAGEMENT_NAME string = apim.name
-output AZURE_API_MANAGEMENT_PRINCIPAL_ID string = apim.identity.principalId
 
 module developerPortal 'apim-developer-portal.bicep' = {
   name: 'deploy-apim-developer-portal'
@@ -45,6 +44,12 @@ module developerPortal 'apim-developer-portal.bicep' = {
     tags: tags
   }
 }
+
+output AZURE_CLIENT_SECRET_ID string = developerPortal.outputs.AZURE_CLIENT_SECRET_ID
+output AZURE_CLIENT_SECRET_NAME string = developerPortal.outputs.AZURE_CLIENT_SECRET_NAME
+output AZURE_CLIENT_SECRET_PRINCIPAL_ID string = developerPortal.outputs.AZURE_CLIENT_SECRET_PRINCIPAL_ID
+output AZURE_CLIENT_SECRET_CLIENT_ID string = developerPortal.outputs.AZURE_CLIENT_SECRET_CLIENT_ID
+output AZURE_API_MANAGEMENT_IDENTITY_PRINCIPAL_ID string = developerPortal.outputs.AZURE_API_MANAGEMENT_IDENTITY_PRINCIPAL_ID
 
 resource apimDiagnosticSettings 'Microsoft.Insights/diagnosticSettings@2021-05-01-preview' = {
   name: '${apim.name}-diag'

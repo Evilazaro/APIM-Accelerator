@@ -24,6 +24,8 @@ module monitoring '../src/shared/resources/monitoring/main.bicep' = {
   }
 }
 
+output AZURE_STORAGE_ACCOUNT_ID string = monitoring.outputs.AZURE_STORAGE_ACCOUNT_ID
+output AZURE_STORAGE_ACCOUNT_NAME string = monitoring.outputs.AZURE_STORAGE_ACCOUNT_NAME
 output AZURE_LOG_ANALYTICS_WORKSPACE_ID string = monitoring.outputs.AZURE_LOG_ANALYTICS_WORKSPACE_ID
 output AZURE_LOG_ANALYTICS_WORKSPACE_NAME string = monitoring.outputs.AZURE_LOG_ANALYTICS_WORKSPACE_NAME
 output AZURE_APPLICATION_INSIGHTS_ID string = monitoring.outputs.AZURE_APPLICATION_INSIGHTS_ID
@@ -44,6 +46,12 @@ module core '../src/core/main.bicep' = {
 
 output AZURE_API_MANAGEMENT_ID string = core.outputs.AZURE_API_MANAGEMENT_ID
 output AZURE_API_MANAGEMENT_NAME string = core.outputs.AZURE_API_MANAGEMENT_NAME
+output AZURE_CLIENT_SECRET_ID string = core.outputs.AZURE_CLIENT_SECRET_ID
+output AZURE_CLIENT_SECRET_NAME string = core.outputs.AZURE_CLIENT_SECRET_NAME
+output AZURE_CLIENT_SECRET_PRINCIPAL_ID string = core.outputs.AZURE_CLIENT_SECRET_PRINCIPAL_ID
+output AZURE_CLIENT_SECRET_CLIENT_ID string = core.outputs.AZURE_CLIENT_SECRET_CLIENT_ID
+output AZURE_API_MANAGEMENT_IDENTITY_PRINCIPAL_ID string = core.outputs.AZURE_API_MANAGEMENT_IDENTITY_PRINCIPAL_ID
+
 
 module inventory '../src/shared/resources/inventory/main.bicep' = {
   name: 'deploy-inventory'
@@ -56,3 +64,6 @@ module inventory '../src/shared/resources/inventory/main.bicep' = {
     tags: settings.tags
   }
 }
+
+output AZURE_API_CENTER_ID string = inventory.outputs.AZURE_API_CENTER_ID
+output AZURE_API_CENTER_NAME string = inventory.outputs.AZURE_API_CENTER_NAME
