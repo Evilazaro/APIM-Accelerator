@@ -38,6 +38,9 @@ module identity '../shared/resources/identity/main.bicep' = {
   params: {
     apiManagementName: apim.name
   }
+  dependsOn: [
+    apim
+  ]
 }
 
 output AZURE_CLIENT_SECRET_ID string = identity.outputs.AZURE_CLIENT_SECRET_ID

@@ -14,25 +14,6 @@ resource resourceGroup 'Microsoft.Resources/resourceGroups@2025-04-01' = {
   tags: settings.tags
 }
 
-module identity '../src/shared/resources/identity/managed-identity.bicep' = {
-  scope: resourceGroup
-  params: {
-    name: '${settings.solutionName}-security-mi'
-    location: location
-    tags: settings.tags
-  }
-}
-
-output AZURE_MANAGED_IDENTITY_ID string = identity.outputs.AZURE_MANAGED_IDENTITY_ID
-output AZURE_MANAGED_IDENTITY_NAME string = identity.outputs.AZURE_MANAGED_IDENTITY_NAME
-output AZURE_MANAGED_IDENTITY_PRINCIPAL_ID string = identity.outputs.AZURE_MANAGED_IDENTITY_PRINCIPAL_ID
-output AZURE_MANAGED_IDENTITY_CLIENT_ID string = identity.outputs.AZURE_MANAGED_IDENTITY_CLIENT_ID
-
-output AZURE_CLIENT_SECRET_ID string = identity.outputs.AZURE_CLIENT_SECRET_ID
-output AZURE_CLIENT_SECRET_NAME string = identity.outputs.AZURE_CLIENT_SECRET_NAME
-output AZURE_CLIENT_SECRET_PRINCIPAL_ID string = identity.outputs.AZURE_CLIENT_SECRET_PRINCIPAL_ID
-output AZURE_CLIENT_SECRET_CLIENT_ID string = identity.outputs.AZURE_CLIENT_SECRET_CLIENT_ID
-
 module monitoring '../src/shared/resources/monitoring/main.bicep' = {
   name: 'deploy-monitoring'
   scope: resourceGroup

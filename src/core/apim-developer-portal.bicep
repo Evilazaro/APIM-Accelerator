@@ -49,22 +49,35 @@ resource apimIdentityProvider 'Microsoft.ApiManagement/service/identityProviders
 //   ]
 // }
 
-// resource devPortalSignInSetting 'Microsoft.ApiManagement/service/portalsettings@2024-06-01-preview' = {
-//   parent: apim
-//   name: 'signin'
-//   properties: {
-//     enabled: true
-//   }
-// }
+resource devPortalSignInSetting 'Microsoft.ApiManagement/service/portalsettings@2024-06-01-preview' = {
+  parent: apim
+  name: 'signin'
+  properties: {
+    enabled: true
+  }
+}
 
-// resource devPortalSignUpSetting 'Microsoft.ApiManagement/service/portalsettings@2024-06-01-preview' = {
-//   parent: apim
-//   name: 'signup'
-//   properties: {
-//     enabled: true
-//     termsOfService: {
-//       enabled: true
-//       consentRequired: true
-//     }
-//   }
-// }
+resource devPortalSignUpSetting 'Microsoft.ApiManagement/service/portalsettings@2024-06-01-preview' = {
+  parent: apim
+  name: 'signup'
+  properties: {
+    enabled: true
+    termsOfService: {
+      enabled: true
+      consentRequired: true
+    }
+  }
+}
+
+resource developerPortalDelegationSetting 'Microsoft.ApiManagement/service/portalsettings@2024-06-01-preview' = {
+  parent: apim
+  name: 'delegation'
+  properties: {
+    subscriptions: {
+      enabled: false
+    }
+    userRegistration: {
+      enabled: false
+    }
+  }
+}
