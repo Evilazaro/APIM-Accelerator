@@ -5,6 +5,8 @@ param name string
 
 param location string
 
+param storageAccountId string
+
 param tags object
 
 @allowed([
@@ -30,22 +32,6 @@ param publicNetworkAccessForQuery string = 'Enabled'
 param publicNetworkAccessForIngestion string = 'Enabled'
 
 param diagnosticSettingsName string = 'diagnostic-settings'
-
-resource storageAccount 'Microsoft.Storage/storageAccounts@2023-05-01' = {
-  name: uniqueString(subscription().id, resourceGroup().id, resourceGroup().name, name)
-  location: location
-  sku: {
-    name: 'Standard_LRS'
-  }
-  kind: 'StorageV2'
-  identity: {
-    type: 'SystemAssigned'
-  }
-  properties: {
-    accessTier: 'Hot'
-  }
-  tags: tags
-}
 
 resource logAnalyticsWorkspace 'Microsoft.OperationalInsights/workspaces@2025-02-01' = {
   name: name
@@ -77,7 +63,7 @@ resource diagnosticSettings 'Microsoft.Insights/diagnosticSettings@2021-05-01-pr
   name: diagnosticSettingsName
   scope: logAnalyticsWorkspace
   properties: {
-    storageAccountId: storageAccount.id
+    storageAccountId: storageAccountId
 
     workspaceId: logAnalyticsWorkspace.id
 
@@ -85,18 +71,10 @@ resource diagnosticSettings 'Microsoft.Insights/diagnosticSettings@2021-05-01-pr
       {
         categoryGroup: 'audit'
         enabled: true
-        retentionPolicy: {
-          enabled: true
-          days: 365 // Retain audit logs for 1 year for compliance
-        }
       }
       {
         categoryGroup: 'allLogs'
         enabled: true
-        retentionPolicy: {
-          enabled: true
-          days: 90 // Standard retention for operational logs
-        }
       }
     ]
 
@@ -104,10 +82,6 @@ resource diagnosticSettings 'Microsoft.Insights/diagnosticSettings@2021-05-01-pr
       {
         category: 'AllMetrics'
         enabled: true
-        retentionPolicy: {
-          enabled: true
-          days: 90
-        }
         timeGrain: null
       }
     ]
@@ -178,19 +152,7 @@ resource dataCollectionRule 'Microsoft.Insights/dataCollectionRules@2023-03-11' 
           ]
         }
       ]
-      windowsEventLogs: [
-        {
-          name: 'cloudSecuritySystemEvents'
-          streams: [
-            'Microsoft-WindowsEvent'
-          ]
-          xPathQueries: [
-            'Security!*[System[(Level=1 or Level=2 or Level=3)]]'
-            'System!*[System[(Level=1 or Level=2 or Level=3)]]'
-            'Application!*[System[(Level=1 or Level=2 or Level=3)]]'
-          ]
-        }
-      ]
+
       syslog: [
         {
           name: 'cronSyslog'
@@ -254,7 +216,6 @@ resource dataCollectionRule 'Microsoft.Insights/dataCollectionRules@2023-03-11' 
         streams: [
           'Microsoft-Perf'
           'Microsoft-Syslog'
-          'Microsoft-WindowsEvent'
         ]
         destinations: [
           name

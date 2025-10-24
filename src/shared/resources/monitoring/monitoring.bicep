@@ -4,6 +4,22 @@ param tags object
 
 var settings = loadYamlContent('../../../../infra/monitoring.yaml')
 
+resource storageAccount 'Microsoft.Storage/storageAccounts@2023-05-01' = {
+  name: uniqueString(subscription().id, resourceGroup().id, resourceGroup().name, solutionName)
+  location: location
+  sku: {
+    name: 'Standard_LRS'
+  }
+  kind: 'StorageV2'
+  identity: {
+    type: 'SystemAssigned'
+  }
+  properties: {
+    accessTier: 'Hot'
+  }
+  tags: tags
+}
+
 var logAnalyticsName = (empty(settings.logAnalytics.name))
   ? '${solutionName}-${uniqueString(subscription().id, resourceGroup().id, resourceGroup().name, solutionName,location)}-law'
   : settings.logAnalytics.name
@@ -14,6 +30,7 @@ module operationsManagement 'log-analytics-workspace-resource.bicep' = {
   params: {
     name: logAnalyticsName
     location: location
+    storageAccountId: storageAccount.id
     tags: tags
   }
 }
@@ -32,6 +49,7 @@ module insights 'app-insights.bicep' = {
     name: appInsightsName
     location: location
     workspaceResourceId: operationsManagement.outputs.AZURE_LOG_ANALYTICS_WORKSPACE_ID
+    storageAccountId: storageAccount.id
     tags: tags
   }
 }

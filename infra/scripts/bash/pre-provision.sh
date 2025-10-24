@@ -11,7 +11,7 @@
 # - Soft-deleted APIM instances and purges them to prevent naming conflicts
 # - Existing API Center instances and provides cleanup options
 #
-# Usage:       ./pre-provision.sh [environment_name] [location]
+# Usage:       ./pre-provision.sh <environment_name> <location>
 # Example:     ./pre-provision.sh "dev" "eastus2"
 #
 # Requirements:
@@ -23,10 +23,6 @@ IFS=$'\n\t'       # Set secure Internal Field Separator
 
 # Script configuration
 readonly SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
-
-# Default values
-readonly DEFAULT_ENV_NAME="dev"
-readonly DEFAULT_LOCATION="eastus2"
 
 # Global variables
 AZURE_ENV_NAME=""
@@ -94,8 +90,22 @@ validate_prerequisites() {
 # Arguments: $@ - All script arguments
 #===============================================================================
 parse_arguments() {
-    AZURE_ENV_NAME="${1:-${DEFAULT_ENV_NAME}}"
-    AZURE_LOCATION="${2:-${DEFAULT_LOCATION}}"
+    # Check if required parameters are provided
+    if [[ $# -lt 2 ]]; then
+        log_error "Missing required parameters. Usage: $0 <environment_name> <location>"
+    fi
+    
+    AZURE_ENV_NAME="$1"
+    AZURE_LOCATION="$2"
+    
+    # Validate that parameters are not empty
+    if [[ -z "${AZURE_ENV_NAME}" ]]; then
+        log_error "Environment name cannot be empty"
+    fi
+    
+    if [[ -z "${AZURE_LOCATION}" ]]; then
+        log_error "Location cannot be empty"
+    fi
     
     # Validate environment name format (alphanumeric and hyphens only)
     if [[ ! "${AZURE_ENV_NAME}" =~ ^[a-zA-Z0-9-]+$ ]]; then

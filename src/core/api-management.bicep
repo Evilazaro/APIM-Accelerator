@@ -42,19 +42,7 @@ resource apimDiagnosticSettings 'Microsoft.Insights/diagnosticSettings@2021-05-0
 
     logs: [
       {
-        category: 'GatewayLogs'
-        enabled: true
-      }
-      {
-        category: 'WebSocketConnectionLogs'
-        enabled: true
-      }
-      {
-        category: 'DeveloperPortalAuditLogs'
-        enabled: true
-      }
-      {
-        category: 'GatewayLlmLogs'
+        categoryGroup: 'allLogs'
         enabled: true
       }
     ]
@@ -63,8 +51,7 @@ resource apimDiagnosticSettings 'Microsoft.Insights/diagnosticSettings@2021-05-0
       {
         category: 'AllMetrics'
         enabled: true
-
-        timeGrain: 'PT1M'
+        timeGrain: null
       }
     ]
   }
