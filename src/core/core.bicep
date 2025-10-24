@@ -3,9 +3,8 @@ metadata description = 'This module deploys the Workload API Management platform
 
 param solutionName string
 param location string
-param appInsightsInstrumentationKey string
 param appInsightsResourceId string
-param appInsightsConnectionString string
+param appInsightsInstrumentationKey string
 param logAnalyticsWorkspaceId string
 param tags object
 
@@ -23,10 +22,9 @@ module platform 'api-management.bicep' = {
     location: location
     publisherEmail: workloadSettings.apiManagement.publisherEmail
     publisherName: workloadSettings.apiManagement.publisherName
-    appInsightsInstrumentationKey: appInsightsInstrumentationKey
     appInsightsResourceId: appInsightsResourceId
     logAnalyticsWorkspaceId: logAnalyticsWorkspaceId
-    appInsightsConnectionString: appInsightsConnectionString
+    appInsightsInstrumentationKey: appInsightsInstrumentationKey
     tags: tags
   }
 }
