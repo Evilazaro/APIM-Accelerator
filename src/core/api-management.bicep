@@ -7,6 +7,7 @@ param publisherEmail string
 param publisherName string
 param appInsightsInstrumentationKey string
 param appInsightsResourceId string
+param appInsightsConnectionString string
 param logAnalyticsWorkspaceId string
 param tags object
 
@@ -68,7 +69,7 @@ resource apimLogger 'Microsoft.ApiManagement/service/loggers@2024-05-01' = {
 
     credentials: {
       instrumentationKey: appInsightsInstrumentationKey
-
+      connectionString: appInsightsConnectionString
       identityClientId: apim.identity.principalId
     }
   }

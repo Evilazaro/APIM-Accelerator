@@ -29,20 +29,40 @@ output AZURE_LOG_ANALYTICS_WORKSPACE_NAME string = monitoring.outputs.AZURE_LOG_
 output AZURE_APPLICATION_INSIGHTS_ID string = monitoring.outputs.AZURE_APPLICATION_INSIGHTS_ID
 output AZURE_APPLICATION_INSIGHTS_NAME string = monitoring.outputs.AZURE_APPLICATION_INSIGHTS_NAME
 
-module workload '../src/core/workload.bicep' = {
-  name: 'deploy-workload'
+module core '../src/core/core.bicep' = {
+  name: 'deploy-core'
   scope: resourceGroup
   params: {
     solutionName: settings.solutionName
     location: location
     appInsightsInstrumentationKey: monitoring.outputs.AZURE_APPLICATION_INSIGHTS_INSTRUMENTATION_KEY
     appInsightsResourceId: monitoring.outputs.AZURE_APPLICATION_INSIGHTS_ID
+    appInsightsConnectionString: monitoring.outputs.AZURE_APPLICATION_INSIGHTS_CONNECTION_STRING
     logAnalyticsWorkspaceId: monitoring.outputs.AZURE_LOG_ANALYTICS_WORKSPACE_ID
     tags: settings.tags
   }
 }
 
-output AZURE_API_MANAGEMENT_ID string = workload.outputs.AZURE_API_MANAGEMENT_ID
-output AZURE_API_MANAGEMENT_NAME string = workload.outputs.AZURE_API_MANAGEMENT_NAME
-output AZURE_API_CENTER_ID string = workload.outputs.AZURE_API_CENTER_ID
-output AZURE_API_CENTER_NAME string = workload.outputs.AZURE_API_CENTER_NAME
+// output AZURE_API_MANAGEMENT_ID string = core.outputs.AZURE_API_MANAGEMENT_ID
+// output AZURE_API_MANAGEMENT_NAME string = core.outputs.AZURE_API_MANAGEMENT_NAME
+// output AZURE_API_CENTER_ID string = core.outputs.AZURE_API_CENTER_ID
+// output AZURE_API_CENTER_NAME string = core.outputs.AZURE_API_CENTER_NAME
+
+// var providersSettings = loadYamlContent('./providers.yaml')
+
+// module provider '../src/providers/provider.bicep' = {
+//   name: 'deploy-providers'
+//   scope: resourceGroup
+//   params: {
+//     apiManagementName: core.outputs.AZURE_API_MANAGEMENT_NAME
+//     providersSettings: providersSettings
+//   }
+// }
+
+// module developerPortal '../src/providers/apim-developer-portal.bicep' = {
+//   name: 'deploy-developer-portal'
+//   scope: resourceGroup
+//   params: {
+//     apiManagementName: core.outputs.AZURE_API_MANAGEMENT_NAME
+//   }
+// }

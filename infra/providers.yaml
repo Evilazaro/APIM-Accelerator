@@ -1,0 +1,6 @@
+- name: "provider-apim-workspace"
+  description: "description"
+  displayName: "provider-apim-workspace"
+- name: "provider-apim-workspace-2"
+  description: "description"
+  displayName: "provider-apim-workspace-2"
