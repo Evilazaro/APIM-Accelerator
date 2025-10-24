@@ -7,9 +7,6 @@ param apiManagementName string
 param apiManagementResourceId string
 param tags object
 
-@description('The name of an API to register in the API center.')
-param apiName string = 'first-api'
-
 @description('The type of the API to register in the API center.')
 @allowed([
   'rest'
