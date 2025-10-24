@@ -8,9 +8,6 @@ param publisherName string
 param appInsightsResourceId string
 param appInsightsInstrumentationKey string
 param logAnalyticsWorkspaceId string
-@secure()
-param clientSecretClientId string
-param identityProviderClientId string
 param tags object
 
 resource apim 'Microsoft.ApiManagement/service@2024-10-01-preview' = {
@@ -39,9 +36,8 @@ module developerPortal 'apim-developer-portal.bicep' = {
   name: 'deploy-apim-developer-portal'
   scope: resourceGroup()
   params: {
+    location: location
     apiManagementName: apim.name
-    clientSecretClientId: clientSecretClientId
-    identityProviderClientId: identityProviderClientId
   }
 }
 

@@ -14,21 +14,6 @@ resource resourceGroup 'Microsoft.Resources/resourceGroups@2025-04-01' = {
   tags: settings.tags
 }
 
-module identity '../src/shared/resources/identity/main.bicep' = {
-  name: 'deploy-identity'
-  scope: resourceGroup
-  params: {
-    solutionName: settings.solutionName
-    location: location
-  }
-}
-
-output AZURE_CLIENT_SECRET_ID string = identity.outputs.AZURE_CLIENT_SECRET_ID
-output AZURE_CLIENT_SECRET_NAME string = identity.outputs.AZURE_CLIENT_SECRET_NAME
-output AZURE_CLIENT_SECRET_PRINCIPAL_ID string = identity.outputs.AZURE_CLIENT_SECRET_PRINCIPAL_ID
-output AZURE_CLIENT_SECRET_CLIENT_ID string = identity.outputs.AZURE_CLIENT_SECRET_CLIENT_ID
-output AZURE_API_MANAGEMENT_IDENTITY_PRINCIPAL_ID string = identity.outputs.AZURE_API_MANAGEMENT_IDENTITY_PRINCIPAL_ID
-
 module monitoring '../src/shared/resources/monitoring/main.bicep' = {
   name: 'deploy-monitoring'
   scope: resourceGroup
@@ -53,8 +38,6 @@ module core '../src/core/main.bicep' = {
     appInsightsResourceId: monitoring.outputs.AZURE_APPLICATION_INSIGHTS_ID
     appInsightsInstrumentationKey: monitoring.outputs.AZURE_APPLICATION_INSIGHTS_INSTRUMENTATION_KEY
     logAnalyticsWorkspaceId: monitoring.outputs.AZURE_LOG_ANALYTICS_WORKSPACE_ID
-    clientSecretClientId: identity.outputs.AZURE_CLIENT_SECRET_CLIENT_ID
-    identityProviderClientId: identity.outputs.AZURE_CLIENT_SECRET_CLIENT_ID
     tags: settings.tags
   }
 }
