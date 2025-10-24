@@ -258,7 +258,7 @@ cleanup_api_center_instances() {
     log_info "Checking for Azure API Center instances in subscription..."
     
     # Check if API Center extension is available
-    if ! az extension list --query "[?name=='apic'].name" -o tsv | grep -q "apic"; then
+    if ! az extension list --query "[?name=='apic'].name" -o tsv 2>/dev/null | grep -q "apic" 2>/dev/null; then
         log_info "Azure API Center CLI extension not installed. Skipping API Center cleanup."
         log_info "To install: az extension add --name apic"
         return 0
@@ -266,7 +266,12 @@ cleanup_api_center_instances() {
     
     # Query for all API Center instances in the subscription
     local api_center_instances
-    api_center_instances="$(az apic list --query "[].[name,resourceGroup,location]" -o tsv 2>/dev/null || echo "")"
+    api_center_instances="$(az apic list --query "[].[name,resourceGroup,location]" -o tsv 2>/dev/null || true)"
+    
+    # Handle case where command returns empty or fails
+    if [[ -z "${api_center_instances}" ]] || [[ "${api_center_instances}" == "null" ]]; then
+        api_center_instances=""
+    fi
     
     if [[ -z "${api_center_instances}" ]]; then
         log_info "No Azure API Center instances found in subscription"
@@ -281,12 +286,14 @@ cleanup_api_center_instances() {
     
     # List instances for visibility
     local instance_count=0
-    while IFS=$'\t' read -r apic_name apic_rg apic_location; do
-        if [[ -n "${apic_name}" && -n "${apic_rg}" && -n "${apic_location}" ]]; then
-            ((instance_count++))
-            log_info "API Center ${instance_count}: ${apic_name} (Resource Group: ${apic_rg}, Location: ${apic_location})"
-        fi
-    done <<< "${api_center_instances}"
+    if [[ -n "${api_center_instances}" ]]; then
+        while IFS=$'\t' read -r apic_name apic_rg apic_location || [[ -n "${apic_name}" ]]; do
+            if [[ -n "${apic_name}" && -n "${apic_rg}" && -n "${apic_location}" ]]; then
+                ((instance_count++))
+                log_info "API Center ${instance_count}: ${apic_name} (Resource Group: ${apic_rg}, Location: ${apic_location})"
+            fi
+        done <<< "${api_center_instances}"
+    fi
     
     # Provide manual cleanup instructions
     if [[ ${instance_count} -gt 0 ]]; then
@@ -313,7 +320,9 @@ main() {
     purge_soft_deleted_apim
     
     # Check and provide info about API Center instances
-    cleanup_api_center_instances
+    if ! cleanup_api_center_instances; then
+        log_warning "API Center cleanup encountered an issue, but continuing with deployment..."
+    fi
     
     log_info "Pre-provisioning cleanup script completed successfully"
     
@@ -323,5 +332,16 @@ main() {
 
 # Execute main function if script is run directly (not sourced)
 if [[ "${BASH_SOURCE[0]}" == "${0}" ]]; then
-    main "$@"
+    # Trap any unexpected errors and ensure clean exit
+    trap 'log_error "Script failed unexpectedly at line $LINENO"' ERR
+    
+    # Execute main function with error handling
+    if main "$@"; then
+        # Success - main function completed and called exit 0
+        true
+    else
+        # This should not be reached due to explicit exit 0 in main, but just in case
+        log_error "Main function failed"
+        exit 1
+    fi
 fi
