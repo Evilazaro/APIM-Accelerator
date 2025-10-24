@@ -26,13 +26,18 @@ resource roleAssignments 'Microsoft.Authorization/roleAssignments@2022-04-01' = 
       principalId: userAssignedIdentity.properties.principalId
       principalType: 'ServicePrincipal'
     }
+    dependsOn: [
+      userAssignedIdentity
+    ]
   }
 ]
-
 
 resource clientSecret 'Microsoft.ManagedIdentity/identities@2025-01-31-preview' existing = {
   scope: userAssignedIdentity
   name: 'default'
+dependsOn: [
+    userAssignedIdentity
+  ]
 }
 
 output AZURE_CLIENT_SECRET_ID string = clientSecret.id
