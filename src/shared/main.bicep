@@ -23,10 +23,10 @@ output APPLICATION_INSIGHTS_RESOURCE_ID string = monitoring.outputs.APPLICATION_
 output APPLICATION_INSIGHTS_NAME string = monitoring.outputs.APPLICATION_INSIGHTS_NAME
 output APPLICATION_INSIGHTS_INSTRUMENTATION_KEY string = monitoring.outputs.APPLICATION_INSIGHTS_INSTRUMENTATION_KEY
 
-module networking 'networking/main.bicep' = {
-  name: 'deploy-networking-resources'
-  scope: resourceGroup()
-  dependsOn: [
-    monitoring
-  ]
-}
+// module networking 'networking/main.bicep' = {
+//   name: 'deploy-networking-resources'
+//   scope: resourceGroup()
+//   dependsOn: [
+//     monitoring
+//   ]
+// }

@@ -25,6 +25,7 @@ type ApiManagement = {
     type: 'SystemAssigned' | 'UserAssigned'
     userAssignedIdentities: []
   }
+  workspaces: array
 }
 
 type ApiCenter = {
