@@ -26,6 +26,7 @@ resource apim 'Microsoft.ApiManagement/service@2024-10-01-preview' = {
   }
   tags: tags
   properties: {
+    publicNetworkAccess: 'Enabled'
     publisherEmail: workloadSettings.apiManagement.publisherEmail
     publisherName: workloadSettings.apiManagement.publisherName
     developerPortalStatus: 'Enabled'
