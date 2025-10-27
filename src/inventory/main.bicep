@@ -1,45 +1,34 @@
-metadata name = 'API Center'
-metadata description = 'This module deploys an API Center resource.'
-
+import { Inventory } from '../shared/common-types.bicep'
 param solutionName string
 param location string = 'eastus'
+param inventorySettings Inventory
 param apiManagementName string
 param apiManagementResourceId string
 param tags object
 
-var apiCenterName = '${solutionName}-${uniqueString(subscription().id, resourceGroup().id, resourceGroup().name, solutionName,location)}-apicenter'
+var apiCenterSettings = inventorySettings.apiCenter
 
-resource apiCenterService 'Microsoft.ApiCenter/services@2024-03-01' = {
+var apiCenterName = apiCenterSettings.name != ''
+  ? apiCenterSettings.name
+  : '${solutionName}-apicenter-${uniqueString(resourceGroup().id)}'
+
+resource apiCenter 'Microsoft.ApiCenter/services@2024-06-01-preview' = {
   name: apiCenterName
   location: location
-  identity: {
-    type: 'SystemAssigned'
-  }
   tags: tags
   sku: {
     name: 'Standard'
   }
-  properties: {}
-}
-
-output AZURE_API_CENTER_ID string = apiCenterService.id
-output AZURE_API_CENTER_NAME string = apiCenterService.name
-
-var apiCenterSchema = loadTextContent('api.schema.json')
-
-resource metadata 'Microsoft.ApiCenter/services/metadataSchemas@2024-06-01-preview' = {
-  parent: apiCenterService
-  name: 'default'
-  properties: {
-    schema: apiCenterSchema
-    assignedTo: [
-      {
-        entity: 'api'
-        required: true
+  identity: (apiCenterSettings.identity.type != 'None')
+    ? {
+        type: apiCenterSettings.identity.type
+        userAssignedIdentities: ((apiCenterSettings.identity.type == 'UserAssigned' || apiCenterSettings.identity.type == 'SystemAssigned, UserAssigned') && !empty(apiCenterSettings.identity.userAssignedIdentities))
+          ? toObject(apiCenterSettings.identity.userAssignedIdentities, id => id, id => {})
+          : null
       }
-    ]
-  }
+    : null
 }
+
 var roles = [
   '71522526-b88f-4d52-b57f-d31fc3546d0d'
 ]
@@ -50,13 +39,13 @@ resource apimRoleAssignments 'Microsoft.Authorization/roleAssignments@2022-04-01
       subscription().id,
       resourceGroup().id,
       resourceGroup().name,
-      apiCenterService.id,
-      apiCenterService.name,
+      apiCenter.id,
+      apiCenter.name,
       role
     )
     scope: resourceGroup()
     properties: {
-      principalId: apiCenterService.identity.principalId
+      principalId: apiCenter.identity.principalId
       principalType: 'ServicePrincipal'
       roleDefinitionId: subscriptionResourceId('Microsoft.Authorization/roleDefinitions', role)
     }
@@ -64,7 +53,7 @@ resource apimRoleAssignments 'Microsoft.Authorization/roleAssignments@2022-04-01
 ]
 
 resource apiCenterWorkspace 'Microsoft.ApiCenter/services/workspaces@2024-03-01' = {
-  parent: apiCenterService
+  parent: apiCenter
   name: 'default'
   properties: {
     title: 'Default workspace'
