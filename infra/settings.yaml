@@ -1,14 +1,60 @@
+solutionName: "apim-accelerator"
 shared:
   monitoring:
     logAnalytics:
-      name: "apim-accelerator-law"
+      name: ""
       workSpaceResourceId: ""
       identity:
         type: "SystemAssigned"
         userAssignedIdentities: []
     applicationInsights:
-      name: "apim-accelerator-ai"
+      name: ""
       logAnalyticsWorkspaceResourceId: ""
     tags:
-      component-type: "shared"
+      lz-component-type: "shared"
       component: "monitoring"
+  inventory:
+    apiCenter:
+      name: ""
+      identity:
+        type: "SystemAssigned"
+        userAssignedIdentities: []
+    tags:
+      lz-component-type: "shared"
+      component: "inventory"
+    
+  tags:
+    CostCenter: "CC-1234" # Tracks cost allocation
+    BusinessUnit: "IT" # Business unit or department
+    Owner: "jdoe@contoso.com" # Resource/application owner
+    ApplicationName: "APIM Platform" # Workload/application name
+
+    Environment: "Production" # Environment (Dev, Test, QA, Prod)
+    Lifecycle: "Operational" # Lifecycle stage
+    ProjectName: "APIMForAll" # Project or initiative name
+    ServiceClass: "Critical" # Workload tier (Critical, Standard, Experimental)
+
+    DataClassification: "Confidential" # Data sensitivity (Public, Internal, Confidential, HighlyConfidential)
+    RegulatoryCompliance: "GDPR" # Compliance requirements (GDPR, HIPAA, PCI, None)
+
+    SupportContact: "cloudops@contoso.com" # Incident support team or contact
+
+    ChargebackModel: "Dedicated" # Chargeback/Showback model
+    BudgetCode: "FY25-Q1-InitiativeX" # Budget or initiative code
+    ServiceOwner: "asmith@contoso.com" # Service manager accountable
+
+
+core:
+  apiManagement: 
+    name: ""
+    publisherEmail: "evilazaro@gmail.com"
+    publisherName: "Contoso"
+    sku:
+      name: "Premium"
+      capacity: 1
+    identity:
+      type: "SystemAssigned"
+      userAssignedIdentities: []
+  tags:
+      lz-component-type: "core"
+      component: "apiManagement"

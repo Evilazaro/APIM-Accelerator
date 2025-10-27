@@ -38,6 +38,8 @@ param retentionInDays int = 90
 
 param logAnalyticsWorkspaceResourceId string
 
+param storageAccountResourceId string
+
 param tags object
 
 resource appInsights 'Microsoft.Insights/components@2020-02-02' = {
@@ -55,29 +57,26 @@ resource appInsights 'Microsoft.Insights/components@2020-02-02' = {
   }
 }
 
+output APPLICATION_INSIGHTS_RESOURCE_ID string = appInsights.id
+output APPLICATION_INSIGHTS_NAME string = appInsights.name
+output APPLICATION_INSIGHTS_INSTRUMENTATION_KEY string = appInsights.properties.InstrumentationKey
+
 resource appInsightsDiagnosticSettings 'Microsoft.Insights/diagnosticSettings@2021-05-01-preview' = {
   name: '${appInsights.name}-diag'
   scope: appInsights
   properties: {
     workspaceId: logAnalyticsWorkspaceResourceId
+    storageAccountId: storageAccountResourceId
     logs: [
       {
         enabled: true
         categoryGroup: 'allLogs'
-        retentionPolicy: {
-          days: 7
-          enabled: true
-        }
       }
     ]
     metrics: [
       {
         enabled: true
         category: 'allMetrics'
-        retentionPolicy: {
-          days: 7
-          enabled: true
-        }
       }
     ]
   }

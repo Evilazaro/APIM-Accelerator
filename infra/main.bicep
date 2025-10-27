@@ -1,25 +1,47 @@
 targetScope = 'subscription'
 
-param solutionName string
 param envName string
 param location string
 
-var rgName = '${solutionName}-${envName}-${location}-rg'
 var settings = loadYamlContent('settings.yaml')
-var monitoringSettings = settings.shared.monitoring
+var corePlatformSettings = settings.core
+var sharedSettings = settings.shared
+var commonTags = settings.shared.tags
+
+var rgName = '${settings.solutionName}-${envName}-${location}-rg'
 
 resource rg 'Microsoft.Resources/resourceGroups@2025-04-01' = {
   name: rgName
   location: location
+  tags: commonTags
 }
 
-module monitoring '../src/shared/monitoring/main.bicep' = {
-  name: 'deploy-shared-monitoring'
+module sharedComponents '../src/shared/main.bicep' = {
+  name: 'deploy-shared-components'
   scope: rg
   params: {
+    solutionName: settings.solutionName
     location: location
-    tags: settings.shared.monitoring.tags
-    applicationInsightsSettings: monitoringSettings.applicationInsights
-    logAnalyticsSettings: monitoringSettings.logAnalytics
+    sharedSettings: sharedSettings
   }
+}
+
+output APPLICATION_INSIGHTS_RESOURCE_ID string = sharedComponents.outputs.APPLICATION_INSIGHTS_RESOURCE_ID
+output APPLICATION_INSIGHTS_NAME string = sharedComponents.outputs.APPLICATION_INSIGHTS_NAME
+output APPLICATION_INSIGHTS_INSTRUMENTATION_KEY string = sharedComponents.outputs.APPLICATION_INSIGHTS_INSTRUMENTATION_KEY
+
+module corePlatform '../src/core/main.bicep' = {
+  name: 'deploy-core-platform'
+  scope: rg
+  params: {
+    solutionName: settings.solutionName
+    location: location
+    tags: union(commonTags, corePlatformSettings.tags)
+    logAnalyticsWorkspaceId: sharedComponents.outputs.AZURE_LOG_ANALYTICS_WORKSPACE_ID
+    ApplicationInsightsResourceId: sharedComponents.outputs.APPLICATION_INSIGHTS_RESOURCE_ID
+    apiManagementSettings: corePlatformSettings.apiManagement
+  }
+  dependsOn: [
+    sharedComponents
+  ]
 }

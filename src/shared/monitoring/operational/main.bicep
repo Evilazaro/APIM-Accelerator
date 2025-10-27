@@ -21,6 +21,8 @@ param identityType string
 
 param userAssignedIdentities array
 
+param storageAccountResourceId string
+
 param tags object
 
 resource logAnalyticsWorkspace 'Microsoft.OperationalInsights/workspaces@2025-02-01' = {
@@ -49,24 +51,17 @@ resource logAnalyticsDiagnosticSettings 'Microsoft.Insights/diagnosticSettings@2
   scope: logAnalyticsWorkspace
   properties: {
     workspaceId: logAnalyticsWorkspace.id
+    storageAccountId: storageAccountResourceId
     logs: [
       {
         enabled: true
         categoryGroup: 'allLogs'
-        retentionPolicy: {
-          days: 7
-          enabled: true
-        }
       }
     ]
     metrics: [
       {
         enabled: true
         category: 'allMetrics'
-        retentionPolicy: {
-          days: 7
-          enabled: true
-        }
       }
     ]
   }
