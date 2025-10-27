@@ -6,7 +6,12 @@ param location string
 var settings = loadYamlContent('settings.yaml')
 var corePlatformSettings = settings.core
 var sharedSettings = settings.shared
-var commonTags = settings.shared.tags
+
+var envTags = {
+  environment: envName
+}
+
+var commonTags = union( settings.shared.tags, envTags)
 
 var rgName = '${settings.solutionName}-${envName}-${location}-rg'
 

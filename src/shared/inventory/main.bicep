@@ -14,6 +14,9 @@ resource apiCenter 'Microsoft.ApiCenter/services@2024-06-01-preview' = {
   name: apiCenterName
   location: location
   tags: tags
+  sku:{
+    name: 'Standard'
+  }
   identity: (apiCenterSettings.identity.type != 'None')
     ? {
         type: apiCenterSettings.identity.type

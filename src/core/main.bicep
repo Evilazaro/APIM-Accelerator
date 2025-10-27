@@ -29,6 +29,17 @@ module apim 'apim.bicep' = {
   }
 }
 
+module workspaces 'workspaces.bicep' = [
+  for item in apiManagementSettings.workspaces: {
+    name: item.name
+    scope: resourceGroup()
+    params: {
+      name: item.name
+      apiManagementName: apim.outputs.API_MANAGEMENT_NAME
+    }
+  }
+]
+
 module developerPortal 'developer-portal.bicep' = {
   name: 'deploy-developer-portal'
   scope: resourceGroup()
