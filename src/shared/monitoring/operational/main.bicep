@@ -21,9 +21,21 @@ param identityType string
 
 param userAssignedIdentities array
 
-param storageAccountResourceId string
-
 param tags object
+
+var storageAccountName = toLower(take(replace('${name}sa${uniqueString(resourceGroup().id)}', '-', ''), 24))
+
+resource storageAccount 'Microsoft.Storage/storageAccounts@2025-01-01' = {
+  name: storageAccountName
+  location: location
+  sku: {
+    name: 'Standard_LRS'
+  }
+  kind: 'StorageV2'
+  tags: tags
+}
+
+output AZURE_STORAGE_ACCOUNT_ID string = storageAccount.id
 
 resource logAnalyticsWorkspace 'Microsoft.OperationalInsights/workspaces@2025-02-01' = {
   name: name
@@ -51,7 +63,7 @@ resource logAnalyticsDiagnosticSettings 'Microsoft.Insights/diagnosticSettings@2
   scope: logAnalyticsWorkspace
   properties: {
     workspaceId: logAnalyticsWorkspace.id
-    storageAccountId: storageAccountResourceId
+    storageAccountId: storageAccount.id
     logs: [
       {
         enabled: true

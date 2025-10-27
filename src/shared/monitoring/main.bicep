@@ -5,20 +5,6 @@ param location string
 param monitoringSettings Monitoring
 param tags object
 
-var storageAccountName = toLower(take(replace('${solutionName}sa${uniqueString(resourceGroup().id)}', '-', ''), 24))
-
-resource storageAccount 'Microsoft.Storage/storageAccounts@2025-01-01' = {
-  name: storageAccountName
-  location: location
-  sku: {
-    name: 'Standard_LRS'
-  }
-  kind: 'StorageV2'
-  tags: tags
-}
-
-output AZURE_STORAGE_ACCOUNT_ID string = storageAccount.id
-
 var logAnalyticsSettings = monitoringSettings.logAnalytics
 
 var logAnalyticsWorkspaceName = (!empty(logAnalyticsSettings.name))
@@ -34,7 +20,6 @@ module operational 'operational/main.bicep' = {
     tags: tags
     identityType: logAnalyticsSettings.identity.type
     userAssignedIdentities: logAnalyticsSettings.identity.userAssignedIdentities
-    storageAccountResourceId: storageAccount.id
   }
 }
 
@@ -54,7 +39,7 @@ module insights 'insights/main.bicep' = {
     location: location
     tags: tags
     logAnalyticsWorkspaceResourceId: operational.outputs.AZURE_LOG_ANALYTICS_WORKSPACE_ID
-    storageAccountResourceId: storageAccount.id
+    storageAccountResourceId: operational.outputs.AZURE_STORAGE_ACCOUNT_ID
   }
 }
 

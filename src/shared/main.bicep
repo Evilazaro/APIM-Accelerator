@@ -17,7 +17,6 @@ module monitoring 'monitoring/main.bicep' = {
   }
 }
 
-output AZURE_STORAGE_ACCOUNT_ID string = monitoring.outputs.AZURE_STORAGE_ACCOUNT_ID
 output AZURE_LOG_ANALYTICS_WORKSPACE_ID string = monitoring.outputs.AZURE_LOG_ANALYTICS_WORKSPACE_ID
 output APPLICATION_INSIGHTS_RESOURCE_ID string = monitoring.outputs.APPLICATION_INSIGHTS_RESOURCE_ID
 output APPLICATION_INSIGHTS_NAME string = monitoring.outputs.APPLICATION_INSIGHTS_NAME
