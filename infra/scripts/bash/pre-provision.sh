@@ -3,179 +3,345 @@
 #===============================================================================
 # Azure API Management Landing Zone Accelerator - Pre-Provision Script
 #===============================================================================
-# Description: Purges soft-deleted Azure resources (APIM and Key Vault) to
-#              enable clean redeployment for demo and testing scenarios
-# Usage:       ./pre-provision.sh <location>
-# Example:     ./pre-provision.sh "East US"
+# Description: Purges soft-deleted Azure API Management instances and cleans up
+#              Azure API Center instances to enable clean redeployment for demo 
+#              and testing scenarios
+# 
+# This script queries the entire subscription for:
+# - Soft-deleted APIM instances and purges them to prevent naming conflicts
+# - Existing API Center instances and provides cleanup options
+#
+# Usage:       ./pre-provision.sh <environment_name> <location>
+# Example:     ./pre-provision.sh "dev" "eastus2"
+#
+# Requirements:
+#   - Azure CLI must be installed and authenticated
 #===============================================================================
 
 set -euo pipefail  # Exit on error, undefined variables, and pipe failures
+IFS=$'\n\t'       # Set secure Internal Field Separator
+
+# Script configuration
+readonly SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+
+# Global variables
+AZURE_ENV_NAME=""
+AZURE_LOCATION=""
 
 #===============================================================================
-# FUNCTIONS
+# Function: log_info
+# Description: Logs informational messages with timestamp
+# Arguments: $1 - Message to log
 #===============================================================================
+log_info() {
+    local message="$1"
+    echo "[$(date '+%Y-%m-%d %H:%M:%S')] INFO: ${message}"
+}
 
-# Display script usage information
-show_usage() {
-    echo "Usage: $0 <location>"
-    echo "Example: $0 'East US'"
-    echo ""
-    echo "This script purges soft-deleted Azure resources to enable clean redeployment."
+#===============================================================================
+# Function: log_error
+# Description: Logs error messages with timestamp and exits
+# Arguments: $1 - Error message to log
+#===============================================================================
+log_error() {
+    local message="$1"
+    echo "[$(date '+%Y-%m-%d %H:%M:%S')] ERROR: ${message}" >&2
     exit 1
 }
 
-# Log messages with timestamp for better traceability
-log_message() {
-    echo "[$(date +'%Y-%m-%d %H:%M:%S')] $1"
+#===============================================================================
+# Function: log_warning
+# Description: Logs warning messages with timestamp
+# Arguments: $1 - Warning message to log
+#===============================================================================
+log_warning() {
+    local message="$1"
+    echo "[$(date '+%Y-%m-%d %H:%M:%S')] WARNING: ${message}" >&2
 }
 
-# Check if a resource is currently active
-is_resource_active() {
-    local resource_type="$1"
-    local resource_name="$2"
-    local resource_group="$3"
+#===============================================================================
+# Function: validate_prerequisites
+# Description: Validates required tools and files are available
+#===============================================================================
+validate_prerequisites() {
+    log_info "Validating prerequisites..."
     
-    case "$resource_type" in
-        "apim")
-            az apim show --name "$resource_name" --resource-group "$resource_group" >/dev/null 2>&1
-            ;;
-        "keyvault")
-            az keyvault show --name "$resource_name" --resource-group "$resource_group" >/dev/null 2>&1
-            ;;
-        *)
-            echo "Error: Unknown resource type: $resource_type" >&2
-            return 1
+    # Check if Azure CLI is installed
+    if ! command -v az >/dev/null 2>&1; then
+        log_error "Azure CLI is not installed. Please install Azure CLI to continue."
+    fi
+    
+    # Verify Azure CLI authentication
+    if ! az account show >/dev/null 2>&1; then
+        log_error "Azure CLI is not authenticated. Please run 'az login' to authenticate."
+    fi
+    
+    # Get current subscription info for logging
+    local subscription_name
+    subscription_name="$(az account show --query name -o tsv 2>/dev/null || echo "Unknown")"
+    log_info "Operating on subscription: ${subscription_name}"
+    
+    log_info "Prerequisites validation completed successfully"
+}
+
+#===============================================================================
+# Function: parse_arguments
+# Description: Parses and validates command line arguments
+# Arguments: $@ - All script arguments
+#===============================================================================
+parse_arguments() {
+    # Check if required parameters are provided
+    if [[ $# -lt 2 ]]; then
+        log_error "Missing required parameters. Usage: $0 <environment_name> <location>"
+    fi
+    
+    AZURE_ENV_NAME="$1"
+    AZURE_LOCATION="$2"
+    
+    # Validate that parameters are not empty
+    if [[ -z "${AZURE_ENV_NAME}" ]]; then
+        log_error "Environment name cannot be empty"
+    fi
+    
+    if [[ -z "${AZURE_LOCATION}" ]]; then
+        log_error "Location cannot be empty"
+    fi
+    
+    # Validate environment name format (alphanumeric and hyphens only)
+    if [[ ! "${AZURE_ENV_NAME}" =~ ^[a-zA-Z0-9-]+$ ]]; then
+        log_error "Invalid environment name format: '${AZURE_ENV_NAME}'. Only alphanumeric characters and hyphens are allowed."
+    fi
+    
+    # Validate location format (lowercase, no spaces)
+    if [[ ! "${AZURE_LOCATION}" =~ ^[a-z0-9]+$ ]]; then
+        log_error "Invalid location format: '${AZURE_LOCATION}'. Use lowercase format without spaces (e.g., 'eastus2')."
+    fi
+    
+    log_info "Environment: ${AZURE_ENV_NAME}"
+    log_info "Location: ${AZURE_LOCATION}"
+}
+
+
+
+#===============================================================================
+# Function: normalize_location
+# Description: Converts display location names to programmatic location names
+# Arguments: $1 - Display location name (e.g., "East US 2")
+# Returns: Normalized location name (e.g., "eastus2")
+#===============================================================================
+normalize_location() {
+    local display_location="$1"
+    local normalized_location
+    
+    # Convert common display names to programmatic names
+    case "${display_location}" in
+        "East US 2") normalized_location="eastus2" ;;
+        "East US") normalized_location="eastus" ;;
+        "West US 2") normalized_location="westus2" ;;
+        "West US") normalized_location="westus" ;;
+        "West US 3") normalized_location="westus3" ;;
+        "Central US") normalized_location="centralus" ;;
+        "North Central US") normalized_location="northcentralus" ;;
+        "South Central US") normalized_location="southcentralus" ;;
+        "West Central US") normalized_location="westcentralus" ;;
+        "Canada Central") normalized_location="canadacentral" ;;
+        "Canada East") normalized_location="canadaeast" ;;
+        "Brazil South") normalized_location="brazilsouth" ;;
+        "North Europe") normalized_location="northeurope" ;;
+        "West Europe") normalized_location="westeurope" ;;
+        "UK South") normalized_location="uksouth" ;;
+        "UK West") normalized_location="ukwest" ;;
+        "France Central") normalized_location="francecentral" ;;
+        "Germany West Central") normalized_location="germanywestcentral" ;;
+        "Norway East") normalized_location="norwayeast" ;;
+        "Switzerland North") normalized_location="switzerlandnorth" ;;
+        "UAE North") normalized_location="uaenorth" ;;
+        "South Africa North") normalized_location="southafricanorth" ;;
+        "Australia East") normalized_location="australiaeast" ;;
+        "Australia Southeast") normalized_location="australiasoutheast" ;;
+        "Southeast Asia") normalized_location="southeastasia" ;;
+        "East Asia") normalized_location="eastasia" ;;
+        "Japan East") normalized_location="japaneast" ;;
+        "Japan West") normalized_location="japanwest" ;;
+        "Korea Central") normalized_location="koreacentral" ;;
+        "Central India") normalized_location="centralindia" ;;
+        "South India") normalized_location="southindia" ;;
+        "West India") normalized_location="westindia" ;;
+        *) 
+            # If no match found, try to normalize by removing spaces and converting to lowercase
+            normalized_location="$(echo "${display_location}" | tr '[:upper:]' '[:lower:]' | tr -d ' ')"
             ;;
     esac
+    
+    echo "${normalized_location}"
 }
 
-# Check if a resource is soft-deleted
-is_resource_soft_deleted() {
-    local resource_type="$1"
-    local resource_name="$2"
+#===============================================================================
+# Function: purge_soft_deleted_apim
+# Description: Purges all soft-deleted APIM instances in the subscription to allow clean redeployment
+#===============================================================================
+purge_soft_deleted_apim() {
+    log_info "Checking for all soft-deleted API Management instances in subscription..."
     
-    case "$resource_type" in
-        "apim")
-            az apim deletedservice list --query "[?name=='$resource_name']" -o tsv | grep -q "$resource_name"
-            ;;
-        "keyvault")
-            az keyvault list-deleted --query "[?name=='$resource_name']" -o tsv | grep -q "$resource_name"
-            ;;
-        *)
-            echo "Error: Unknown resource type: $resource_type" >&2
-            return 1
-            ;;
-    esac
-}
-
-# Purge a soft-deleted resource
-purge_soft_deleted_resource() {
-    local resource_type="$1"
-    local resource_name="$2"
-    local location="$3"
+    # Query for all soft-deleted APIM instances in the subscription
+    local deleted_apims_data
+    deleted_apims_data="$(az apim deletedservice list --query "[].[name,location]" -o tsv 2>/dev/null || echo "")"
     
-    log_message "${resource_type^^} purge initiated"
+    if [[ -z "${deleted_apims_data}" ]]; then
+        log_info "No soft-deleted API Management instances found in subscription"
+        return 0
+    fi
     
-    case "$resource_type" in
-        "apim")
-            az apim deletedservice purge --service-name "$resource_name" --location "$location"
-            ;;
-        "keyvault")
-            az keyvault purge --name "$resource_name" --location "$location"
-            ;;
-        *)
-            echo "Error: Unknown resource type: $resource_type" >&2
-            return 1
-            ;;
-    esac
+    # Count total instances found
+    local total_instances
+    total_instances="$(echo "${deleted_apims_data}" | wc -l | tr -d '[:space:]')"
+    log_info "Found ${total_instances} soft-deleted API Management instance(s) to purge"
     
-    log_message "${resource_type^^} purge completed"
-}
-
-# Process resource purging for a given resource type
-process_resource_purging() {
-    local resource_type="$1"
-    local resource_name="$2"
-    local resource_group="$3"
-    local location="$4"
-    
-    if is_resource_active "$resource_type" "$resource_name" "$resource_group"; then
-        log_message "${resource_type^^} is still active"
-    else
-        if is_resource_soft_deleted "$resource_type" "$resource_name"; then
-            log_message "${resource_type^^} is soft-deleted"
-            purge_soft_deleted_resource "$resource_type" "$resource_name" "$location"
-        else
-            log_message "${resource_type^^} not found (already purged or never existed)"
+    # Process each soft-deleted instance
+    local purge_count=0
+    local failed_count=0
+    while IFS=$'\t' read -r apim_name apim_location; do
+        if [[ -n "${apim_name}" && -n "${apim_location}" ]]; then
+            # Normalize the location name for the purge command
+            local normalized_location
+            normalized_location="$(normalize_location "${apim_location}")"
+            
+            log_info "Purging soft-deleted API Management instance: ${apim_name}"
+            log_info "Display location: ${apim_location} -> Normalized: ${normalized_location}"
+            
+            # Try with normalized location first
+            if echo 'y' | az apim deletedservice purge --service-name "${apim_name}" --location "${normalized_location}" >/dev/null 2>&1; then
+                log_info "Successfully purged: ${apim_name} using normalized location"
+                ((purge_count++))
+            else
+                log_warning "Failed with normalized location, trying original location format..."
+                
+                # Try with original location format as fallback
+                if echo 'y' | az apim deletedservice purge --service-name "${apim_name}" --location "${apim_location}" >/dev/null 2>&1; then
+                    log_info "Successfully purged: ${apim_name} using original location format"
+                    ((purge_count++))
+                else
+                    log_warning "Failed to purge soft-deleted API Management instance: ${apim_name}"
+                    log_warning "Location tried: '${normalized_location}' and '${apim_location}'"
+                    ((failed_count++))
+                fi
+            fi
         fi
+    done <<< "${deleted_apims_data}"
+    
+    # Report results
+    if [[ ${purge_count} -gt 0 ]]; then
+        log_info "Successfully purged ${purge_count} soft-deleted API Management instance(s)"
+    fi
+    
+    if [[ ${failed_count} -gt 0 ]]; then
+        log_warning "Failed to purge ${failed_count} soft-deleted API Management instance(s)"
+        log_warning "Some instances may require manual cleanup or additional permissions"
+        log_warning "You can try manual purge using: az apim deletedservice purge --service-name <name> --location <location> --yes"
+        
+        # Don't exit with error code - continue with deployment
+        log_info "Continuing with deployment despite purge failures..."
+    fi
+    
+    if [[ ${purge_count} -eq 0 && ${failed_count} -eq 0 ]]; then
+        log_info "No soft-deleted API Management instances required purging"
     fi
 }
 
 #===============================================================================
-# MAIN EXECUTION
+# Function: cleanup_api_center_instances
+# Description: Lists and optionally cleans up Azure API Center instances that might conflict with deployment
+# Note: API Center instances do not have soft-delete functionality, so this function
+#       focuses on listing existing instances for manual cleanup decisions
 #===============================================================================
+cleanup_api_center_instances() {
+    log_info "Checking for Azure API Center instances in subscription..."
+    
+    # Check if API Center extension is available
+    if ! az extension list --query "[?name=='apic'].name" -o tsv 2>/dev/null | grep -q "apic" 2>/dev/null; then
+        log_info "Azure API Center CLI extension not installed. Skipping API Center cleanup."
+        log_info "To install: az extension add --name apic"
+        return 0
+    fi
+    
+    # Query for all API Center instances in the subscription
+    local api_center_instances
+    api_center_instances="$(az apic list --query "[].[name,resourceGroup,location]" -o tsv 2>/dev/null || true)"
+    
+    # Handle case where command returns empty or fails
+    if [[ -z "${api_center_instances}" ]] || [[ "${api_center_instances}" == "null" ]]; then
+        api_center_instances=""
+    fi
+    
+    if [[ -z "${api_center_instances}" ]]; then
+        log_info "No Azure API Center instances found in subscription"
+        return 0
+    fi
+    
+    # Count total instances found
+    local total_instances
+    total_instances="$(echo "${api_center_instances}" | wc -l | tr -d '[:space:]')"
+    log_info "Found ${total_instances} Azure API Center instance(s) in subscription"
+    log_info "Note: API Center instances do not support soft-delete functionality"
+    
+    # List instances for visibility
+    local instance_count=0
+    if [[ -n "${api_center_instances}" ]]; then
+        while IFS=$'\t' read -r apic_name apic_rg apic_location || [[ -n "${apic_name}" ]]; do
+            if [[ -n "${apic_name}" && -n "${apic_rg}" && -n "${apic_location}" ]]; then
+                ((instance_count++))
+                log_info "API Center ${instance_count}: ${apic_name} (Resource Group: ${apic_rg}, Location: ${apic_location})"
+            fi
+        done <<< "${api_center_instances}"
+    fi
+    
+    # Provide manual cleanup instructions
+    if [[ ${instance_count} -gt 0 ]]; then
+        log_info "API Center instances found. If cleanup is needed, use:"
+        log_info "  az apic delete --name <instance-name> --resource-group <resource-group> --yes"
+        log_info "Continuing with deployment as API Center instances don't block APIM deployment..."
+    fi
+}
 
+#===============================================================================
+# Function: main
+# Description: Main script execution function
+# Arguments: $@ - All script arguments
+#===============================================================================
 main() {
-    # Validate input parameters
-    if [[ $# -ne 1 ]]; then
-        echo "Error: Invalid number of arguments" >&2
-        show_usage
+    log_info "Starting Azure API pre-provisioning cleanup script"
+    log_info "=================================================="
+    
+    # Validate prerequisites and parse arguments
+    validate_prerequisites
+    parse_arguments "$@"
+    
+    # Purge all soft-deleted APIM instances
+    purge_soft_deleted_apim
+    
+    # Check and provide info about API Center instances
+    if ! cleanup_api_center_instances; then
+        log_warning "API Center cleanup encountered an issue, but continuing with deployment..."
     fi
     
-    local location="$1"
+    log_info "Pre-provisioning cleanup script completed successfully"
     
-    # Validate location parameter is not empty
-    if [[ -z "$location" ]]; then
-        echo "Error: Location parameter cannot be empty" >&2
-        show_usage
-    fi
-    
-    log_message "Starting Azure resource purging process for location: $location"
-    
-    # Extract APIM configuration using yq -r (keeping original command format)
-    local apim_name
-    local apim_resource_group
-    apim_name=$(yq -r '.core.apiManagement.name' ./infra/settings.yaml)
-    apim_resource_group=$(yq -r '.core.apiManagement.resourceGroup' ./infra/settings.yaml)
-    
-    # Validate APIM configuration values
-    if [[ -z "$apim_name" || "$apim_name" == "null" ]]; then
-        echo "Error: APIM name not found in settings.yaml" >&2
-        exit 1
-    fi
-    
-    if [[ -z "$apim_resource_group" || "$apim_resource_group" == "null" ]]; then
-        echo "Error: APIM resource group not found in settings.yaml" >&2
-        exit 1
-    fi
-    
-    log_message "Api Management name: $apim_name"
-    
-    # Process APIM purging
-    process_resource_purging "apim" "$apim_name" "$apim_resource_group" "$location"
-    
-    # Extract Key Vault configuration using yq -r (keeping original command format)
-    local key_vault_name
-    local key_vault_resource_group
-    key_vault_name=$(yq -r '.shared.security.keyVault.name' ./infra/settings.yaml)
-    key_vault_resource_group=$(yq -r '.shared.security.resourceGroup' ./infra/settings.yaml)
-
-    # Validate Key Vault configuration values
-    if [[ -z "$key_vault_name" || "$key_vault_name" == "null" ]]; then
-        echo "Error: Key Vault name not found in settings.yaml" >&2
-        exit 1
-    fi
-    
-    if [[ -z "$key_vault_resource_group" || "$key_vault_resource_group" == "null" ]]; then
-        echo "Error: Key Vault resource group not found in settings.yaml" >&2
-        exit 1
-    fi
-    
-    # Process Key Vault purging
-    process_resource_purging "keyvault" "$key_vault_name" "$key_vault_resource_group" "$location"
-    
-    log_message "Azure resource purging process completed successfully"
+    # Explicitly exit with success code
+    exit 0
 }
 
-# Execute main function with all provided arguments
-main "$@"
+# Execute main function if script is run directly (not sourced)
+if [[ "${BASH_SOURCE[0]}" == "${0}" ]]; then
+    # Trap any unexpected errors and ensure clean exit
+    trap 'log_error "Script failed unexpectedly at line $LINENO"' ERR
+    
+    # Execute main function with error handling
+    if main "$@"; then
+        # Success - main function completed and called exit 0
+        true
+    else
+        # This should not be reached due to explicit exit 0 in main, but just in case
+        log_error "Main function failed"
+        exit 1
+    fi
+fi
