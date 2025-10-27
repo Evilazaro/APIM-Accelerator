@@ -18,7 +18,7 @@ resource apim 'Microsoft.ApiManagement/service@2024-10-01-preview' = {
   name: apimName
   location: location
   sku: {
-    name: 'Developer'
+    name: 'Premium'
     capacity: 1
   }
   identity: {
