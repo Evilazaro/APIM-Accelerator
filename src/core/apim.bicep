@@ -114,29 +114,21 @@ resource diagnosticSettings 'Microsoft.Insights/diagnosticSettings@2021-05-01-pr
     ]
     logs: [
       {
-        category: 'allLogs'
+        categoryGroup: 'allLogs'
         enabled: true
       }
     ]
   }
 }
 
-resource appInsightsDiagnostic 'Microsoft.ApiManagement/service/diagnostics@2024-10-01-preview' = {
-  name: 'name'
-  parent: apim
-  properties: {
-    loggerId: logAnalyticsWorkspaceId
-  }
-}
-
 resource appInsightsLogger 'Microsoft.ApiManagement/service/loggers@2024-10-01-preview' = {
-  name: 'looger'
+  name: '${apim.name}-appinsights'
   parent: apim
   properties: {
     loggerType: 'applicationInsights'
     resourceId: ApplicationInsightsResourceId
     credentials: {
-      instrumentationKey: reference(ApplicationInsightsResourceId, '2020-02-02').properties.InstrumentationKey
+      instrumentationKey: reference(ApplicationInsightsResourceId, '2020-02-02').InstrumentationKey
     }
   }
 }
