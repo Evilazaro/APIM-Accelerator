@@ -53,6 +53,5 @@ type Monitoring = {
 @export()
 type Shared = {
   monitoring: Monitoring
-  inventory: Inventory
   tags: object
 }

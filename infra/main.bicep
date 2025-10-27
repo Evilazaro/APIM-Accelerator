@@ -6,12 +6,13 @@ param location string
 var settings = loadYamlContent('settings.yaml')
 var corePlatformSettings = settings.core
 var sharedSettings = settings.shared
+var inventorySettings = settings.inventory
 
 var envTags = {
   environment: envName
 }
 
-var commonTags = union( settings.shared.tags, envTags)
+var commonTags = union(settings.shared.tags, envTags)
 
 var rgName = '${settings.solutionName}-${envName}-${location}-rg'
 
@@ -48,5 +49,19 @@ module corePlatform '../src/core/main.bicep' = {
   }
   dependsOn: [
     sharedComponents
+  ]
+}
+
+module inventory '../src/inventory/main.bicep' = {
+  name: 'deploy-inventory-components'
+  scope: rg
+  params: {
+    solutionName: settings.solutionName
+    location: location
+    inventorySettings: inventorySettings
+    tags: sharedSettings.tags
+  }
+  dependsOn: [
+    corePlatform
   ]
 }

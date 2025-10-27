@@ -1,4 +1,4 @@
-import { Inventory } from '../common-types.bicep'
+import { Inventory } from '../shared/common-types.bicep'
 param solutionName string
 param location string = 'eastus'
 param inventorySettings Inventory
@@ -14,7 +14,7 @@ resource apiCenter 'Microsoft.ApiCenter/services@2024-06-01-preview' = {
   name: apiCenterName
   location: location
   tags: tags
-  sku:{
+  sku: {
     name: 'Standard'
   }
   identity: (apiCenterSettings.identity.type != 'None')

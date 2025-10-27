@@ -13,15 +13,6 @@ shared:
     tags:
       lz-component-type: "shared"
       component: "monitoring"
-  inventory:
-    apiCenter:
-      name: ""
-      identity:
-        type: "SystemAssigned"
-        userAssignedIdentities: []
-    tags:
-      lz-component-type: "shared"
-      component: "inventory"
     
   tags:
     CostCenter: "CC-1234" # Tracks cost allocation
@@ -57,3 +48,13 @@ core:
   tags:
       lz-component-type: "core"
       component: "apiManagement"
+
+inventory:
+  apiCenter:
+    name: ""
+    identity:
+      type: "SystemAssigned"
+      userAssignedIdentities: []
+  tags:
+    lz-component-type: "shared"
+    component: "inventory"
