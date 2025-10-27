@@ -57,7 +57,6 @@ module inventory '../src/inventory/main.bicep' = {
   scope: resourceGroup(rgName)
   params: {
     solutionName: settings.solutionName
-    location: location
     inventorySettings: inventorySettings
     apiManagementName: core.outputs.API_MANAGEMENT_NAME
     apiManagementResourceId: core.outputs.API_MANAGEMENT_RESOURCE_ID
