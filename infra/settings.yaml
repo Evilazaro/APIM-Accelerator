@@ -1,0 +1,14 @@
+shared:
+  monitoring:
+    logAnalytics:
+      name: "apim-accelerator-law"
+      workSpaceResourceId: ""
+      identity:
+        type: "SystemAssigned"
+        userAssignedIdentities: []
+    applicationInsights:
+      name: "apim-accelerator-ai"
+      logAnalyticsWorkspaceResourceId: ""
+    tags:
+      component-type: "shared"
+      component: "monitoring"
