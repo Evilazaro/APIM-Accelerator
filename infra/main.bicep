@@ -38,7 +38,7 @@ output APPLICATION_INSIGHTS_INSTRUMENTATION_KEY string = sharedComponents.output
 
 module corePlatform '../src/core/main.bicep' = {
   name: 'deploy-core-platform'
-  scope: rg
+  scope: resourceGroup(rgName)
   params: {
     solutionName: settings.solutionName
     location: location
@@ -54,11 +54,13 @@ module corePlatform '../src/core/main.bicep' = {
 
 module inventory '../src/inventory/main.bicep' = {
   name: 'deploy-inventory-components'
-  scope: rg
+  scope: resourceGroup(rgName)
   params: {
     solutionName: settings.solutionName
     location: location
     inventorySettings: inventorySettings
+    apiManagementName: corePlatform.outputs.API_MANAGEMENT_NAME
+    apiManagementResourceId: corePlatform.outputs.API_MANAGEMENT_RESOURCE_ID
     tags: sharedSettings.tags
   }
   dependsOn: [

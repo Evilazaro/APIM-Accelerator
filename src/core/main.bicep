@@ -29,6 +29,9 @@ module apim 'apim.bicep' = {
   }
 }
 
+output API_MANAGEMENT_RESOURCE_ID string = apim.outputs.API_MANAGEMENT_RESOURCE_ID
+output API_MANAGEMENT_NAME string = apim.outputs.API_MANAGEMENT_NAME
+
 module workspaces 'workspaces.bicep' = [
   for item in apiManagementSettings.workspaces: {
     name: item.name
