@@ -56,17 +56,17 @@ output AZURE_API_MANAGEMENT_GATEWAY_URL string = core.outputs.AZURE_API_MANAGEME
 output AZURE_API_MANAGEMENT_MANAGEMENT_API_URL string = core.outputs.AZURE_API_MANAGEMENT_MANAGEMENT_API_URL
 
 
-// module inventory '../src/shared/resources/inventory/main.bicep' = {
-//   name: 'deploy-inventory'
-//   scope: resourceGroup
-//   params: {
-//     solutionName: settings.solutionName
-//     location: location
-//     apiManagementName: core.outputs.AZURE_API_MANAGEMENT_NAME
-//     apiManagementResourceId: core.outputs.AZURE_API_MANAGEMENT_ID
-//     tags: settings.tags
-//   }
-// }
+module inventory '../src/shared/resources/inventory/main.bicep' = {
+  name: 'deploy-inventory'
+  scope: resourceGroup
+  params: {
+    solutionName: settings.solutionName
+    location: location
+    apiManagementName: core.outputs.AZURE_API_MANAGEMENT_NAME
+    apiManagementResourceId: core.outputs.AZURE_API_MANAGEMENT_ID
+    tags: settings.tags
+  }
+}
 
-// output AZURE_API_CENTER_ID string = inventory.outputs.AZURE_API_CENTER_ID
-// output AZURE_API_CENTER_NAME string = inventory.outputs.AZURE_API_CENTER_NAME
+output AZURE_API_CENTER_ID string = inventory.outputs.AZURE_API_CENTER_ID
+output AZURE_API_CENTER_NAME string = inventory.outputs.AZURE_API_CENTER_NAME

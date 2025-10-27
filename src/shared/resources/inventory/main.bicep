@@ -7,17 +7,6 @@ param apiManagementName string
 param apiManagementResourceId string
 param tags object
 
-@description('The type of the API to register in the API center.')
-@allowed([
-  'rest'
-  'soap'
-  'graphql'
-  'grpc'
-  'webhook'
-  'websocket'
-])
-param apiType string = 'rest'
-
 var apiCenterName = '${solutionName}-${uniqueString(subscription().id, resourceGroup().id, resourceGroup().name, solutionName,location)}-apicenter'
 
 resource apiCenterService 'Microsoft.ApiCenter/services@2024-03-01' = {
@@ -36,6 +25,21 @@ resource apiCenterService 'Microsoft.ApiCenter/services@2024-03-01' = {
 output AZURE_API_CENTER_ID string = apiCenterService.id
 output AZURE_API_CENTER_NAME string = apiCenterService.name
 
+var apiCenterSchema = loadTextContent('api.schema.json')
+
+resource metadata 'Microsoft.ApiCenter/services/metadataSchemas@2024-06-01-preview' = {
+  parent: apiCenterService
+  name: 'default'
+  properties: {
+    schema: apiCenterSchema
+    assignedTo: [
+      {
+        entity: 'api'
+        required: true
+      }
+    ]
+  }
+}
 var roles = [
   '71522526-b88f-4d52-b57f-d31fc3546d0d'
 ]
