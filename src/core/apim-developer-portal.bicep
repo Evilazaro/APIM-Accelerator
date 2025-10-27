@@ -37,13 +37,15 @@ resource apimIdentityProvider 'Microsoft.ApiManagement/service/identityProviders
   }
 }
 
-resource devPortalConfig 'Microsoft.ApiManagement/service/portalconfigs@2024-10-01-preview' = {
-  name: 'devPortalConfig'
+resource devPortalConfig 'Microsoft.ApiManagement/service/portalconfigs@2023-05-01-preview' = {
+  name: 'default'
   parent: apim
   properties: {
     cors: {
       allowedOrigins: [
-        '*'
+        '${apim.properties.developerPortalUrl}'
+        '${apim.properties.gatewayUrl}'
+        '${apim.properties.managementApiUrl}'
       ]
     }
   }
@@ -74,15 +76,3 @@ resource devPortalSignUpSetting 'Microsoft.ApiManagement/service/portalsettings@
   }
 }
 
-resource developerPortalDelegationSetting 'Microsoft.ApiManagement/service/portalsettings@2024-06-01-preview' = {
-  parent: apim
-  name: 'delegation'
-  properties: {
-    subscriptions: {
-      enabled: false
-    }
-    userRegistration: {
-      enabled: false
-    }
-  }
-}

@@ -51,19 +51,22 @@ output AZURE_CLIENT_SECRET_NAME string = core.outputs.AZURE_CLIENT_SECRET_NAME
 output AZURE_CLIENT_SECRET_PRINCIPAL_ID string = core.outputs.AZURE_CLIENT_SECRET_PRINCIPAL_ID
 output AZURE_CLIENT_SECRET_CLIENT_ID string = core.outputs.AZURE_CLIENT_SECRET_CLIENT_ID
 output AZURE_API_MANAGEMENT_IDENTITY_PRINCIPAL_ID string = core.outputs.AZURE_API_MANAGEMENT_IDENTITY_PRINCIPAL_ID
+output AZURE_API_MANAGEMENT_DEVELOPER_PORTAL_URL string = core.outputs.AZURE_API_MANAGEMENT_DEVELOPER_PORTAL_URL
+output AZURE_API_MANAGEMENT_GATEWAY_URL string = core.outputs.AZURE_API_MANAGEMENT_GATEWAY_URL
+output AZURE_API_MANAGEMENT_MANAGEMENT_API_URL string = core.outputs.AZURE_API_MANAGEMENT_MANAGEMENT_API_URL
 
 
-module inventory '../src/shared/resources/inventory/main.bicep' = {
-  name: 'deploy-inventory'
-  scope: resourceGroup
-  params: {
-    solutionName: settings.solutionName
-    location: location
-    apiManagementName: core.outputs.AZURE_API_MANAGEMENT_NAME
-    apiManagementResourceId: core.outputs.AZURE_API_MANAGEMENT_ID
-    tags: settings.tags
-  }
-}
+// module inventory '../src/shared/resources/inventory/main.bicep' = {
+//   name: 'deploy-inventory'
+//   scope: resourceGroup
+//   params: {
+//     solutionName: settings.solutionName
+//     location: location
+//     apiManagementName: core.outputs.AZURE_API_MANAGEMENT_NAME
+//     apiManagementResourceId: core.outputs.AZURE_API_MANAGEMENT_ID
+//     tags: settings.tags
+//   }
+// }
 
-output AZURE_API_CENTER_ID string = inventory.outputs.AZURE_API_CENTER_ID
-output AZURE_API_CENTER_NAME string = inventory.outputs.AZURE_API_CENTER_NAME
+// output AZURE_API_CENTER_ID string = inventory.outputs.AZURE_API_CENTER_ID
+// output AZURE_API_CENTER_NAME string = inventory.outputs.AZURE_API_CENTER_NAME
