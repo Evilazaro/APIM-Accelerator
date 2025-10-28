@@ -46,7 +46,13 @@ param tags object
 //==============================================================================
 
 @description('Unique suffix for resource naming consistency across deployments')
-var uniqueSuffix = generateUniqueSuffix(subscription().id, resourceGroup().id, resourceGroup().name, solutionName, location)
+var uniqueSuffix = generateUniqueSuffix(
+  subscription().id,
+  resourceGroup().id,
+  resourceGroup().name,
+  solutionName,
+  location
+)
 
 // Resource naming suffixes following organizational standards
 @description('Standard suffix for Log Analytics workspace naming')
@@ -57,7 +63,9 @@ var applicationInsightsSuffix = 'ai'
 
 // Resource naming logic with fallback to generated names
 @description('Log Analytics workspace name with fallback to generated name if not specified in configuration')
-var logAnalyticsWorkspaceName = monitoringSettings.logAnalytics.name ?? '${solutionName}-${uniqueSuffix}-${logAnalyticsWorkspaceSuffix}'
+var logAnalyticsWorkspaceName = (!empty(monitoringSettings.logAnalytics.name)
+  ? monitoringSettings.logAnalytics.name
+  : '${solutionName}-${uniqueSuffix}-${logAnalyticsWorkspaceSuffix}')
 
 //==============================================================================
 // OPERATIONAL MONITORING DEPLOYMENT
@@ -93,7 +101,9 @@ output AZURE_STORAGE_ACCOUNT_ID string = operational.outputs.AZURE_STORAGE_ACCOU
 //==============================================================================
 
 @description('Application Insights instance name with fallback to generated name if not specified')
-var appInsightsName = monitoringSettings.applicationInsights.name ?? '${solutionName}-${uniqueSuffix}-${applicationInsightsSuffix}'
+var appInsightsName = (!empty(monitoringSettings.applicationInsights.name)
+  ? monitoringSettings.applicationInsights.name
+  : '${solutionName}-${uniqueSuffix}-${applicationInsightsSuffix}')
 
 @description('Application Insights instance for application performance monitoring and telemetry')
 module insights 'insights/main.bicep' = {

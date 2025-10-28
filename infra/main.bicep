@@ -47,8 +47,8 @@ targetScope = 'subscription'
 // PARAMETERS
 //==============================================================================
 
-@description('Environment name (dev, test, staging, prod) - determines resource sizing and configuration')
-@allowed(['dev', 'test', 'staging', 'prod'])
+@description('Environment name (dev, test, staging, prod, uat) - determines resource sizing and configuration')
+@allowed(['dev', 'test', 'staging', 'prod', 'uat'])
 param envName string
 
 @description('Azure region where all resources will be deployed - must support API Management Premium tier')

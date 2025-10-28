@@ -62,7 +62,9 @@ var uniqueSuffix = generateUniqueSuffix(subscription().id, resourceGroup().id, r
 var apimSuffix = 'apim'
 
 @description('API Management service name with fallback to generated name if not specified')
-var apimName = apiManagementSettings.name ?? '${solutionName}-${uniqueSuffix}-${apimSuffix}'
+var apimName = (!empty(apiManagementSettings.name)
+  ? apiManagementSettings.name
+  : '${solutionName}-${uniqueSuffix}-${apimSuffix}')
 
 //==============================================================================
 // API MANAGEMENT SERVICE DEPLOYMENT

@@ -56,7 +56,9 @@ var apiCenterContributorRoleId = '6cba8790-29c5-48e5-bab1-c7541b01cb04'
 var apiCenterSettings = inventorySettings.apiCenter
 
 // Generate unique API Center name with fallback logic
-var apiCenterName = apiCenterSettings.name ?? '${solutionName}-${apiCenterSuffix}-${uniqueString(resourceGroup().id)}'
+var apiCenterName = (!empty(apiCenterSettings.name)
+  ? apiCenterSettings.name
+  : '${solutionName}-${apiCenterSuffix}')
 
 // =================================================================
 // AZURE API CENTER SERVICE
