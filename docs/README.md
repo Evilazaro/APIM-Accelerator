@@ -5,50 +5,14 @@ Welcome to the Azure API Management Accelerator documentation! This comprehensiv
 ## 📚 Documentation Structure
 
 ### 🚀 [Getting Started](getting-started/)
-Perfect for newcomers and quick deployment scenarios.
+Essential guides for deploying and configuring the accelerator.
 
-- **[Prerequisites](getting-started/prerequisites.md)** - Required tools, permissions, and setup
-- **[Quick Start](getting-started/quick-start.md)** - Deploy your first APIM platform in minutes
-- **[Installation Guide](getting-started/installation.md)** - Detailed installation instructions
-- **[Configuration Basics](getting-started/configuration.md)** - Essential configuration concepts
-
-### 📖 [User Guide](user-guide/)
-Comprehensive guides for using and customizing the accelerator.
-
-- **[Features Overview](user-guide/features.md)** - Complete feature set and capabilities
-- **[Configuration Reference](user-guide/configuration.md)** - Detailed settings.yaml reference
-- **[Deployment Options](user-guide/deployment.md)** - Different ways to deploy the accelerator
-- **[Security Configuration](user-guide/security.md)** - Security best practices and setup
-- **[Monitoring & Observability](user-guide/monitoring.md)** - Logging, metrics, and alerting
-- **[Examples & Tutorials](user-guide/examples/)** - Step-by-step scenarios and use cases
+- **[Prerequisites](getting-started/prerequisites.md)** - Required tools, permissions, and setup requirements
 
 ### 🏗️ [Architecture](architecture/)
-Deep dive into the design principles and architecture.
+Deep dive into the design principles and current architecture.
 
-- **[Overview](architecture/overview.md)** - High-level architecture and design principles  
-- **[Landing Zone Alignment](architecture/landing-zones.md)** - How this aligns with Azure Landing Zones
-- **[Component Architecture](architecture/components.md)** - Detailed component breakdown
-- **[Security Model](architecture/security.md)** - Security architecture and controls
-- **[Network Design](architecture/networking.md)** - Network topology and connectivity patterns
-- **[Data Flow](architecture/data-flow.md)** - How data flows through the system
-
-### 👩‍💻 [Developer Guide](developer-guide/)
-For contributors and those extending the accelerator.
-
-- **[Development Setup](developer-guide/development-setup.md)** - Set up your development environment
-- **[Template Structure](developer-guide/template-structure.md)** - Understanding the Bicep structure
-- **[Customization Guide](developer-guide/customization.md)** - How to customize and extend
-- **[Testing Guide](developer-guide/testing.md)** - Testing strategies and best practices
-- **[Contributing](developer-guide/contributing.md)** - How to contribute to the project
-
-### 🔧 [Troubleshooting](troubleshooting/)
-Solutions to common issues and problems.
-
-- **[Common Issues](troubleshooting/common-issues.md)** - Frequently encountered problems
-- **[Deployment Errors](troubleshooting/deployment-errors.md)** - Deployment-specific troubleshooting
-- **[Configuration Issues](troubleshooting/configuration.md)** - Configuration-related problems
-- **[Performance Issues](troubleshooting/performance.md)** - Performance tuning and optimization
-- **[FAQ](troubleshooting/faq.md)** - Frequently asked questions
+- **[Overview](architecture/overview.md)** - High-level architecture, design principles, and current implementation
 
 ### 📑 [Reference](reference/)
 Technical reference materials and specifications.
@@ -57,36 +21,40 @@ Technical reference materials and specifications.
 - **[Bicep Module Reference](reference/bicep-modules.md)** - All Bicep modules and their parameters
 - **[Azure Resources](reference/azure-resources.md)** - Complete list of Azure resources created
 - **[RBAC & Permissions](reference/permissions.md)** - Required permissions and role assignments
-- **[API Reference](reference/api-reference.md)** - API Management specific configurations
-- **[Glossary](reference/glossary.md)** - Terms and definitions
 
 ## 🎯 Quick Navigation
 
 ### I want to...
-- **Get started quickly** → [Quick Start Guide](getting-started/quick-start.md)
+- **Get started quickly** → [Prerequisites Guide](getting-started/prerequisites.md)
 - **Understand the architecture** → [Architecture Overview](architecture/overview.md)
-- **Configure for production** → [Configuration Reference](user-guide/configuration.md)
-- **Customize the templates** → [Customization Guide](developer-guide/customization.md)
-- **Troubleshoot an issue** → [Common Issues](troubleshooting/common-issues.md)
+- **Configure the deployment** → [Settings Schema Reference](reference/settings-schema.md)
+- **Understand the Bicep templates** → [Bicep Module Reference](reference/bicep-modules.md)
+- **See what resources are created** → [Azure Resources Reference](reference/azure-resources.md)
+- **Understand permissions** → [RBAC & Permissions Guide](reference/permissions.md)
 - **Contribute to the project** → [Contributing Guide](../CONTRIBUTING.md)
 
 ### By Role
-- **Platform Engineers** → [Architecture](architecture/) + [Configuration](user-guide/configuration.md)
-- **Developers** → [Getting Started](getting-started/) + [Examples](user-guide/examples/)
-- **DevOps Engineers** → [Deployment Options](user-guide/deployment.md) + [Troubleshooting](troubleshooting/)
-- **Security Engineers** → [Security Configuration](user-guide/security.md) + [Security Model](architecture/security.md)
-- **Contributors** → [Developer Guide](developer-guide/) + [Contributing](../CONTRIBUTING.md)
+- **Platform Engineers** → [Architecture Overview](architecture/overview.md) + [Settings Schema](reference/settings-schema.md)
+- **Developers** → [Getting Started](getting-started/prerequisites.md) + [Bicep Modules](reference/bicep-modules.md)
+- **DevOps Engineers** → [Azure Resources](reference/azure-resources.md) + [Permissions](reference/permissions.md)
+- **Security Engineers** → [Permissions Guide](reference/permissions.md) + [Architecture Overview](architecture/overview.md)
+- **Contributors** → [Bicep Module Reference](reference/bicep-modules.md) + [Contributing Guide](../CONTRIBUTING.md)
 
 ## 📊 Documentation Status
 
 | Section | Status | Last Updated |
 |---------|--------|--------------|
-| Getting Started | ✅ Complete | 2025-01-15 |
-| User Guide | ✅ Complete | 2025-01-15 |
-| Architecture | ✅ Complete | 2025-01-15 |
-| Developer Guide | ✅ Complete | 2025-01-15 |
-| Troubleshooting | ✅ Complete | 2025-01-15 |
-| Reference | ✅ Complete | 2025-01-15 |
+| Getting Started | ✅ Complete | 2025-10-28 |
+| Architecture | ✅ Complete | 2025-10-28 |
+| Reference | ✅ Complete | 2025-10-28 |
+
+### Available Documentation
+- **Prerequisites Guide** - All tools, permissions, and setup requirements
+- **Architecture Overview** - Complete architectural design and implementation details
+- **Settings Schema Reference** - Comprehensive configuration file documentation
+- **Bicep Module Reference** - All modules, parameters, and usage patterns
+- **Azure Resources Reference** - Complete inventory of deployed resources
+- **RBAC & Permissions Guide** - Security configuration and access control
 
 ## 🤝 Contributing to Documentation
 
@@ -127,6 +95,6 @@ If you can't find what you're looking for in the documentation:
 
 ---
 
-**Last Updated:** January 15, 2025  
-**Version:** 1.0.0  
-**Maintainers:** [Azure APIM Accelerator Team](mailto:cloudops@contoso.com)
+**Last Updated:** October 28, 2025  
+**Version:** 2.0.0  
+**Maintainers:** [Azure APIM Accelerator Team](mailto:evilazaro@gmail.com)

@@ -6,55 +6,47 @@ The Azure API Management Accelerator follows Azure Landing Zone design principle
 
 ```mermaid
 graph TB
-    subgraph "Azure Landing Zone"
-        subgraph "Connectivity"
-            VNet[Virtual Network]
-            NSG[Network Security Groups]
-            PE[Private Endpoints]
-        end
-        
-        subgraph "Identity"
-            MI[Managed Identities]
-            RBAC[Role Assignments]
+    subgraph "Azure Landing Zone Design Areas"
+        subgraph "Identity & Access"
+            MI[System Managed Identities]
+            RBAC[RBAC Assignments]
             AAD[Azure Active Directory]
         end
         
-        subgraph "Security"
-            KV[Key Vault]
-            Policies[Security Policies]
-        end
-        
-        subgraph "Management"
-            LA[Log Analytics]
+        subgraph "Management & Monitoring"
+            LA[Log Analytics Workspace]
             AI[Application Insights]
-            Monitor[Azure Monitor]
+            SA[Storage Account]
+            Diag[Diagnostic Settings]
         end
         
         subgraph "Governance"
-            Tags[Resource Tags]
-            RG[Resource Groups]
-            Compliance[Policy Compliance]
+            Tags[Resource Tagging]
+            RG[Single Resource Group]
+            Config[Centralized Configuration]
         end
     end
     
-    subgraph "Core Platform"
-        APIM[API Management]
+    subgraph "Core APIM Platform"
+        APIM[API Management Service]
         DevPortal[Developer Portal]
-        Workspaces[Workspaces]
+        Workspaces[APIM Workspaces]
+        Logger[App Insights Logger]
     end
     
-    subgraph "Inventory"
-        APICenter[API Center]
-        Catalog[API Catalog]
+    subgraph "API Inventory & Governance"
+        APICenter[API Center Service]
+        APIWorkspace[API Center Workspace]
+        APISource[API Source Registration]
     end
     
-    VNet --> APIM
     MI --> APIM
-    KV --> APIM
     LA --> APIM
-    AI --> APIM
+    AI --> Logger
+    SA --> Diag
     APIM --> APICenter
     AAD --> DevPortal
+    APIM --> APISource
 ```
 
 ## 🎯 Design Principles
@@ -62,13 +54,13 @@ graph TB
 ### Landing Zone Alignment
 This accelerator implements all five Azure Landing Zone design areas:
 
-| Design Area | Implementation | Benefits |
-|-------------|----------------|----------|
-| **Identity & Access** | Managed identities, RBAC | Secure, credential-free access |
-| **Network Topology** | VNet integration, private endpoints | Network isolation and security |
-| **Security** | Key Vault, NSGs, monitoring | Defense in depth |
-| **Management** | Centralized logging and monitoring | Operational excellence |
-| **Governance** | Resource tagging, policy compliance | Cost management and compliance |
+| Design Area | Current Implementation | Benefits |
+|-------------|----------------------|----------|
+| **Identity & Access** | System-assigned managed identities, automated RBAC assignments | Secure, credential-free service authentication |
+| **Network Topology** | Public by default, VNet integration configurable | Flexible deployment options (public/private) |
+| **Security** | Diagnostic logging, managed identities, HTTPS by default | Defense in depth without complexity |
+| **Management** | Log Analytics workspace, Application Insights integration | Comprehensive observability and monitoring |
+| **Governance** | Consistent resource tagging, centralized configuration | Cost tracking and operational governance |
 
 ### Core Principles
 
@@ -147,29 +139,35 @@ graph TB
 
 ### Shared Infrastructure Layer
 
-#### Connectivity Components
+#### Connectivity Architecture (Current Implementation)
 ```mermaid
 graph TB
-    subgraph "Virtual Network"
-        subgraph "APIM Subnet"
-            APIM[API Management]
-        end
-        
-        subgraph "App Gateway Subnet"
-            AGW[Application Gateway]
-        end
-        
-        subgraph "Private Endpoint Subnet"
-            PE1[KV Private Endpoint]
-            PE2[Storage Private Endpoint]
-        end
+    subgraph "Public Deployment (Default)"
+        Internet[Internet]
+        APIM[API Management Service]
+        DevPortal[Developer Portal]
     end
     
-    NSG1[APIM NSG] --> APIM
-    NSG2[AGW NSG] --> AGW
-    NSG3[PE NSG] --> PE1
-    NSG3 --> PE2
+    subgraph "Optional VNet Integration"
+        VNet[Virtual Network]
+        Subnet[APIM Subnet]
+        NSG[Network Security Group]
+    end
+    
+    subgraph "Configurable Options"
+        Internal[Internal VNet Mode]
+        External[External VNet Mode]
+        None[Public Mode - Default]
+    end
+    
+    Internet --> APIM
+    Internet --> DevPortal
+    VNet -.-> APIM
+    Subnet -.-> APIM
+    NSG -.-> Subnet
 ```
+
+**Note**: Networking components are configurable but not deployed by default. The accelerator supports public deployment (default) with optional VNet integration for private scenarios.
 
 #### Identity & Access Management
 ```mermaid
@@ -197,27 +195,39 @@ graph LR
     Users --> RBAC
 ```
 
-#### Security Layer
+#### Security Architecture (Current Implementation)
 ```mermaid
 graph TB
-    subgraph "Key Vault"
-        Secrets[Secrets]
-        Keys[Keys]
-        Certs[Certificates]
+    subgraph "Identity Security"
+        MSI[System Managed Identities]
+        RBAC[Automated RBAC Assignments]
+        AAD[Azure AD Integration]
     end
     
-    subgraph "Network Security"
-        NSGs[Network Security Groups]
-        PE[Private Endpoints]
-        FW[Firewall Rules]
+    subgraph "Data Security"
+        HTTPS[HTTPS by Default]
+        Encryption[Encryption in Transit]
+        Diag[Diagnostic Logging]
     end
     
     subgraph "Access Control"
-        RBAC[Role-Based Access]
-        Policies[Azure Policies]
-        CAP[Conditional Access]
+        Reader[Reader Role - APIM]
+        APICenterReader[API Center Reader]
+        APICenterContrib[API Center Contributor]
     end
+    
+    MSI --> RBAC
+    RBAC --> Reader
+    RBAC --> APICenterReader
+    RBAC --> APICenterContrib
+    AAD --> DevPortalAuth[Developer Portal Auth]
 ```
+
+**Security Features**:
+- **No Stored Secrets**: All authentication uses managed identities
+- **Least Privilege**: Minimal required permissions automatically assigned
+- **Comprehensive Logging**: All operations logged to Log Analytics
+- **Default Encryption**: HTTPS enforced, data encrypted in transit
 
 #### Monitoring & Observability
 ```mermaid
@@ -334,46 +344,50 @@ sequenceDiagram
     APIM->>Monitor: Telemetry Data
 ```
 
-### Monitoring Data Flow
+### Monitoring Data Flow (Current Implementation)
 ```mermaid
 graph LR
     subgraph "Data Sources"
         APIM[API Management]
-        KV[Key Vault]
-        VNet[Virtual Network]
-        NSG[Network Security Groups]
+        APICenter[API Center]
+        LAW[Log Analytics Workspace]
+        SA[Storage Account]
     end
     
-    subgraph "Collection"
-        Diag[Diagnostic Settings]
+    subgraph "Collection & Processing"
+        DiagSettings[Diagnostic Settings]
+        AILogger[App Insights Logger]
         Metrics[Azure Metrics]
     end
     
-    subgraph "Storage"
-        LA[Log Analytics]
-        Storage[Storage Account]
+    subgraph "Storage & Analysis"
+        LA[Log Analytics Workspace]
         AI[Application Insights]
+        Storage[Storage Account Archive]
     end
     
     subgraph "Consumption"
-        Dashboards[Dashboards]
-        Alerts[Alerts]
-        Reports[Reports]
+        Portal[Azure Portal]
+        Workbooks[Azure Workbooks]
+        Alerts[Alert Rules]
+        Queries[KQL Queries]
     end
     
-    APIM --> Diag
-    KV --> Diag
-    VNet --> Diag
-    NSG --> Diag
+    APIM --> DiagSettings
+    APIM --> AILogger
+    APICenter --> DiagSettings
     
-    Diag --> LA
-    Diag --> Storage
+    DiagSettings --> LA
+    DiagSettings --> Storage
+    AILogger --> AI
     Metrics --> AI
     
-    LA --> Dashboards
-    AI --> Dashboards
+    LA --> Portal
+    AI --> Portal
+    LA --> Workbooks
+    AI --> Workbooks
     LA --> Alerts
-    AI --> Alerts
+    LA --> Queries
 ```
 
 ## 🚀 Deployment Architecture
@@ -467,26 +481,50 @@ graph TB
 
 ## 📊 Scalability Considerations
 
-### Horizontal Scaling
-- **API Management Units**: Scale processing capacity
-- **Regional Deployment**: Multi-region for global reach
-- **Workspace Isolation**: Separate environments and teams
-- **Backend Integration**: Load balancing to backend services
+### Current Scaling Options
 
-### Vertical Scaling
-- **SKU Tiers**: Basic → Standard → Premium
-- **Feature Scaling**: Add capabilities as needed
-- **Storage Scaling**: Increase log retention and storage
-- **Monitoring Scaling**: Enhanced metrics and alerting
+#### API Management Scaling
+- **SKU Selection**: Developer (testing) → Premium (production)
+- **Capacity Units**: Configurable scale units per environment
+- **Workspace Organization**: Multiple workspaces for team isolation
+- **Regional Deployment**: Deploy accelerator in multiple regions
+
+#### Monitoring Scaling
+- **Log Analytics**: PerGB2018 pricing scales with usage
+- **Application Insights**: Automatic scaling with telemetry volume
+- **Storage Account**: LRS for cost efficiency, upgrade to GRS if needed
+- **Retention Policies**: Configure based on compliance requirements
+
+#### Environment-Specific Scaling
+```yaml
+# Example scaling configurations
+dev:
+  apiManagement:
+    sku: { name: "Developer", capacity: 1 }
+    
+staging:
+  apiManagement:
+    sku: { name: "Standard", capacity: 1 }
+    
+production:
+  apiManagement:
+    sku: { name: "Premium", capacity: 3 }
+```
+
+### Future Scaling Considerations
+- **Multi-Region**: Deploy accelerator template in multiple Azure regions
+- **VNet Integration**: Add networking module for enterprise connectivity
+- **Advanced Security**: Integrate Key Vault for certificate management
+- **CI/CD Integration**: Add Azure DevOps or GitHub Actions templates
 
 ## 🎯 Next Steps
 
-To dive deeper into specific architectural components:
+To dive deeper into specific implementation details:
 
-- **[Landing Zone Alignment](landing-zones.md)** - Detailed LZ mapping
-- **[Component Architecture](components.md)** - Individual component details
-- **[Security Model](security.md)** - Security architecture deep dive
-- **[Network Design](networking.md)** - Network topology details
+- **[Settings Schema Reference](../reference/settings-schema.md)** - Complete configuration reference
+- **[Bicep Module Reference](../reference/bicep-modules.md)** - Technical implementation details
+- **[Azure Resources Reference](../reference/azure-resources.md)** - Complete resource inventory
+- **[RBAC & Permissions Guide](../reference/permissions.md)** - Security configuration details
 
 ---
 

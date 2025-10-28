@@ -230,4 +230,4 @@ az deployment sub validate \
 
 - [Bicep Module Reference](bicep-modules.md) - Module parameters and outputs
 - [Azure Resources Reference](azure-resources.md) - Created resources inventory
-- [Configuration Examples](../user-guide/examples/) - Real-world configuration scenarios
+- [RBAC & Permissions Guide](permissions.md) - Security and access control configuration
