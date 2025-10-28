@@ -13,7 +13,7 @@ shared:
     tags:
       lz-component-type: "shared"
       component: "monitoring"
-    
+
   tags:
     CostCenter: "CC-1234" # Tracks cost allocation
     BusinessUnit: "IT" # Business unit or department
@@ -27,7 +27,7 @@ shared:
     BudgetCode: "FY25-Q1-InitiativeX" # Budget or initiative code
 
 core:
-  apiManagement: 
+  apiManagement:
     name: ""
     publisherEmail: "evilazaro@gmail.com"
     publisherName: "Contoso"
@@ -37,11 +37,11 @@ core:
     identity:
       type: "SystemAssigned"
       userAssignedIdentities: []
-    workspaces: 
+    workspaces:
       - name: "workspace1"
   tags:
-      lz-component-type: "core"
-      component: "apiManagement"
+    lz-component-type: "core"
+    component: "apiManagement"
 
 inventory:
   apiCenter:

@@ -3,7 +3,7 @@
 name: apim-accelerator
 
 hooks:
-  preprovision: 
+  preprovision:
     shell: sh
     run: |
       #!/bin/sh

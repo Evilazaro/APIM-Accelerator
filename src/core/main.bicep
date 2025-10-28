@@ -56,7 +56,13 @@ param tags object
 //==============================================================================
 
 @description('Unique suffix for consistent resource naming across all deployments')
-var uniqueSuffix = generateUniqueSuffix(subscription().id, resourceGroup().id, resourceGroup().name, solutionName, location)
+var uniqueSuffix = generateUniqueSuffix(
+  subscription().id,
+  resourceGroup().id,
+  resourceGroup().name,
+  solutionName,
+  location
+)
 
 @description('Standard suffix for API Management service naming')
 var apimSuffix = 'apim'

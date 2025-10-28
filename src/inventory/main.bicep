@@ -56,9 +56,7 @@ var apiCenterContributorRoleId = '6cba8790-29c5-48e5-bab1-c7541b01cb04'
 var apiCenterSettings = inventorySettings.apiCenter
 
 // Generate unique API Center name with fallback logic
-var apiCenterName = (!empty(apiCenterSettings.name)
-  ? apiCenterSettings.name
-  : '${solutionName}-${apiCenterSuffix}')
+var apiCenterName = (!empty(apiCenterSettings.name) ? apiCenterSettings.name : '${solutionName}-${apiCenterSuffix}')
 
 // =================================================================
 // AZURE API CENTER SERVICE
@@ -76,7 +74,7 @@ resource apiCenter 'Microsoft.ApiCenter/services@2024-06-01-preview' = {
           ? toObject(apiCenterSettings.identity.userAssignedIdentities, id => id, id => {})
           : null
       }
-      : null
+    : null
 }
 
 // =================================================================
@@ -92,14 +90,7 @@ var roles = [
 @description('Role assignments for API Center service principal - Grants necessary permissions for API inventory operations')
 resource apimRoleAssignments 'Microsoft.Authorization/roleAssignments@2022-04-01' = [
   for role in roles: {
-    name: guid(
-      subscription().id,
-      resourceGroup().id,
-      resourceGroup().name,
-      apiCenter.id,
-      apiCenter.name,
-      role
-    )
+    name: guid(subscription().id, resourceGroup().id, resourceGroup().name, apiCenter.id, apiCenter.name, role)
     scope: resourceGroup()
     properties: {
       principalId: apiCenter.identity.principalId

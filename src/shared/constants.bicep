@@ -34,9 +34,9 @@ Version: 1.0.0
 @description('Standard diagnostic settings configuration used across all Azure resources')
 @export()
 var diagnosticSettings object = {
-  suffix: '-diag'                    // Standard suffix for diagnostic setting names
-  allLogsCategory: 'allLogs'         // Category group for capturing all log types
-  allMetricsCategory: 'allMetrics'   // Category for capturing all metric types
+  suffix: '-diag' // Standard suffix for diagnostic setting names
+  allLogsCategory: 'allLogs' // Category group for capturing all log types
+  allMetricsCategory: 'allMetrics' // Category for capturing all metric types
 }
 
 //==============================================================================
@@ -46,10 +46,10 @@ var diagnosticSettings object = {
 @description('Storage account configuration constants for consistent deployment across environments')
 @export()
 var storageAccount object = {
-  standardLRS: 'Standard_LRS'        // Locally redundant storage for cost optimization
-  storageV2: 'StorageV2'            // Latest storage account type with all features
-  suffixSeparator: 'sa'             // Standard abbreviation for storage accounts
-  maxNameLength: 24                 // Azure limit for storage account name length
+  standardLRS: 'Standard_LRS' // Locally redundant storage for cost optimization
+  storageV2: 'StorageV2' // Latest storage account type with all features
+  suffixSeparator: 'sa' // Standard abbreviation for storage accounts
+  maxNameLength: 24 // Azure limit for storage account name length
 }
 
 // Log Analytics constants
@@ -153,18 +153,25 @@ var roleDefinitions = {
 
 @description('Generates consistent unique suffix for resource naming based on deployment context')
 @export()
-func generateUniqueSuffix(subscriptionId string, resourceGroupId string, resourceGroupName string, solutionName string, location string) string =>
-  uniqueString(subscriptionId, resourceGroupId, resourceGroupName, solutionName, location)
+func generateUniqueSuffix(
+  subscriptionId string,
+  resourceGroupId string,
+  resourceGroupName string,
+  solutionName string,
+  location string
+) string => uniqueString(subscriptionId, resourceGroupId, resourceGroupName, solutionName, location)
 
 @description('Generates compliant storage account name with length constraints and character restrictions')
 @export()
 func generateStorageAccountName(baseName string, uniqueSuffix string) string =>
-  toLower(take(replace('${baseName}${storageAccount.suffixSeparator}${uniqueSuffix}', '-', ''), storageAccount.maxNameLength))
+  toLower(take(
+    replace('${baseName}${storageAccount.suffixSeparator}${uniqueSuffix}', '-', ''),
+    storageAccount.maxNameLength
+  ))
 
 @description('Generates standardized diagnostic settings name for consistent monitoring configuration')
 @export()
-func generateDiagnosticSettingsName(resourceName string) string =>
-  '${resourceName}${diagnosticSettings.suffix}'
+func generateDiagnosticSettingsName(resourceName string) string => '${resourceName}${diagnosticSettings.suffix}'
 
 @description('Creates properly formatted identity configuration object for Azure resources')
 @export()

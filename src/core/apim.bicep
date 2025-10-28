@@ -108,17 +108,23 @@ param tags object
 // =================================================================
 
 // Identity Configuration - Build the identity object based on type
-var identityObject = identityType == 'SystemAssigned' ? {
-  type: identityType
-} : identityType == 'UserAssigned' ? {
-  type: identityType
-  userAssignedIdentities: toObject(userAssignedIdentities, identity => identity, identity => {})
-} : null
+var identityObject = identityType == 'SystemAssigned'
+  ? {
+      type: identityType
+    }
+  : identityType == 'UserAssigned'
+      ? {
+          type: identityType
+          userAssignedIdentities: toObject(userAssignedIdentities, identity => identity, identity => {})
+        }
+      : null
 
 // Virtual Network Configuration - Only configure if VNet integration is enabled
-var virtualNetworkConfiguration = virtualNetworkType != 'None' ? {
-  subnetResourceId: subnetResourceId
-} : null
+var virtualNetworkConfiguration = virtualNetworkType != 'None'
+  ? {
+      subnetResourceId: subnetResourceId
+    }
+  : null
 
 // =================================================================
 // AZURE API MANAGEMENT SERVICE
@@ -139,10 +145,10 @@ resource apim 'Microsoft.ApiManagement/service@2024-10-01-preview' = {
     // Publisher information for service configuration
     publisherEmail: publisherEmail
     publisherName: publisherName
-    
+
     // Developer portal configuration
     developerPortalStatus: (enableDeveloperPortal) ? 'Enabled' : 'Disabled'
-    
+
     // Network access configuration
     publicNetworkAccess: (publicNetworkAccess) ? 'Enabled' : 'Disabled'
     virtualNetworkType: virtualNetworkType
@@ -169,6 +175,9 @@ resource roleAssignments 'Microsoft.Authorization/roleAssignments@2022-04-01' = 
       principalId: apim.identity.principalId
       principalType: 'ServicePrincipal'
     }
+    dependsOn: [
+      apim
+    ]
   }
 ]
 
@@ -180,6 +189,9 @@ resource roleAssignments 'Microsoft.Authorization/roleAssignments@2022-04-01' = 
 resource clientSecret 'Microsoft.ManagedIdentity/identities@2025-01-31-preview' existing = {
   scope: apim
   name: 'default'
+  dependsOn: [
+    roleAssignments
+  ]
 }
 
 // =================================================================
