@@ -23,6 +23,7 @@ param skuCapacity int
 param publisherEmail string
 param publisherName string
 param logAnalyticsWorkspaceId string
+param storageAccountResourceId string
 param ApplicationInsightsResourceId string
 param enableDeveloperPortal bool = true
 param publicNetworkAccess bool = true
@@ -106,6 +107,7 @@ resource diagnosticSettings 'Microsoft.Insights/diagnosticSettings@2021-05-01-pr
   scope: apim
   properties: {
     workspaceId: logAnalyticsWorkspaceId
+    storageAccountId: storageAccountResourceId
     metrics: [
       {
         category: 'AllMetrics'

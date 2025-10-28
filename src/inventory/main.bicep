@@ -31,6 +31,7 @@ resource apiCenter 'Microsoft.ApiCenter/services@2024-06-01-preview' = {
 
 var roles = [
   '71522526-b88f-4d52-b57f-d31fc3546d0d'
+  '6cba8790-29c5-48e5-bab1-c7541b01cb04'
 ]
 
 resource apimRoleAssignments 'Microsoft.Authorization/roleAssignments@2022-04-01' = [

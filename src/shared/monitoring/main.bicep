@@ -24,6 +24,7 @@ module operational 'operational/main.bicep' = {
 }
 
 output AZURE_LOG_ANALYTICS_WORKSPACE_ID string = operational.outputs.AZURE_LOG_ANALYTICS_WORKSPACE_ID
+output AZURE_STORAGE_ACCOUNT_ID string = operational.outputs.AZURE_STORAGE_ACCOUNT_ID
 
 var applicationInsightsSettings = monitoringSettings.applicationInsights
 

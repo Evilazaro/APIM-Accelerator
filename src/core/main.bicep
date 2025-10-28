@@ -4,6 +4,7 @@ param solutionName string
 param location string
 param apiManagementSettings ApiManagement
 param logAnalyticsWorkspaceId string
+param storageAccountResourceId string
 param ApplicationInsightsResourceId string
 param tags object
 
@@ -21,6 +22,7 @@ module apim 'apim.bicep' = {
     ApplicationInsightsResourceId: ApplicationInsightsResourceId
     identityType: apiManagementSettings.identity.type
     logAnalyticsWorkspaceId: logAnalyticsWorkspaceId
+    storageAccountResourceId: storageAccountResourceId
     publisherEmail: apiManagementSettings.publisherEmail
     publisherName: apiManagementSettings.publisherName
     skuCapacity: apiManagementSettings.sku.capacity

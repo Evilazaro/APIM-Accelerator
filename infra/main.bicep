@@ -35,6 +35,7 @@ module shared '../src/shared/main.bicep' = {
 output APPLICATION_INSIGHTS_RESOURCE_ID string = shared.outputs.APPLICATION_INSIGHTS_RESOURCE_ID
 output APPLICATION_INSIGHTS_NAME string = shared.outputs.APPLICATION_INSIGHTS_NAME
 output APPLICATION_INSIGHTS_INSTRUMENTATION_KEY string = shared.outputs.APPLICATION_INSIGHTS_INSTRUMENTATION_KEY
+output AZURE_STORAGE_ACCOUNT_ID string = shared.outputs.AZURE_STORAGE_ACCOUNT_ID
 
 module core '../src/core/main.bicep' = {
   name: 'deploy-core-platform'
@@ -44,6 +45,7 @@ module core '../src/core/main.bicep' = {
     location: location
     tags: union(commonTags, corePlatformSettings.tags)
     logAnalyticsWorkspaceId: shared.outputs.AZURE_LOG_ANALYTICS_WORKSPACE_ID
+    storageAccountResourceId: shared.outputs.AZURE_STORAGE_ACCOUNT_ID
     ApplicationInsightsResourceId: shared.outputs.APPLICATION_INSIGHTS_RESOURCE_ID
     apiManagementSettings: corePlatformSettings.apiManagement
   }
