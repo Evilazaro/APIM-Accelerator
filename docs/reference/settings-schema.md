@@ -6,16 +6,16 @@ This document provides a comprehensive reference for the `settings.yaml` configu
 
 The `settings.yaml` file serves as the central configuration hub for all deployment parameters, resource settings, and environment-specific values. It follows a hierarchical structure aligned with the actual implementation.
 
-## 📋 Actual Schema Structure
+## 📋 Current Schema Structure
 
-Based on the current implementation in `infra/settings.yaml`:
+Based on the current implementation in `infra/settings.yaml` and validated against the Bicep type definitions:
 
 ### Root Level Configuration
 
 ```yaml
 solutionName: string          # Base name for all resources (required)
 shared: Shared               # Shared infrastructure configuration  
-core: CorePlatform           # Core platform configuration
+core: Core                   # Core platform configuration (contains apiManagement)
 inventory: Inventory         # API inventory and governance configuration
 ```
 
@@ -77,8 +77,8 @@ inventory:
       type: "SystemAssigned"         # SystemAssigned | UserAssigned | SystemAssigned,UserAssigned | None
       userAssignedIdentities: []     # Array of managed identity resource IDs
   tags:
-    lz-component-type: "inventory"   # Note: Corrected from "shared" in actual file
-    component: "inventory"           # Note: Corrected from "inventory" to match component
+    lz-component-type: "inventory"   # Landing zone component classification
+    component: "inventory"           # Component identifier for API Center
 ```
 
 ## 🔧 Field Descriptions
@@ -133,26 +133,30 @@ inventory:
 
 ### Component-Specific Tags
 
+Component tags are applied at the module level and combined with global tags during deployment:
+
 ```yaml
 # Monitoring components
 shared:
   monitoring:
     tags:
-      lz-component-type: "shared"
-      component: "monitoring"
+      lz-component-type: "shared"      # Shared infrastructure classification
+      component: "monitoring"          # Monitoring services identifier
 
 # API Management components      
 core:
   tags:
-    lz-component-type: "core"
-    component: "apiManagement"
+    lz-component-type: "core"          # Core platform classification
+    component: "apiManagement"         # API Management identifier
 
 # API Center components
 inventory:
   tags:
-    lz-component-type: "inventory"
-    component: "inventory"
+    lz-component-type: "inventory"     # Inventory management classification  
+    component: "inventory"             # API Center identifier
 ```
+
+**Tag Inheritance**: Component tags are merged with global `shared.tags` during deployment, with deployment-specific tags (environment, managedBy, templateVersion) added automatically.
 
 ## 🌍 Environment-Specific Configurations
 

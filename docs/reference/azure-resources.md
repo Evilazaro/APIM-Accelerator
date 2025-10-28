@@ -11,68 +11,73 @@ The accelerator creates resources across multiple Azure services, organized by f
 ### Resource Groups
 | Resource Type | Name Pattern | Purpose | Module |
 |---------------|--------------|---------|---------|
-| `Microsoft.Resources/resourceGroups` | `{solutionName}-{envName}-{location}-rg` | Primary resource container | `infra/main.bicep` |
+| `Microsoft.Resources/resourceGroups` | `{solutionName}-{envName}-{location}-rg` | Single resource container for all components | `infra/main.bicep` |
 
 ### Monitoring & Observability
 
 #### Log Analytics Workspace
 | Resource Type | Name Pattern | SKU | Purpose | Module |
 |---------------|--------------|-----|---------|---------|
-| `Microsoft.OperationalInsights/workspaces` | `{solutionName}-{uniqueString}-law` | PerGB2018 (default) | Centralized logging and analytics | `src/shared/monitoring/operational/main.bicep` |
+| `Microsoft.OperationalInsights/workspaces` | `{solutionName}-{uniqueSuffix}-law` | PerGB2018 (default, configurable) | Centralized logging and analytics | `src/shared/monitoring/operational/main.bicep` |
 
 **Key Properties**:
-- Data retention: Configurable (30-730 days)
-- Identity: System-assigned managed identity
-- Diagnostic settings: Enabled for all supported categories
+- SKU options: CapacityReservation, Free, LACluster, PerGB2018, PerNode, Premium, Standalone, Standard
+- Identity: System-assigned managed identity (configurable)
+- User-assigned identities: Supported via configuration
+- Workspace-based ingestion for Application Insights
 
 #### Application Insights
 | Resource Type | Name Pattern | Kind | Purpose | Module |
 |---------------|--------------|------|---------|---------|
-| `Microsoft.Insights/components` | `{solutionName}-{uniqueString}-ai` | web | Application performance monitoring | `src/shared/monitoring/insights/main.bicep` |
+| `Microsoft.Insights/components` | `{solutionName}-{uniqueSuffix}-ai` | web (configurable) | Application performance monitoring | `src/shared/monitoring/insights/main.bicep` |
 
 **Key Properties**:
-- Application type: web
-- Ingestion mode: LogAnalytics (workspace-based)
-- Retention: 90 days (default)
-- Public network access: Enabled (configurable)
-- Linked workspace: Auto-linked to Log Analytics
+- Application types: web, other (configurable)
+- Ingestion modes: ApplicationInsights, ApplicationInsightsWithDiagnosticSettings, LogAnalytics
+- Retention: 90 days (default, configurable)
+- Public network access: Enabled/Disabled (configurable)
+- Workspace-based mode: Integrated with Log Analytics workspace
 
 #### Storage Account (Monitoring Support)
 | Resource Type | Name Pattern | SKU | Purpose | Module |
 |---------------|--------------|-----|---------|---------|
-| `Microsoft.Storage/storageAccounts` | `{name}sa{uniqueString}` (truncated to 24 chars) | Standard_LRS | Diagnostic data storage | `src/shared/monitoring/operational/main.bicep` |
+| `Microsoft.Storage/storageAccounts` | `{baseName}sa{uniqueSuffix}` (max 24 chars) | Standard_LRS | Diagnostic data storage and archival | `src/shared/monitoring/operational/main.bicep` |
 
 **Key Properties**:
-- Kind: StorageV2
-- Access tier: Hot
-- Replication: Locally redundant storage (LRS)
+- Kind: StorageV2 (latest storage account type)
+- Access tier: Hot (optimized for frequently accessed data)
+- Replication: Locally redundant storage (LRS) for cost optimization
+- Name generation: Uses constants.bicep utility functions for compliance
 
 ### API Management Platform
 
 #### API Management Service
 | Resource Type | Name Pattern | SKU | Purpose | Module |
 |---------------|--------------|-----|---------|---------|
-| `Microsoft.ApiManagement/service` | `{solutionName}-{uniqueString}-apim` | Premium (default) | Core API gateway and management | `src/core/apim.bicep` |
+| `Microsoft.ApiManagement/service` | `{solutionName}-{uniqueSuffix}-apim` | Premium (configurable) | Core API gateway and management platform | `src/core/apim.bicep` |
 
 **Key Properties**:
-- Capacity: 1 unit (default, configurable)
-- Identity: System-assigned managed identity
-- Developer portal: Enabled by default
-- Public network access: Enabled (configurable)
-- VNet integration: None (configurable for Internal/External)
+- SKU options: Basic, BasicV2, Developer, Isolated, Standard, StandardV2, Premium, Consumption
+- Capacity: Configurable scale units (affects performance and cost)
+- Identity: System-assigned or User-assigned managed identity
+- Developer portal: Enabled/Disabled (configurable, default enabled)
+- Public network access: Enabled/Disabled (configurable)
+- VNet integration: None/External/Internal (configurable)
 
 **Associated Resources**:
-- **Diagnostic Settings**: `{apim.name}-diag`
-  - Logs: allLogs category enabled
-  - Metrics: AllMetrics enabled
-  - Target: Log Analytics workspace
+- **Diagnostic Settings**: `{apimName}-diag`
+  - Logs: allLogs category group
+  - Metrics: AllMetrics category
+  - Destination: Log Analytics workspace + Storage account
 
-- **Application Insights Logger**: `looger` (sic)
+- **Application Insights Logger**: `{apimName}-appinsights`
   - Type: applicationInsights
-  - Credentials: Instrumentation key-based
+  - Credentials: Instrumentation key from Application Insights
+  - Integration: Full telemetry collection
 
-- **Application Insights Diagnostic**: `name`
-  - Logger ID: Log Analytics workspace ID
+- **RBAC Assignment**: Reader role for APIM managed identity
+  - Scope: Resource group level
+  - Purpose: Access to other Azure resources
 
 #### API Management Workspaces
 | Resource Type | Name Pattern | Purpose | Module |
@@ -126,15 +131,15 @@ The accelerator creates resources across multiple Azure services, organized by f
 #### Managed Identities
 | Service | Identity Type | Purpose | RBAC Roles Assigned |
 |---------|---------------|---------|-------------------|
-| API Management | System-assigned | Service authentication | `acdd72a7-3385-48ef-bd42-f606fba81ae7` (Reader) |
-| Log Analytics | System-assigned | Workspace operations | N/A |
-| API Center | System-assigned | Service operations | `71522526-b88f-4d52-b57f-d31fc3546d0d` (API Center Service Reader) |
+| API Management | System/User-assigned (configurable) | Secure service authentication | Reader (`acdd72a7-3385-48ef-bd42-f606fba81ae7`) |
+| Log Analytics | System/User-assigned (configurable) | Workspace operations and authentication | None (managed by platform) |
+| API Center | System/User/None (configurable) | API catalog operations | API Center Service Reader (`71522526-b88f-4d52-b57f-d31fc3546d0d`), API Center Service Contributor (`6cba8790-29c5-48e5-bab1-c7541b01cb04`) |
 
 #### RBAC Role Assignments
-| Resource Type | Scope | Purpose | Module |
-|---------------|-------|---------|---------|
-| `Microsoft.Authorization/roleAssignments` | Resource Group | APIM managed identity permissions | `src/core/apim.bicep` |
-| `Microsoft.Authorization/roleAssignments` | Resource Group | API Center managed identity permissions | `src/inventory/main.bicep` |
+| Resource Type | Scope | Purpose | Module | Notes |
+|---------------|-------|---------|---------|-------|
+| `Microsoft.Authorization/roleAssignments` | Resource Group | APIM managed identity permissions | `src/core/apim.bicep` | Auto-generated GUID for assignment name |
+| `Microsoft.Authorization/roleAssignments` | Resource Group | API Center managed identity permissions | `src/inventory/main.bicep` | Multiple roles assigned in array deployment |
 
 ### Networking (Placeholder)
 
@@ -179,18 +184,22 @@ The accelerator creates resources across multiple Azure services, organized by f
 ### Naming Conventions
 
 ```bicep
-// Auto-generated names follow this pattern
+// Auto-generated names using centralized utility function
+import { generateUniqueSuffix } from '../shared/constants.bicep'
+
+var uniqueSuffix = generateUniqueSuffix(subscription().id, resourceGroup().id, resourceGroup().name, solutionName, location)
 var resourceName = !empty(settings.name) 
   ? settings.name 
-  : '${solutionName}-${uniqueString(subscription().id, resourceGroup().id, resourceGroup().name, solutionName, location)}-{suffix}'
+  : '${solutionName}-${uniqueSuffix}-{suffix}'
 ```
 
-**Naming Suffixes**:
+**Naming Suffixes** (defined in constants.bicep):
 - API Management: `-apim`
 - Log Analytics: `-law` 
 - Application Insights: `-ai`
 - API Center: `-apicenter`
-- Storage Account: `sa` (with unique string, truncated to 24 chars)
+- Storage Account: `sa` (with unique string, auto-truncated to 24 chars)
+- Diagnostic Settings: `-diag`
 
 ### Identity Configuration
 
@@ -223,21 +232,28 @@ resource diagnosticSettings 'Microsoft.Insights/diagnosticSettings@2021-05-01-pr
 
 ```mermaid
 graph TD
-    A[Resource Group] --> B[Log Analytics Workspace]
-    A --> C[Storage Account]
-    B --> D[Application Insights]
-    C --> D
+    A[Resource Group Creation] --> B[Shared Infrastructure]
     
-    A --> E[API Management Service]
-    B --> E
-    D --> E
+    subgraph "Shared Module"
+        B --> C[Log Analytics Workspace]
+        B --> D[Storage Account] 
+        C --> E[Application Insights]
+        D --> E
+    end
     
-    E --> F[APIM Workspaces]
-    E --> G[Developer Portal Config]
+    subgraph "Core Module"
+        B --> F[API Management Service]
+        E --> F
+        C --> F
+        F --> G[APIM Workspaces]
+        F --> H[Developer Portal Config]
+    end
     
-    A --> H[API Center]
-    E --> I[API Source Registration]
-    H --> I
+    subgraph "Inventory Module"
+        F --> I[API Center Service]
+        I --> J[API Center Workspace]
+        I --> K[API Source Registration]
+    end
 ```
 
 ## 🔍 Resource Validation

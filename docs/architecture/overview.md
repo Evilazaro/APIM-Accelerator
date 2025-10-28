@@ -104,32 +104,44 @@ This accelerator implements all five Azure Landing Zone design areas:
 
 ## 🏢 Component Architecture
 
-### Resource Group Organization
+### Simplified Resource Group Structure
+
+The accelerator uses a **single resource group** approach for simplified management while maintaining logical component separation through tagging and naming conventions.
 
 ```mermaid
-graph LR
-    subgraph "Subscription"
-        RG1[apim-plat-connectivity-rg]
-        RG2[apim-plat-identity-rg]
-        RG3[apim-plat-security-rg]
-        RG4[apim-plat-monitoring-rg]
-        RG5[apim-plat-rg]
-        RG6[apim-plat-inventory-rg]
+graph TB
+    subgraph "Single Resource Group"
+        subgraph "Shared Infrastructure"
+            LA[Log Analytics Workspace]
+            AI[Application Insights]
+            SA[Storage Account]
+        end
+        
+        subgraph "Core Platform"
+            APIM[API Management Service]
+            DevPortal[Developer Portal Config]
+            Workspaces[APIM Workspaces]
+        end
+        
+        subgraph "API Inventory"
+            APICenter[API Center Service]
+            APIWorkspace[API Center Workspace]
+            APISource[API Source Registration]
+        end
     end
     
-    RG1 --> Networking[VNet, Subnets, NSGs]
-    RG2 --> Identity[Managed Identities]
-    RG3 --> Security[Key Vault]
-    RG4 --> Monitoring[Log Analytics, App Insights]
-    RG5 --> Core[API Management]
-    RG6 --> Inventory[API Center]
+    LA --> APIM
+    AI --> APIM
+    SA --> APIM
+    APIM --> APICenter
 ```
 
-### Resource Separation Benefits
-- **Blast Radius Limitation**: Issues in one component don't affect others
-- **RBAC Granularity**: Different teams can have different access levels
-- **Cost Allocation**: Clear cost attribution by component
-- **Lifecycle Management**: Independent lifecycle for different components
+### Resource Organization Benefits
+- **Simplified Management**: Single resource group reduces complexity
+- **Clear Dependencies**: Resource dependencies are explicit and managed
+- **Cost Efficiency**: Reduced resource group overhead
+- **Deployment Simplicity**: Single scope for all related resources
+- **Component Tagging**: Logical separation through consistent tagging strategy
 
 ## 🔧 Technical Architecture
 
@@ -243,34 +255,32 @@ graph TB
 graph TB
     subgraph "API Management Service"
         Gateway[API Gateway]
-        Management[Management Plane]
+        Management[Management API]
         Portal[Developer Portal]
         
         subgraph "Workspaces"
             WS1[Workspace 1]
-            WS2[Workspace 2]
-            WSN[Workspace N]
+            WSN[Additional Workspaces]
+        end
+        
+        subgraph "Monitoring Integration"
+            AILogger[App Insights Logger]
+            Diagnostics[Diagnostic Settings]
         end
     end
     
-    subgraph "Integration"
-        Backend1[Backend Service 1]
-        Backend2[Backend Service 2]
-        BackendN[Backend Service N]
+    subgraph "External Integration"
+        Backends[Backend Services]
+        AAD[Azure AD Authentication]
+        APICenter[API Center Integration]
     end
     
-    subgraph "Authentication"
-        AAD[Azure AD]
-        OAuth[OAuth Providers]
-        JWT[JWT Validation]
-    end
-    
-    Gateway --> Backend1
-    Gateway --> Backend2
-    Gateway --> BackendN
+    Gateway --> Backends
     Management --> AAD
-    Portal --> OAuth
-    Gateway --> JWT
+    Portal --> AAD
+    AILogger --> ApplicationInsights[Application Insights]
+    Diagnostics --> LogAnalytics[Log Analytics]
+    APIM --> APICenter
 ```
 
 ### Inventory Management Layer
@@ -371,37 +381,45 @@ graph LR
 ### Infrastructure as Code Structure
 ```
 infra/
-├── main.bicep                 # Orchestration template
-├── settings.yaml             # Configuration file
+├── main.bicep                    # Subscription-level orchestration
+├── main.parameters.json          # Optional parameters file
+├── settings.yaml                 # Centralized configuration
 └── azd-hooks/
-    └── pre-provision.sh      # Pre-deployment scripts
+    └── pre-provision.sh          # Pre-deployment automation
 
 src/
-├── shared/                   # Shared infrastructure
-│   ├── monitoring/          # Log Analytics, App Insights
-│   ├── constants.bicep      # Reusable constants
-│   └── common-types.bicep   # Type definitions
-├── core/                    # Core APIM platform
-│   ├── main.bicep          # Core orchestration
-│   ├── apim.bicep          # APIM service
-│   ├── developer-portal.bicep
-│   └── workspaces.bicep
-└── inventory/              # API Center integration
-    └── main.bicep
+├── shared/                       # Shared infrastructure components
+│   ├── main.bicep               # Shared orchestration
+│   ├── common-types.bicep       # Bicep type definitions
+│   ├── constants.bicep          # Utility functions and constants
+│   ├── monitoring/              # Monitoring infrastructure
+│   │   ├── main.bicep          # Monitoring orchestration
+│   │   ├── operational/
+│   │   │   └── main.bicep      # Log Analytics + Storage
+│   │   └── insights/
+│   │       └── main.bicep      # Application Insights
+│   └── networking/              # Network components (placeholder)
+│       └── main.bicep
+├── core/                         # Core APIM platform
+│   ├── main.bicep               # Core platform orchestration
+│   ├── apim.bicep               # API Management service
+│   ├── developer-portal.bicep   # Developer portal configuration
+│   └── workspaces.bicep         # APIM workspace management
+└── inventory/                    # API inventory management
+    └── main.bicep               # API Center integration
 ```
 
 ### Deployment Flow
 ```mermaid
 graph TD
-    Start[Start Deployment] --> Config[Load Configuration]
+    Start[Start Deployment] --> Config[Load settings.yaml]
     Config --> Validate[Validate Templates]
-    Validate --> RG[Create Resource Groups]
-    RG --> Shared[Deploy Shared Infrastructure]
-    Shared --> Core[Deploy Core Platform]
+    Validate --> RG[Create Resource Group]
+    RG --> Shared[Deploy Shared Monitoring]
+    Shared --> Core[Deploy APIM Platform]
     Core --> Inventory[Deploy API Center]
-    Inventory --> Configure[Configure Integration]
-    Configure --> Test[Validation Tests]
-    Test --> Complete[Deployment Complete]
+    Inventory --> Integration[Configure API Source]
+    Integration --> Complete[Deployment Complete]
     
     Validate --> |Validation Fails| Error[Report Errors]
     Shared --> |Deployment Fails| Rollback[Rollback Changes]

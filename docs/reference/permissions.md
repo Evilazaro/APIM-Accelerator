@@ -75,12 +75,15 @@ az role assignment create \
 #### API Center Service Identity
 | Resource | Identity Type | Principal ID Source | Purpose |
 |----------|---------------|-------------------|---------|
-| API Center | System-assigned | `apiCenter.identity.principalId` | Service authentication |
+| API Center | System-assigned (configurable) | `apiCenter.identity.principalId` | Service authentication and APIM integration |
 
 **Automatically Assigned Roles**:
 - **Role**: `API Center Service Reader` (`71522526-b88f-4d52-b57f-d31fc3546d0d`)
-- **Scope**: Resource Group  
-- **Purpose**: Read access to API Center resources
+- **Role**: `API Center Service Contributor` (`6cba8790-29c5-48e5-bab1-c7541b01cb04`)
+- **Scope**: Resource Group
+- **Purpose**: Full access to API Center resources and APIM integration capabilities
+
+**Note**: Both roles are assigned automatically to enable complete API inventory and governance functionality.
 
 ### User-Assigned Managed Identities
 
@@ -117,9 +120,18 @@ core:
 **Assigned to**: API Center system identity  
 **Permissions**:
 - `Microsoft.ApiCenter/services/*/read` - Read API Center resources
-- `Microsoft.ApiManagement/service/*/read` - Read APIM resources for integration
+- `Microsoft.ApiManagement/service/*/read` - Read APIM services for integration
 
-**Purpose**: Allows API Center to read APIM service configuration for inventory management.
+**Purpose**: Allows API Center to read APIM service configuration for API discovery and inventory management.
+
+#### API Center Service Contributor (6cba8790-29c5-48e5-bab1-c7541b01cb04)
+**Assigned to**: API Center system identity  
+**Permissions**:
+- `Microsoft.ApiCenter/services/*` - Manage API Center resources
+- `Microsoft.ApiManagement/service/*/read` - Read APIM services
+- Additional write permissions for API catalog management
+
+**Purpose**: Enables full API Center functionality including API source registration, workspace management, and API catalog updates.
 
 ### Additional Roles for Operations
 

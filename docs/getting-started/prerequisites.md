@@ -126,32 +126,39 @@ az account show --query "user.name"
 ### Resource Quotas
 Ensure sufficient quotas for the following resources:
 
-| Resource Type | Minimum Required | Recommended |
-|---------------|------------------|-------------|
-| Resource Groups | 5 | 10 |
-| API Management Services | 1 | 2 |
-| Log Analytics Workspaces | 1 | 2 |
-| Application Insights | 1 | 2 |
-| Storage Accounts | 1 | 2 |
-| Virtual Networks | 1 | 2 |
+| Resource Type | Minimum Required | Recommended | Notes |
+|---------------|------------------|-------------|-------|
+| Resource Groups | 1 | 3 | Single RG per environment (dev/test/prod) |
+| API Management Services | 1 | 2 | Premium tier recommended for production |
+| Log Analytics Workspaces | 1 | 2 | One per environment or shared |
+| Application Insights | 1 | 2 | Integrated with Log Analytics |
+| Storage Accounts | 1 | 2 | For diagnostic logs storage |
+| API Center Services | 1 | 2 | For API inventory and governance |
 
 **Check Quotas:**
 ```bash
-# Check API Management quota
+# Check current API Management usage
 az apim list --query "length(@)"
 
-# Check resource group quota
+# Check current resource group usage
 az group list --query "length(@)"
+
+# Check API Center availability (preview service)
+az provider show --namespace Microsoft.ApiCenter --query "registrationState"
+
+# Register API Center provider if needed
+az provider register --namespace Microsoft.ApiCenter
 ```
 
 ### Regional Availability
 Verify that your chosen region supports all required services:
 
-| Service | Check Availability |
-|---------|-------------------|
-| API Management Premium | [Regional Availability](https://azure.microsoft.com/global-infrastructure/services/?products=api-management) |
-| Log Analytics | [Regional Availability](https://azure.microsoft.com/global-infrastructure/services/?products=monitor) |
-| Application Insights | [Regional Availability](https://azure.microsoft.com/global-infrastructure/services/?products=monitor) |
+| Service | Check Availability | Notes |
+|---------|-------------------|-------|
+| API Management Premium | [Regional Availability](https://azure.microsoft.com/global-infrastructure/services/?products=api-management) | Premium tier required for full features |
+| Log Analytics | [Regional Availability](https://azure.microsoft.com/global-infrastructure/services/?products=monitor) | Available in most regions |
+| Application Insights | [Regional Availability](https://azure.microsoft.com/global-infrastructure/services/?products=monitor) | Workspace-based mode required |
+| API Center | [Regional Availability](https://learn.microsoft.com/azure/api-center/overview#supported-regions) | Preview service, limited regions |
 
 ## 🖥️ Development Environment
 
@@ -257,6 +264,7 @@ az provider register --namespace Microsoft.ApiManagement
 az provider register --namespace Microsoft.OperationalInsights
 az provider register --namespace Microsoft.Insights
 az provider register --namespace Microsoft.Storage
+az provider register --namespace Microsoft.ApiCenter
 ```
 
 #### Issue: "Quota exceeded for resource type"

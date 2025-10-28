@@ -53,14 +53,15 @@ infra/main.bicep              # Subscription-level orchestration
 **Parameters**:
 | Name | Type | Required | Description |
 |------|------|----------|-------------|
-| `solutionName` | string | Yes | Base name for resources |
-| `location` | string | Yes | Azure region |
-| `sharedSettings` | Shared | Yes | Shared configuration object |
+| `solutionName` | string | Yes | Base name for resource naming |
+| `location` | string | Yes | Azure region for deployment |
+| `sharedSettings` | Shared | Yes | Shared configuration from settings.yaml |
 
 **Key Features**:
-- Deploys monitoring infrastructure
-- Manages shared tagging strategy
-- Provides outputs for dependent modules
+- Deploys monitoring infrastructure (Log Analytics, Application Insights)
+- Manages shared resource tagging strategy
+- Provides essential outputs for dependent modules
+- Imports type definitions from common-types.bicep
 
 **Outputs**:
 | Name | Type | Description |
@@ -68,7 +69,8 @@ infra/main.bicep              # Subscription-level orchestration
 | `AZURE_LOG_ANALYTICS_WORKSPACE_ID` | string | Log Analytics workspace resource ID |
 | `APPLICATION_INSIGHTS_RESOURCE_ID` | string | Application Insights resource ID |
 | `APPLICATION_INSIGHTS_NAME` | string | Application Insights component name |
-| `APPLICATION_INSIGHTS_INSTRUMENTATION_KEY` | string | Application Insights instrumentation key |
+| `APPLICATION_INSIGHTS_INSTRUMENTATION_KEY` | string | Application Insights instrumentation key (secure) |
+| `AZURE_STORAGE_ACCOUNT_ID` | string | Storage account resource ID |
 
 #### `src/shared/monitoring/main.bicep`
 **Purpose**: Monitoring infrastructure orchestration
@@ -141,59 +143,73 @@ infra/main.bicep              # Subscription-level orchestration
 **Parameters**:
 | Name | Type | Required | Description |
 |------|------|----------|-------------|
-| `solutionName` | string | Yes | Solution identifier |
-| `location` | string | Yes | Azure region |
-| `apiManagementSettings` | ApiManagement | Yes | APIM configuration |
-| `logAnalyticsWorkspaceId` | string | Yes | Monitoring workspace ID |
-| `ApplicationInsightsResourceId` | string | Yes | Application Insights ID |
-| `tags` | object | Yes | Resource tags |
+| `solutionName` | string | Yes | Solution identifier for resource naming |
+| `location` | string | Yes | Azure region for deployment |
+| `apiManagementSettings` | ApiManagement | Yes | APIM configuration from settings.yaml |
+| `logAnalyticsWorkspaceId` | string | Yes | Log Analytics workspace resource ID |
+| `storageAccountResourceId` | string | Yes | Storage account resource ID for diagnostics |
+| `applicationInsIghtsResourceId` | string | Yes | Application Insights resource ID |
+| `tags` | object | Yes | Resource tags for governance |
+
+**Key Features**:
+- Imports ApiManagement type and utility functions
+- Generates unique resource names using constants.bicep
+- Orchestrates APIM service, workspaces, and developer portal
+- Ensures proper dependency management between components
 
 **Modules Deployed**:
-- `apim.bicep` - API Management service
-- `workspaces.bicep` - APIM workspaces (array deployment)
-- `developer-portal.bicep` - Developer portal configuration
+- `apim.bicep` - API Management service with monitoring integration
+- `workspaces.bicep` - APIM workspaces (array deployment from settings)
+- `developer-portal.bicep` - Developer portal configuration with Azure AD
 
 **Outputs**:
 | Name | Type | Description |
 |------|------|-------------|
 | `API_MANAGEMENT_RESOURCE_ID` | string | APIM service resource ID |
-| `API_MANAGEMENT_NAME` | string | APIM service name |
+| `API_MANAGEMENT_NAME` | string | APIM service name for reference |
 
 #### `src/core/apim.bicep`
-**Purpose**: Core API Management service deployment
+**Purpose**: Core API Management service deployment with comprehensive configuration
 
 **Parameters**:
 | Name | Type | Required | Default | Description |
 |------|------|----------|---------|-------------|
-| `name` | string | Yes | - | APIM service name |
-| `location` | string | Yes | - | Azure region |
-| `skuName` | string | Yes | - | APIM pricing tier |
-| `identityType` | string | Yes | - | Managed identity type |
-| `userAssignedIdentities` | array | Yes | - | User-assigned identities |
-| `skuCapacity` | int | Yes | - | Scale unit count |
-| `publisherEmail` | string | Yes | - | Publisher contact email |
-| `publisherName` | string | Yes | - | Publisher organization |
-| `logAnalyticsWorkspaceId` | string | Yes | - | Monitoring workspace |
-| `ApplicationInsightsResourceId` | string | Yes | - | Application Insights |
-| `enableDeveloperPortal` | bool | No | `true` | Enable developer portal |
-| `publicNetworkAccess` | bool | No | `true` | Allow public access |
-| `virtualNetworkType` | string | No | `None` | VNet integration type |
-| `subnetResourceId` | string | No | `''` | Subnet for VNet integration |
-| `tags` | object | Yes | - | Resource tags |
+| `name` | string | Yes | - | APIM service instance name |
+| `location` | string | Yes | - | Azure region for deployment |
+| `skuName` | string | Yes | - | APIM pricing tier (Basic, Developer, Premium, etc.) |
+| `identityType` | string | Yes | - | Managed identity type (SystemAssigned/UserAssigned/None) |
+| `userAssignedIdentities` | array | Yes | - | User-assigned identity resource IDs |
+| `skuCapacity` | int | Yes | - | Number of scale units |
+| `publisherEmail` | string | Yes | - | Publisher contact email address |
+| `publisherName` | string | Yes | - | Publisher organization name |
+| `logAnalyticsWorkspaceId` | string | Yes | - | Log Analytics workspace resource ID |
+| `storageAccountResourceId` | string | Yes | - | Storage account for diagnostic logs |
+| `applicationInsIghtsResourceId` | string | Yes | - | Application Insights resource ID |
+| `enableDeveloperPortal` | bool | No | `true` | Enable/disable developer portal |
+| `publicNetworkAccess` | bool | No | `true` | Allow public network access |
+| `virtualNetworkType` | string | No | `None` | VNet integration (External/Internal/None) |
+| `subnetResourceId` | string | No | `''` | Subnet resource ID for VNet integration |
+| `tags` | object | Yes | - | Resource governance tags |
 
 **Key Features**:
-- System or user-assigned managed identity
-- Diagnostic settings integration
-- Application Insights logger configuration
-- RBAC role assignments
-- Developer portal enablement
+- Comprehensive identity configuration with conditional logic
+- Full diagnostic settings with Log Analytics and Storage integration
+- Application Insights logger with instrumentation key configuration
+- RBAC role assignment for Reader access
+- VNet integration support for private deployments
+- Configurable developer portal and network access settings
+
+**Resources Created**:
+- API Management service with specified configuration
+- Diagnostic settings for logs and metrics
+- Application Insights logger integration
+- RBAC role assignment for service identity
 
 **Outputs**:
 | Name | Type | Description |
 |------|------|-------------|
 | `API_MANAGEMENT_RESOURCE_ID` | string | APIM service resource ID |
 | `API_MANAGEMENT_NAME` | string | APIM service name |
-| `AZURE_CLIENT_SECRET_ID` | string | Managed identity ID |
 | `AZURE_CLIENT_SECRET_CLIENT_ID` | string | Managed identity client ID |
 | `AZURE_API_MANAGEMENT_IDENTITY_PRINCIPAL_ID` | string | Service principal ID |
 
@@ -252,24 +268,36 @@ infra/main.bicep              # Subscription-level orchestration
 ### Type Definitions
 
 #### `src/shared/common-types.bicep`
-**Purpose**: Shared type definitions using Bicep's type system
+**Purpose**: Centralized type definitions for consistent parameter structures
 
-**Exported Types**:
+**Key Type Definitions**:
 
 ```bicep
+// Identity types with comprehensive support
+type SystemAssignedIdentity = {
+  type: 'SystemAssigned' | 'UserAssigned'
+  userAssignedIdentities: []
+}
+
+type ExtendedIdentity = {
+  type: 'SystemAssigned' | 'UserAssigned' | 'SystemAssigned, UserAssigned' | 'None'
+  userAssignedIdentities: []
+}
+
+// Service configuration types
+type ApimSku = {
+  name: 'Basic' | 'BasicV2' | 'Developer' | 'Isolated' | 'Standard' | 'StandardV2' | 'Premium' | 'Consumption'
+  capacity: int
+}
+
+// Main exported types
 @export()
 type ApiManagement = {
   name: string
   publisherEmail: string
   publisherName: string
-  sku: {
-    name: 'Basic' | 'BasicV2' | 'Developer' | 'Isolated' | 'Standard' | 'StandardV2' | 'Premium' | 'Consumption'
-    capacity: int
-  }
-  identity: {
-    type: 'SystemAssigned' | 'UserAssigned'
-    userAssignedIdentities: []
-  }
+  sku: ApimSku
+  identity: SystemAssignedIdentity
   workspaces: array
 }
 
@@ -292,6 +320,21 @@ type Shared = {
   tags: object
 }
 ```
+
+#### `src/shared/constants.bicep`
+**Purpose**: Centralized constants, defaults, and utility functions
+
+**Key Constants**:
+- Diagnostic settings configuration
+- Storage account naming and constraints
+- Service defaults and options
+- Azure role definition IDs
+- Identity type constants
+
+**Utility Functions**:
+- `generateUniqueSuffix()` - Consistent resource naming
+- `generateStorageAccountName()` - Compliant storage naming
+- `createIdentityConfig()` - Proper identity object creation
 
 ## 🔧 Module Usage Patterns
 
