@@ -78,7 +78,7 @@ If you can't find what you're looking for in the documentation:
 1. **Search Issues** - Check if someone has asked the same question
 2. **Ask a Question** - Create a [question issue](../.github/ISSUE_TEMPLATE/question.md)
 3. **Join Discussions** - Participate in GitHub Discussions
-4. **Contact Us** - Reach out to [cloudops@contoso.com](mailto:cloudops@contoso.com)
+4. **Contact Us** - Reach out to [evilazaro@gmail.com](mailto:evilazaro@gmail.com)
 
 ## 🔗 External Resources
 

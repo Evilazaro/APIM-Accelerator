@@ -15,7 +15,7 @@ Thank you for your interest in contributing to the Azure API Management Accelera
 
 ## Code of Conduct
 
-This project adheres to our [Code of Conduct](CODE_OF_CONDUCT.md). By participating, you are expected to uphold this code. Please report unacceptable behavior to [cloudops@contoso.com](mailto:cloudops@contoso.com).
+This project adheres to our [Code of Conduct](CODE_OF_CONDUCT.md). By participating, you are expected to uphold this code. Please report unacceptable behavior to [evilazaro@gmail.com](mailto:evilazaro@gmail.com).
 
 ## How to Contribute
 
@@ -276,7 +276,7 @@ docs/
 ### Communication Channels
 - **GitHub Issues**: Bug reports, feature requests
 - **GitHub Discussions**: General questions, ideas
-- **Email**: [cloudops@contoso.com](mailto:cloudops@contoso.com) for sensitive issues
+- **Email**: [evilazaro@gmail.com](mailto:evilazaro@gmail.com) for sensitive issues
 
 ### Resources
 - [Azure API Management Documentation](https://learn.microsoft.com/azure/api-management/)

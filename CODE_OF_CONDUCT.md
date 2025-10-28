@@ -60,7 +60,7 @@ representative at an online or offline event.
 
 Instances of abusive, harassing, or otherwise unacceptable behavior may be
 reported to the community leaders responsible for enforcement at
-[cloudops@contoso.com](mailto:cloudops@contoso.com).
+[evilazaro@gmail.com](mailto:evilazaro@gmail.com).
 
 All complaints will be reviewed and investigated promptly and fairly.
 

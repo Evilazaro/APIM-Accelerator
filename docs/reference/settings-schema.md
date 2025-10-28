@@ -44,12 +44,12 @@ shared:
     # Governance and compliance tags
     CostCenter: "CC-1234"              # Cost center tracking
     BusinessUnit: "IT"                 # Organizational unit
-    Owner: "jdoe@contoso.com"          # Resource owner
+    Owner: "evilazaro@gmail.com"          # Resource owner
     ApplicationName: "APIM Platform"   # Application identifier
     ProjectName: "APIMForAll"          # Project name
     ServiceClass: "Critical"           # Critical | Standard | Experimental
     RegulatoryCompliance: "GDPR"       # GDPR | HIPAA | PCI | None
-    SupportContact: "cloudops@contoso.com" # Support team
+    SupportContact: "evilazaro@gmail.com" # Support team
     ChargebackModel: "Dedicated"       # Chargeback model
     BudgetCode: "FY25-Q1-InitiativeX"  # Budget identifier
 
@@ -127,7 +127,7 @@ inventory:
 | `ProjectName` | Project/initiative name | "APIMForAll", "DigitalTransformation" |
 | `ServiceClass` | Service tier | "Critical", "Standard", "Experimental" |
 | `RegulatoryCompliance` | Compliance requirements | "GDPR", "HIPAA", "PCI", "None" |
-| `SupportContact` | Support team contact | "cloudops@contoso.com" |
+| `SupportContact` | Support team contact | "evilazaro@gmail.com" |
 | `ChargebackModel` | Cost allocation model | "Dedicated", "Shared", "Hybrid" |
 | `BudgetCode` | Budget tracking code | "FY25-Q1-InitiativeX" |
 

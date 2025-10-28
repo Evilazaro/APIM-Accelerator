@@ -16,7 +16,7 @@ We take security vulnerabilities seriously. If you discover a security vulnerabi
 ### How to Report
 
 1. **Do NOT create a public GitHub issue** for security vulnerabilities
-2. **Email us directly** at [cloudops@contoso.com](mailto:cloudops@contoso.com) with the subject line: "SECURITY: Azure APIM Accelerator Vulnerability Report"
+2. **Email us directly** at [evilazaro@gmail.com](mailto:evilazaro@gmail.com) with the subject line: "SECURITY: Azure APIM Accelerator Vulnerability Report"
 3. **Include the following information**:
    - Description of the vulnerability
    - Steps to reproduce the issue
@@ -149,7 +149,7 @@ We regularly review and update third-party dependencies for security vulnerabili
 ## Security Contacts
 
 For security-related inquiries:
-- **Email**: [cloudops@contoso.com](mailto:cloudops@contoso.com)
+- **Email**: [evilazaro@gmail.com](mailto:evilazaro@gmail.com)
 - **Response Time**: 2 business days for acknowledgment
 - **Escalation**: Include "URGENT SECURITY" in subject line for critical issues
 

@@ -17,30 +17,28 @@ README.md                   # This file - project overview and documentation
 │   └── azd-hooks/         # Azure Developer CLI lifecycle hooks
 │       └── pre-provision.sh
 ├── src/                   # Bicep modules organized by functional area
-│   ├── core/              # Core API Management platform components
-│   │   ├── main.bicep     # Core orchestration module
-│   │   ├── apim.bicep     # API Management service deployment
-│   │   ├── developer-portal.bicep # Developer portal configuration
-│   │   └── workspaces.bicep # APIM workspace management
 │   ├── shared/            # Shared infrastructure components
-│   │   ├── main.bicep     # Shared resources orchestration
-│   │   ├── common-types.bicep # TypeScript-like type definitions
-│   │   ├── monitoring/    # Observability components
+│   │   ├── main.bicep     # Shared infrastructure orchestration
+│   │   ├── common-types.bicep # Bicep type definitions and schemas
+│   │   ├── constants.bicep # Utility functions and constants
+│   │   ├── monitoring/    # Monitoring infrastructure
 │   │   │   ├── main.bicep # Monitoring orchestration
 │   │   │   ├── operational/
-│   │   │   │   └── main.bicep # Log Analytics workspace
+│   │   │   │   └── main.bicep # Log Analytics workspace + Storage
 │   │   │   └── insights/
-│   │   │       └── main.bicep # Application Insights
-│   │   └── networking/    # Network topology (VNet, subnets, NSGs)
+│   │   │       └── main.bicep # Application Insights component
+│   │   └── networking/    # Network components (placeholder)
 │   │       └── main.bicep
-│   └── inventory/         # API inventory and catalog management
-│       └── main.bicep     # API Center integration
-└── docs/                  # Comprehensive documentation
-    ├── getting-started/   # Quick start guides and prerequisites
-    ├── user-guide/        # Configuration and deployment guides
-    ├── architecture/      # Design principles and patterns
-    ├── developer-guide/   # Contribution and development guides
-    ├── troubleshooting/   # Common issues and solutions
+│   ├── core/              # Core API Management platform
+│   │   ├── main.bicep     # Core platform orchestration
+│   │   ├── apim.bicep     # API Management service with monitoring
+│   │   ├── developer-portal.bicep # Developer portal + Azure AD config
+│   │   └── workspaces.bicep # APIM workspace management
+│   └── inventory/         # API inventory and governance
+│       └── main.bicep     # API Center service integration
+└── docs/                  # Current documentation
+    ├── getting-started/   # Prerequisites and setup guides
+    ├── architecture/      # Architecture overview and design
     └── reference/         # Technical reference materials
 ```
 
@@ -48,77 +46,95 @@ README.md                   # This file - project overview and documentation
 
 | Component | Purpose | Location | Dependencies |
 |-----------|---------|----------|--------------|
-| **Orchestration** | Creates resource groups and coordinates module deployment | `infra/main.bicep` | `settings.yaml` |
-| **Core Platform** | API Management service, developer portal, workspaces | `src/core/` | Shared monitoring outputs |
-| **Shared Infrastructure** | Monitoring (Log Analytics, App Insights), networking | `src/shared/` | Resource group from orchestration |
-| **API Inventory** | API Center integration for cataloging and governance | `src/inventory/` | Core APIM service outputs |
-| **Configuration** | Centralized YAML-based settings for all environments | `infra/settings.yaml` | None (root configuration) |
+| **Orchestration** | Creates single resource group and coordinates deployment | `infra/main.bicep` | `settings.yaml` |
+| **Shared Infrastructure** | Log Analytics, Application Insights, Storage Account | `src/shared/` | Resource group from orchestration |
+| **Core Platform** | API Management service with monitoring integration | `src/core/` | Shared infrastructure outputs |
+| **API Inventory** | API Center service for API catalog and governance | `src/inventory/` | Core APIM service integration |
+| **Configuration** | Centralized settings for all deployment parameters | `infra/settings.yaml` | None (root configuration) |
 
-### 🎯 Module Flow
+### 🎯 Deployment Flow
 
 ```mermaid
 graph TD
-    A[infra/main.bicep] --> B[Resource Group Creation]
+    A[infra/main.bicep] --> B[Single Resource Group]
     A --> C[src/shared/main.bicep]
     A --> D[src/core/main.bicep]
     A --> E[src/inventory/main.bicep]
     
     C --> F[monitoring/main.bicep]
-    F --> G[operational/main.bicep - Log Analytics]
-    F --> H[insights/main.bicep - App Insights]
+    F --> G[operational/main.bicep - Log Analytics + Storage]
+    F --> H[insights/main.bicep - Application Insights]
     
-    D --> I[apim.bicep - APIM Service]
-    D --> J[developer-portal.bicep]
-    D --> K[workspaces.bicep]
+    D --> I[apim.bicep - APIM with Monitoring]
+    D --> J[developer-portal.bicep - Azure AD Integration]
+    D --> K[workspaces.bicep - Multi-tenant Organization]
     
-    E --> L[API Center Deployment]
+    E --> L[API Center + Workspace + Source Integration]
     
     C --> D
     D --> E
 ```
 
-## � Quick Start
+## 🚀 Quick Start
 
 ### Prerequisites
-- Azure CLI (`az`) v2.61+ with `bicep` extension
-- Azure Developer CLI (`azd`) v1.10+
-- Azure subscription with Contributor/Owner rights
+- Azure CLI (`az`) v2.60+ with `bicep` extension
+- Azure subscription with Contributor + User Access Administrator rights
 - PowerShell 7+ or Bash shell
+- Git for repository access
+
+**Optional but Recommended:**
+- Azure Developer CLI (`azd`) v1.10+ for simplified deployment
 
 ### Deployment Steps
 
-1. **Clone and Initialize**
+1. **Clone and Setup**
    ```bash
-   git clone <repository-url>
+   git clone https://github.com/Evilazaro/APIM-Accelerator.git
    cd APIM-Accelerator
-   azd auth login
+   
+   # Login to Azure
+   az login
+   az account set --subscription <your-subscription-id>
    ```
 
-2. **Configure Environment**
+2. **Configure Deployment**
    ```bash
-   # Review and customize settings
+   # Review and customize configuration
    code infra/settings.yaml
    
-   # Set target subscription
-   azd env set AZURE_SUBSCRIPTION_ID <your-subscription-id>
+   # Update required settings:
+   # - solutionName: your organization prefix
+   # - core.apiManagement.publisherEmail: your email
+   # - core.apiManagement.publisherName: your organization
    ```
 
 3. **Deploy Infrastructure**
    ```bash
-   # Deploy to Azure
-   azd up
-   
-   # Or use Azure CLI directly
+   # Deploy using Azure CLI
    az deployment sub create \
      --location eastus \
      --template-file infra/main.bicep \
      --parameters envName=dev location=eastus
+   
+   # Or use Azure Developer CLI (if installed)
+   azd auth login
+   azd up
    ```
 
 4. **Verify Deployment**
-   - Check Azure portal for created resources
-   - Navigate to API Management service → Developer Portal
-   - Review Log Analytics workspace for monitoring data
+   ```bash
+   # Check deployed resources
+   az resource list --resource-group <your-rg-name> --output table
+   
+   # Verify API Management service
+   az apim show --name <apim-name> --resource-group <rg-name>
+   ```
+   
+   **Manual Verification:**
+   - Azure Portal: Check all resources in the resource group
+   - API Management: Access developer portal and management interface
+   - Monitoring: Verify Log Analytics workspace and Application Insights data
 
 ## ⚙️ Configuration
 
@@ -134,192 +150,222 @@ All environment-specific settings are centralized in `infra/settings.yaml`:
 | `inventory.apiCenter` | API catalog integration | API Center service configuration |
 | `tags` | Resource governance | Cost tracking, ownership, compliance |
 
-### Complete Configuration Example
+### Current Implementation Example
 ```yaml
-solutionName: "contoso-apim"
+solutionName: "apim-accelerator"
 
 shared:
   monitoring:
     logAnalytics:
-      name: ""                           # Auto-generated if empty
-      workSpaceResourceId: ""           # Optional: use existing workspace
+      name: ""                        # Auto-generated: {solutionName}-{uniqueSuffix}-law
+      workSpaceResourceId: ""         # Optional: use existing workspace
       identity:
-        type: "SystemAssigned"          # SystemAssigned | UserAssigned
-        userAssignedIdentities: []      # Array of identity resource IDs
+        type: "SystemAssigned"        # SystemAssigned | UserAssigned
+        userAssignedIdentities: []    
     applicationInsights:
-      name: ""                          # Auto-generated if empty
-      logAnalyticsWorkspaceResourceId: "" # Linked workspace (auto-linked if empty)
+      name: ""                        # Auto-generated: {solutionName}-{uniqueSuffix}-ai
+      logAnalyticsWorkspaceResourceId: "" # Auto-linked to Log Analytics
     tags:
       lz-component-type: "shared"
       component: "monitoring"
   tags:
-    # Governance and compliance tags
     CostCenter: "CC-1234"
-    BusinessUnit: "IT"
-    Owner: "admin@contoso.com"
+    BusinessUnit: "IT" 
+    Owner: "evilazaro@gmail.com"
     ApplicationName: "APIM Platform"
-    ProjectName: "APIManagementInitiative"
-    ServiceClass: "Critical"            # Critical | Standard | Experimental
-    RegulatoryCompliance: "GDPR"       # GDPR | HIPAA | PCI | None
-    SupportContact: "cloudops@contoso.com"
-    ChargebackModel: "Dedicated"       # Dedicated | Shared | Hybrid
+    ProjectName: "APIMForAll"
+    ServiceClass: "Critical"
+    RegulatoryCompliance: "GDPR"
+    SupportContact: "evilazaro@gmail.com"
+    ChargebackModel: "Dedicated"
     BudgetCode: "FY25-Q1-InitiativeX"
 
 core:
-  apiManagement:
-    name: ""                           # Auto-generated if empty
-    publisherEmail: "admin@contoso.com"
-    publisherName: "Contoso API Team"
+  apiManagement: 
+    name: ""                          # Auto-generated: {solutionName}-{uniqueSuffix}-apim
+    publisherEmail: "evilazaro@gmail.com"  # REQUIRED: Update this
+    publisherName: "Contoso"          # REQUIRED: Update this
     sku:
-      name: "Premium"                  # Basic | BasicV2 | Developer | Standard | StandardV2 | Premium | Consumption
-      capacity: 1                     # Scale units (1-10+ depending on SKU)
+      name: "Premium"                 # Premium for production, Developer for testing
+      capacity: 1                     # Scale units (1-3+ for Premium)
     identity:
-      type: "SystemAssigned"          # SystemAssigned | UserAssigned | None
-      userAssignedIdentities: []      # Array of managed identity resource IDs
-    workspaces:                       # APIM workspaces for multi-tenancy
-      - name: "workspace1"
-      - name: "workspace2"
+      type: "SystemAssigned"          # Managed identity for secure authentication
+      userAssignedIdentities: []
+    workspaces: 
+      - name: "workspace1"            # APIM workspaces for organization
   tags:
-    lz-component-type: "core"
-    component: "apiManagement"
+      lz-component-type: "core"
+      component: "apiManagement"
 
 inventory:
   apiCenter:
-    name: ""                          # Auto-generated if empty
+    name: ""                          # Auto-generated: {solutionName}-apicenter-{uniqueSuffix}
     identity:
-      type: "SystemAssigned"         # SystemAssigned | UserAssigned | None
-      userAssignedIdentities: []     # Array of managed identity resource IDs
+      type: "SystemAssigned"          # System identity with Reader + Contributor roles
+      userAssignedIdentities: []
   tags:
     lz-component-type: "inventory"
-    component: "apiCenter"
+    component: "inventory"
 ```
 
-## 🏢 Enterprise Features
+## 🏢 Current Features
 
-- **Landing Zone Aligned**: Follows Azure Landing Zone design areas (identity, networking, security, monitoring, governance)
-- **Multi-Environment**: Support for Dev/Test/Prod with environment-specific configurations
-- **Managed Identity**: System and user-assigned identities with proper RBAC assignments
-- **Comprehensive Monitoring**: Log Analytics workspace with Application Insights integration
-- **API Governance**: API Center integration for catalog management and compliance
-- **Security First**: Key Vault integration, network isolation options, diagnostic logging
-- **Modular Design**: Composable Bicep modules for customization and extension
+- **Landing Zone Aligned**: Implements Azure Landing Zone design principles with managed identities and comprehensive monitoring
+- **Single Resource Group**: Simplified deployment model with logical component separation through tagging
+- **Managed Identity**: System-assigned identities with automated RBAC assignments (no stored secrets)
+- **Comprehensive Monitoring**: Log Analytics workspace with Application Insights integration and diagnostic settings
+- **API Governance**: API Center integration for centralized API catalog and automated discovery
+- **Security by Default**: HTTPS enforcement, managed identities, least-privilege access, comprehensive logging
+- **Modular Design**: Well-structured Bicep modules with type safety and utility functions
 
-## 🏗️ Landing Zone Alignment
+## 🏗️ Azure Landing Zone Alignment
 
-This accelerator implements Azure Landing Zone design areas:
+This accelerator implements Azure Landing Zone design areas with a practical, deployable approach:
 
-| Design Area | Implementation | Resources |
-|-------------|----------------|-----------|
-| **Identity & Access** | System/User-assigned managed identities with RBAC | Managed identities, role assignments |
-| **Network Topology** | VNet integration, subnet delegation, NSGs | Virtual networks, subnets, security groups |
-| **Security** | Key Vault integration, diagnostic logging, private endpoints | Key Vault, diagnostic settings, private DNS |
-| **Management** | Comprehensive monitoring and alerting | Log Analytics, Application Insights, workbooks |
-| **Governance** | Consistent tagging, resource organization, compliance | Resource groups, tags, policies |
+| Design Area | Current Implementation | Resources |
+|-------------|----------------------|-----------|
+| **Identity & Access** | System-assigned managed identities with automated RBAC | Managed identities, role assignments |
+| **Network Topology** | Public by default, VNet integration configurable | Optional VNet integration, public endpoints |
+| **Security** | Managed identities, HTTPS by default, comprehensive logging | Diagnostic settings, managed identities |
+| **Management** | Centralized monitoring with Log Analytics and Application Insights | Log Analytics, Application Insights, diagnostic settings |
+| **Governance** | Consistent tagging strategy and centralized configuration | Resource tags, settings.yaml configuration |
 
 ## 📚 Additional Resources
 
-### Documentation Structure
+### Available Documentation
 ```
 docs/
-├── getting-started/          # Quick start guides and setup
-├── user-guide/              # Configuration and operational guides
-├── architecture/            # Design principles and patterns
-├── developer-guide/         # Contribution and customization
-├── troubleshooting/         # Issue resolution and debugging
-└── reference/              # Technical specifications and schemas
+├── getting-started/          # Prerequisites and setup requirements
+├── architecture/            # Architecture overview and design principles
+└── reference/              # Technical specifications and reference materials
 ```
 
 ### Key Documentation Files
-- **[CONTRIBUTING.md](CONTRIBUTING.md)** - Contribution guidelines and process
-- **[CODE_OF_CONDUCT.md](CODE_OF_CONDUCT.md)** - Community standards and expectations
-- **[SECURITY.md](SECURITY.md)** - Security policy and vulnerability reporting
+- **[docs/getting-started/prerequisites.md](docs/getting-started/prerequisites.md)** - Complete setup requirements
+- **[docs/architecture/overview.md](docs/architecture/overview.md)** - Architecture design and implementation details
 - **[docs/reference/settings-schema.md](docs/reference/settings-schema.md)** - Complete settings.yaml reference
+- **[docs/reference/bicep-modules.md](docs/reference/bicep-modules.md)** - All Bicep modules and parameters
+- **[docs/reference/azure-resources.md](docs/reference/azure-resources.md)** - Complete resource inventory
+- **[docs/reference/permissions.md](docs/reference/permissions.md)** - RBAC and security configuration
 
-## 🔧 Customization & Extension
+## 🔧 Customization & Configuration
 
-### Adding New Modules
-```bicep
-// Create new module in appropriate src/ subdirectory
-// Import types from common-types.bicep
-import { YourType } from '../shared/common-types.bicep'
-
-// Add to main orchestration
-module yourModule '../src/your-area/main.bicep' = {
-  name: 'deploy-your-components'
-  scope: resourceGroup(rgName)
-  params: {
-    // Pass configuration and dependencies
-  }
-}
-```
-
-### Environment-Specific Overrides
+### Environment-Specific Deployment
 ```bash
-# Create environment-specific settings
-cp infra/settings.yaml infra/settings.prod.yaml
+# Development environment
+az deployment sub create \
+  --location eastus \
+  --template-file infra/main.bicep \
+  --parameters envName=dev location=eastus
 
-# Use with azd
-azd env set SETTINGS_FILE settings.prod.yaml
-azd up
+# Production environment with custom settings
+az deployment sub create \
+  --location eastus \
+  --template-file infra/main.bicep \
+  --parameters envName=prod location=eastus
 ```
 
 ### Custom Resource Naming
 ```yaml
-# Override default naming in settings.yaml
+# Override auto-generated names in settings.yaml
+core:
+  apiManagement:
+    name: "contoso-prod-apim"         # Custom APIM name
 shared:
   monitoring:
     logAnalytics:
-      name: "your-custom-law-name"
+      name: "contoso-prod-law"        # Custom Log Analytics name
     applicationInsights:
-      name: "your-custom-ai-name"
+      name: "contoso-prod-ai"         # Custom App Insights name
+```
+
+### SKU Configuration for Different Environments
+```yaml
+# Development - Cost-optimized
+core:
+  apiManagement:
+    sku: { name: "Developer", capacity: 1 }
+
+# Production - High-availability
+core:
+  apiManagement:
+    sku: { name: "Premium", capacity: 3 }
 ```
 
 ## 🔍 Monitoring & Operations
 
-### Key Metrics to Monitor
-- **API Management**: Request count, response time, error rates
-- **Log Analytics**: Query performance, data ingestion volume
-- **Application Insights**: Dependency health, exception rates
-- **Resource Health**: Service availability, configuration drift
+The accelerator includes comprehensive monitoring out-of-the-box:
 
-### Diagnostic Queries
+### Built-in Monitoring Features
+- **Diagnostic Settings**: All resources configured with Log Analytics integration
+- **Application Insights Logger**: APIM automatically sends telemetry to Application Insights
+- **Managed Identity Integration**: Secure monitoring without stored credentials
+- **Storage Account**: Long-term log retention and archival
+
+### Key Metrics Available
+- **API Management**: Request count, response time, error rates, gateway logs
+- **Log Analytics**: Query performance, data ingestion, workspace utilization
+- **Application Insights**: Performance counters, dependency tracking, exception analysis
+- **API Center**: API discovery, catalog usage, governance metrics
+
+### Sample Diagnostic Queries
 ```kql
-// API request patterns
+// API request patterns (available immediately after deployment)
 ApiManagementGatewayLogs
 | where TimeGenerated > ago(1h)
-| summarize RequestCount = count() by ApiId, bin(TimeGenerated, 5m)
+| summarize RequestCount = count() by OperationName, bin(TimeGenerated, 5m)
 
-// Error analysis  
+// Error analysis with response codes
 ApiManagementGatewayLogs
 | where ResponseCode >= 400
-| summarize ErrorCount = count() by ResponseCode, ApiId
+| summarize ErrorCount = count() by ResponseCode, OperationName
+| order by ErrorCount desc
 ```
 
-## � Troubleshooting
+## 🛠️ Troubleshooting
 
-### Common Issues
+### Common Issues and Solutions
 
 | Issue | Cause | Solution |
 |-------|-------|----------|
-| Deployment fails with permissions error | Insufficient RBAC | Ensure Contributor role on subscription |
-| APIM provisioning timeout | Large SKU deployment | Use smaller SKU for testing, Premium for production |
-| Monitoring data missing | Diagnostic settings not configured | Verify Log Analytics workspace connection |
-| API Center integration fails | Missing API Center registration | Enable API Center in target subscription |
+| "Insufficient privileges" error | Missing User Access Administrator role | Add User Access Administrator role to deployment user |
+| APIM deployment timeout | Premium SKU provisioning time | Premium can take 45+ minutes; use Developer SKU for testing |
+| API Center provider not found | API Center not registered | Run `az provider register --namespace Microsoft.ApiCenter` |
+| Monitoring data missing | Deployment still in progress | Wait for all resources to complete; diagnostic data appears within 5-15 minutes |
 
-### Validation Commands
+### Validation and Debugging
 ```bash
-# Verify Azure CLI and Bicep
-az version
-az bicep version
-
-# Validate templates
+# Pre-deployment validation
 az deployment sub validate \
   --location eastus \
   --template-file infra/main.bicep \
   --parameters envName=dev location=eastus
 
-# Check resource deployment
-az resource list --resource-group <your-rg-name> --output table
+# Check deployment status
+az deployment sub show \
+  --name <deployment-name> \
+  --query "properties.provisioningState"
+
+# Verify resource deployment
+az resource list \
+  --resource-group <rg-name> \
+  --query "[].{Name:name, Type:type, Status:properties.provisioningState}" \
+  --output table
+
+# Check API Center integration
+az apic api list \
+  --service-name <api-center-name> \
+  --resource-group <rg-name>
+```
+
+### Required Azure Resource Providers
+```bash
+# Register all required providers before deployment
+az provider register --namespace Microsoft.ApiManagement
+az provider register --namespace Microsoft.OperationalInsights  
+az provider register --namespace Microsoft.Insights
+az provider register --namespace Microsoft.Storage
+az provider register --namespace Microsoft.ApiCenter
 ```
 
 ## 📋 License

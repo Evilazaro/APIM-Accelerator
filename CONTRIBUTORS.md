@@ -142,7 +142,7 @@ We use the All Contributors specification to recognize all types of contribution
 - **GitHub Issues**: Bug reports and feature requests
 - **GitHub Discussions**: General questions and ideas
 - **Pull Requests**: Code and documentation contributions
-- **Email**: [cloudops@contoso.com](mailto:cloudops@contoso.com) for private matters
+- **Email**: [evilazaro@gmail.com](mailto:evilazaro@gmail.com) for private matters
 
 ## 🎉 Thank You!
 

@@ -163,7 +163,7 @@ The accelerator creates resources across multiple Azure services, organized by f
 | `ProjectName` | `shared.tags` | "APIMForAll" | Project identification |
 | `ServiceClass` | `shared.tags` | "Critical" | Service tier |
 | `RegulatoryCompliance` | `shared.tags` | "GDPR" | Compliance requirements |
-| `SupportContact` | `shared.tags` | "cloudops@contoso.com" | Support escalation |
+| `SupportContact` | `shared.tags` | "evilazaro@gmail.com" | Support escalation |
 | `ChargebackModel` | `shared.tags` | "Dedicated" | Cost model |
 | `BudgetCode` | `shared.tags` | "FY25-Q1-InitiativeX" | Budget tracking |
 | `environment` | Runtime | "dev", "test", "prod" | Environment identification |
