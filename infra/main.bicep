@@ -3,18 +3,21 @@ targetScope = 'subscription'
 param envName string
 param location string
 
-var settings = loadYamlContent('settings.yaml')
-var corePlatformSettings = settings.core
-var sharedSettings = settings.shared
-var inventorySettings = settings.inventory
+// Optimized: Configuration constants
+var settingsFile = 'settings.yaml'
+var resourceGroupSuffix = 'rg'
+var managedByValue = 'bicep'
 
-var envTags = {
+var settings = loadYamlContent(settingsFile)
+
+// Optimized: Consolidated tag creation with environment metadata
+var commonTags = union(settings.shared.tags, {
   environment: envName
-}
+  managedBy: managedByValue
+})
 
-var commonTags = union(settings.shared.tags, envTags)
-
-var rgName = '${settings.solutionName}-${envName}-${location}-rg'
+// Optimized: Consistent naming pattern for resource group
+var rgName = '${settings.solutionName}-${envName}-${location}-${resourceGroupSuffix}'
 
 resource rg 'Microsoft.Resources/resourceGroups@2025-04-01' = {
   name: rgName
@@ -28,7 +31,7 @@ module shared '../src/shared/main.bicep' = {
   params: {
     solutionName: settings.solutionName
     location: location
-    sharedSettings: sharedSettings
+    sharedSettings: settings.shared
   }
 }
 
@@ -43,15 +46,12 @@ module core '../src/core/main.bicep' = {
   params: {
     solutionName: settings.solutionName
     location: location
-    tags: union(commonTags, corePlatformSettings.tags)
+    tags: union(commonTags, settings.core.tags)
     logAnalyticsWorkspaceId: shared.outputs.AZURE_LOG_ANALYTICS_WORKSPACE_ID
     storageAccountResourceId: shared.outputs.AZURE_STORAGE_ACCOUNT_ID
-    ApplicationInsightsResourceId: shared.outputs.APPLICATION_INSIGHTS_RESOURCE_ID
-    apiManagementSettings: corePlatformSettings.apiManagement
+    applicationInsIghtsResourceId: shared.outputs.APPLICATION_INSIGHTS_RESOURCE_ID
+    apiManagementSettings: settings.core.apiManagement
   }
-  dependsOn: [
-    shared
-  ]
 }
 
 module inventory '../src/inventory/main.bicep' = {
@@ -59,12 +59,9 @@ module inventory '../src/inventory/main.bicep' = {
   scope: resourceGroup(rgName)
   params: {
     solutionName: settings.solutionName
-    inventorySettings: inventorySettings
+    inventorySettings: settings.inventory
     apiManagementName: core.outputs.API_MANAGEMENT_NAME
     apiManagementResourceId: core.outputs.API_MANAGEMENT_RESOURCE_ID
-    tags: sharedSettings.tags
+    tags: settings.shared.tags
   }
-  dependsOn: [
-    core
-  ]
 }

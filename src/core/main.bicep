@@ -1,16 +1,22 @@
 import { ApiManagement } from '../shared/common-types.bicep'
+import { generateUniqueSuffix } from '../shared/constants.bicep'
 
 param solutionName string
 param location string
 param apiManagementSettings ApiManagement
 param logAnalyticsWorkspaceId string
 param storageAccountResourceId string
-param ApplicationInsightsResourceId string
+param applicationInsIghtsResourceId string
 param tags object
 
-var apimName = (!empty(apiManagementSettings.name))
-  ? apiManagementSettings.name
-  : '${solutionName}-${uniqueString(subscription().id, resourceGroup().id,resourceGroup().name, solutionName, location)}-apim'
+// Optimized: Use centralized unique suffix function
+var uniqueSuffix = generateUniqueSuffix(subscription().id, resourceGroup().id, resourceGroup().name, solutionName, location)
+
+// Optimized: Constant for API Management suffix
+var apimSuffix = 'apim'
+
+// Optimized: Simplified naming logic using coalesce
+var apimName = apiManagementSettings.name ?? '${solutionName}-${uniqueSuffix}-${apimSuffix}'
 
 module apim 'apim.bicep' = {
   name: 'deploy-api-management'
@@ -19,7 +25,7 @@ module apim 'apim.bicep' = {
     name: apimName
     location: location
     tags: tags
-    ApplicationInsightsResourceId: ApplicationInsightsResourceId
+    applicationInsIghtsResourceId: applicationInsIghtsResourceId
     identityType: apiManagementSettings.identity.type
     logAnalyticsWorkspaceId: logAnalyticsWorkspaceId
     storageAccountResourceId: storageAccountResourceId
@@ -49,12 +55,8 @@ module devPortal 'developer-portal.bicep' = {
   name: 'deploy-developer-portal'
   scope: resourceGroup()
   params: {
-    tags: tags
     apiManagementName: apim.outputs.API_MANAGEMENT_NAME
     clientId: apim.outputs.AZURE_CLIENT_SECRET_CLIENT_ID
     clientSecret: apim.outputs.AZURE_CLIENT_SECRET_CLIENT_ID
   }
-  dependsOn: [
-    apim
-  ]
 }

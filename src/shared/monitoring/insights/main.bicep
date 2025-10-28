@@ -1,3 +1,8 @@
+// Optimized: Variables for diagnostic settings
+var diagnosticSettingsSuffix = '-diag'
+var allLogsCategory = 'allLogs'
+var allMetricsCategory = 'allMetrics'
+
 param name string
 param location string
 @allowed([
@@ -62,7 +67,7 @@ output APPLICATION_INSIGHTS_NAME string = appInsights.name
 output APPLICATION_INSIGHTS_INSTRUMENTATION_KEY string = appInsights.properties.InstrumentationKey
 
 resource appInsightsDiagnosticSettings 'Microsoft.Insights/diagnosticSettings@2021-05-01-preview' = {
-  name: '${appInsights.name}-diag'
+  name: '${appInsights.name}${diagnosticSettingsSuffix}'
   scope: appInsights
   properties: {
     workspaceId: logAnalyticsWorkspaceResourceId
@@ -70,13 +75,13 @@ resource appInsightsDiagnosticSettings 'Microsoft.Insights/diagnosticSettings@20
     logs: [
       {
         enabled: true
-        categoryGroup: 'allLogs'
+        categoryGroup: allLogsCategory
       }
     ]
     metrics: [
       {
         enabled: true
-        category: 'allMetrics'
+        category: allMetricsCategory
       }
     ]
   }

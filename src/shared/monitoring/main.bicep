@@ -1,15 +1,20 @@
 import { Monitoring } from '../common-types.bicep'
+import { generateUniqueSuffix } from '../constants.bicep'
 
 param solutionName string
 param location string
 param monitoringSettings Monitoring
 param tags object
 
-var logAnalyticsSettings = monitoringSettings.logAnalytics
+// Optimized: Use centralized unique suffix function
+var uniqueSuffix = generateUniqueSuffix(subscription().id, resourceGroup().id, resourceGroup().name, solutionName, location)
 
-var logAnalyticsWorkspaceName = (!empty(logAnalyticsSettings.name))
-  ? logAnalyticsSettings.name
-  : '${solutionName}-${uniqueString(subscription().id, resourceGroup().id,resourceGroup().name, solutionName, location)}-law'
+// Optimized: Constants for resource naming
+var logAnalyticsWorkspaceSuffix = 'law'
+var applicationInsightsSuffix = 'ai'
+
+// Optimized: Simplified naming logic using coalesce
+var logAnalyticsWorkspaceName = monitoringSettings.logAnalytics.name ?? '${solutionName}-${uniqueSuffix}-${logAnalyticsWorkspaceSuffix}'
 
 module operational 'operational/main.bicep' = {
   name: 'deploy-operational-insights'
@@ -18,19 +23,16 @@ module operational 'operational/main.bicep' = {
     name: logAnalyticsWorkspaceName
     location: location
     tags: tags
-    identityType: logAnalyticsSettings.identity.type
-    userAssignedIdentities: logAnalyticsSettings.identity.userAssignedIdentities
+    identityType: monitoringSettings.logAnalytics.identity.type
+    userAssignedIdentities: monitoringSettings.logAnalytics.identity.userAssignedIdentities
   }
 }
 
 output AZURE_LOG_ANALYTICS_WORKSPACE_ID string = operational.outputs.AZURE_LOG_ANALYTICS_WORKSPACE_ID
 output AZURE_STORAGE_ACCOUNT_ID string = operational.outputs.AZURE_STORAGE_ACCOUNT_ID
 
-var applicationInsightsSettings = monitoringSettings.applicationInsights
-
-var appInsightsName = (!empty(applicationInsightsSettings.name))
-  ? applicationInsightsSettings.name
-  : '${solutionName}-${uniqueString(subscription().id, resourceGroup().id,resourceGroup().name, solutionName, location)}-ai'
+// Optimized: Simplified naming logic using coalesce
+var appInsightsName = monitoringSettings.applicationInsights.name ?? '${solutionName}-${uniqueSuffix}-${applicationInsightsSuffix}'
 
 module insights 'insights/main.bicep' = {
   name: 'deploy-application-insights'

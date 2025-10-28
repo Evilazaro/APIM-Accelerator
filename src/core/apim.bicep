@@ -1,5 +1,11 @@
-param name string
+// Optimized: Configuration constants
+var diagnosticSettingsSuffix = '-diag'
+var appInsightsLoggerSuffix = '-appinsights'
 
+// Optimized: Role definition constants
+var readerRoleId = 'acdd72a7-3385-48ef-bd42-f606fba81ae7'
+
+param name string
 param location string
 @allowed([
   'Basic'
@@ -24,7 +30,7 @@ param publisherEmail string
 param publisherName string
 param logAnalyticsWorkspaceId string
 param storageAccountResourceId string
-param ApplicationInsightsResourceId string
+param applicationInsIghtsResourceId string
 param enableDeveloperPortal bool = true
 param publicNetworkAccess bool = true
 @allowed([
@@ -69,8 +75,9 @@ resource apim 'Microsoft.ApiManagement/service@2024-10-01-preview' = {
 output API_MANAGEMENT_RESOURCE_ID string = apim.id
 output API_MANAGEMENT_NAME string = apim.name
 
+// Optimized: Use constant for role definition
 var roles = [
-  'acdd72a7-3385-48ef-bd42-f606fba81ae7'
+  readerRoleId
 ]
 
 resource roleAssignments 'Microsoft.Authorization/roleAssignments@2022-04-01' = [
@@ -82,18 +89,12 @@ resource roleAssignments 'Microsoft.Authorization/roleAssignments@2022-04-01' = 
       principalId: apim.identity.principalId
       principalType: 'ServicePrincipal'
     }
-    dependsOn: [
-      apim
-    ]
   }
 ]
 
 resource clientSecret 'Microsoft.ManagedIdentity/identities@2025-01-31-preview' existing = {
   scope: apim
   name: 'default'
-  dependsOn: [
-    apim
-  ]
 }
 
 output AZURE_CLIENT_SECRET_ID string = clientSecret.id
@@ -103,7 +104,7 @@ output AZURE_CLIENT_SECRET_CLIENT_ID string = clientSecret.properties.clientId
 output AZURE_API_MANAGEMENT_IDENTITY_PRINCIPAL_ID string = apim.identity.principalId
 
 resource diagnosticSettings 'Microsoft.Insights/diagnosticSettings@2021-05-01-preview' = if (!empty(logAnalyticsWorkspaceId)) {
-  name: '${apim.name}-diag'
+  name: '${apim.name}${diagnosticSettingsSuffix}'
   scope: apim
   properties: {
     workspaceId: logAnalyticsWorkspaceId
@@ -124,13 +125,13 @@ resource diagnosticSettings 'Microsoft.Insights/diagnosticSettings@2021-05-01-pr
 }
 
 resource appInsightsLogger 'Microsoft.ApiManagement/service/loggers@2024-10-01-preview' = {
-  name: '${apim.name}-appinsights'
+  name: '${apim.name}${appInsightsLoggerSuffix}'
   parent: apim
   properties: {
     loggerType: 'applicationInsights'
-    resourceId: ApplicationInsightsResourceId
+    resourceId: applicationInsIghtsResourceId
     credentials: {
-      instrumentationKey: reference(ApplicationInsightsResourceId, '2020-02-02').InstrumentationKey
+      instrumentationKey: reference(applicationInsIghtsResourceId, '2020-02-02').InstrumentationKey
     }
   }
 }

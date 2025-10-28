@@ -4,16 +4,14 @@ param solutionName string
 param location string
 param sharedSettings Shared
 
-var monitoringSettings = sharedSettings.monitoring
-
 module monitoring 'monitoring/main.bicep' = {
   name: 'deploy-monitoring-resources'
   scope: resourceGroup()
   params: {
     location: location
-    tags: union(sharedSettings.tags, monitoringSettings.tags)
+    tags: union(sharedSettings.tags, sharedSettings.monitoring.tags)
     solutionName: solutionName
-    monitoringSettings: monitoringSettings
+    monitoringSettings: sharedSettings.monitoring
   }
 }
 

@@ -1,10 +1,24 @@
+// Optimized: Reusable identity type definitions
+type SystemAssignedIdentity = {
+  type: 'SystemAssigned' | 'UserAssigned'
+  userAssignedIdentities: []
+}
+
+type ExtendedIdentity = {
+  type: 'SystemAssigned' | 'UserAssigned' | 'SystemAssigned, UserAssigned' | 'None'
+  userAssignedIdentities: []
+}
+
+// Optimized: APIM SKU type definition
+type ApimSku = {
+  name: 'Basic' | 'BasicV2' | 'Developer' | 'Isolated' | 'Standard' | 'StandardV2' | 'Premium' | 'Consumption'
+  capacity: int
+}
+
 type LogAnalytics = {
   name: string
   workSpaceResourceId: string
-  identity: {
-    type: 'SystemAssigned' | 'UserAssigned'
-    userAssignedIdentities: []
-  }
+  identity: SystemAssignedIdentity
 }
 
 type ApplicationInsights = {
@@ -17,23 +31,14 @@ type ApiManagement = {
   name: string
   publisherEmail: string
   publisherName: string
-  sku: {
-    name: 'Basic' | 'BasicV2' | 'Developer' | 'Isolated' | 'Standard' | 'StandardV2' | 'Premium' | 'Consumption'
-    capacity: int
-  }
-  identity: {
-    type: 'SystemAssigned' | 'UserAssigned'
-    userAssignedIdentities: []
-  }
+  sku: ApimSku
+  identity: SystemAssignedIdentity
   workspaces: array
 }
 
 type ApiCenter = {
   name: string
-  identity: {
-    type: 'SystemAssigned' | 'UserAssigned' | 'SystemAssigned, UserAssigned' | 'None'
-    userAssignedIdentities: []
-  }
+  identity: ExtendedIdentity
 }
 
 type CorePlatform = {}
