@@ -1,4 +1,22 @@
-// Optimized: Configuration constants
+// =================================================================
+// AZURE API MANAGEMENT DEVELOPER PORTAL CONFIGURATION
+// =================================================================
+// This module configures the API Management developer portal with:
+// - CORS policies for cross-origin requests
+// - Azure AD identity provider integration
+// - Portal settings for sign-in and sign-up functionality
+// - Terms of service configuration
+//
+// File: src/core/developer-portal.bicep
+// Purpose: Configures developer portal authentication and policies
+// Dependencies: API Management service (existing resource)
+// =================================================================
+
+// =================================================================
+// CONFIGURATION CONSTANTS
+// =================================================================
+
+// Resource naming constants for consistent deployment
 var policyResourceName = 'policy'
 var identityProviderName = 'aad'
 var identityProviderType = 'aad'
@@ -8,20 +26,39 @@ var defaultPortalConfigName = 'default'
 var signInSettingName = 'signin'
 var signUpSettingName = 'signup'
 
-// Optimized: Tenant configuration (should be parameterized in production)
+// Azure AD tenant configuration - customize for your environment
 var allowedTenants = [
   'MngEnvMCAP341438.onmicrosoft.com'
 ]
 
+// =================================================================
+// PARAMETERS
+// =================================================================
+
+@description('Name of the existing API Management service to configure')
 param apiManagementName string
+
+@description('Azure AD application client ID for developer portal authentication')
 param clientId string
+
+@description('Azure AD application client secret for developer portal authentication')
 @secure()
 param clientSecret string
 
+// =================================================================
+// EXISTING RESOURCES
+// =================================================================
+
+@description('Reference to existing API Management service')
 resource apim 'Microsoft.ApiManagement/service@2024-10-01-preview' existing = {
   name: apiManagementName
 }
 
+// =================================================================
+// CORS POLICY CONFIGURATION
+// =================================================================
+
+@description('Global CORS policy for API Management - Enables cross-origin requests from developer portal')
 resource apimPolicy 'Microsoft.ApiManagement/service/policies@2024-10-01-preview' = {
   parent: apim
   name: policyResourceName
@@ -31,6 +68,11 @@ resource apimPolicy 'Microsoft.ApiManagement/service/policies@2024-10-01-preview
   }
 }
 
+// =================================================================
+// AZURE AD IDENTITY PROVIDER
+// =================================================================
+
+@description('Azure AD identity provider configuration - Enables AAD authentication for developer portal users')
 resource apimIdentityProvider 'Microsoft.ApiManagement/service/identityProviders@2024-06-01-preview' = {
   parent: apim
   name: identityProviderName
@@ -44,6 +86,11 @@ resource apimIdentityProvider 'Microsoft.ApiManagement/service/identityProviders
   }
 }
 
+// =================================================================
+// DEVELOPER PORTAL CONFIGURATION
+// =================================================================
+
+@description('Developer portal configuration - Sets CORS origins and portal behavior')
 resource devPortalConfig 'Microsoft.ApiManagement/service/portalconfigs@2023-05-01-preview' = {
   name: defaultPortalConfigName
   parent: apim
@@ -58,6 +105,11 @@ resource devPortalConfig 'Microsoft.ApiManagement/service/portalconfigs@2023-05-
   }
 }
 
+// =================================================================
+// PORTAL AUTHENTICATION SETTINGS
+// =================================================================
+
+@description('Developer portal sign-in settings - Enables user authentication')
 resource devPortalSignInSetting 'Microsoft.ApiManagement/service/portalsettings@2024-06-01-preview' = {
   parent: apim
   name: signInSettingName
@@ -66,6 +118,7 @@ resource devPortalSignInSetting 'Microsoft.ApiManagement/service/portalsettings@
   }
 }
 
+@description('Developer portal sign-up settings - Enables user registration with terms of service')
 resource devPortalSignUpSetting 'Microsoft.ApiManagement/service/portalsettings@2024-06-01-preview' = {
   parent: apim
   name: signUpSettingName

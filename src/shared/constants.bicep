@@ -1,21 +1,55 @@
-// Common constants and reusable variables for the APIM Accelerator solution
-// This file centralizes frequently used constants to improve maintainability
+/*
+==============================================================================
+SHARED CONSTANTS AND UTILITY FUNCTIONS
+==============================================================================
 
-// Diagnostic settings constants
+File: src/shared/constants.bicep
+Purpose: Centralized constants and utility functions for APIM Accelerator
+Author: Cloud Platform Team
+Created: 2025-10-28
+Last Modified: 2025-10-28
+
+Description:
+  This module provides centralized constants and utility functions used across
+  all APIM Accelerator templates. It includes:
+  - Diagnostic settings configurations
+  - Storage account naming and configuration constants
+  - Log Analytics and Application Insights defaults
+  - Identity type definitions and role mappings
+  - API Management configuration constants
+  - Utility functions for consistent resource naming
+
+Usage:
+  Import specific constants or functions as needed:
+  import { diagnosticSettings, generateUniqueSuffix } from '../shared/constants.bicep'
+
+Version: 1.0.0
+==============================================================================
+*/
+
+//==============================================================================
+// DIAGNOSTIC SETTINGS CONSTANTS
+//==============================================================================
+
+@description('Standard diagnostic settings configuration used across all Azure resources')
 @export()
 var diagnosticSettings object = {
-  suffix: '-diag'
-  allLogsCategory: 'allLogs'
-  allMetricsCategory: 'allMetrics'
+  suffix: '-diag'                    // Standard suffix for diagnostic setting names
+  allLogsCategory: 'allLogs'         // Category group for capturing all log types
+  allMetricsCategory: 'allMetrics'   // Category for capturing all metric types
 }
 
-// Storage account constants
+//==============================================================================
+// STORAGE ACCOUNT CONFIGURATION CONSTANTS
+//==============================================================================
+
+@description('Storage account configuration constants for consistent deployment across environments')
 @export()
 var storageAccount object = {
-  standardLRS: 'Standard_LRS'
-  storageV2: 'StorageV2'
-  suffixSeparator: 'sa'
-  maxNameLength: 24
+  standardLRS: 'Standard_LRS'        // Locally redundant storage for cost optimization
+  storageV2: 'StorageV2'            // Latest storage account type with all features
+  suffixSeparator: 'sa'             // Standard abbreviation for storage accounts
+  maxNameLength: 24                 // Azure limit for storage account name length
 }
 
 // Log Analytics constants
@@ -113,22 +147,26 @@ var roleDefinitions = {
   apiCenterContributor: '6cba8790-29c5-48e5-bab1-c7541b01cb04'
 }
 
-// Function to generate consistent unique suffix
+//==============================================================================
+// UTILITY FUNCTIONS
+//==============================================================================
+
+@description('Generates consistent unique suffix for resource naming based on deployment context')
 @export()
 func generateUniqueSuffix(subscriptionId string, resourceGroupId string, resourceGroupName string, solutionName string, location string) string =>
   uniqueString(subscriptionId, resourceGroupId, resourceGroupName, solutionName, location)
 
-// Function to generate storage account name with proper constraints
+@description('Generates compliant storage account name with length constraints and character restrictions')
 @export()
 func generateStorageAccountName(baseName string, uniqueSuffix string) string =>
   toLower(take(replace('${baseName}${storageAccount.suffixSeparator}${uniqueSuffix}', '-', ''), storageAccount.maxNameLength))
 
-// Function to generate diagnostic settings name
+@description('Generates standardized diagnostic settings name for consistent monitoring configuration')
 @export()
 func generateDiagnosticSettingsName(resourceName string) string =>
   '${resourceName}${diagnosticSettings.suffix}'
 
-// Function to create identity configuration
+@description('Creates properly formatted identity configuration object for Azure resources')
 @export()
 func createIdentityConfig(identityType string, userAssignedIdentities array) object =>
   identityType != identityTypes.none
