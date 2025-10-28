@@ -1,132 +1,350 @@
-# Documentation Index
+# Azure API Management Landing Zone Accelerator
 
-Welcome to the Azure API Management Landing Zone Accelerator documentation! This comprehensive guide will help you understand, deploy, and customize the accelerator for your organization.
+Provision, configure, and operationalize Azure API Management (APIM) following Azure Landing Zone (ALZ) design areas and enterprise guardrails.
 
-## 📚 Documentation Structure
+![Status](https://img.shields.io/badge/status-active-success) ![License](https://img.shields.io/badge/license-MIT-blue) ![IaC-Bicep](https://img.shields.io/badge/IaC-Bicep-5C2D91)
 
-### 🚀 [Getting Started](./docs/getting-started/)
-Perfect for newcomers and quick deployment scenarios.
+## 📁 Repository Structure
 
-- **[Prerequisites](./docs/getting-started/prerequisites.md)** - Required tools, permissions, and setup
-- **[Quick Start](./docs/getting-started/quick-start.md)** - Deploy your first APIM platform in minutes
-- **[Installation Guide](./docs/getting-started/installation.md)** - Detailed installation instructions
-- **[Configuration Basics](./docs/getting-started/configuration.md)** - Essential configuration concepts
+```
+azure.yaml                   # Azure Developer CLI (azd) project configuration
+LICENSE                     # MIT license terms
+README.md                   # This file - project overview and documentation
+├── infra/                  # Infrastructure orchestration
+│   ├── main.bicep         # Subscription-scoped entry point (resource groups + modules)
+│   ├── main.parameters.json # Optional parameters file for Azure CLI deployment
+│   ├── settings.yaml      # Centralized configuration for all environments
+│   └── azd-hooks/         # Azure Developer CLI lifecycle hooks
+│       └── pre-provision.sh
+├── src/                   # Bicep modules organized by functional area
+│   ├── core/              # Core API Management platform components
+│   │   ├── main.bicep     # Core orchestration module
+│   │   ├── apim.bicep     # API Management service deployment
+│   │   ├── developer-portal.bicep # Developer portal configuration
+│   │   └── workspaces.bicep # APIM workspace management
+│   ├── shared/            # Shared infrastructure components
+│   │   ├── main.bicep     # Shared resources orchestration
+│   │   ├── common-types.bicep # TypeScript-like type definitions
+│   │   ├── monitoring/    # Observability components
+│   │   │   ├── main.bicep # Monitoring orchestration
+│   │   │   ├── operational/
+│   │   │   │   └── main.bicep # Log Analytics workspace
+│   │   │   └── insights/
+│   │   │       └── main.bicep # Application Insights
+│   │   └── networking/    # Network topology (VNet, subnets, NSGs)
+│   │       └── main.bicep
+│   └── inventory/         # API inventory and catalog management
+│       └── main.bicep     # API Center integration
+└── docs/                  # Comprehensive documentation
+    ├── getting-started/   # Quick start guides and prerequisites
+    ├── user-guide/        # Configuration and deployment guides
+    ├── architecture/      # Design principles and patterns
+    ├── developer-guide/   # Contribution and development guides
+    ├── troubleshooting/   # Common issues and solutions
+    └── reference/         # Technical reference materials
+```
 
-### 📖 [User Guide](./docs/user-guide/)
-Comprehensive guides for using and customizing the accelerator.
+### 🏗️ Architecture Components
 
-- **[Features Overview](./docs/user-guide/features.md)** - Complete feature set and capabilities
-- **[Configuration Reference](./docs/user-guide/configuration.md)** - Detailed settings.yaml reference
-- **[Deployment Options](./docs/user-guide/deployment.md)** - Different ways to deploy the accelerator
-- **[Security Configuration](./docs/user-guide/security.md)** - Security best practices and setup
-- **[Monitoring & Observability](./docs/user-guide/monitoring.md)** - Logging, metrics, and alerting
-- **[Examples & Tutorials](./docs/user-guide/examples/)** - Step-by-step scenarios and use cases
+| Component | Purpose | Location | Dependencies |
+|-----------|---------|----------|--------------|
+| **Orchestration** | Creates resource groups and coordinates module deployment | `infra/main.bicep` | `settings.yaml` |
+| **Core Platform** | API Management service, developer portal, workspaces | `src/core/` | Shared monitoring outputs |
+| **Shared Infrastructure** | Monitoring (Log Analytics, App Insights), networking | `src/shared/` | Resource group from orchestration |
+| **API Inventory** | API Center integration for cataloging and governance | `src/inventory/` | Core APIM service outputs |
+| **Configuration** | Centralized YAML-based settings for all environments | `infra/settings.yaml` | None (root configuration) |
 
-### 🏗️ [Architecture](./docs/architecture/)
-Deep dive into the design principles and architecture.
+### 🎯 Module Flow
 
-- **[Overview](./docs/architecture/overview.md)** - High-level architecture and design principles  
-- **[Landing Zone Alignment](./docs/architecture/landing-zones.md)** - How this aligns with Azure Landing Zones
-- **[Component Architecture](./docs/architecture/components.md)** - Detailed component breakdown
-- **[Security Model](./docs/architecture/security.md)** - Security architecture and controls
-- **[Network Design](./docs/architecture/networking.md)** - Network topology and connectivity patterns
-- **[Data Flow](./docs/architecture/data-flow.md)** - How data flows through the system
+```mermaid
+graph TD
+    A[infra/main.bicep] --> B[Resource Group Creation]
+    A --> C[src/shared/main.bicep]
+    A --> D[src/core/main.bicep]
+    A --> E[src/inventory/main.bicep]
+    
+    C --> F[monitoring/main.bicep]
+    F --> G[operational/main.bicep - Log Analytics]
+    F --> H[insights/main.bicep - App Insights]
+    
+    D --> I[apim.bicep - APIM Service]
+    D --> J[developer-portal.bicep]
+    D --> K[workspaces.bicep]
+    
+    E --> L[API Center Deployment]
+    
+    C --> D
+    D --> E
+```
 
-### 👩‍💻 [Developer Guide](./docs/developer-guide/)
-For contributors and those extending the accelerator.
+## � Quick Start
 
-- **[Development Setup](./docs/developer-guide/development-setup.md)** - Set up your development environment
-- **[Template Structure](./docs/developer-guide/template-structure.md)** - Understanding the Bicep structure
-- **[Customization Guide](./docs/developer-guide/customization.md)** - How to customize and extend
-- **[Testing Guide](./docs/developer-guide/testing.md)** - Testing strategies and best practices
-- **[Contributing](./docs/developer-guide/contributing.md)** - How to contribute to the project
+### Prerequisites
+- Azure CLI (`az`) v2.61+ with `bicep` extension
+- Azure Developer CLI (`azd`) v1.10+
+- Azure subscription with Contributor/Owner rights
+- PowerShell 7+ or Bash shell
 
-### 🔧 [Troubleshooting](./docs/troubleshooting/)
-Solutions to common issues and problems.
+### Deployment Steps
 
-- **[Common Issues](./docs/troubleshooting/common-issues.md)** - Frequently encountered problems
-- **[Deployment Errors](./docs/troubleshooting/deployment-errors.md)** - Deployment-specific troubleshooting
-- **[Configuration Issues](./docs/troubleshooting/configuration.md)** - Configuration-related problems
-- **[Performance Issues](./docs/troubleshooting/performance.md)** - Performance tuning and optimization
-- **[FAQ](./docs/troubleshooting/faq.md)** - Frequently asked questions
+1. **Clone and Initialize**
+   ```bash
+   git clone <repository-url>
+   cd APIM-Accelerator
+   azd auth login
+   ```
 
-### 📑 [Reference](./docs/reference/)
-Technical reference materials and specifications.
+2. **Configure Environment**
+   ```bash
+   # Review and customize settings
+   code infra/settings.yaml
+   
+   # Set target subscription
+   azd env set AZURE_SUBSCRIPTION_ID <your-subscription-id>
+   ```
 
-- **[Settings Schema](./docs/reference/settings-schema.md)** - Complete settings.yaml schema reference
-- **[Bicep Module Reference](./docs/reference/bicep-modules.md)** - All Bicep modules and their parameters
-- **[Azure Resources](./docs/reference/azure-resources.md)** - Complete list of Azure resources created
-- **[RBAC & Permissions](./docs/reference/permissions.md)** - Required permissions and role assignments
-- **[API Reference](./docs/reference/api-reference.md)** - API Management specific configurations
-- **[Glossary](./docs/reference/glossary.md)** - Terms and definitions
+3. **Deploy Infrastructure**
+   ```bash
+   # Deploy to Azure
+   azd up
+   
+   # Or use Azure CLI directly
+   az deployment sub create \
+     --location eastus \
+     --template-file infra/main.bicep \
+     --parameters envName=dev location=eastus
+   ```
 
-## 🎯 Quick Navigation
+4. **Verify Deployment**
+   - Check Azure portal for created resources
+   - Navigate to API Management service → Developer Portal
+   - Review Log Analytics workspace for monitoring data
 
-### I want to...
-- **Get started quickly** → [Quick Start Guide](./docs/getting-started/quick-start.md)
-- **Understand the architecture** → [Architecture Overview](./docs/architecture/overview.md)
-- **Configure for production** → [Configuration Reference](./docs/user-guide/configuration.md)
-- **Customize the templates** → [Customization Guide](./docs/developer-guide/customization.md)
-- **Troubleshoot an issue** → [Common Issues](./docs/troubleshooting/common-issues.md)
-- **Contribute to the project** → [Contributing Guide](./docs/../CONTRIBUTING.md)
+## ⚙️ Configuration
 
-### By Role
-- **Platform Engineers** → [Architecture](./docs/architecture/) + [Configuration](./docs/user-guide/configuration.md)
-- **Developers** → [Getting Started](./docs/getting-started/) + [Examples](./docs/user-guide/examples/)
-- **DevOps Engineers** → [Deployment Options](./docs/user-guide/deployment.md) + [Troubleshooting](./docs/troubleshooting/)
-- **Security Engineers** → [Security Configuration](./docs/user-guide/security.md) + [Security Model](./docs/architecture/security.md)
-- **Contributors** → [Developer Guide](./docs/developer-guide/) + [Contributing](./docs/../CONTRIBUTING.md)
+All environment-specific settings are centralized in `infra/settings.yaml`:
 
-## 📊 Documentation Status
+### Core Configuration Areas
 
-| Section | Status | Last Updated |
-|---------|--------|--------------|
-| Getting Started | ✅ Complete | 2025-01-15 |
-| User Guide | ✅ Complete | 2025-01-15 |
-| Architecture | ✅ Complete | 2025-01-15 |
-| Developer Guide | ✅ Complete | 2025-01-15 |
-| Troubleshooting | ✅ Complete | 2025-01-15 |
-| Reference | ✅ Complete | 2025-01-15 |
+| Section | Purpose | Key Settings |
+|---------|---------|--------------|
+| `solutionName` | Resource naming prefix | Base name for all resources |
+| `shared.monitoring` | Observability stack | Log Analytics, Application Insights |
+| `core.apiManagement` | APIM service config | SKU, identity, publisher details |
+| `inventory.apiCenter` | API catalog integration | API Center service configuration |
+| `tags` | Resource governance | Cost tracking, ownership, compliance |
 
-## 🤝 Contributing to Documentation
+### Complete Configuration Example
+```yaml
+solutionName: "contoso-apim"
 
-We welcome contributions to improve our documentation! Here's how you can help:
+shared:
+  monitoring:
+    logAnalytics:
+      name: ""                           # Auto-generated if empty
+      workSpaceResourceId: ""           # Optional: use existing workspace
+      identity:
+        type: "SystemAssigned"          # SystemAssigned | UserAssigned
+        userAssignedIdentities: []      # Array of identity resource IDs
+    applicationInsights:
+      name: ""                          # Auto-generated if empty
+      logAnalyticsWorkspaceResourceId: "" # Linked workspace (auto-linked if empty)
+    tags:
+      lz-component-type: "shared"
+      component: "monitoring"
+  tags:
+    # Governance and compliance tags
+    CostCenter: "CC-1234"
+    BusinessUnit: "IT"
+    Owner: "admin@contoso.com"
+    ApplicationName: "APIM Platform"
+    ProjectName: "APIManagementInitiative"
+    ServiceClass: "Critical"            # Critical | Standard | Experimental
+    RegulatoryCompliance: "GDPR"       # GDPR | HIPAA | PCI | None
+    SupportContact: "cloudops@contoso.com"
+    ChargebackModel: "Dedicated"       # Dedicated | Shared | Hybrid
+    BudgetCode: "FY25-Q1-InitiativeX"
 
-1. **Report Issues** - Found something unclear? [Create a documentation issue](./docs/../.github/ISSUE_TEMPLATE/documentation.md)
-2. **Suggest Improvements** - Have ideas for better explanations? We'd love to hear them!
-3. **Submit Changes** - Follow our [contributing guidelines](./docs/../CONTRIBUTING.md) to submit improvements
+core:
+  apiManagement:
+    name: ""                           # Auto-generated if empty
+    publisherEmail: "admin@contoso.com"
+    publisherName: "Contoso API Team"
+    sku:
+      name: "Premium"                  # Basic | BasicV2 | Developer | Standard | StandardV2 | Premium | Consumption
+      capacity: 1                     # Scale units (1-10+ depending on SKU)
+    identity:
+      type: "SystemAssigned"          # SystemAssigned | UserAssigned | None
+      userAssignedIdentities: []      # Array of managed identity resource IDs
+    workspaces:                       # APIM workspaces for multi-tenancy
+      - name: "workspace1"
+      - name: "workspace2"
+  tags:
+    lz-component-type: "core"
+    component: "apiManagement"
 
-### Documentation Standards
-- **Clear and Concise** - Write for your audience
-- **Complete Examples** - Include working code samples
-- **Up-to-Date** - Keep content current with latest changes
-- **Accessible** - Use clear language and good structure
-- **Visual** - Include diagrams and screenshots where helpful
+inventory:
+  apiCenter:
+    name: ""                          # Auto-generated if empty
+    identity:
+      type: "SystemAssigned"         # SystemAssigned | UserAssigned | None
+      userAssignedIdentities: []     # Array of managed identity resource IDs
+  tags:
+    lz-component-type: "inventory"
+    component: "apiCenter"
+```
 
-## 📞 Getting Help
+## 🏢 Enterprise Features
 
-If you can't find what you're looking for in the documentation:
+- **Landing Zone Aligned**: Follows Azure Landing Zone design areas (identity, networking, security, monitoring, governance)
+- **Multi-Environment**: Support for Dev/Test/Prod with environment-specific configurations
+- **Managed Identity**: System and user-assigned identities with proper RBAC assignments
+- **Comprehensive Monitoring**: Log Analytics workspace with Application Insights integration
+- **API Governance**: API Center integration for catalog management and compliance
+- **Security First**: Key Vault integration, network isolation options, diagnostic logging
+- **Modular Design**: Composable Bicep modules for customization and extension
 
-1. **Search Issues** - Check if someone has asked the same question
-2. **Ask a Question** - Create a [question issue](./docs/../.github/ISSUE_TEMPLATE/question.md)
-3. **Join Discussions** - Participate in GitHub Discussions
-4. **Contact Us** - Reach out to [cloudops@contoso.com](./docs/mailto:cloudops@contoso.com)
+## 🏗️ Landing Zone Alignment
 
-## 🔗 External Resources
+This accelerator implements Azure Landing Zone design areas:
 
-### Azure Documentation
-- [Azure API Management](./docs/https://learn.microsoft.com/azure/api-management/)
-- [Azure Landing Zones](./docs/https://learn.microsoft.com/azure/cloud-adoption-framework/ready/landing-zone/)
-- [Azure Bicep](./docs/https://learn.microsoft.com/azure/azure-resource-manager/bicep/)
-- [Azure Monitor](./docs/https://learn.microsoft.com/azure/azure-monitor/)
+| Design Area | Implementation | Resources |
+|-------------|----------------|-----------|
+| **Identity & Access** | System/User-assigned managed identities with RBAC | Managed identities, role assignments |
+| **Network Topology** | VNet integration, subnet delegation, NSGs | Virtual networks, subnets, security groups |
+| **Security** | Key Vault integration, diagnostic logging, private endpoints | Key Vault, diagnostic settings, private DNS |
+| **Management** | Comprehensive monitoring and alerting | Log Analytics, Application Insights, workbooks |
+| **Governance** | Consistent tagging, resource organization, compliance | Resource groups, tags, policies |
 
-### Tools & SDKs
-- [Azure CLI](./docs/https://learn.microsoft.com/cli/azure/)
-- [Azure Developer CLI](./docs/https://learn.microsoft.com/azure/developer/azure-developer-cli/)
-- [VS Code Bicep Extension](./docs/https://marketplace.visualstudio.com/items?itemName=ms-azuretools.vscode-bicep)
+## 📚 Additional Resources
 
----
+### Documentation Structure
+```
+docs/
+├── getting-started/          # Quick start guides and setup
+├── user-guide/              # Configuration and operational guides
+├── architecture/            # Design principles and patterns
+├── developer-guide/         # Contribution and customization
+├── troubleshooting/         # Issue resolution and debugging
+└── reference/              # Technical specifications and schemas
+```
 
-**Last Updated:** January 15, 2025  
-**Version:** 1.0.0  
-**Maintainers:** [Azure APIM Accelerator Team](./docs/mailto:cloudops@contoso.com)
+### Key Documentation Files
+- **[CONTRIBUTING.md](CONTRIBUTING.md)** - Contribution guidelines and process
+- **[CODE_OF_CONDUCT.md](CODE_OF_CONDUCT.md)** - Community standards and expectations
+- **[SECURITY.md](SECURITY.md)** - Security policy and vulnerability reporting
+- **[docs/reference/settings-schema.md](docs/reference/settings-schema.md)** - Complete settings.yaml reference
+
+## 🔧 Customization & Extension
+
+### Adding New Modules
+```bicep
+// Create new module in appropriate src/ subdirectory
+// Import types from common-types.bicep
+import { YourType } from '../shared/common-types.bicep'
+
+// Add to main orchestration
+module yourModule '../src/your-area/main.bicep' = {
+  name: 'deploy-your-components'
+  scope: resourceGroup(rgName)
+  params: {
+    // Pass configuration and dependencies
+  }
+}
+```
+
+### Environment-Specific Overrides
+```bash
+# Create environment-specific settings
+cp infra/settings.yaml infra/settings.prod.yaml
+
+# Use with azd
+azd env set SETTINGS_FILE settings.prod.yaml
+azd up
+```
+
+### Custom Resource Naming
+```yaml
+# Override default naming in settings.yaml
+shared:
+  monitoring:
+    logAnalytics:
+      name: "your-custom-law-name"
+    applicationInsights:
+      name: "your-custom-ai-name"
+```
+
+## 🔍 Monitoring & Operations
+
+### Key Metrics to Monitor
+- **API Management**: Request count, response time, error rates
+- **Log Analytics**: Query performance, data ingestion volume
+- **Application Insights**: Dependency health, exception rates
+- **Resource Health**: Service availability, configuration drift
+
+### Diagnostic Queries
+```kql
+// API request patterns
+ApiManagementGatewayLogs
+| where TimeGenerated > ago(1h)
+| summarize RequestCount = count() by ApiId, bin(TimeGenerated, 5m)
+
+// Error analysis  
+ApiManagementGatewayLogs
+| where ResponseCode >= 400
+| summarize ErrorCount = count() by ResponseCode, ApiId
+```
+
+## � Troubleshooting
+
+### Common Issues
+
+| Issue | Cause | Solution |
+|-------|-------|----------|
+| Deployment fails with permissions error | Insufficient RBAC | Ensure Contributor role on subscription |
+| APIM provisioning timeout | Large SKU deployment | Use smaller SKU for testing, Premium for production |
+| Monitoring data missing | Diagnostic settings not configured | Verify Log Analytics workspace connection |
+| API Center integration fails | Missing API Center registration | Enable API Center in target subscription |
+
+### Validation Commands
+```bash
+# Verify Azure CLI and Bicep
+az version
+az bicep version
+
+# Validate templates
+az deployment sub validate \
+  --location eastus \
+  --template-file infra/main.bicep \
+  --parameters envName=dev location=eastus
+
+# Check resource deployment
+az resource list --resource-group <your-rg-name> --output table
+```
+
+## 📋 License
+
+This project is licensed under the [MIT License](LICENSE).
+
+## 🤝 Contributing
+
+1. Fork the repository
+2. Create a feature branch: `git checkout -b feature/your-feature`
+3. Commit changes: `git commit -am 'Add your feature'`
+4. Push to branch: `git push origin feature/your-feature`
+5. Submit a Pull Request
+
+Please read our [Contributing Guidelines](CONTRIBUTING.md) and [Code of Conduct](CODE_OF_CONDUCT.md) before contributing.
+
+## 📞 Support
+
+- **Issues**: [GitHub Issues](../../issues)
+- **Discussions**: [GitHub Discussions](../../discussions)
+- **Security**: [Security Policy](SECURITY.md)
+
+## 🔗 Related Resources
+
+- [Azure API Management Documentation](https://learn.microsoft.com/azure/api-management/)
+- [Azure Landing Zones](https://learn.microsoft.com/azure/cloud-adoption-framework/ready/landing-zone/)
+- [Azure Bicep Documentation](https://learn.microsoft.com/azure/azure-resource-manager/bicep/)
+- [Azure Developer CLI](https://learn.microsoft.com/azure/developer/azure-developer-cli/)
