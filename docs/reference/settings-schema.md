@@ -1,6 +1,6 @@
 # Settings Schema Reference
 
-This document provides a comprehensive reference for the `settings.yaml` configuration file used by the Azure API Management Landing Zone Accelerator.
+This document provides a comprehensive reference for the `settings.yaml` configuration file used by the Azure API Management Accelerator.
 
 ## 🎯 Overview
 

@@ -1,6 +1,6 @@
 # RBAC & Permissions Reference
 
-This document provides a comprehensive reference for Role-Based Access Control (RBAC) and permissions required for the Azure API Management Landing Zone Accelerator.
+This document provides a comprehensive reference for Role-Based Access Control (RBAC) and permissions required for the Azure API Management Accelerator.
 
 ## 🎯 Overview
 

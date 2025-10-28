@@ -1,6 +1,6 @@
 /*
 ==============================================================================
-AZURE API MANAGEMENT LANDING ZONE ACCELERATOR - MAIN ORCHESTRATION TEMPLATE
+AZURE API Management Accelerator - MAIN ORCHESTRATION TEMPLATE
 ==============================================================================
 
 File: infra/main.bicep

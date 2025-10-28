@@ -1,6 +1,6 @@
 ---
 name: Bug Report
-about: Create a report to help us improve the Azure API Management Landing Zone Accelerator
+about: Create a report to help us improve the Azure API Management Accelerator
 title: '[BUG] '
 labels: 'bug'
 assignees: ''

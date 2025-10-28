@@ -1,6 +1,6 @@
 ---
 name: Feature Request
-about: Suggest an idea or enhancement for the Azure API Management Landing Zone Accelerator
+about: Suggest an idea or enhancement for the Azure API Management Accelerator
 title: '[FEATURE] '
 labels: 'enhancement'
 assignees: ''

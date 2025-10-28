@@ -1,6 +1,6 @@
 # Azure Resources Reference
 
-This document provides a comprehensive inventory of all Azure resources created by the API Management Landing Zone Accelerator.
+This document provides a comprehensive inventory of all Azure resources created by the API Management Accelerator.
 
 ## 🎯 Resource Overview
 

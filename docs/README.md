@@ -1,6 +1,6 @@
 # Documentation Index
 
-Welcome to the Azure API Management Landing Zone Accelerator documentation! This comprehensive guide will help you understand, deploy, and customize the accelerator for your organization.
+Welcome to the Azure API Management Accelerator documentation! This comprehensive guide will help you understand, deploy, and customize the accelerator for your organization.
 
 ## 📚 Documentation Structure
 

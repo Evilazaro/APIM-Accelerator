@@ -1,6 +1,6 @@
 # Architecture Overview
 
-The Azure API Management Landing Zone Accelerator follows Azure Landing Zone design principles to provide a secure, scalable, and maintainable API management platform.
+The Azure API Management Accelerator follows Azure Landing Zone design principles to provide a secure, scalable, and maintainable API management platform.
 
 ## 🏗️ High-Level Architecture
 

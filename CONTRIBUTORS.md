@@ -1,6 +1,6 @@
 # Contributors
 
-Thank you to all the people who have contributed to the Azure API Management Landing Zone Accelerator!
+Thank you to all the people who have contributed to the Azure API Management Accelerator!
 
 ## 🏆 Core Maintainers
 

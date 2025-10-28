@@ -1,4 +1,4 @@
-# Azure API Management Landing Zone Accelerator
+# Azure API Management Accelerator
 
 Provision, configure, and operationalize Azure API Management (APIM) following Azure Landing Zone (ALZ) design areas and enterprise guardrails.
 

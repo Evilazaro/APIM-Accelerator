@@ -1,6 +1,6 @@
 # Prerequisites
 
-Before deploying the Azure API Management Landing Zone Accelerator, ensure you have the required tools, permissions, and environment setup.
+Before deploying the Azure API Management Accelerator, ensure you have the required tools, permissions, and environment setup.
 
 ## 📋 Required Tools
 

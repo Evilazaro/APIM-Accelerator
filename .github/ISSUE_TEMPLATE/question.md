@@ -1,6 +1,6 @@
 ---
 name: Question
-about: Ask a question about using the Azure API Management Landing Zone Accelerator
+about: Ask a question about using the Azure API Management Accelerator
 title: '[QUESTION] '
 labels: 'question'
 assignees: ''

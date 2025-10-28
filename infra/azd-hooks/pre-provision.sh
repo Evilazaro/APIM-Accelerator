@@ -1,7 +1,7 @@
 #!/bin/bash
 
 #===============================================================================
-# Azure API Management Landing Zone Accelerator - Pre-Provision Script
+# Azure API Management Accelerator - Pre-Provision Script
 #===============================================================================
 # Description: Purges soft-deleted Azure API Management instances to
 #              enable clean redeployment for demo and testing scenarios

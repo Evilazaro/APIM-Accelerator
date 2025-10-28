@@ -2,7 +2,7 @@
 
 ## Supported Versions
 
-We provide security updates for the following versions of the Azure API Management Landing Zone Accelerator:
+We provide security updates for the following versions of the Azure API Management Accelerator:
 
 | Version | Supported          |
 | ------- | ------------------ |
@@ -173,4 +173,4 @@ We commit to:
 
 ---
 
-Thank you for helping us keep the Azure API Management Landing Zone Accelerator secure!
+Thank you for helping us keep the Azure API Management Accelerator secure!

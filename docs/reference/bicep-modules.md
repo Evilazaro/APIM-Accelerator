@@ -1,6 +1,6 @@
 # Bicep Module Reference
 
-This document provides a comprehensive reference for all Bicep modules in the Azure API Management Landing Zone Accelerator.
+This document provides a comprehensive reference for all Bicep modules in the Azure API Management Accelerator.
 
 ## 🏗️ Module Architecture
 

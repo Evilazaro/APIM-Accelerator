@@ -1,6 +1,6 @@
-# Contributing to Azure API Management Landing Zone Accelerator
+# Contributing to Azure API Management Accelerator
 
-Thank you for your interest in contributing to the Azure API Management Landing Zone Accelerator! This guide will help you understand how to contribute effectively to this project.
+Thank you for your interest in contributing to the Azure API Management Accelerator! This guide will help you understand how to contribute effectively to this project.
 
 ## Table of Contents
 
