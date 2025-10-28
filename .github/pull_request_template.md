@@ -43,7 +43,7 @@ Describe the test scenarios you ran:
 3. Scenario 3: Description and results
 
 ### Validation Steps
-- [ ] Bicep templates validate successfully (`az deployment sub validate`)
+- [ ] Bicep templates validate successfully (`azd provision --preview`)
 - [ ] Deployment completes without errors
 - [ ] All resources are created as expected
 - [ ] Functionality works as intended

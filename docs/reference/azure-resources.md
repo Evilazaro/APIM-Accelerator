@@ -258,23 +258,17 @@ graph TD
 
 ## 🔍 Resource Validation
 
-### Health Check Queries
+### Health Check Commands
 
 ```bash
-# Verify all resources are deployed
-az resource list --resource-group "{rgName}" --output table
+# Show all deployed resources and their status
+azd show
 
-# Check API Management service status
-az apim show --name "{apimName}" --resource-group "{rgName}" --query "provisioningState"
+# Monitor service health and metrics
+azd monitor
 
-# Verify Log Analytics workspace
-az monitor log-analytics workspace show --workspace-name "{lawName}" --resource-group "{rgName}"
-
-# Check Application Insights component
-az monitor app-insights component show --app "{aiName}" --resource-group "{rgName}"
-
-# Validate API Center service
-az apic service show --service-name "{apiCenterName}" --resource-group "{rgName}"
+# View deployment logs
+azd logs
 ```
 
 ### Cost Estimation

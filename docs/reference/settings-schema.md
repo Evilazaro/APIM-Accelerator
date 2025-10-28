@@ -211,13 +211,10 @@ if [ -z "$(yq '.core.apiManagement.publisherEmail' infra/settings.yaml)" ]; then
 fi
 ```
 
-### Schema Validation with Bicep
+### Schema Validation
 ```bash
-# Validate configuration with actual deployment
-az deployment sub validate \
-  --location eastus \
-  --template-file infra/main.bicep \
-  --parameters envName=dev location=eastus
+# Validate configuration before deployment
+azd provision --preview
 ```
 
 ## 🔗 Related Files

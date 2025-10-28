@@ -50,7 +50,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Documentation
 - Detailed README with quick start guide
 - Configuration examples and best practices
-- Deployment options (Azure CLI, azd, pipelines)
+- Deployment options (azd recommended, Azure CLI, pipelines)
 - Architecture alignment with Azure Landing Zones
 - Troubleshooting guide
 

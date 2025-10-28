@@ -435,26 +435,11 @@ tags: union(tags, {
 
 ### Template Validation
 ```bash
-# Validate individual modules
-az deployment group validate \
-  --resource-group myRG \
-  --template-file src/core/apim.bicep \
-  --parameters @params.json
+# Validate deployment configuration
+azd provision --preview
 
-# Validate complete deployment
-az deployment sub validate \
-  --location eastus \
-  --template-file infra/main.bicep \
-  --parameters envName=dev location=eastus
-```
-
-### Parameter Testing
-```bash
-# Test parameter combinations with whatif
-az deployment sub what-if \
-  --location eastus \
-  --template-file infra/main.bicep \
-  --parameters envName=test location=westus
+# Preview changes before deployment
+azd up --preview
 ```
 
 ## 📚 Related Documentation

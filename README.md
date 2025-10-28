@@ -12,7 +12,7 @@ LICENSE                     # MIT license terms
 README.md                   # This file - project overview and documentation
 ├── infra/                  # Infrastructure orchestration
 │   ├── main.bicep         # Subscription-scoped entry point (resource groups + modules)
-│   ├── main.parameters.json # Optional parameters file for Azure CLI deployment
+│   ├── main.parameters.json # Optional parameters file for direct deployment
 │   ├── settings.yaml      # Centralized configuration for all environments
 │   └── azd-hooks/         # Azure Developer CLI lifecycle hooks
 │       └── pre-provision.sh
@@ -78,7 +78,7 @@ graph TD
 ## 🚀 Quick Start
 
 ### Prerequisites
-- Azure CLI (`az`) v2.60+ with `bicep` extension
+- Azure Developer CLI (`azd`) v1.10+
 - Azure subscription with Contributor + User Access Administrator rights
 - PowerShell 7+ or Bash shell
 - Git for repository access
@@ -94,8 +94,7 @@ graph TD
    cd APIM-Accelerator
    
    # Login to Azure
-   az login
-   az account set --subscription <your-subscription-id>
+   azd auth login
    ```
 
 2. **Configure Deployment**
@@ -111,24 +110,20 @@ graph TD
 
 3. **Deploy Infrastructure**
    ```bash
-   # Deploy using Azure CLI
-   az deployment sub create \
-     --location eastus \
-     --template-file infra/main.bicep \
-     --parameters envName=dev location=eastus
-   
-   # Or use Azure Developer CLI (if installed)
-   azd auth login
+   # Deploy using Azure Developer CLI
    azd up
+   
+   # Preview deployment before running
+   azd provision --preview
    ```
 
 4. **Verify Deployment**
    ```bash
-   # Check deployed resources
-   az resource list --resource-group <your-rg-name> --output table
+   # Monitor deployment status
+   azd monitor
    
-   # Verify API Management service
-   az apim show --name <apim-name> --resource-group <rg-name>
+   # Show deployed resources
+   azd show
    ```
    
    **Manual Verification:**
@@ -253,16 +248,10 @@ docs/
 ### Environment-Specific Deployment
 ```bash
 # Development environment
-az deployment sub create \
-  --location eastus \
-  --template-file infra/main.bicep \
-  --parameters envName=dev location=eastus
+azd up --environment dev
 
-# Production environment with custom settings
-az deployment sub create \
-  --location eastus \
-  --template-file infra/main.bicep \
-  --parameters envName=prod location=eastus
+# Production environment
+azd up --environment prod
 ```
 
 ### Custom Resource Naming
@@ -330,43 +319,26 @@ ApiManagementGatewayLogs
 |-------|-------|----------|
 | "Insufficient privileges" error | Missing User Access Administrator role | Add User Access Administrator role to deployment user |
 | APIM deployment timeout | Premium SKU provisioning time | Premium can take 45+ minutes; use Developer SKU for testing |
-| API Center provider not found | API Center not registered | Run `az provider register --namespace Microsoft.ApiCenter` |
+| API Center provider not found | API Center not registered | Providers registered automatically during azd deployment |
 | Monitoring data missing | Deployment still in progress | Wait for all resources to complete; diagnostic data appears within 5-15 minutes |
 
 ### Validation and Debugging
 ```bash
 # Pre-deployment validation
-az deployment sub validate \
-  --location eastus \
-  --template-file infra/main.bicep \
-  --parameters envName=dev location=eastus
+azd provision --preview
 
-# Check deployment status
-az deployment sub show \
-  --name <deployment-name> \
-  --query "properties.provisioningState"
+# Monitor deployment progress
+azd monitor
 
-# Verify resource deployment
-az resource list \
-  --resource-group <rg-name> \
-  --query "[].{Name:name, Type:type, Status:properties.provisioningState}" \
-  --output table
+# Show deployment status and resources
+azd show
 
-# Check API Center integration
-az apic api list \
-  --service-name <api-center-name> \
-  --resource-group <rg-name>
+# View deployment logs
+azd logs
 ```
 
-### Required Azure Resource Providers
-```bash
-# Register all required providers before deployment
-az provider register --namespace Microsoft.ApiManagement
-az provider register --namespace Microsoft.OperationalInsights  
-az provider register --namespace Microsoft.Insights
-az provider register --namespace Microsoft.Storage
-az provider register --namespace Microsoft.ApiCenter
-```
+### Azure Resource Providers
+Azure resource providers are automatically registered during `azd up` deployment. No manual registration is required.
 
 ## 📋 License
 

@@ -36,8 +36,8 @@ solutionName: "minimal-repro"
 ## Environment Information
 **Deployment Environment:**
 - OS: [e.g. Windows 11, Ubuntu 22.04, macOS 13]
-- Azure CLI Version: [run `az --version`]
-- Bicep Version: [run `az bicep version`]
+- Azure CLI Version: [run `az --version` if using Azure CLI directly]
+- Azure Developer CLI Version: [run `azd version`]
 - Azure Developer CLI Version (if used): [run `azd version`]
 - PowerShell/Bash Version: [version info]
 
@@ -45,7 +45,7 @@ solutionName: "minimal-repro"
 - Azure Cloud: [Public, Government, China, etc.]
 - Subscription Type: [Pay-as-you-go, Enterprise, etc.]
 - Region: [e.g. East US 2, West Europe]
-- Deployment Method: [Azure CLI, azd, Azure DevOps, GitHub Actions]
+- Deployment Method: [azd (recommended), Azure CLI, Azure DevOps, GitHub Actions]
 
 **Template Information:**
 - Accelerator Version: [e.g. v1.0.0, main branch, commit hash]
@@ -100,7 +100,7 @@ If applicable, add screenshots to help explain your problem.
 - [ ] Verified subscription permissions
 - [ ] Validated Bicep template syntax
 - [ ] Tested with minimal configuration
-- [ ] Checked Azure CLI authentication
+- [ ] Checked Azure Developer CLI authentication (`azd auth login --check-status`)
 - [ ] Reviewed deployment logs
 - [ ] Searched existing issues
 - [ ] Consulted documentation

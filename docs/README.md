@@ -89,7 +89,8 @@ If you can't find what you're looking for in the documentation:
 - [Azure Monitor](https://learn.microsoft.com/azure/azure-monitor/)
 
 ### Tools & SDKs
-- [Azure CLI](https://learn.microsoft.com/cli/azure/)
+- [Azure Developer CLI](https://learn.microsoft.com/azure/developer/azure-developer-cli/)
+- [Azure CLI](https://learn.microsoft.com/cli/azure/) (optional)
 - [Azure Developer CLI](https://learn.microsoft.com/azure/developer/azure-developer-cli/)
 - [VS Code Bicep Extension](https://marketplace.visualstudio.com/items?itemName=ms-azuretools.vscode-bicep)
 

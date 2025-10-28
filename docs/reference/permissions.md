@@ -36,20 +36,7 @@ If `Contributor` at subscription level is too broad, use these specific permissi
 
 For automated deployments, create a service principal with:
 
-```bash
-# Create service principal with Contributor role
-az ad sp create-for-rbac \
-  --name "apim-accelerator-deploy" \
-  --role "Contributor" \
-  --scopes "/subscriptions/{subscription-id}" \
-  --sdk-auth
-
-# Add User Access Administrator for RBAC assignments
-az role assignment create \
-  --assignee "{service-principal-id}" \
-  --role "User Access Administrator" \
-  --scope "/subscriptions/{subscription-id}"
-```
+Service principals and role assignments are automatically created during `azd up` deployment.
 
 ## 🏗️ Managed Identity Configuration
 
@@ -190,36 +177,18 @@ core:
 ### Pre-Deployment Checks
 
 ```bash
-# Check current user permissions
-az role assignment list --assignee $(az account show --query user.name -o tsv) --all
-
-# Verify subscription-level access
-az deployment sub validate \
-  --location eastus \
-  --template-file infra/main.bicep \
-  --parameters envName=dev location=eastus
-
-# Test resource group creation
-az group create --name "test-permissions-rg" --location "eastus"
-az group delete --name "test-permissions-rg" --yes --no-wait
+# Verify deployment permissions
+azd provision --preview
 ```
 
 ### Post-Deployment Verification
 
 ```bash
-# Verify APIM managed identity
-az apim show --name "{apimName}" --resource-group "{rgName}" \
-  --query "identity.principalId" -o tsv
+# Show deployed resources and their status
+azd show
 
-# Check APIM role assignments
-az role assignment list --assignee "{principalId}" --all
-
-# Verify API Center identity
-az apic service show --service-name "{apiCenterName}" --resource-group "{rgName}" \
-  --query "identity.principalId" -o tsv
-
-# Validate integration between services
-az apic api list --service-name "{apiCenterName}" --resource-group "{rgName}"
+# Monitor service health
+azd monitor
 ```
 
 ## 🚨 Security Best Practices
@@ -248,13 +217,7 @@ az apic api list --service-name "{apiCenterName}" --resource-group "{rgName}"
 
 ### Issue: "Insufficient privileges to complete the operation"
 **Cause**: Missing `User Access Administrator` role  
-**Solution**: 
-```bash
-az role assignment create \
-  --assignee "{user-or-sp-id}" \
-  --role "User Access Administrator" \
-  --scope "/subscriptions/{subscription-id}"
-```
+**Solution**: Role assignments are automatically handled during `azd up` deployment.
 
 ### Issue: "Cannot assign roles to managed identity"
 **Cause**: Managed identity created after RBAC assignment attempt  
@@ -267,19 +230,14 @@ az role assignment create \
 ### Issue: "APIM cannot write to Log Analytics"
 **Cause**: Application Insights logger configuration issue  
 **Solution**: Check instrumentation key and workspace linkage:
-```bash
-az monitor app-insights component show \
-  --app "{appInsightsName}" \
-  --resource-group "{rgName}" \
-  --query "instrumentationKey"
-```
+Use `azd monitor` to verify Application Insights configuration and check diagnostic logs.
 
 ## 📋 Permission Checklist
 
 ### Pre-Deployment
 - [ ] User/SP has `Contributor` at subscription level
 - [ ] User/SP has `User Access Administrator` at subscription level
-- [ ] Target subscription is selected: `az account show`
+- [ ] Azure authentication configured: `azd auth login --check-status`
 - [ ] Required resource providers are registered
 
 ### Post-Deployment Validation

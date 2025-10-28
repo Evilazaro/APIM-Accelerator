@@ -24,9 +24,9 @@ Be as specific as possible about what you need help with.
 ## Your Environment
 **Current Setup (if applicable):**
 - Operating System: [Windows/macOS/Linux]
-- Azure CLI Version: [run `az --version`]
+- Azure Developer CLI Version: [run `azd version`]
 - Accelerator Version: [e.g., v1.0.0, main branch]
-- Deployment Method: [Azure CLI, azd, pipelines]
+- Deployment Method: [azd (recommended), Azure CLI, pipelines]
 
 **Azure Environment:**
 - Subscription Type: [Pay-as-you-go, Enterprise, etc.]

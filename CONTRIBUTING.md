@@ -49,12 +49,10 @@ Ensure you have the following tools installed:
 
 ```bash
 # Required tools
-az --version          # Azure CLI >= 2.60.0
-az bicep version      # Bicep CLI (included with Azure CLI)
+azd version           # Azure Developer CLI >= 1.10.0
 git --version         # Git >= 2.30.0
 
 # Optional but recommended
-azd version           # Azure Developer CLI
 code --version        # VS Code with Bicep extension
 ```
 
@@ -68,8 +66,7 @@ code --version        # VS Code with Bicep extension
 
 2. **Set Up Azure Authentication**
    ```bash
-   az login
-   az account set --subscription "your-dev-subscription-id"
+   azd auth login
    ```
 
 3. **Configure Development Environment**
@@ -81,10 +78,8 @@ code --version        # VS Code with Bicep extension
 
 4. **Validate Bicep Templates**
    ```bash
-   # Validate main template
-   az deployment sub validate \
-     --location "East US 2" \
-     --template-file infra/main.bicep
+   # Validate deployment configuration
+   azd provision --preview
    ```
 
 ### Development Workflow
@@ -104,10 +99,7 @@ code --version        # VS Code with Bicep extension
 3. **Test Your Changes**
    ```bash
    # Deploy to development environment
-   az deployment sub create \
-     --name "dev-test-$(date +%Y%m%d%H%M%S)" \
-     --location "East US 2" \
-     --template-file infra/main.bicep
+   azd up --environment dev
    ```
 
 4. **Commit and Push**
@@ -235,7 +227,7 @@ Use the [Bug Report template](.github/ISSUE_TEMPLATE/bug_report.md) and include:
 - Clear description of the bug
 - Steps to reproduce
 - Expected vs actual behavior
-- Environment details (Azure CLI version, subscription type, etc.)
+- Environment details (Azure Developer CLI version, subscription type, etc.)
 - Relevant logs or error messages
 
 ### Feature Requests

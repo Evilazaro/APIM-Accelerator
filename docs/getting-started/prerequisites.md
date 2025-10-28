@@ -4,8 +4,8 @@ Before deploying the Azure API Management Accelerator, ensure you have the requi
 
 ## 📋 Required Tools
 
-### Azure CLI
-The Azure CLI is required for all deployment scenarios.
+### Azure Developer CLI
+The Azure Developer CLI (azd) is the recommended tool for all deployment scenarios.
 
 **Installation:**
 ```bash
@@ -25,26 +25,15 @@ az --version
 # Should show version >= 2.60.0
 ```
 
-**Login and Set Subscription:**
+**Authentication:**
 ```bash
-az login
-az account list --output table
-az account set --subscription "your-subscription-id"
+azd auth login
 ```
 
 ### Bicep CLI
 Bicep is included with Azure CLI but can be updated separately.
 
-**Verify Bicep:**
-```bash
-az bicep version
-# Should show latest version
-```
-
-**Update Bicep (if needed):**
-```bash
-az bicep upgrade
-```
+Bicep is handled automatically by Azure Developer CLI during deployment.
 
 ### Git
 Required for cloning the repository and version control.
@@ -99,22 +88,15 @@ You need the following permissions in your Azure subscription:
 If using a service principal for automation:
 
 ```bash
-# Create service principal
-az ad sp create-for-rbac \
-  --name "apim-accelerator-sp" \
-  --role "Owner" \
-  --scopes "/subscriptions/your-subscription-id"
+# Service principals are automatically created by azd during deployment
 ```
 
 ### Permission Verification
 Verify your permissions before deployment:
 
 ```bash
-# Check current user permissions
-az role assignment list --assignee $(az ad signed-in-user show --query id --output tsv) --all
-
-# Check subscription access
-az account show --query "user.name"
+# Check authentication status
+azd auth login --check-status
 ```
 
 ## 🏢 Azure Subscription Requirements
@@ -135,20 +117,7 @@ Ensure sufficient quotas for the following resources:
 | Storage Accounts | 1 | 2 | For diagnostic logs storage |
 | API Center Services | 1 | 2 | For API inventory and governance |
 
-**Check Quotas:**
-```bash
-# Check current API Management usage
-az apim list --query "length(@)"
-
-# Check current resource group usage
-az group list --query "length(@)"
-
-# Check API Center availability (preview service)
-az provider show --namespace Microsoft.ApiCenter --query "registrationState"
-
-# Register API Center provider if needed
-az provider register --namespace Microsoft.ApiCenter
-```
+Resource quotas and provider registration are automatically handled during `azd up` deployment.
 
 ### Regional Availability
 Verify that your chosen region supports all required services:
@@ -204,15 +173,12 @@ Ensure your environment can reach:
 
 ### Corporate Firewall
 If behind a corporate firewall, you may need to:
-- Configure proxy settings for Azure CLI
+- Configure proxy settings for Azure Developer CLI
 - Add certificate exceptions
 - Work with IT to allowlist Azure endpoints
 
 **Configure Proxy (if needed):**
-```bash
-# Set proxy for Azure CLI
-az config set core.proxy_url=http://proxy.company.com:8080
-```
+Configure proxy settings for Azure Developer CLI as needed for your corporate environment.
 
 ## 🔧 Environment Validation
 
@@ -220,23 +186,15 @@ az config set core.proxy_url=http://proxy.company.com:8080
 Run these commands to validate your environment:
 
 ```bash
-# 1. Verify Azure CLI and authentication
-az account show --output table
-
-# 2. Check Bicep installation
-az bicep version
-
-# 3. Verify subscription permissions
-az role assignment list --assignee $(az ad signed-in-user show --query id --output tsv) --all --query "[?roleDefinitionName=='Owner' || roleDefinitionName=='Contributor']"
-
-# 4. Test resource creation (creates and deletes a test resource group)
-az group create --name "test-permissions-rg" --location "East US 2"
-az group delete --name "test-permissions-rg" --yes --no-wait
-
-# 5. Validate Bicep template syntax
+# 1. Clone the repository
 git clone https://github.com/Evilazaro/APIM-Accelerator.git
 cd APIM-Accelerator
-az deployment sub validate --location "East US 2" --template-file infra/main.bicep
+
+# 2. Authenticate with Azure
+azd auth login
+
+# 3. Validate deployment configuration
+azd provision --preview
 ```
 
 ### Common Issues and Solutions
@@ -244,28 +202,15 @@ az deployment sub validate --location "East US 2" --template-file infra/main.bic
 #### Issue: "Insufficient privileges to complete the operation"
 **Solution:**
 - Request Owner or Contributor + User Access Administrator permissions
-- Verify you're in the correct subscription: `az account show`
+- Verify authentication: `azd auth login --check-status`
 
 #### Issue: "Bicep CLI not found"
 **Solution:**
-```bash
-# Update Azure CLI to latest version
-az upgrade
-
-# Or install Bicep manually
-az bicep install
-```
+Bicep is automatically handled by Azure Developer CLI during deployment.
 
 #### Issue: "Resource provider not registered"
 **Solution:**
-```bash
-# Register required resource providers
-az provider register --namespace Microsoft.ApiManagement
-az provider register --namespace Microsoft.OperationalInsights
-az provider register --namespace Microsoft.Insights
-az provider register --namespace Microsoft.Storage
-az provider register --namespace Microsoft.ApiCenter
-```
+Resource providers are automatically registered during `azd up` deployment.
 
 #### Issue: "Quota exceeded for resource type"
 **Solution:**
@@ -278,7 +223,7 @@ az provider register --namespace Microsoft.ApiCenter
 Use this checklist to ensure you're ready for deployment:
 
 ### Tools Installation
-- [ ] Azure CLI >= 2.60.0 installed and working
+- [ ] Azure Developer CLI >= 1.10.0 installed and working
 - [ ] Bicep CLI installed and up to date  
 - [ ] Git installed and configured
 - [ ] Code editor with Bicep support (recommended)
@@ -297,12 +242,11 @@ Use this checklist to ensure you're ready for deployment:
 - [ ] Corporate firewall rules configured (if applicable)
 
 ### Authentication
-- [ ] Azure CLI authentication working (`az account show`)
-- [ ] Correct subscription selected
+- [ ] Azure authentication working (`azd auth login --check-status`)
 - [ ] Service principal created (if using automation)
 
 ### Validation
-- [ ] Template validation passes (`az deployment sub validate`)
+- [ ] Template validation passes (`azd provision --preview`)
 - [ ] Test resource group creation/deletion successful
 - [ ] All prerequisite tools functioning correctly
 

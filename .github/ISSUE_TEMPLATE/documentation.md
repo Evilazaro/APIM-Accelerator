@@ -82,8 +82,8 @@ Describe the task or goal you were working on when you encountered this document
 ## Environment Context
 **If relevant to the documentation issue:**
 - Operating System: [Windows/macOS/Linux]
-- Tools being used: [Azure CLI, VS Code, etc.]
-- Deployment method: [Azure CLI, azd, pipelines]
+- Tools being used: [Azure Developer CLI, VS Code, etc.]
+- Deployment method: [azd (recommended), Azure CLI, pipelines]
 
 ## Additional Information
 **Screenshots**
