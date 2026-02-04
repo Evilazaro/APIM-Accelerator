@@ -90,7 +90,7 @@ param clientSecret string
 // - Only the developer portal URL is whitelisted as an origin
 // =================================================================
 @description('Reference to existing API Management service')
-resource apim 'Microsoft.ApiManagement/service@2024-10-01-preview' existing = {
+resource apim 'Microsoft.ApiManagement/service@2025-03-01-preview' existing = {
   name: apiManagementName
 }
 
@@ -109,7 +109,7 @@ resource apim 'Microsoft.ApiManagement/service@2024-10-01-preview' existing = {
 // =================================================================
 
 @description('Global CORS policy for API Management - Enables cross-origin requests from developer portal')
-resource apimPolicy 'Microsoft.ApiManagement/service/policies@2024-10-01-preview' = {
+resource apimPolicy 'Microsoft.ApiManagement/service/policies@2025-03-01-preview' = {
   parent: apim
   name: policyResourceName
   // Configures the developer portal's CORS settings to allow requests
@@ -132,7 +132,7 @@ resource apimPolicy 'Microsoft.ApiManagement/service/policies@2024-10-01-preview
 // =================================================================
 
 @description('Azure AD identity provider configuration - Enables AAD authentication for developer portal users')
-resource apimIdentityProvider 'Microsoft.ApiManagement/service/identityProviders@2024-06-01-preview' = {
+resource apimIdentityProvider 'Microsoft.ApiManagement/service/identityProviders@2025-03-01-preview' = {
   parent: apim
   // Configures sign-in and sign-up settings for the developer portal.
   // These settings control user registration and authentication flows.
@@ -156,7 +156,7 @@ resource apimIdentityProvider 'Microsoft.ApiManagement/service/identityProviders
 // =================================================================
 
 @description('Developer portal configuration - Sets CORS origins and portal behavior')
-resource devPortalConfig 'Microsoft.ApiManagement/service/portalconfigs@2023-05-01-preview' = {
+resource devPortalConfig 'Microsoft.ApiManagement/service/portalconfigs@2025-03-01-preview' = {
   name: defaultPortalConfigName
   parent: apim
   properties: {
@@ -175,7 +175,7 @@ resource devPortalConfig 'Microsoft.ApiManagement/service/portalconfigs@2023-05-
 // =================================================================
 
 @description('Developer portal sign-in settings - Enables user authentication')
-resource devPortalSignInSetting 'Microsoft.ApiManagement/service/portalsettings@2024-06-01-preview' = {
+resource devPortalSignInSetting 'Microsoft.ApiManagement/service/portalsettings@2025-03-01-preview' = {
   parent: apim
   name: signInSettingName
   properties: {
@@ -184,7 +184,7 @@ resource devPortalSignInSetting 'Microsoft.ApiManagement/service/portalsettings@
 }
 
 @description('Developer portal sign-up settings - Enables user registration with terms of service')
-resource devPortalSignUpSetting 'Microsoft.ApiManagement/service/portalsettings@2024-06-01-preview' = {
+resource devPortalSignUpSetting 'Microsoft.ApiManagement/service/portalsettings@2025-03-01-preview' = {
   parent: apim
   name: signUpSettingName
   properties: {

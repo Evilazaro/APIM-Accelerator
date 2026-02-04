@@ -182,7 +182,7 @@ var virtualNetworkConfiguration = virtualNetworkType != 'None'
 // =================================================================
 
 @description('Azure API Management service - Provides API gateway, developer portal, and management capabilities')
-resource apim 'Microsoft.ApiManagement/service@2024-10-01-preview' = {
+resource apim 'Microsoft.ApiManagement/service@2025-03-01-preview' = {
   name: name
   location: location
   sku: {
@@ -289,7 +289,7 @@ resource diagnosticSettings 'Microsoft.Insights/diagnosticSettings@2021-05-01-pr
 }
 
 @description('Application Insights logger for API Management - Enables detailed performance monitoring and analytics')
-resource appInsightsLogger 'Microsoft.ApiManagement/service/loggers@2024-10-01-preview' = {
+resource appInsightsLogger 'Microsoft.ApiManagement/service/loggers@2025-03-01-preview' = {
   name: '${apim.name}${appInsightsLoggerSuffix}'
   parent: apim
   properties: {
