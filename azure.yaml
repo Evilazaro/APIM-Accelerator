@@ -1,10 +1,54 @@
 # yaml-language-server: $schema=https://raw.githubusercontent.com/Azure/azure-dev/main/schemas/v1.0/azure.yaml.json
 
+# ============================================================================
+# Azure Developer CLI (azd) Configuration File
+# ============================================================================
+# This configuration file enables Azure Developer CLI (azd) to automate the
+# deployment and management of the APIM Accelerator project.
+#
+# Purpose:
+#   - Defines the project identity and metadata
+#   - Configures lifecycle hooks for deployment automation
+#   - Integrates custom provisioning scripts with azd workflows
+#
+# Usage:
+#   - Run 'azd up' to provision and deploy the entire solution
+#   - Run 'azd provision' to provision Azure resources only
+#   - Run 'azd deploy' to deploy application code only
+#
+# Documentation:
+#   - Azure Developer CLI: https://learn.microsoft.com/azure/developer/azure-developer-cli/
+#   - Schema Reference: https://learn.microsoft.com/azure/developer/azure-developer-cli/azd-schema
+# ============================================================================
+
+# Project name used by azd to identify this application across all commands
+# This name is used as a prefix for Azure resource naming and tagging
 name: apim-accelerator
 
+# ============================================================================
+# Lifecycle Hooks
+# ============================================================================
+# Hooks execute custom scripts at specific stages of the azd deployment process.
+# They enable pre/post-deployment logic, validation, and custom automation.
+#
+# Available lifecycle events:
+#   - preprovision: Before infrastructure provisioning
+#   - postprovision: After infrastructure provisioning
+#   - predeploy: Before application deployment
+#   - postdeploy: After application deployment
+# ============================================================================
 hooks:
+  # Pre-provision hook: Runs before Azure resources are provisioned
+  # Purpose: Validates prerequisites, sets up configuration, and prepares environment
   preprovision:
-    shell: sh
+    shell: sh # Shell type (sh, bash, pwsh, or powershell)
     run: |
       #!/bin/sh
+      # Execute pre-provision script to set up prerequisites
+      # This script validates the environment and configures necessary settings
+      # 
+      # Arguments:
+      #   $AZURE_LOCATION: The target Azure region for resource deployment
+      # 
+      # Script location: ./infra/azd-hooks/pre-provision.sh
       ./infra/azd-hooks/pre-provision.sh $AZURE_LOCATION

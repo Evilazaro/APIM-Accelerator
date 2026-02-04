@@ -9,15 +9,72 @@ Author: Cloud Platform Team
 Created: 2025-10-28
 
 Description:
-  Deploys foundational monitoring infrastructure including:
-  - Log Analytics workspace for centralized logging
-  - Application Insights for application performance monitoring
-  - Storage account for diagnostic log retention
-  - Diagnostic settings for comprehensive observability
+  This module serves as the main entry point for deploying a comprehensive
+  monitoring solution for Azure API Management (APIM) accelerator. It 
+  orchestrates the deployment of critical observability components:
+  
+  - Log Analytics workspace for centralized logging and query analysis
+  - Application Insights for application performance monitoring (APM)
+  - Storage account for long-term diagnostic log retention and compliance
+  - Diagnostic settings for comprehensive observability across resources
+
+Architecture:
+  The module follows a layered deployment pattern:
+  1. Operational Layer: Deploys Log Analytics and diagnostic storage
+  2. Insights Layer: Deploys Application Insights linked to operational resources
+  
+  This ensures dependencies are resolved correctly and resources are 
+  provisioned in the proper sequence.
+
+Usage:
+  module monitoring 'src/shared/monitoring/main.bicep' = {
+    name: 'deploy-monitoring'
+    params: {
+      solutionName: 'apim-solution'
+      location: 'eastus'
+      monitoringSettings: {
+        logAnalytics: {
+          name: 'custom-law-name'  // Optional
+          identity: {
+            type: 'SystemAssigned'
+            userAssignedIdentities: {}
+          }
+        }
+        applicationInsights: {
+          name: 'custom-ai-name'    // Optional
+        }
+      }
+      tags: {
+        environment: 'production'
+        costCenter: '12345'
+      }
+    }
+  }
+
+Parameters:
+  - solutionName: Base name for all resources (used in naming convention)
+  - location: Azure region for resource deployment
+  - monitoringSettings: Monitoring configuration object (see Monitoring type)
+  - tags: Resource tags for governance and cost tracking
+
+Outputs:
+  - AZURE_LOG_ANALYTICS_WORKSPACE_ID: Log Analytics workspace resource ID
+  - AZURE_STORAGE_ACCOUNT_ID: Diagnostic storage account resource ID
+  - APPLICATION_INSIGHTS_RESOURCE_ID: Application Insights resource ID
+  - APPLICATION_INSIGHTS_NAME: Application Insights name
+  - APPLICATION_INSIGHTS_INSTRUMENTATION_KEY: Instrumentation key (secure)
 
 Dependencies:
   - ../common-types.bicep: Type definitions for monitoring configuration
   - ../constants.bicep: Shared constants and utility functions
+  - operational/main.bicep: Operational monitoring resources
+  - insights/main.bicep: Application Insights resources
+
+Notes:
+  - Resource names can be explicitly provided or auto-generated
+  - Auto-generated names include unique suffix for collision prevention
+  - Diagnostic storage is automatically configured for log retention
+  - All resources inherit tags from parent configuration
 
 ==============================================================================
 */

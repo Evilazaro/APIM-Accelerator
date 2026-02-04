@@ -17,11 +17,29 @@ Description:
   - Log Analytics and Application Insights defaults
   - Identity type definitions and role mappings
   - API Management configuration constants
+  - Azure role definition IDs for RBAC assignments
   - Utility functions for consistent resource naming
 
 Usage:
   Import specific constants or functions as needed:
-  import { diagnosticSettings, generateUniqueSuffix } from '../shared/constants.bicep'
+  
+  Example 1 - Import diagnostic settings and naming functions:
+    import { diagnosticSettings, generateUniqueSuffix } from '../shared/constants.bicep'
+  
+  Example 2 - Import storage account constants:
+    import { storageAccount, generateStorageAccountName } from '../shared/constants.bicep'
+  
+  Example 3 - Import identity and role definitions:
+    import { identityTypes, roleDefinitions, createIdentityConfig } from '../shared/constants.bicep'
+  
+  Example 4 - Import API Management constants:
+    import { apiManagement } from '../shared/constants.bicep'
+
+Notes:
+  - All exported constants are immutable and provide type-safe configuration values
+  - Utility functions ensure consistent naming conventions across resources
+  - Role definition IDs are standard Azure built-in role GUIDs
+  - Constants enforce Azure service limits and best practices
 
 Version: 1.0.0
 ==============================================================================

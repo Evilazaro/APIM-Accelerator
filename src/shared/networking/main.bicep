@@ -13,6 +13,26 @@
 // =================================================================
 // PARAMETERS
 // =================================================================
+// This section defines the configurable parameters for the networking module.
+// These parameters allow customization of the network infrastructure deployment.
+//
+// Parameters:
+// - name: The name identifier for the virtual network resource
+//         Default: 'vnet'
+//         Used to uniquely identify the network within the resource group
+//
+// - location: The Azure region for resource deployment
+//         Default: 'eastus'
+//         Determines where the networking infrastructure will be provisioned
+//
+// Note: This is a placeholder implementation using SCVMM provider.
+// Future versions will include additional parameters for:
+// - Address spaces and CIDR blocks
+// - Subnet configurations
+// - Network security group rules
+// - DNS settings
+// - VNet peering options
+// =================================================================
 
 @description('Name of the virtual network resource')
 param name string = 'vnet'

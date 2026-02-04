@@ -8,6 +8,31 @@
 // File: src/shared/common-types.bicep
 // Purpose: Centralized type definitions for API Management solution
 // Dependencies: None (foundational module)
+//
+// USAGE:
+// Import this module in other Bicep files to use the type definitions:
+// - import { ApiManagement, Inventory, Monitoring, Shared } from 'common-types.bicep'
+//
+// EXPORTED TYPES:
+// - ApiManagement: Configuration for Azure API Management service
+// - Inventory: Configuration for API Center and inventory management
+// - Monitoring: Configuration for monitoring infrastructure (Log Analytics + App Insights)
+// - Shared: Configuration for shared infrastructure services
+//
+// INTERNAL TYPES:
+// - SystemAssignedIdentity: System or user-assigned managed identity
+// - ExtendedIdentity: Extended identity supporting multiple configurations
+// - ApimSku: API Management SKU and capacity settings
+// - LogAnalytics: Log Analytics workspace configuration
+// - ApplicationInsights: Application Insights monitoring configuration
+// - ApiCenter: API Center service configuration
+// - CorePlatform: Platform configuration placeholder
+//
+// DESIGN PRINCIPLES:
+// - Type safety: Strongly typed configurations prevent runtime errors
+// - Reusability: Types can be imported and reused across modules
+// - Consistency: Standardized structures across the solution
+// - Documentation: Comprehensive descriptions for all properties
 // =================================================================
 
 // =================================================================

@@ -5,9 +5,34 @@
 // components including monitoring, logging, and optional networking.
 // These services provide foundational capabilities for the APIM platform.
 //
-// File: src/shared/main.bicep
-// Purpose: Deploys shared infrastructure services
-// Dependencies: Monitoring modules, common types
+// FILE INFORMATION:
+//   - Path: src/shared/main.bicep
+//   - Purpose: Orchestrates deployment of shared infrastructure services
+//   - Scope: Resource Group level deployment
+//
+// DEPENDENCIES:
+//   - monitoring/main.bicep: Monitoring infrastructure module
+//   - common-types.bicep: Shared type definitions
+//
+// DEPLOYED RESOURCES:
+//   - Log Analytics Workspace: Centralized logging and diagnostics
+//   - Application Insights: Application performance monitoring
+//   - Storage Account: Diagnostic log archival and storage
+//
+// INPUTS:
+//   - solutionName: Base name for resource naming convention
+//   - location: Target Azure region for deployment
+//   - sharedSettings: Configuration object containing monitoring settings and tags
+//
+// OUTPUTS:
+//   - Workspace and resource IDs for downstream service integration
+//   - Application Insights keys and connection information
+//   - Storage account identifiers for diagnostic configuration
+//
+// USAGE:
+//   Deploy this module to establish shared services before deploying
+//   application-specific resources that depend on monitoring infrastructure.
+//
 // =================================================================
 
 import { Shared } from 'common-types.bicep'
