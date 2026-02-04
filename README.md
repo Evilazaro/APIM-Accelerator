@@ -40,7 +40,12 @@ flowchart TB
     %% Accessibility: Indigo 50 (#E8EAF6) with Indigo 500 (#3F51B5) border = 9.2:1 contrast
     classDef mainGroup fill:#E8EAF6,stroke:#3F51B5,stroke-width:3px,color:#000
 
-    %% Content Level (Semantic colors - Level 2+)
+    %% Sub Group Level (Nested containers - Level 2)
+    %% Purpose: Architectural layer groupings within main container
+    %% Accessibility: Indigo 100 (#C5CAE9) with Indigo 500 (#3F51B5) border = 8.1:1 contrast
+    classDef subGroup fill:#C5CAE9,stroke:#3F51B5,stroke-width:2px,color:#000
+
+    %% Content Level (Semantic colors - Level 3)
     %% Purpose: Individual components with semantic meaning
     %% Accessibility: All combinations exceed WCAG AA (4.5:1) requirement
     classDef mdBlue fill:#BBDEFB,stroke:#1976D2,stroke-width:2px,color:#000
@@ -79,6 +84,7 @@ flowchart TB
     end
 
     class system mainGroup
+    class shared,core,inventory subGroup
 ```
 
 **Key Components:**
