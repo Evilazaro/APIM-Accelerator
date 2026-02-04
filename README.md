@@ -85,6 +85,8 @@ flowchart TB
 - [Deployment](#-deployment)
 - [Usage](#-usage)
 - [Configuration](#-configuration)
+- [Troubleshooting](#-troubleshooting)
+- [Roadmap](#-roadmap)
 - [Contributing](#-contributing)
 - [License](#-license)
 
@@ -473,7 +475,241 @@ az bicep build --file infra/main.bicep
 
 > ℹ️ **Note**: Please ensure all Bicep files follow Azure Bicep best practices and include inline documentation comments.
 
-## 📝 License
+## � Troubleshooting
+
+**Overview**
+
+This section addresses common deployment and operational issues encountered when using the APIM Accelerator. Most problems fall into three categories: permission errors during deployment, region availability limitations, and configuration mismatches. Understanding these patterns helps diagnose issues quickly and avoid repeated failures.
+
+Troubleshooting follows a systematic approach: verify prerequisites first (authentication, subscriptions, permissions), then check configuration files for syntax errors, and finally validate Azure service availability in your target region. Each issue below includes diagnostic commands to identify the root cause and concrete remediation steps.
+
+### Common Deployment Issues
+
+#### Issue: Subscription-Level Permission Denied
+
+**Symptom**:
+
+```bash
+ERROR: Authorization failed. The client does not have authorization to perform action
+'Microsoft.Resources/subscriptions/resourceGroups/write'
+```
+
+**Cause**: User lacks Owner or Contributor + User Access Administrator roles at subscription scope.
+
+**Solution**:
+
+```bash
+# Check current role assignments
+az role assignment list --assignee $(az account show --query user.name -o tsv) --scope /subscriptions/$(az account show --query id -o tsv)
+
+# Request subscription Owner role from Azure administrator
+# Or assign Contributor + User Access Administrator roles
+az role assignment create --assignee <user-principal-id> \
+  --role "Contributor" \
+  --scope /subscriptions/<subscription-id>
+
+az role assignment create --assignee <user-principal-id> \
+  --role "User Access Administrator" \
+  --scope /subscriptions/<subscription-id>
+```
+
+#### Issue: Bicep Compilation Errors
+
+**Symptom**:
+
+```bash
+ERROR: InvalidTemplate - Deployment template validation failed:
+'The template parameter 'envName' is not found.'
+```
+
+**Cause**: Missing or incorrect parameters in `infra/main.parameters.json`.
+
+**Solution**:
+
+```bash
+# Validate Bicep syntax locally
+az bicep build --file infra/main.bicep
+
+# Check parameter file matches expected schema
+cat infra/main.parameters.json
+
+# Ensure environment variables are set (for azd)
+echo $AZURE_ENV_NAME
+echo $AZURE_LOCATION
+
+# If using azd, reinitialize environment
+azd env refresh
+```
+
+#### Issue: Region Doesn't Support Premium SKU or API Center
+
+**Symptom**:
+
+```bash
+ERROR: The subscription is not registered for resource type
+'Microsoft.ApiCenter/services' in location 'westus'
+```
+
+**Cause**: Selected Azure region doesn't support required services.
+
+**Solution**:
+
+```bash
+# Check API Management SKU availability by region
+az provider show --namespace Microsoft.ApiManagement \
+  --query "resourceTypes[?resourceType=='service'].locations" -o table
+
+# Check API Center availability
+az provider show --namespace Microsoft.ApiCenter \
+  --query "resourceTypes[?resourceType=='services'].locations" -o table
+
+# Use a supported region (e.g., eastus, westeurope, northeurope)
+# Update infra/main.parameters.json or AZURE_LOCATION variable
+```
+
+#### Issue: Settings.yaml Parsing Errors
+
+**Symptom**:
+
+```bash
+ERROR: Invalid YAML syntax in settings.yaml
+```
+
+**Cause**: Incorrect YAML formatting (indentation, special characters).
+
+**Solution**:
+
+```bash
+# Validate YAML syntax online or with tools
+python -c "import yaml; yaml.safe_load(open('infra/settings.yaml'))"
+
+# Common mistakes:
+# - Email addresses without quotes: publisherEmail: admin@domain.com
+# - Incorrect indentation (use 2 spaces, not tabs)
+# - Missing colon after keys
+
+# Correct format:
+# publisherEmail: "admin@domain.com"  # Quote email addresses
+# workspaces:                         # Consistent 2-space indentation
+#   - name: "team1-apis"              # Quote strings with special chars
+```
+
+#### Issue: Managed Identity Role Assignment Failures
+
+**Symptom**:
+
+```bash
+ERROR: Principal <guid> does not exist in the directory
+```
+
+**Cause**: Attempting role assignment before managed identity fully propagates in Azure AD.
+
+**Solution**:
+
+```bash
+# Add retry logic or wait time in deployment
+# The main.bicep already includes dependsOn, but manual deployments may need delays
+
+# For manual deployments, wait 60 seconds after managed identity creation
+sleep 60
+
+# Verify managed identity exists
+az identity show --name <identity-name> --resource-group <rg-name>
+
+# Retry role assignment
+az role assignment create --assignee <principal-id> \
+  --role "Contributor" \
+  --scope <resource-id>
+```
+
+### Getting Help
+
+> 💡 **Tip**: Enable verbose logging to diagnose deployment issues:
+>
+> ```bash
+> azd up --debug  # For Azure Developer CLI
+> az deployment sub create --debug  # For manual deployments
+> ```
+
+If you encounter issues not covered here:
+
+1. **Check Azure Service Health**: [Azure Status](https://status.azure.com)
+2. **Review Deployment Logs**: Azure Portal → Subscriptions → Deployments
+3. **Search Issues**: [GitHub Issues](https://github.com/Evilazaro/APIM-Accelerator/issues)
+4. **Open New Issue**: Provide deployment logs, settings.yaml (redact secrets), and error messages
+
+## 🗺️ Roadmap
+
+**Overview**
+
+The APIM Accelerator roadmap focuses on expanding deployment flexibility, improving observability, and adding advanced networking capabilities. These enhancements are driven by community feedback and Azure API Management feature releases. Contributions in any of these areas are welcome—see the [Contributing](#-contributing) section for details.
+
+Roadmap items are prioritized based on enterprise adoption patterns: networking features enable secure production deployments, observability enhancements reduce mean time to resolution (MTTR), and developer experience improvements accelerate API onboarding.
+
+### Planned Features
+
+#### Q1 2026 (In Progress)
+
+- **VNet Integration Module**
+  - Private endpoint support for internal APIM access
+  - Network Security Group (NSG) templates with recommended rules
+  - Azure Firewall integration for outbound traffic control
+  - Virtual network peering examples for hub-spoke topologies
+
+- **Enhanced Monitoring**
+  - Predefined Log Analytics queries for common scenarios
+  - Azure Monitor alert rules for APIM health metrics
+  - Application Insights availability tests for API endpoints
+  - Azure Dashboard templates for operations teams
+
+#### Q2 2026
+
+- **Custom Domain Support**
+  - Azure Key Vault integration for SSL certificate management
+  - Wildcard certificate configuration for multi-domain APIs
+  - Azure Front Door integration for global traffic routing
+  - Automated certificate renewal workflows
+
+- **CI/CD Templates**
+  - GitHub Actions workflows for automated deployment
+  - Azure Pipelines YAML templates with multi-stage approval
+  - GitOps patterns for infrastructure drift detection
+  - Terraform conversion option for multi-cloud strategies
+
+#### Q3 2026
+
+- **Multi-Region Deployment**
+  - Active-active Premium SKU configuration across regions
+  - Azure Traffic Manager integration for geo-distributed APIs
+  - Regional failover automation and health probes
+  - Data residency compliance patterns (GDPR, HIPAA)
+
+- **Advanced Security**
+  - Azure API Management policy templates (rate limiting, JWT validation)
+  - Integration with Azure Sentinel for security monitoring
+  - OAuth2/OpenID Connect examples with Azure AD B2C
+  - Mutual TLS (mTLS) configuration for client authentication
+
+#### Backlog (Future)
+
+- Self-hosted gateway deployment for hybrid cloud scenarios
+- Azure Arc integration for on-premises API Management
+- Cost optimization recommendations and SKU right-sizing tools
+- Multi-subscription deployment patterns for large enterprises
+- Bicep module registry publication for easier reuse
+
+### How to Influence the Roadmap
+
+> 📢 **Feature Requests**: Open a [GitHub Discussion](https://github.com/Evilazaro/APIM-Accelerator/discussions) to propose new features or vote on existing requests.
+
+Community input shapes priorities:
+
+- **Upvote Issues**: Star issues you'd like prioritized
+- **Share Use Cases**: Comment with your specific requirements
+- **Contribute Code**: Submit PRs for roadmap items (coordinate via issues first)
+- **Beta Testing**: Volunteer to test pre-release features in your environment
+
+## �📝 License
 
 This project is licensed under the **MIT License** - see the [LICENSE](LICENSE) file for details.
 
