@@ -178,15 +178,15 @@ flowchart TB
     %% Sub Group Level
     classDef subGroup fill:#C5CAE9,stroke:#3F51B5,stroke-width:2px,color:#000
 
-    %% Content Level (Semantic colors)
-    classDef mdBlue fill:#BBDEFB,stroke:#1976D2,stroke-width:2px,color:#000
-    classDef mdGreen fill:#C8E6C9,stroke:#388E3C,stroke-width:2px,color:#000
-    classDef mdRed fill:#FFCDD2,stroke:#D32F2F,stroke-width:2px,color:#000
-    classDef mdYellow fill:#FFF9C4,stroke:#F57F17,stroke-width:2px,color:#000
-    classDef mdOrange fill:#FFE0B2,stroke:#E64A19,stroke-width:2px,color:#000
-    classDef mdPurple fill:#E1BEE7,stroke:#7B1FA2,stroke-width:2px,color:#000
-    classDef mdTeal fill:#B2DFDB,stroke:#00796B,stroke-width:2px,color:#000
-    classDef mdGrey fill:#F5F5F5,stroke:#616161,stroke-width:2px,color:#000
+    %% Content Level (Semantic colors - using darker/saturated fills for contrast)
+    classDef mdBlue fill:#2196F3,stroke:#0D47A1,stroke-width:2px,color:#FFF
+    classDef mdGreen fill:#4CAF50,stroke:#1B5E20,stroke-width:2px,color:#FFF
+    classDef mdRed fill:#F44336,stroke:#B71C1C,stroke-width:2px,color:#FFF
+    classDef mdYellow fill:#FFEB3B,stroke:#F57F17,stroke-width:2px,color:#000
+    classDef mdOrange fill:#FF9800,stroke:#E65100,stroke-width:2px,color:#FFF
+    classDef mdPurple fill:#9C27B0,stroke:#4A148C,stroke-width:2px,color:#FFF
+    classDef mdTeal fill:#009688,stroke:#004D40,stroke-width:2px,color:#FFF
+    classDef mdGrey fill:#757575,stroke:#212121,stroke-width:2px,color:#FFF
     %% ============================================
     %% COLOR SCHEME DOCUMENTATION
     %% ============================================
@@ -200,9 +200,9 @@ flowchart TB
     %%   - Stroke: Indigo 500 (#3F51B5), 2px
     %%
     %% Level 3 (Content): Material Design semantic colors
-    %%   - Blue (#BBDEFB): Shared infrastructure components
-    %%   - Green (#C8E6C9): Core platform services
-    %%   - Orange (#FFE0B2): Inventory management components
+    %%   - Blue (#2196F3): Shared infrastructure components - Vibrant blue
+    %%   - Green (#4CAF50): Core platform services - Vibrant green
+    %%   - Orange (#FF9800): Inventory management components - Vibrant orange
     %% ============================================
 
     subgraph system["APIM Accelerator Architecture"]
