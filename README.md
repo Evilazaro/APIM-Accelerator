@@ -178,15 +178,15 @@ flowchart TB
     %% Sub Group Level
     classDef subGroup fill:#C5CAE9,stroke:#3F51B5,stroke-width:2px,color:#000
 
-    %% Content Level (Semantic colors - Material Design 100-200 shades for light, professional appearance)
-    classDef mdBlue fill:#BBDEFB,stroke:#1976D2,stroke-width:2px,color:#000
-    classDef mdGreen fill:#C8E6C9,stroke:#388E3C,stroke-width:2px,color:#000
-    classDef mdRed fill:#FFCDD2,stroke:#D32F2F,stroke-width:2px,color:#000
-    classDef mdYellow fill:#FFF9C4,stroke:#F57F17,stroke-width:2px,color:#000
-    classDef mdOrange fill:#FFE0B2,stroke:#E64A19,stroke-width:2px,color:#000
-    classDef mdPurple fill:#E1BEE7,stroke:#7B1FA2,stroke-width:2px,color:#000
-    classDef mdTeal fill:#B2DFDB,stroke:#00796B,stroke-width:2px,color:#000
-    classDef mdGrey fill:#F5F5F5,stroke:#616161,stroke-width:2px,color:#000
+    %% Content Level (Semantic colors - darker for contrast against light subgraph backgrounds)
+    classDef mdBlue fill:#64B5F6,stroke:#1976D2,stroke-width:2px,color:#000
+    classDef mdGreen fill:#81C784,stroke:#388E3C,stroke-width:2px,color:#000
+    classDef mdRed fill:#E57373,stroke:#D32F2F,stroke-width:2px,color:#000
+    classDef mdYellow fill:#FFF176,stroke:#F57F17,stroke-width:2px,color:#000
+    classDef mdOrange fill:#FFB74D,stroke:#E64A19,stroke-width:2px,color:#000
+    classDef mdPurple fill:#BA68C8,stroke:#7B1FA2,stroke-width:2px,color:#000
+    classDef mdTeal fill:#4DB6AC,stroke:#00796B,stroke-width:2px,color:#000
+    classDef mdGrey fill:#E0E0E0,stroke:#616161,stroke-width:2px,color:#000
     %% ============================================
     %% COLOR SCHEME DOCUMENTATION
     %% ============================================
@@ -238,14 +238,14 @@ flowchart TB
         governance --> apicenter
     end
 
-    %% Apply styling - main group and subgroups
+    %% Apply styling - main group and subgroups with DISTINCT colors per layer
     class system mainGroup
-    class shared,core,inventory subGroup
 
-    %% Apply inline styling to ensure nested subgraphs render with visible backgrounds
-    style shared fill:#C5CAE9,stroke:#3F51B5,stroke-width:2px
-    style core fill:#C5CAE9,stroke:#3F51B5,stroke-width:2px
-    style inventory fill:#C5CAE9,stroke:#3F51B5,stroke-width:2px
+    %% Apply different background colors to each layer for clear visual distinction
+    style system fill:#E8EAF6,stroke:#3F51B5,stroke-width:3px
+    style shared fill:#BBDEFB,stroke:#1976D2,stroke-width:2px
+    style core fill:#C8E6C9,stroke:#388E3C,stroke-width:2px
+    style inventory fill:#FFE0B2,stroke:#E64A19,stroke-width:2px
 ```
 
 **Component Interactions:**
