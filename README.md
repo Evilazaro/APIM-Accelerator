@@ -26,44 +26,65 @@ This layered approach enables organizations to deploy once and scale horizontall
 ```mermaid
 %%{init: {"flowchart": {"htmlLabels": false}} }%%
 flowchart TB
+    %% ============================================
+    %% STANDARD COLOR SCHEME - DO NOT MODIFY
+    %% ============================================
+    %% Main Group Level (Neutral background)
     classDef mainGroup fill:#E8EAF6,stroke:#3F51B5,stroke-width:3px,color:#000
+
+    %% Content Level (Semantic colors for functional differentiation)
     classDef mdBlue fill:#BBDEFB,stroke:#1976D2,stroke-width:2px,color:#000
     classDef mdGreen fill:#C8E6C9,stroke:#388E3C,stroke-width:2px,color:#000
     classDef mdOrange fill:#FFE0B2,stroke:#E64A19,stroke-width:2px,color:#000
     classDef mdPurple fill:#E1BEE7,stroke:#7B1FA2,stroke-width:2px,color:#000
+    classDef mdYellow fill:#FFF9C4,stroke:#F57F17,stroke-width:2px,color:#000
+    %% ============================================
+    %% COLOR SCHEME DOCUMENTATION
+    %% ============================================
+    %% Level 1 (Main Container): Indigo 50 (#E8EAF6)
+    %%   - Used for: Top-level architecture container
+    %%   - Purpose: Visual hierarchy and neutral background
+    %%   - Stroke: Indigo 500 (#3F51B5), 3px
+    %%
+    %% Functional Layers (Semantic Colors):
+    %%   - Monitoring (Blue): Observability infrastructure
+    %%   - Core Platform (Green): Primary APIM services
+    %%   - Governance (Orange): API catalog and compliance
+    %%   - External Services (Purple): Third-party integrations
+    %% ============================================
 
     subgraph landing["APIM Landing Zone Architecture"]
         direction TB
 
-        subgraph shared["Shared Monitoring Layer"]
+        subgraph shared["🔍 Shared Monitoring Layer"]
             direction LR
-            logs["Log Analytics<br/>Workspace"]:::mdBlue
-            insights["Application<br/>Insights"]:::mdBlue
-            storage["Storage Account<br/>(Diagnostics)"]:::mdBlue
+            logs["📊 Log Analytics<br/>Workspace"]:::mdBlue
+            insights["📈 Application<br/>Insights"]:::mdBlue
+            storage["💾 Storage Account<br/>(Diagnostics)"]:::mdBlue
         end
 
-        subgraph core["Core APIM Platform"]
+        subgraph core["⚙️ Core APIM Platform"]
             direction TB
-            apim["API Management<br/>Service<br/>(Premium SKU)"]:::mdGreen
-            ws1["Workspace 1<br/>(Team APIs)"]:::mdGreen
-            identity["Managed<br/>Identity"]:::mdGreen
+            apim["🌐 API Management<br/>Service<br/>(Premium SKU)"]:::mdGreen
+            ws1["📦 Workspace 1<br/>(Team APIs)"]:::mdGreen
+            identity["🔑 Managed<br/>Identity"]:::mdGreen
 
             apim --> ws1
             apim --> identity
         end
 
-        subgraph inventory["API Governance Layer"]
+        subgraph inventory["📋 API Governance Layer"]
             direction LR
-            apicenter["API Center<br/>(Catalog)"]:::mdOrange
-            rbac["RBAC Roles<br/>(Compliance)"]:::mdOrange
+            apicenter["📚 API Center<br/>(Catalog)"]:::mdOrange
+            rbac["🔒 RBAC Roles<br/>(Compliance)"]:::mdOrange
 
             apicenter --> rbac
         end
 
-        subgraph external["External Services"]
+        subgraph external["🔌 External Services"]
             direction LR
-            aad["Azure AD<br/>(OAuth2)"]:::mdPurple
-            keyvault["Key Vault<br/>(Secrets)"]:::mdPurple
+            aad["🔐 Azure AD<br/>(OAuth2)"]:::mdPurple
+            keyvault["🗝️ Key Vault<br/>(Secrets)"]:::mdPurple
         end
 
         logs --> apim
@@ -74,7 +95,12 @@ flowchart TB
         aad --> apim
     end
 
+    %% Apply styles using style directives (MANDATORY for subgraphs)
     style landing fill:#E8EAF6,stroke:#3F51B5,stroke-width:3px
+    style shared fill:#BBDEFB,stroke:#1976D2,stroke-width:2px
+    style core fill:#C8E6C9,stroke:#388E3C,stroke-width:2px
+    style inventory fill:#FFE0B2,stroke:#E64A19,stroke-width:2px
+    style external fill:#E1BEE7,stroke:#7B1FA2,stroke-width:2px
 ```
 
 ## Table of Contents
