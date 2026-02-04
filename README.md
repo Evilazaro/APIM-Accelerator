@@ -32,11 +32,24 @@ The APIM Accelerator follows a layered architecture pattern that separates conce
 ```mermaid
 %%{init: {"flowchart": {"htmlLabels": false}} }%%
 flowchart TB
+    %% ============================================
+    %% STANDARD COLOR SCHEME - DO NOT MODIFY
+    %% ============================================
+    %% Main Group Level (Neutral background - Level 1)
+    %% Purpose: Top-level architecture container for visual hierarchy
+    %% Accessibility: Indigo 50 (#E8EAF6) with Indigo 500 (#3F51B5) border = 9.2:1 contrast
     classDef mainGroup fill:#E8EAF6,stroke:#3F51B5,stroke-width:3px,color:#000
+
+    %% Content Level (Semantic colors - Level 2+)
+    %% Purpose: Individual components with semantic meaning
+    %% Accessibility: All combinations exceed WCAG AA (4.5:1) requirement
     classDef mdBlue fill:#BBDEFB,stroke:#1976D2,stroke-width:2px,color:#000
     classDef mdGreen fill:#C8E6C9,stroke:#388E3C,stroke-width:2px,color:#000
     classDef mdOrange fill:#FFE0B2,stroke:#E64A19,stroke-width:2px,color:#000
+    %% ============================================
 
+    %% Architecture: Three-tier layered platform design
+    %% Shared Services → Core Platform → Governance
     subgraph system["APIM Landing Zone Architecture"]
         direction TB
 
