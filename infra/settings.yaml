@@ -1,19 +1,30 @@
+# APIM Accelerator Infrastructure Configuration
+# This file defines the configuration settings for deploying Azure API Management and related services
+# including monitoring, inventory, and tagging strategies for the landing zone.
+
+# Solution identifier used for naming conventions and resource grouping
 solutionName: "apim-accelerator"
+
+# Shared services configuration - Resources used across multiple landing zone components
 shared:
+  # Monitoring infrastructure for observability and diagnostics
   monitoring:
+    # Azure Log Analytics workspace configuration
     logAnalytics:
-      name: ""
-      workSpaceResourceId: ""
+      name: "" # Log Analytics workspace name (leave empty for auto-generation)
+      workSpaceResourceId: "" # Existing workspace resource ID (if reusing)
       identity:
-        type: "SystemAssigned"
-        userAssignedIdentities: []
+        type: "SystemAssigned" # Managed identity type: SystemAssigned or UserAssigned
+        userAssignedIdentities: [] # List of user-assigned identity resource IDs
+    # Application Insights for application performance monitoring
     applicationInsights:
-      name: ""
-      logAnalyticsWorkspaceResourceId: ""
+      name: "" # Application Insights instance name (leave empty for auto-generation)
+      logAnalyticsWorkspaceResourceId: "" # Log Analytics workspace to link with App Insights
     tags:
       lz-component-type: "shared"
       component: "monitoring"
 
+  # Shared resource tags - Applied to all resources in the shared scope
   tags:
     CostCenter: "CC-1234" # Tracks cost allocation
     BusinessUnit: "IT" # Business unit or department
@@ -26,29 +37,36 @@ shared:
     ChargebackModel: "Dedicated" # Chargeback/Showback model
     BudgetCode: "FY25-Q1-InitiativeX" # Budget or initiative code
 
+# Core services configuration - Primary APIM infrastructure
 core:
+  # Azure API Management service configuration
   apiManagement:
-    name: ""
-    publisherEmail: "evilazaro@gmail.com"
-    publisherName: "Contoso"
+    name: "" # APIM service name (leave empty for auto-generation)
+    publisherEmail: "evilazaro@gmail.com" # Publisher contact email (required by Azure)
+    publisherName: "Contoso" # Organization name shown in developer portal
+    # SKU configuration - Determines features and scaling
     sku:
-      name: "Premium"
-      capacity: 1
+      name: "Premium" # SKU tier: Developer, Basic, Standard, Premium, Consumption
+      capacity: 1 # Number of scale units (Premium: 1-10, Standard: 1-4)
+    # Managed identity configuration for secure access to Azure resources
     identity:
-      type: "SystemAssigned"
-      userAssignedIdentities: []
+      type: "SystemAssigned" # Identity type: SystemAssigned, UserAssigned, or Both
+      userAssignedIdentities: [] # List of user-assigned identity resource IDs
+    # Workspaces for logical API grouping and team isolation
     workspaces:
-      - name: "workspace1"
+      - name: "workspace1" # Workspace name (Premium SKU only)
   tags:
     lz-component-type: "core"
     component: "apiManagement"
 
+# Inventory services configuration - API catalog and governance
 inventory:
+  # Azure API Center for API discovery and governance
   apiCenter:
-    name: ""
+    name: "" # API Center name (leave empty for auto-generation)
     identity:
-      type: "SystemAssigned"
-      userAssignedIdentities: []
+      type: "SystemAssigned" # Managed identity type
+      userAssignedIdentities: [] # List of user-assigned identity resource IDs
   tags:
     lz-component-type: "shared"
     component: "inventory"

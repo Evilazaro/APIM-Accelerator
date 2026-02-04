@@ -1,36 +1,47 @@
 /*
-==============================================================================
-AZURE API Management Accelerator - MAIN ORCHESTRATION TEMPLATE
-==============================================================================
+╔════════════════════════════════════════════════════════════════════════════╗
+║                   APIM LANDING ZONE ORCHESTRATION TEMPLATE                  ║
+╚════════════════════════════════════════════════════════════════════════════╝
 
-File: infra/main.bicep
-Purpose: Main orchestration template for APIM Landing Zone deployment
-Author: Cloud Platform Team
-Created: 2025-10-28
-Last Modified: 2025-10-28
+PURPOSE:
+  This is the main orchestration template for deploying a complete API Management
+  landing zone on Azure. It coordinates the deployment of monitoring infrastructure,
+  core API Management services, and API inventory management capabilities.
 
-Description:
-  This template deploys a complete Azure API Management Landing Zone following
-  Azure Well-Architected Framework principles. It orchestrates the deployment of:
-  - Shared monitoring infrastructure (Log Analytics, Application Insights)
-  - Core API Management service with premium features
-  - API inventory management with API Center integration
-  - Comprehensive observability and diagnostic settings
+DEPLOYMENT SCOPE:
+  Subscription level - creates resource groups and deploys child modules
 
-Dependencies:
-  - settings.yaml: Configuration file containing environment-specific values
-  - Shared modules: monitoring, core platform, inventory management
+KEY COMPONENTS:
+  1. Shared Infrastructure - Monitoring foundation (Log Analytics, App Insights)
+  2. Core Platform - API Management service with premium features
+  3. API Inventory - API Center for governance and documentation
 
-Deployment Scope: Subscription
-Target Resource Groups: Creates single resource group with organized component deployment
+DEPENDENCIES:
+  - settings.yaml: Environment-specific configuration file
+  - ../src/shared/main.bicep: Shared monitoring infrastructure module
+  - ../src/core/main.bicep: Core APIM platform module
+  - ../src/inventory/main.bicep: API Center inventory module
 
-Version: 2.0.0
-Changelog:
-  - v2.0.0: Added comprehensive documentation and variable optimization
-  - v1.5.0: Implemented modular architecture with separated concerns
-  - v1.0.0: Initial release with basic APIM deployment
+DEPLOYMENT SEQUENCE:
+  1. Resource group creation
+  2. Shared monitoring infrastructure (required first)
+  3. Core APIM platform (depends on monitoring)
+  4. API inventory management (depends on APIM)
 
-==============================================================================
+USAGE:
+  az deployment sub create \
+    --location <region> \
+    --template-file infra/main.bicep \
+    --parameters envName=<dev|test|staging|prod|uat> location=<azure-region>
+
+OUTPUTS:
+  - Application Insights details for monitoring integration
+  - Storage account ID for diagnostic logs
+  - Additional outputs from core and inventory modules
+
+AUTHOR: Cloud Platform Team
+VERSION: 2.0.0
+LAST UPDATED: 2025-10-28
 */
 
 metadata templateInfo = {

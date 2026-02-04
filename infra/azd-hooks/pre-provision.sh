@@ -1,27 +1,76 @@
 #!/bin/bash
 
 #===============================================================================
-# Azure API Management Accelerator - Pre-Provision Script
-#===============================================================================
-# Description: Purges soft-deleted Azure API Management instances to
-#              enable clean redeployment for demo and testing scenarios
-# Usage:       ./pre-provision.sh <location>
-# Example:     ./pre-provision.sh "East US"
+# Script: pre-provision.sh
+# Purpose: Purge soft-deleted Azure API Management (APIM) resources before provisioning
+# Usage: ./pre-provision.sh <location>
+# Example: ./pre-provision.sh 'East US'
+#
+# Description:
+#   This pre-provisioning hook script is executed before Azure resource deployment.
+#   It identifies and purges all soft-deleted APIM instances in the specified
+#   Azure location to prevent naming conflicts and enable clean redeployment.
+#
+# Prerequisites:
+#   - Azure CLI (az) must be installed and configured
+#   - User must be authenticated with appropriate Azure permissions
+#   - Permissions required: Microsoft.ApiManagement/deletedservices/delete
+#
+# Exit Codes:
+#   0 - Success
+#   1 - Invalid arguments or usage error
 #===============================================================================
 
-set -euo pipefail  # Exit on error, undefined variables, and pipe failures
-
-#===============================================================================
-# FUNCTIONS
-#===============================================================================
-
-# Display script usage information
+#-------------------------------------------------------------------------------
+# Function: show_usage
+# Description: Displays script usage information and exits with error code
+# Parameters: None
+# Returns: Exits with code 1
+#-------------------------------------------------------------------------------
 show_usage() {
     echo "Usage: $0 <location>"
     echo "Example: $0 'East US'"
-    echo ""
+ -------------------------------------------------------------------------------
+# Function: log_message
+# Description: Outputs a timestamped log message for traceability
+# Parameters:
+#   $1 - Message string to log
+#-------------------------------------------------------------------------------
+# Function: get_soft_deleted_apims
+# Description: Retrieves a list of all soft-deleted APIM service names
+# Parameters: None
+# Returns: Tab-separated list of soft-deleted APIM service names (via stdout)
+#-------------------------------------------------------------------------------
+# Function: purge_soft_deleted_apim
+# Description: Permanently purges a soft-deleted APIM service instance
+# Parameters:
+#   $1 - resource_name: Name of the APIM service to purge
+#   $2 - location: Azure region where the resource was originally deployed
+# Returns: None
+# Notes:
+#   - Purging is irreversible and permanently deletes the resource
+#   - Location must match the original deployment location
+#   - Failures are logged but don't halt script execution
+#-------------------------------------------------------------------------------
+#   - Errors are suppressed (redirected to /dev/null)
+#   - Returns empty string if no soft-deleted instances found
+#   - Uses JMESPath query to extract only the 'name' field
+#-------------------------------------------------------------------------------
+# Example: log_message "Process started"
+#-------------------------------------------------------------------------------
     echo "This script purges soft-deleted Azure resources to enable clean redeployment."
-    exit 1
+ -------------------------------------------------------------------------------
+# Function: process_apim_purging
+# Description: Orchestrates the discovery and purging of all soft-deleted APIM instances
+# Parameters:
+#   $1 - location: Azure region to target for purging operations
+# Returns: None
+# Process Flow:
+#   1. Retrieves list of all soft-deleted APIM instances
+#   2. Iterates through each instance
+#   3. Initiates purge operation for each found instance
+#   4. Logs all operations for audit trail
+#-------------------------------------------------------------------------------
 }
 
 # Log messages with timestamp for better traceability
@@ -33,30 +82,50 @@ log_message() {
 get_soft_deleted_apims() {
     az apim deletedservice list --query "[].name" -o tsv 2>/dev/null || true
 }
-
-# Purge a soft-deleted APIM resource
-purge_soft_deleted_apim() {
-    local resource_name="$1"
-    local location="$2"
-    
-    log_message "APIM purge initiated for: $resource_name"
-    
-    if az apim deletedservice purge --service-name "$resource_name" --location "$location" 2>/dev/null; then
-        log_message "APIM purge completed successfully for: $resource_name"
-    else
-        log_message "APIM purge failed for: $resource_name (may require different location or already purged)"
+#-------------------------------------------------------------------------------
+# Function: main
+# Description: Main entry point for the script - validates inputs and orchestrates purging
+# Parameters:
+#   $1 - location: Azure region (e.g., 'East US', 'westus2')
+# Returns: 
+#   Exit code 0 on success
+#   Exit code 1 on validation failure
+# Validation:
+#   - Ensures exactly one argument is provided
+#   - Verifies location parameter is not empty
+# Execution Flow:
+#   1. Validate command-line arguments
+#   2. Log process initiation
+#   3. Invoke APIM purging process
+#   4. Log completion status
+#-------------------------------------------------------------------------------
+main() {
+    # Validate input parameters
+    if [[ $# -ne 1 ]]; then
+        echo "Error: Invalid number of arguments" >&2
+        show_usage
     fi
-}
-
-# Process APIM resource purging
-process_apim_purging() {
+    
     local location="$1"
     
-    local soft_deleted_apims
-    soft_deleted_apims=$(get_soft_deleted_apims)
+    # Validate location parameter is not empty
+    if [[ -z "$location" ]]; then
+        echo "Error: Location parameter cannot be empty" >&2
+        show_usage
+    fi
     
-    if [[ -z "$soft_deleted_apims" ]]; then
-        log_message "No soft-deleted APIM instances found"
+    log_message "Starting APIM resource purging process for location: $location"
+    
+    # Process APIM purging - find and purge all soft-deleted APIM instances
+    process_apim_purging "$location"
+    
+    log_message "APIM resource purging process completed successfully"
+}
+
+#-------------------------------------------------------------------------------
+# Script Entry Point
+# Execute main function with all provided command-line arguments
+#------------------------------------------------------------------------------- found"
         return
     fi
     

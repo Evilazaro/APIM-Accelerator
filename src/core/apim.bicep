@@ -1,26 +1,66 @@
-/*
-==============================================================================
-API MANAGEMENT SERVICE DEPLOYMENT MODULE
-==============================================================================
-
-File: src/core/apim.bicep
-Purpose: Deploys API Management service with monitoring and security configuration
-Author: Cloud Platform Team
-Created: 2025-10-28
-
-Description:
-  Deploys API Management service with:
-  - Premium tier configuration for production workloads
-  - Managed identity for secure service-to-service communication
-  - Application Insights logger for performance monitoring
-  - Diagnostic settings for comprehensive observability
-  - Role-based access control for security
-
-==============================================================================
-*/
+//==============================================================================
+// APIM BICEP TEMPLATE
+//==============================================================================
+// This Bicep template deploys an Azure API Management (APIM) service instance
+// with comprehensive configuration options including:
+// - Managed identity support (System-assigned and User-assigned)
+// - Virtual network integration for private deployments
+// - Diagnostic settings with Log Analytics and Storage Account integration
+// - Application Insights logger for performance monitoring
+// - Role-based access control (RBAC) assignments
+// - Developer portal configuration
+//
+// USAGE EXAMPLE:
+// --------------
+// module apim './apim.bicep' = {
+//   name: 'apim-deployment'
+//   params: {
+//     name: 'my-apim-service'
+//     location: 'eastus'
+//     skuName: 'Developer'
+//     skuCapacity: 1
+//     identityType: 'SystemAssigned'
+//     userAssignedIdentities: []
+//     publisherEmail: 'admin@contoso.com'
+//     publisherName: 'Contoso'
+//     logAnalyticsWorkspaceId: '/subscriptions/.../workspaces/...'
+//     storageAccountResourceId: '/subscriptions/.../storageAccounts/...'
+//     applicationInsIghtsResourceId: '/subscriptions/.../components/...'
+//     enableDeveloperPortal: true
+//     publicNetworkAccess: true
+//     virtualNetworkType: 'None'
+//     subnetResourceId: ''
+//     tags: { environment: 'dev', project: 'api-platform' }
+//   }
+// }
+//
+// PREREQUISITES:
+// --------------
+// - Log Analytics workspace must exist
+// - Application Insights instance must exist
+// - Storage account must exist
+// - For VNet integration: Virtual network and subnet must exist
+// - Appropriate RBAC permissions to deploy resources
+//
+// SKU RECOMMENDATIONS:
+// --------------------
+// - Developer: Non-production, no SLA, low cost
+// - Basic/BasicV2: Small-scale production workloads
+// - Standard/StandardV2: Medium-scale production workloads
+// - Premium: High-scale production with multi-region support
+// - Consumption: Serverless, pay-per-execution model
+//
+// SECURITY BEST PRACTICES:
+// ------------------------
+// - Use System-assigned managed identity when possible
+// - Set publicNetworkAccess to false for production environments
+// - Use Internal VNet type for fully private deployments
+// - Enable diagnostic settings for audit and compliance
+// - Apply appropriate resource tags for governance
+//==============================================================================
 
 //==============================================================================
-// CONFIGURATION CONSTANTS
+// CONSTANTS AND CONFIGURATION
 //==============================================================================
 
 @description('Suffix for diagnostic settings resource naming')
@@ -34,6 +74,13 @@ var readerRoleId = 'acdd72a7-3385-48ef-bd42-f606fba81ae7'
 
 //==============================================================================
 // PARAMETERS
+//==============================================================================
+// All parameters required for deploying and configuring the API Management
+// service. Parameters are grouped by category:
+// - Identity and Security
+// - Networking
+// - Monitoring and Diagnostics
+// - Service Configuration
 //==============================================================================
 
 @description('Name of the API Management service instance')
@@ -106,8 +153,12 @@ param tags object
 // =================================================================
 // VARIABLES AND COMPUTED VALUES
 // =================================================================
+// Dynamic variables that compute configuration objects based on
+// provided parameters. These enable conditional resource deployment
+// and configuration.
+// =================================================================
 
-// Identity Configuration - Build the identity object based on type
+@description('Identity Configuration - Constructs the managed identity object based on the specified identity type. SystemAssigned creates a new identity, UserAssigned uses existing identities, and None results in null.')
 var identityObject = identityType == 'SystemAssigned'
   ? {
       type: identityType
@@ -119,7 +170,7 @@ var identityObject = identityType == 'SystemAssigned'
         }
       : null
 
-// Virtual Network Configuration - Only configure if VNet integration is enabled
+@description('Virtual Network Configuration - Conditionally configures VNet integration by setting the subnet resource ID when virtualNetworkType is External or Internal. Returns null for public deployments.')
 var virtualNetworkConfiguration = virtualNetworkType != 'None'
   ? {
       subnetResourceId: subnetResourceId
@@ -159,8 +210,13 @@ resource apim 'Microsoft.ApiManagement/service@2024-10-01-preview' = {
 // =================================================================
 // ROLE ASSIGNMENTS AND PERMISSIONS
 // =================================================================
+// Assigns necessary RBAC roles to the API Management service's
+// managed identity to enable access to required Azure resources.
+// The Reader role allows APIM to read resource metadata.
+// Additional roles can be added to the roles array as needed.
+// =================================================================
 
-// Define required roles for API Management service principal
+@description('Collection of Azure RBAC role definition IDs to be assigned to the API Management service principal. Currently includes Reader role for accessing resources within the resource group.')
 var roles = [
   readerRoleId
 ]
@@ -184,6 +240,12 @@ resource roleAssignments 'Microsoft.Authorization/roleAssignments@2022-04-01' = 
 // =================================================================
 // MANAGED IDENTITY ACCESS (for existing client secret scenarios)
 // =================================================================
+// References the default managed identity associated with the APIM
+// service for scenarios requiring client secret authentication.
+// This is a nested resource reference within the APIM scope.
+// NOTE: This references a system-generated identity, not a custom
+// user-assigned identity.
+// =================================================================
 
 @description('Reference to existing managed identity for client secret scenarios')
 resource clientSecret 'Microsoft.ManagedIdentity/identities@2025-01-31-preview' existing = {
@@ -196,6 +258,12 @@ resource clientSecret 'Microsoft.ManagedIdentity/identities@2025-01-31-preview' 
 
 // =================================================================
 // DIAGNOSTIC SETTINGS AND MONITORING
+// =================================================================
+// Configures comprehensive monitoring and logging for the API
+// Management service. Sends metrics and logs to Log Analytics
+// for real-time monitoring and to Storage Account for long-term
+// retention and compliance. Application Insights provides detailed
+// API performance telemetry and distributed tracing.
 // =================================================================
 
 @description('Diagnostic settings for API Management service - Enables comprehensive logging and monitoring')
@@ -235,6 +303,16 @@ resource appInsightsLogger 'Microsoft.ApiManagement/service/loggers@2024-10-01-p
 
 // =================================================================
 // OUTPUTS
+// =================================================================
+// Returns key identifiers and properties of the deployed resources.
+// These outputs can be used by other modules or for reference in
+// deployment pipelines.
+//
+// OUTPUT USAGE:
+// - API_MANAGEMENT_RESOURCE_ID: Full ARM resource ID
+// - API_MANAGEMENT_NAME: Service name for CLI/SDK operations
+// - AZURE_API_MANAGEMENT_IDENTITY_PRINCIPAL_ID: For RBAC assignments
+// - AZURE_CLIENT_SECRET_*: For authentication scenarios
 // =================================================================
 
 @description('Resource ID of the deployed API Management service')
