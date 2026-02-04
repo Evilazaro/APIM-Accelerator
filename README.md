@@ -77,30 +77,30 @@ flowchart TB
     subgraph system["APIM Landing Zone Architecture"]
         direction TB
 
-        subgraph shared["fa:fa-chart-bar Shared Infrastructure"]
+        subgraph shared["📊 Shared Infrastructure"]
             direction LR
-            logs["fa:fa-file-text Log Analytics<br/>Workspace"]:::mdBlue
-            insights["fa:fa-chart-line Application<br/>Insights"]:::mdBlue
-            storage["fa:fa-database Storage<br/>Account"]:::mdBlue
+            logs["📝 Log Analytics<br/>Workspace"]:::mdBlue
+            insights["📈 Application<br/>Insights"]:::mdBlue
+            storage["💾 Storage<br/>Account"]:::mdBlue
         end
 
-        subgraph core["fa:fa-cogs Core Platform"]
+        subgraph core["⚙️ Core Platform"]
             direction LR
-            apim["fa:fa-server API Management<br/>Service"]:::mdGreen
-            devportal["fa:fa-code Developer<br/>Portal"]:::mdGreen
-            workspaces["fa:fa-users Workspaces<br/>(Multi-tenant)"]:::mdGreen
+            apim["🖥️ API Management<br/>Service"]:::mdGreen
+            devportal["💻 Developer<br/>Portal"]:::mdGreen
+            workspaces["👥 Workspaces<br/>(Multi-tenant)"]:::mdGreen
         end
 
-        subgraph inventory["fa:fa-shield API Governance"]
+        subgraph inventory["🛡️ API Governance"]
             direction LR
-            apicenter["fa:fa-book API Center"]:::mdOrange
-            catalog["fa:fa-list API Catalog"]:::mdOrange
+            apicenter["📚 API Center"]:::mdOrange
+            catalog["📋 API Catalog"]:::mdOrange
         end
 
-        subgraph external["fa:fa-globe External Services"]
+        subgraph external["🌐 External Services"]
             direction LR
-            backends["fa:fa-cloud Backend APIs"]:::mdPurple
-            clients["fa:fa-desktop API Consumers"]:::mdPurple
+            backends["☁️ Backend APIs"]:::mdPurple
+            clients["🖥️ API Consumers"]:::mdPurple
         end
 
         %% Relationships with descriptive labels
