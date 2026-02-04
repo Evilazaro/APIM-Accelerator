@@ -169,10 +169,41 @@ The inventory tier establishes API Center for governance and catalog management.
 ```mermaid
 %%{init: {"flowchart": {"htmlLabels": false}} }%%
 flowchart TB
+    %% ============================================
+    %% STANDARD COLOR SCHEME - DO NOT MODIFY
+    %% ============================================
+    %% Main Group Level (Neutral background)
     classDef mainGroup fill:#E8EAF6,stroke:#3F51B5,stroke-width:3px,color:#000
+
+    %% Sub Group Level
+    classDef subGroup fill:#C5CAE9,stroke:#3F51B5,stroke-width:2px,color:#000
+
+    %% Content Level (Semantic colors)
     classDef mdBlue fill:#BBDEFB,stroke:#1976D2,stroke-width:2px,color:#000
     classDef mdGreen fill:#C8E6C9,stroke:#388E3C,stroke-width:2px,color:#000
+    classDef mdRed fill:#FFCDD2,stroke:#D32F2F,stroke-width:2px,color:#000
+    classDef mdYellow fill:#FFF9C4,stroke:#F57F17,stroke-width:2px,color:#000
     classDef mdOrange fill:#FFE0B2,stroke:#E64A19,stroke-width:2px,color:#000
+    classDef mdPurple fill:#E1BEE7,stroke:#7B1FA2,stroke-width:2px,color:#000
+    classDef mdTeal fill:#B2DFDB,stroke:#00796B,stroke-width:2px,color:#000
+    classDef mdGrey fill:#F5F5F5,stroke:#616161,stroke-width:2px,color:#000
+    %% ============================================
+    %% COLOR SCHEME DOCUMENTATION
+    %% ============================================
+    %% Level 1 (Main Groups): Indigo 50 (#E8EAF6)
+    %%   - Used for: Top-level architecture container
+    %%   - Purpose: Visual hierarchy and separation
+    %%   - Stroke: Indigo 500 (#3F51B5), 3px
+    %%
+    %% Level 2 (Sub Groups): Indigo 100 (#C5CAE9)
+    %%   - Used for: Layer groupings (shared, core, inventory)
+    %%   - Stroke: Indigo 500 (#3F51B5), 2px
+    %%
+    %% Level 3 (Content): Material Design semantic colors
+    %%   - Blue (#BBDEFB): Shared infrastructure components
+    %%   - Green (#C8E6C9): Core platform services
+    %%   - Orange (#FFE0B2): Inventory management components
+    %% ============================================
 
     subgraph system["APIM Accelerator Architecture"]
         direction TB
@@ -205,6 +236,9 @@ flowchart TB
         apicenter -->|"API Discovery"| apim
         catalog --> apicenter
         governance --> apicenter
+
+        %% Apply subGroup styling to layer subgraphs
+        class shared,core,inventory subGroup
     end
 
     class system mainGroup
