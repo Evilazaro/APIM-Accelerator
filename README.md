@@ -5,11 +5,11 @@
 ![Azure](https://img.shields.io/badge/cloud-Azure-0078D4)
 ![Status](https://img.shields.io/badge/status-Active-success)
 
-Enterprise-grade Azure API Management landing zone accelerator delivering production-ready infrastructure through modular Bicep templates and Azure Developer CLI integration.
+Enterprise-grade Azure API Management landing zone accelerator built with modular Bicep templates and Azure Developer CLI for rapid production deployments.
 
 **Overview**
 
-The APIM Accelerator provides a comprehensive Infrastructure-as-Code solution for deploying Azure API Management following Azure Well-Architected Framework principles. This accelerator streamlines the deployment of enterprise API platforms by combining modular Bicep templates with Azure Developer CLI automation, enabling teams to provision production-ready API Management environments in minutes rather than weeks. The solution emphasizes separation of concerns through a layered architecture: shared monitoring infrastructure for observability, core platform services for API management capabilities, and inventory management for API catalog governance. Built for platform teams managing multi-environment API ecosystems, this accelerator reduces deployment complexity while ensuring consistency, security, and operational excellence across development, staging, and production environments.
+The APIM Accelerator delivers a comprehensive Infrastructure-as-Code solution for deploying Azure API Management following Azure Well-Architected Framework principles. This accelerator streamlines enterprise API platform deployment by combining modular Bicep templates with Azure Developer CLI automation, enabling platform teams to provision production-ready API Management environments in minutes. The architecture emphasizes separation of concerns across three layers: shared monitoring infrastructure for comprehensive observability, core platform services for API management capabilities, and inventory management for API catalog governance. Designed for teams managing multi-environment API ecosystems, the accelerator reduces deployment complexity while ensuring consistency, security, and operational excellence from development through production.
 
 ## 📑 Table of Contents
 
@@ -118,7 +118,7 @@ az monitor log-analytics query --workspace <workspace-id> \
 
 ## 🏗️ Architecture
 
-The APIM Accelerator follows a modular layered architecture designed for scalability and maintainability:
+The APIM Accelerator implements a modular four-layer architecture designed for enterprise scalability and maintainability:
 
 ```mermaid
 %%{init: {"flowchart": {"htmlLabels": false}} }%%
@@ -128,56 +128,56 @@ flowchart TB
     classDef mdBlue fill:#BBDEFB,stroke:#1976D2,stroke-width:2px,color:#000
     classDef mdGreen fill:#C8E6C9,stroke:#388E3C,stroke-width:2px,color:#000
     classDef mdOrange fill:#FFE0B2,stroke:#E64A19,stroke-width:2px,color:#000
+    classDef mdPurple fill:#E1BEE7,stroke:#7B1FA2,stroke-width:2px,color:#000
 
     subgraph system["APIM Accelerator Architecture"]
         direction TB
 
-        subgraph orchestration["Orchestration Layer"]
+        subgraph deploy["Deployment Layer"]
             direction LR
-            azd["Azure Developer CLI<br/>(azd)"]:::mdBlue
-            bicep["Main Bicep Template<br/>(infra/main.bicep)"]:::mdBlue
+            azd["Azure Developer CLI"]:::mdBlue
+            bicep["Bicep Templates"]:::mdBlue
         end
 
         subgraph shared["Shared Infrastructure"]
             direction TB
-            logs["Log Analytics<br/>Workspace"]:::mdGreen
-            appins["Application<br/>Insights"]:::mdGreen
-            network["Virtual Network<br/>& Security"]:::mdGreen
+            logs["Log Analytics Workspace"]:::mdGreen
+            appins["Application Insights"]:::mdGreen
+            storage["Diagnostic Storage"]:::mdGreen
         end
 
         subgraph core["Core Platform"]
             direction TB
-            apim["API Management<br/>Service (Premium)"]:::mdOrange
-            portal["Developer<br/>Portal"]:::mdOrange
-            workspace["APIM<br/>Workspaces"]:::mdOrange
+            apim["API Management<br/>(Premium Tier)"]:::mdOrange
+            portal["Developer Portal"]:::mdOrange
+            workspace["APIM Workspaces"]:::mdOrange
         end
 
         subgraph inventory["API Inventory"]
             direction TB
-            apicenter["Azure API<br/>Center"]:::mdBlue
-            catalog["API Catalog<br/>Management"]:::mdBlue
+            apicenter["Azure API Center"]:::mdPurple
         end
 
-        azd -->|"Deploy"| bicep
-        bicep -->|"Provision"| shared
-        bicep -->|"Provision"| core
-        bicep -->|"Provision"| inventory
+        azd -->|"Orchestrates"| bicep
+        bicep -->|"Provisions"| shared
+        bicep -->|"Provisions"| core
+        bicep -->|"Provisions"| inventory
 
-        shared -->|"Monitoring"| core
-        shared -->|"Monitoring"| inventory
-        core -->|"Register APIs"| inventory
+        shared -->|"Monitors"| core
+        shared -->|"Monitors"| inventory
+        core -->|"Registers APIs"| inventory
     end
 
     class system mainGroup
-    class orchestration,shared,core,inventory subGroup
+    class deploy,shared,core,inventory subGroup
 ```
 
-**Key Components:**
+**Architecture Layers:**
 
-- **Orchestration Layer**: Azure Developer CLI automates deployment through modular Bicep templates
-- **Shared Infrastructure**: Centralized monitoring with Log Analytics and Application Insights
-- **Core Platform**: Premium API Management service with developer portal and workspace organization
-- **API Inventory**: Azure API Center integration for comprehensive API catalog governance
+- **Deployment Layer**: Azure Developer CLI orchestrates infrastructure provisioning through parameterized Bicep templates
+- **Shared Infrastructure**: Centralized observability platform with Log Analytics, Application Insights, and diagnostic storage
+- **Core Platform**: Premium-tier API Management with integrated developer portal and workspace-based API organization
+- **API Inventory**: Azure API Center provides centralized catalog for API discovery, versioning, and governance
 
 ## ✨ Features
 
