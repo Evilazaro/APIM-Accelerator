@@ -265,15 +265,15 @@ The accelerator delivers enterprise-grade capabilities designed to reduce time-t
 
 Key differentiators include pre-configured monitoring integrations that eliminate observability gaps, workspace-based multi-tenancy that enables logical isolation without infrastructure duplication, and Azure Developer CLI integration that streamlines deployment automation. The modular architecture allows teams to adopt components incrementally while maintaining a consistent infrastructure baseline.
 
-| Feature                     | Description                                                                 | Benefits                                                                 |
-| --------------------------- | --------------------------------------------------------------------------- | ------------------------------------------------------------------------ |
-| **Infrastructure as Code**  | Complete Bicep templates following Azure best practices                     | Repeatable deployments, version control, audit trail, GitOps integration |
-| **Built-in Observability**  | Pre-configured Log Analytics, Application Insights, and diagnostic settings | Immediate visibility into API performance and health metrics             |
-| **Multi-Workspace Support** | Workspace-based logical isolation for teams                                 | Team independence without infrastructure duplication                     |
-| **API Governance**          | Azure API Center integration for centralized API catalog                    | Compliance tracking, API discovery, lifecycle management                 |
-| **Security by Default**     | Managed identity, RBAC, and secure credential management                    | Reduced attack surface, simplified credential rotation                   |
-| **Automated Deployment**    | Azure Developer CLI (azd) integration with pre-provision hooks              | One-command deployment, consistent environments, reduced human error     |
-| **Flexible SKU Support**    | Developer, Basic, Standard, Premium, and Consumption tiers                  | Scale from development to enterprise production                          |
+| Feature                        | Description                                                                 | Benefits                                                                 |
+| ------------------------------ | --------------------------------------------------------------------------- | ------------------------------------------------------------------------ |
+| 📝 **Infrastructure as Code**  | Complete Bicep templates following Azure best practices                     | Repeatable deployments, version control, audit trail, GitOps integration |
+| 📊 **Built-in Observability**  | Pre-configured Log Analytics, Application Insights, and diagnostic settings | Immediate visibility into API performance and health metrics             |
+| 🏢 **Multi-Workspace Support** | Workspace-based logical isolation for teams                                 | Team independence without infrastructure duplication                     |
+| 📚 **API Governance**          | Azure API Center integration for centralized API catalog                    | Compliance tracking, API discovery, lifecycle management                 |
+| 🔒 **Security by Default**     | Managed identity, RBAC, and secure credential management                    | Reduced attack surface, simplified credential rotation                   |
+| 🚀 **Automated Deployment**    | Azure Developer CLI (azd) integration with pre-provision hooks              | One-command deployment, consistent environments, reduced human error     |
+| ⚙️ **Flexible SKU Support**    | Developer, Basic, Standard, Premium, and Consumption tiers                  | Scale from development to enterprise production                          |
 
 ---
 
