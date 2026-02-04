@@ -62,16 +62,16 @@ flowchart TB
     %%   - Purpose: Visual hierarchy and architectural boundary
     %%   - Stroke: Indigo 500 (#3F51B5), 3px
     %%
-    %% Level 2 (Functional Siblings): Semantic colors
-    %%   - Shared Infrastructure (Monitoring): Blue (#BBDEFB)
-    %%   - Core Platform (API Services): Green (#C8E6C9)
-    %%   - API Governance (Management): Orange (#FFE0B2)
-    %%   - External Services (Integration): Purple (#E1BEE7)
+    %% Level 2 (Sub Groups): Indigo 100 (#C5CAE9)
+    %%   - Used for: ALL Level 2 subgraphs (shared, core, inventory, external)
+    %%   - Purpose: Hierarchical visual consistency
+    %%   - Stroke: Indigo 500 (#3F51B5), 2px
     %%
-    %% Icons: Font Awesome semantic icons for clarity
-    %%   - fa:fa-file-text (Logs), fa:fa-chart-line (Insights)
-    %%   - fa:fa-server (API), fa:fa-code (Portal)
-    %%   - fa:fa-book (Center), fa:fa-cloud (Backends)
+    %% Level 3 (Content Nodes): Semantic colors for differentiation
+    %%   - Shared Infrastructure: Blue (#BBDEFB)
+    %%   - Core Platform: Green (#C8E6C9)
+    %%   - API Governance: Orange (#FFE0B2)
+    %%   - External Services: Purple (#E1BEE7)
     %% ============================================
 
     subgraph system["APIM Landing Zone Architecture"]
@@ -115,10 +115,10 @@ flowchart TB
 
     %% Apply style directives to ALL subgraphs
     style system fill:#E8EAF6,stroke:#3F51B5,stroke-width:3px
-    style shared fill:#E3F2FD,stroke:#1976D2,stroke-width:2px
-    style core fill:#E8F5E9,stroke:#388E3C,stroke-width:2px
-    style inventory fill:#FFF3E0,stroke:#E64A19,stroke-width:2px
-    style external fill:#F3E5F5,stroke:#7B1FA2,stroke-width:2px
+    style shared fill:#C5CAE9,stroke:#3F51B5,stroke-width:2px
+    style core fill:#C5CAE9,stroke:#3F51B5,stroke-width:2px
+    style inventory fill:#C5CAE9,stroke:#3F51B5,stroke-width:2px
+    style external fill:#C5CAE9,stroke:#3F51B5,stroke-width:2px
 ```
 
 **Component Details:**
