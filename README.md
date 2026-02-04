@@ -38,11 +38,44 @@ The deployment model uses Azure subscription-level orchestration to create isola
 ```mermaid
 %%{init: {"flowchart": {"htmlLabels": false}} }%%
 flowchart TB
+    %% ============================================
+    %% STANDARD COLOR SCHEME - DO NOT MODIFY
+    %% ============================================
+    %% Main Group Level (Neutral background)
     classDef mainGroup fill:#E8EAF6,stroke:#3F51B5,stroke-width:3px,color:#000
+
+    %% Sub Group Level (Hierarchical Level 2)
+    classDef subGroup fill:#C5CAE9,stroke:#3F51B5,stroke-width:2px,color:#000
+
+    %% Content Level (Semantic colors)
     classDef mdBlue fill:#BBDEFB,stroke:#1976D2,stroke-width:2px,color:#000
     classDef mdGreen fill:#C8E6C9,stroke:#388E3C,stroke-width:2px,color:#000
     classDef mdOrange fill:#FFE0B2,stroke:#E64A19,stroke-width:2px,color:#000
     classDef mdYellow fill:#FFF9C4,stroke:#F57F17,stroke-width:2px,color:#000
+    %% ============================================
+
+    %% ============================================
+    %% COLOR SCHEME DOCUMENTATION
+    %% ============================================
+    %% Level 1 (Main Container): Indigo 50 (#E8EAF6)
+    %%   - Used for: Top-level architecture container
+    %%   - Purpose: Visual hierarchy and professional appearance
+    %%   - Stroke: Indigo 500 (#3F51B5), 3px
+    %%
+    %% Level 2 (Layer Subgroups): Indigo 100 (#C5CAE9)
+    %%   - Used for: Shared, Core, Governance, External layers
+    %%   - Purpose: Logical separation of architectural layers
+    %%   - Stroke: Indigo 500 (#3F51B5), 2px
+    %%
+    %% Level 3 (Content Nodes): Material Design semantic colors
+    %%   - Blue (#BBDEFB): Infrastructure services (monitoring, storage)
+    %%   - Green (#C8E6C9): Core platform services (APIM, portal)
+    %%   - Orange (#FFE0B2): Governance services (API Center)
+    %%   - Yellow (#FFF9C4): External systems (backends, consumers)
+    %%
+    %% Accessibility: All color combinations meet WCAG AA standards
+    %% (4.5:1 contrast ratio minimum with dark text #000)
+    %% ============================================
 
     subgraph system["APIM Landing Zone Architecture"]
         direction TB
@@ -69,20 +102,36 @@ flowchart TB
             consumers["API Consumers<br/>(Apps/Partners)"]:::mdYellow
         end
 
+        %% ============================================
+        %% FLOW CONNECTIONS
+        %% ============================================
+        %% Monitoring flow: Foundation layer establishes observability
         logAnalytics --> appInsights
         appInsights --> apim
         logAnalytics --> storage
 
+        %% Platform flow: APIM orchestrates portal and workspace access
         apim --> devPortal
         apim --> workspaces
         apim --> apiCenter
         apiCenter --> apiSource
 
+        %% API flow: Consumer requests → APIM gateway → Backend services
         consumers --> apim
         apim --> backends
     end
 
+    %% ============================================
+    %% SUBGRAPH STYLING - CRITICAL FOR VISUAL HIERARCHY
+    %% ============================================
+    %% Level 1: Main container (Indigo 50)
     style system fill:#E8EAF6,stroke:#3F51B5,stroke-width:3px
+
+    %% Level 2: Architectural layer subgroups (Indigo 100)
+    style shared fill:#C5CAE9,stroke:#3F51B5,stroke-width:2px
+    style core fill:#C5CAE9,stroke:#3F51B5,stroke-width:2px
+    style inventory fill:#C5CAE9,stroke:#3F51B5,stroke-width:2px
+    style external fill:#C5CAE9,stroke:#3F51B5,stroke-width:2px
 ```
 
 ## 🚀 Quick Start
