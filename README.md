@@ -236,12 +236,16 @@ flowchart TB
         apicenter -->|"API Discovery"| apim
         catalog --> apicenter
         governance --> apicenter
-
-        %% Apply subGroup styling to layer subgraphs
-        class shared,core,inventory subGroup
     end
 
+    %% Apply styling - main group and subgroups
     class system mainGroup
+    class shared,core,inventory subGroup
+
+    %% Apply inline styling to ensure nested subgraphs render with visible backgrounds
+    style shared fill:#C5CAE9,stroke:#3F51B5,stroke-width:2px
+    style core fill:#C5CAE9,stroke:#3F51B5,stroke-width:2px
+    style inventory fill:#C5CAE9,stroke:#3F51B5,stroke-width:2px
 ```
 
 **Component Interactions:**
