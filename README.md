@@ -54,6 +54,8 @@ flowchart TB
     classDef mdPurple fill:#E1BEE7,stroke:#7B1FA2,stroke-width:2px,color:#000
     classDef mdTeal fill:#B2DFDB,stroke:#00796B,stroke-width:2px,color:#000
     classDef mdYellow fill:#FFF9C4,stroke:#F57F17,stroke-width:2px,color:#000
+    classDef mdRed fill:#FFCDD2,stroke:#D32F2F,stroke-width:2px,color:#000
+    classDef mdGrey fill:#F5F5F5,stroke:#616161,stroke-width:2px,color:#000
     %% ============================================
     %% COLOR SCHEME DOCUMENTATION
     %% ============================================
@@ -62,16 +64,17 @@ flowchart TB
     %%   - Purpose: Visual hierarchy and architectural boundary
     %%   - Stroke: Indigo 500 (#3F51B5), 3px
     %%
-    %% Level 2 (Sub Groups): Indigo 100 (#C5CAE9)
-    %%   - Used for: ALL Level 2 subgraphs (shared, core, inventory, external)
-    %%   - Purpose: Hierarchical visual consistency
-    %%   - Stroke: Indigo 500 (#3F51B5), 2px
+    %% Level 2 (Functional Siblings): Semantic colors for differentiation
+    %%   - Shared Infrastructure: Blue (#BBDEFB) - Monitoring & observability
+    %%   - Core Platform: Green (#C8E6C9) - Primary workload/services
+    %%   - API Governance: Orange (#FFE0B2) - Governance & compliance
+    %%   - External Services: Purple (#E1BEE7) - External integrations
+    %%   - Purpose: Visual differentiation by functional purpose
+    %%   - Stroke: Material Design 700 shades, 2px
     %%
-    %% Level 3 (Content Nodes): Semantic colors for differentiation
-    %%   - Shared Infrastructure: Blue (#BBDEFB)
-    %%   - Core Platform: Green (#C8E6C9)
-    %%   - API Governance: Orange (#FFE0B2)
-    %%   - External Services: Purple (#E1BEE7)
+    %% Level 3 (Content Nodes): Inherit parent subgraph colors
+    %%   - Applied via classDef to individual nodes
+    %%   - Ensures visual consistency within each functional layer
     %% ============================================
 
     subgraph system["APIM Landing Zone Architecture"]
@@ -115,10 +118,10 @@ flowchart TB
 
     %% Apply style directives to ALL subgraphs
     style system fill:#E8EAF6,stroke:#3F51B5,stroke-width:3px
-    style shared fill:#C5CAE9,stroke:#3F51B5,stroke-width:2px
-    style core fill:#C5CAE9,stroke:#3F51B5,stroke-width:2px
-    style inventory fill:#C5CAE9,stroke:#3F51B5,stroke-width:2px
-    style external fill:#C5CAE9,stroke:#3F51B5,stroke-width:2px
+    style shared fill:#BBDEFB,stroke:#1976D2,stroke-width:2px
+    style core fill:#C8E6C9,stroke:#388E3C,stroke-width:2px
+    style inventory fill:#FFE0B2,stroke:#E64A19,stroke-width:2px
+    style external fill:#E1BEE7,stroke:#7B1FA2,stroke-width:2px
 ```
 
 **Component Details:**
