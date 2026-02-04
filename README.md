@@ -216,7 +216,7 @@ az deployment sub show \
   --query properties.outputs
 ```
 
-> ⚠️ **Important**: Manual deployment requires parameter validation. Ensure all required fields in `settings.yaml` are populated before deployment.
+> ⚠️ **Important**: Manual deployment requires parameter validation. Ensure all required fields in `infra/settings.yaml` are populated before deployment.
 
 ### Post-Deployment Steps
 
