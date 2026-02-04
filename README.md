@@ -115,10 +115,10 @@ flowchart TB
 
     %% Apply style directives to ALL subgraphs
     style system fill:#E8EAF6,stroke:#3F51B5,stroke-width:3px
-    style shared fill:#BBDEFB,stroke:#1976D2,stroke-width:2px
-    style core fill:#C8E6C9,stroke:#388E3C,stroke-width:2px
-    style inventory fill:#FFE0B2,stroke:#E64A19,stroke-width:2px
-    style external fill:#E1BEE7,stroke:#7B1FA2,stroke-width:2px
+    style shared fill:#E3F2FD,stroke:#1976D2,stroke-width:2px
+    style core fill:#E8F5E9,stroke:#388E3C,stroke-width:2px
+    style inventory fill:#FFF3E0,stroke:#E64A19,stroke-width:2px
+    style external fill:#F3E5F5,stroke:#7B1FA2,stroke-width:2px
 ```
 
 **Component Details:**
