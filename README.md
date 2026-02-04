@@ -41,51 +41,84 @@ This separation enables independent lifecycle management for each component whil
 ```mermaid
 %%{init: {"flowchart": {"htmlLabels": false}} }%%
 flowchart TB
+    %% ============================================
+    %% STANDARD COLOR SCHEME - DO NOT MODIFY
+    %% ============================================
+    %% Main Group Level (Neutral background)
     classDef mainGroup fill:#E8EAF6,stroke:#3F51B5,stroke-width:3px,color:#000
+
+    %% Sub Group Level (Semantic colors for functional siblings)
     classDef mdBlue fill:#BBDEFB,stroke:#1976D2,stroke-width:2px,color:#000
     classDef mdGreen fill:#C8E6C9,stroke:#388E3C,stroke-width:2px,color:#000
     classDef mdOrange fill:#FFE0B2,stroke:#E64A19,stroke-width:2px,color:#000
     classDef mdPurple fill:#E1BEE7,stroke:#7B1FA2,stroke-width:2px,color:#000
+    classDef mdTeal fill:#B2DFDB,stroke:#00796B,stroke-width:2px,color:#000
+    classDef mdYellow fill:#FFF9C4,stroke:#F57F17,stroke-width:2px,color:#000
+    %% ============================================
+    %% COLOR SCHEME DOCUMENTATION
+    %% ============================================
+    %% Level 1 (Main Container): Indigo 50 (#E8EAF6)
+    %%   - Used for: Top-level system container
+    %%   - Purpose: Visual hierarchy and architectural boundary
+    %%   - Stroke: Indigo 500 (#3F51B5), 3px
+    %%
+    %% Level 2 (Functional Siblings): Semantic colors
+    %%   - Shared Infrastructure (Monitoring): Blue (#BBDEFB)
+    %%   - Core Platform (API Services): Green (#C8E6C9)
+    %%   - API Governance (Management): Orange (#FFE0B2)
+    %%   - External Services (Integration): Purple (#E1BEE7)
+    %%
+    %% Icons: Font Awesome semantic icons for clarity
+    %%   - fa:fa-file-text (Logs), fa:fa-chart-line (Insights)
+    %%   - fa:fa-server (API), fa:fa-code (Portal)
+    %%   - fa:fa-book (Center), fa:fa-cloud (Backends)
+    %% ============================================
 
     subgraph system["APIM Landing Zone Architecture"]
         direction TB
 
-        subgraph shared["Shared Infrastructure"]
+        subgraph shared["fa:fa-chart-bar Shared Infrastructure"]
             direction LR
-            logs["Log Analytics<br/>Workspace"]:::mdBlue
-            insights["Application<br/>Insights"]:::mdBlue
-            storage["Storage<br/>Account"]:::mdBlue
+            logs["fa:fa-file-text Log Analytics<br/>Workspace"]:::mdBlue
+            insights["fa:fa-chart-line Application<br/>Insights"]:::mdBlue
+            storage["fa:fa-database Storage<br/>Account"]:::mdBlue
         end
 
-        subgraph core["Core Platform"]
+        subgraph core["fa:fa-cogs Core Platform"]
             direction LR
-            apim["API Management<br/>Service"]:::mdGreen
-            devportal["Developer<br/>Portal"]:::mdGreen
-            workspaces["Workspaces<br/>(Multi-tenant)"]:::mdGreen
+            apim["fa:fa-server API Management<br/>Service"]:::mdGreen
+            devportal["fa:fa-code Developer<br/>Portal"]:::mdGreen
+            workspaces["fa:fa-users Workspaces<br/>(Multi-tenant)"]:::mdGreen
         end
 
-        subgraph inventory["API Governance"]
+        subgraph inventory["fa:fa-shield API Governance"]
             direction LR
-            apicenter["API Center"]:::mdOrange
-            catalog["API Catalog"]:::mdOrange
+            apicenter["fa:fa-book API Center"]:::mdOrange
+            catalog["fa:fa-list API Catalog"]:::mdOrange
         end
 
-        subgraph external["External Services"]
+        subgraph external["fa:fa-globe External Services"]
             direction LR
-            backends["Backend APIs"]:::mdPurple
-            clients["API Consumers"]:::mdPurple
+            backends["fa:fa-cloud Backend APIs"]:::mdPurple
+            clients["fa:fa-desktop API Consumers"]:::mdPurple
         end
 
-        shared --> core
-        core --> inventory
-        clients --> apim
-        apim --> backends
-        apim --> logs
-        apim --> insights
-        apicenter --> apim
+        %% Relationships with descriptive labels
+        shared -->|Monitoring Data| core
+        core -->|API Registration| inventory
+        clients -->|API Requests| apim
+        apim -->|Proxy| backends
+        apim -->|Diagnostics| logs
+        apim -->|Telemetry| insights
+        apicenter -->|Governance| apim
     end
 
+    %% Apply style directives to ALL subgraphs
     style system fill:#E8EAF6,stroke:#3F51B5,stroke-width:3px
+    style shared fill:#BBDEFB,stroke:#1976D2,stroke-width:2px
+    style core fill:#C8E6C9,stroke:#388E3C,stroke-width:2px
+    style inventory fill:#FFE0B2,stroke:#E64A19,stroke-width:2px
+    style external fill:#E1BEE7,stroke:#7B1FA2,stroke-width:2px
 ```
 
 **Component Details:**
