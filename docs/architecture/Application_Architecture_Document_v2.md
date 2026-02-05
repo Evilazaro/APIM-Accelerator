@@ -241,33 +241,58 @@ The APIM Accelerator provides a baseline architecture for Azure API Management l
 
 #### 4.1.1 Core Platform Components
 
-```
-┌─────────────────────────────────────────────────────────────────────────────┐
-│                        API Management Service (APP-APIM-001)                │
-├─────────────────────────────────────────────────────────────────────────────┤
-│ SKU Options: Developer | Basic | Standard | Premium | Consumption           │
-│ Identity: System-Assigned | User-Assigned | None                            │
-│ Network: Public | External VNet | Internal VNet                             │
-│ Features:                                                                   │
-│   • Gateway for API traffic management                                      │
-│   • Policy engine for transformation and security                           │
-│   • Rate limiting and quota management                                      │
-│   • OAuth2/OpenID Connect integration                                       │
-│   • Multi-region deployment (Premium)                                       │
-└─────────────────────────────────────────────────────────────────────────────┘
-         │
-         ├──────────────────────┬──────────────────────┐
-         ▼                      ▼                      ▼
-┌─────────────────┐   ┌─────────────────┐   ┌─────────────────┐
-│ Developer Portal│   │    Workspaces   │   │  API Policies   │
-│  (APP-PORTAL-001)│   │   (APP-WS-001)  │   │                 │
-├─────────────────┤   ├─────────────────┤   ├─────────────────┤
-│ • Self-service  │   │ • Team isolation│   │ • CORS          │
-│ • Azure AD auth │   │ • Multi-tenant  │   │ • Rate limiting │
-│ • API discovery │   │ • Independent   │   │ • Auth policies │
-│ • Interactive   │   │   lifecycles    │   │ • Transformation│
-│   console       │   │                 │   │                 │
-└─────────────────┘   └─────────────────┘   └─────────────────┘
+```mermaid
+%%{init: {"flowchart": {"htmlLabels": false}} }%%
+flowchart TB
+    subgraph apimService["⚙️ API Management Service (APP-APIM-001)"]
+        direction TB
+        skuInfo["SKU: Developer | Basic | Standard | Premium | Consumption"]
+        identityInfo["Identity: System-Assigned | User-Assigned | None"]
+        networkInfo["Network: Public | External VNet | Internal VNet"]
+
+        subgraph features["Core Features"]
+            direction LR
+            f1["🌐 Gateway for API<br/>traffic management"]
+            f2["📋 Policy engine for<br/>transformation & security"]
+            f3["⏱️ Rate limiting &<br/>quota management"]
+            f4["🔐 OAuth2/OIDC<br/>integration"]
+            f5["🌍 Multi-region<br/>deployment"]
+        end
+    end
+
+    apimService --> portal
+    apimService --> workspaces
+    apimService --> policies
+
+    subgraph portal["🖥️ Developer Portal (APP-PORTAL-001)"]
+        direction TB
+        p1["• Self-service API discovery"]
+        p2["• Azure AD authentication"]
+        p3["• Interactive API console"]
+        p4["• API documentation"]
+    end
+
+    subgraph workspaces["👥 Workspaces (APP-WS-001)"]
+        direction TB
+        w1["• Team isolation"]
+        w2["• Multi-tenant support"]
+        w3["• Independent lifecycles"]
+        w4["• Distributed management"]
+    end
+
+    subgraph policies["📜 API Policies"]
+        direction TB
+        pol1["• CORS configuration"]
+        pol2["• Rate limiting"]
+        pol3["• Authentication policies"]
+        pol4["• Request/Response transformation"]
+    end
+
+    style apimService fill:#E8F5E9,stroke:#388E3C,stroke-width:2px
+    style portal fill:#E3F2FD,stroke:#1976D2,stroke-width:2px
+    style workspaces fill:#FFF3E0,stroke:#E64A19,stroke-width:2px
+    style policies fill:#F3E5F5,stroke:#7B1FA2,stroke-width:2px
+    style features fill:#C8E6C9,stroke:#388E3C,stroke-width:1px
 ```
 
 #### 4.1.2 Observability Stack
