@@ -36,39 +36,57 @@ The architecture follows Azure Landing Zone principles with subscription-level d
 ```mermaid
 %%{init: {"flowchart": {"htmlLabels": false}} }%%
 flowchart TB
-    classDef mainGroup fill:#E8EAF6,stroke:#3F51B5,stroke-width:3px,color:#000
+    %% ============================================
+    %% COLOR SCHEME DOCUMENTATION
+    %% ============================================
+    %% Level 1 (Main Group): Indigo 50 (#E8EAF6)
+    %%   - system: Top-level architecture container
+    %%
+    %% Level 2 (Functional Layers): Semantic colors
+    %%   - shared: Blue (#E3F2FD) - Monitoring/Infrastructure
+    %%   - core: Green (#E8F5E9) - Platform Services
+    %%   - inventory: Orange (#FFF3E0) - Governance
+    %%   - deployment: Purple (#F3E5F5) - Tooling
+    %%
+    %% Content Nodes: Material Design semantic colors
+    %%   - mdBlue: Info/Monitoring components
+    %%   - mdGreen: Platform/Success components
+    %%   - mdOrange: Governance components
+    %%   - mdPurple: Tooling components
+    %% ============================================
+
     classDef mdBlue fill:#BBDEFB,stroke:#1976D2,stroke-width:2px,color:#000
     classDef mdGreen fill:#C8E6C9,stroke:#388E3C,stroke-width:2px,color:#000
     classDef mdOrange fill:#FFE0B2,stroke:#E64A19,stroke-width:2px,color:#000
     classDef mdPurple fill:#E1BEE7,stroke:#7B1FA2,stroke-width:2px,color:#000
 
-    subgraph system["APIM Landing Zone Architecture"]
+    subgraph system["🏗️ APIM Landing Zone Architecture"]
         direction TB
 
-        subgraph shared["Shared Infrastructure"]
+        subgraph shared["📊 Shared Infrastructure"]
             direction LR
-            logAnalytics["Log Analytics<br/>Workspace"]:::mdBlue
-            appInsights["Application<br/>Insights"]:::mdBlue
-            storage["Storage<br/>Account"]:::mdBlue
+            logAnalytics["📈 Log Analytics<br/>Workspace"]:::mdBlue
+            appInsights["🔍 Application<br/>Insights"]:::mdBlue
+            storage["🗄️ Storage<br/>Account"]:::mdBlue
         end
 
-        subgraph core["Core Platform"]
+        subgraph core["⚙️ Core Platform"]
             direction LR
-            apim["API Management<br/>Service"]:::mdGreen
-            workspaces["APIM<br/>Workspaces"]:::mdGreen
-            devPortal["Developer<br/>Portal"]:::mdGreen
+            apim["🌐 API Management<br/>Service"]:::mdGreen
+            workspaces["👥 APIM<br/>Workspaces"]:::mdGreen
+            devPortal["🖥️ Developer<br/>Portal"]:::mdGreen
         end
 
-        subgraph inventory["Inventory Management"]
+        subgraph inventory["📋 Inventory Management"]
             direction LR
-            apiCenter["API Center"]:::mdOrange
-            apiSource["API Source<br/>Integration"]:::mdOrange
+            apiCenter["📚 API Center"]:::mdOrange
+            apiSource["🔗 API Source<br/>Integration"]:::mdOrange
         end
 
-        subgraph deployment["Deployment"]
+        subgraph deployment["🚀 Deployment"]
             direction LR
-            azd["Azure Developer CLI"]:::mdPurple
-            bicep["Bicep Templates"]:::mdPurple
+            azd["⚡ Azure Developer CLI"]:::mdPurple
+            bicep["📝 Bicep Templates"]:::mdPurple
         end
 
         shared --> core
