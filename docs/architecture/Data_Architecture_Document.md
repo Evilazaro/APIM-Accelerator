@@ -43,21 +43,24 @@ This Data Architecture Document defines the data entities, data stores, data flo
 
 ```mermaid
 %%{init: {"flowchart": {"htmlLabels": false}} }%%
+%% ============================================
+%% COLOR SCHEME: Semantic (drivers=blue, outcomes=green)
+%% ============================================
 flowchart LR
     subgraph drivers["🎯 Data Drivers"]
         direction TB
-        D1["Operational<br/>Observability"]
-        D2["Compliance &<br/>Audit Trail"]
-        D3["Configuration<br/>Management"]
-        D4["API<br/>Discoverability"]
+        D1["📊 Operational<br/>Observability"]
+        D2["✅ Compliance &<br/>Audit Trail"]
+        D3["⚙️ Configuration<br/>Management"]
+        D4["📚 API<br/>Discoverability"]
     end
 
     subgraph outcomes["✅ Data Outcomes"]
         direction TB
-        O1["Centralized<br/>Telemetry"]
-        O2["Long-term<br/>Retention"]
-        O3["Type-safe<br/>Configuration"]
-        O4["API Metadata<br/>Catalog"]
+        O1["📈 Centralized<br/>Telemetry"]
+        O2["🗄️ Long-term<br/>Retention"]
+        O3["📋 Type-safe<br/>Configuration"]
+        O4["🔍 API Metadata<br/>Catalog"]
     end
 
     D1 --> O1
@@ -65,8 +68,8 @@ flowchart LR
     D3 --> O3
     D4 --> O4
 
-    style drivers fill:#E3F2FD,stroke:#1976D2,stroke-width:2px
-    style outcomes fill:#E8F5E9,stroke:#388E3C,stroke-width:2px
+    style drivers fill:#BBDEFB,stroke:#1976D2,stroke-width:2px
+    style outcomes fill:#C8E6C9,stroke:#388E3C,stroke-width:2px
 ```
 
 ### 1.4 Executive Highlights
@@ -98,27 +101,31 @@ The APIM Accelerator data architecture directly supports:
 
 ```mermaid
 %%{init: {"flowchart": {"htmlLabels": false}} }%%
+%% ============================================
+%% COLOR SCHEME: Hierarchical + Semantic layers
+%% Level 1: #E8EAF6 | Telemetry=#BBDEFB | Config=#C8E6C9 | Catalog=#FFE0B2
+%% ============================================
 flowchart TB
     subgraph platform["🗄️ APIM Platform Data Domains"]
         direction TB
 
-        subgraph telemetry_domain["Telemetry Domain"]
+        subgraph telemetry_domain["📊 Telemetry Domain"]
             direction LR
-            DD1["📊 Performance<br/>Metrics"]
+            DD1["📈 Performance<br/>Metrics"]
             DD2["📝 Diagnostic<br/>Logs"]
             DD3["🔍 Application<br/>Traces"]
         end
 
-        subgraph config_domain["Configuration Domain"]
+        subgraph config_domain["⚙️ Configuration Domain"]
             direction LR
-            DD4["⚙️ Infrastructure<br/>Settings"]
+            DD4["🛠️ Infrastructure<br/>Settings"]
             DD5["📋 Type<br/>Definitions"]
             DD6["🏷️ Governance<br/>Tags"]
         end
 
-        subgraph catalog_domain["Catalog Domain"]
+        subgraph catalog_domain["📚 Catalog Domain"]
             direction LR
-            DD7["📚 API<br/>Metadata"]
+            DD7["📖 API<br/>Metadata"]
             DD8["🔗 API Source<br/>Registrations"]
         end
     end
@@ -149,29 +156,33 @@ flowchart TB
 
 ```mermaid
 %%{init: {"flowchart": {"htmlLabels": false}} }%%
+%% ============================================
+%% COLOR SCHEME: Hierarchical + Semantic layers
+%% Level 1: #E8EAF6 | Realtime=#BBDEFB | Archive=#C8E6C9 | Meta=#FFE0B2 | Config=#E1BEE7
+%% ============================================
 flowchart TB
     subgraph datastores["💾 Data Store Ecosystem"]
         direction TB
 
-        subgraph realtime["Real-time Analytics"]
+        subgraph realtime["📊 Real-time Analytics"]
             direction LR
             DS1["📈 Log Analytics<br/>Workspace"]
             DS2["🔍 Application<br/>Insights"]
         end
 
-        subgraph archive["Archival Storage"]
+        subgraph archive["🗄️ Archival Storage"]
             direction LR
-            DS3["🗄️ Storage<br/>Account"]
+            DS3["📦 Storage<br/>Account"]
         end
 
-        subgraph metadata["Metadata Store"]
+        subgraph metadata["📚 Metadata Store"]
             direction LR
-            DS4["📚 API<br/>Center"]
+            DS4["📖 API<br/>Center"]
         end
 
-        subgraph config["Configuration Store"]
+        subgraph config["⚙️ Configuration Store"]
             direction LR
-            DS5["⚙️ YAML<br/>Settings"]
+            DS5["📝 YAML<br/>Settings"]
             DS6["📋 Bicep<br/>Types"]
         end
     end
@@ -180,10 +191,10 @@ flowchart TB
     metadata --> realtime
 
     style datastores fill:#E8EAF6,stroke:#3F51B5,stroke-width:3px
-    style realtime fill:#E3F2FD,stroke:#1976D2,stroke-width:2px
+    style realtime fill:#BBDEFB,stroke:#1976D2,stroke-width:2px
     style archive fill:#C8E6C9,stroke:#388E3C,stroke-width:2px
     style metadata fill:#FFE0B2,stroke:#E64A19,stroke-width:2px
-    style config fill:#F3E5F5,stroke:#7B1FA2,stroke-width:2px
+    style config fill:#E1BEE7,stroke:#7B1FA2,stroke-width:2px
 ```
 
 ### 2.4 Data Flow Diagram
@@ -191,31 +202,35 @@ flowchart TB
 ```mermaid
 %%{init: {"flowchart": {"htmlLabels": false}} }%%
 flowchart TB
-    subgraph sources["Data Sources"]
+    %% ============================================
+    %% COLOR SCHEME: Semantic data flow layers
+    %% Sources=#B2DFDB | Processing=#FFE0B2 | Storage=#C8E6C9 | Consumption=#BBDEFB
+    %% ============================================
+    subgraph sources["🌐 Data Sources"]
         direction LR
         SRC1["🌐 API Management"]
         SRC2["📚 API Center"]
         SRC3["🖥️ Developer Portal"]
     end
 
-    subgraph processing["Data Processing"]
+    subgraph processing["⚙️ Data Processing"]
         direction TB
-        DIAG["Diagnostic<br/>Settings"]
-        SDK["App Insights<br/>SDK"]
+        DIAG["📊 Diagnostic<br/>Settings"]
+        SDK["🛠️ App Insights<br/>SDK"]
     end
 
-    subgraph storage["Data Storage"]
+    subgraph storage["💾 Data Storage"]
         direction LR
-        LAW["📊 Log Analytics<br/>Workspace"]
+        LAW["📈 Log Analytics<br/>Workspace"]
         AI["🔍 Application<br/>Insights"]
         SA["🗄️ Storage<br/>Account"]
     end
 
-    subgraph consumption["Data Consumption"]
+    subgraph consumption["🔎 Data Consumption"]
         direction LR
-        QUERY["KQL<br/>Queries"]
-        ALERT["Azure<br/>Alerts"]
-        DASH["Dashboards"]
+        QUERY["📝 KQL<br/>Queries"]
+        ALERT["⚠️ Azure<br/>Alerts"]
+        DASH["📊 Dashboards"]
     end
 
     SRC1 --> DIAG
@@ -229,10 +244,10 @@ flowchart TB
     LAW --> ALERT
     QUERY --> DASH
 
-    style sources fill:#E0F7FA,stroke:#00796B,stroke-width:2px
-    style processing fill:#FFF3E0,stroke:#E64A19,stroke-width:2px
-    style storage fill:#E8F5E9,stroke:#388E3C,stroke-width:2px
-    style consumption fill:#E3F2FD,stroke:#1976D2,stroke-width:2px
+    style sources fill:#B2DFDB,stroke:#00796B,stroke-width:2px
+    style processing fill:#FFE0B2,stroke:#E64A19,stroke-width:2px
+    style storage fill:#C8E6C9,stroke:#388E3C,stroke-width:2px
+    style consumption fill:#BBDEFB,stroke:#1976D2,stroke-width:2px
 ```
 
 ### 2.5 Data Service Catalog
@@ -263,23 +278,26 @@ flowchart TB
 
 ```mermaid
 %%{init: {"flowchart": {"htmlLabels": false}} }%%
+%% ============================================
+%% COLOR SCHEME: Semantic (principles=blue, components=green)
+%% ============================================
 flowchart LR
-    subgraph principles["Data Principles"]
+    subgraph principles["📋 Data Principles"]
         direction TB
-        P1["DP-001<br/>Centralized Telemetry"]
-        P2["DP-002<br/>Type-Safe Config"]
-        P3["DP-003<br/>Tiered Retention"]
-        P4["DP-004<br/>Governance Tags"]
-        P5["DP-005<br/>Self-Documenting"]
+        P1["📊 DP-001<br/>Centralized Telemetry"]
+        P2["📋 DP-002<br/>Type-Safe Config"]
+        P3["🗄️ DP-003<br/>Tiered Retention"]
+        P4["🏷️ DP-004<br/>Governance Tags"]
+        P5["📖 DP-005<br/>Self-Documenting"]
     end
 
-    subgraph components["Data Components"]
+    subgraph components["⚙️ Data Components"]
         direction TB
-        C1["Log Analytics"]
-        C2["common-types.bicep"]
-        C3["Storage Account"]
-        C4["settings.yaml"]
-        C5["Type Definitions"]
+        C1["📈 Log Analytics"]
+        C2["📋 common-types.bicep"]
+        C3["📦 Storage Account"]
+        C4["📝 settings.yaml"]
+        C5["🔧 Type Definitions"]
     end
 
     P1 --> C1
@@ -289,8 +307,8 @@ flowchart LR
     P4 --> C4
     P5 --> C5
 
-    style principles fill:#E3F2FD,stroke:#1976D2,stroke-width:2px
-    style components fill:#E8F5E9,stroke:#388E3C,stroke-width:2px
+    style principles fill:#BBDEFB,stroke:#1976D2,stroke-width:2px
+    style components fill:#C8E6C9,stroke:#388E3C,stroke-width:2px
 ```
 
 ### 3.3 Principle Implementation Status
@@ -313,27 +331,31 @@ The APIM Landing Zone Accelerator provides a production-ready data architecture 
 
 ```mermaid
 %%{init: {"flowchart": {"htmlLabels": false}} }%%
+%% ============================================
+%% COLOR SCHEME: Hierarchical + Semantic layers
+%% Level 1: #E8EAF6 | Config=#E1BEE7 | Operational=#BBDEFB | Meta=#FFE0B2
+%% ============================================
 flowchart TB
     subgraph baseline["📐 Baseline Data Architecture"]
         direction TB
 
-        subgraph layer1["Layer 1: Configuration Data"]
+        subgraph layer1["📋 Layer 1: Configuration Data"]
             direction LR
             L1A["⚙️ settings.yaml<br/>Infrastructure Config"]
             L1B["📋 common-types.bicep<br/>Type Definitions"]
             L1C["🔧 constants.bicep<br/>Shared Constants"]
         end
 
-        subgraph layer2["Layer 2: Operational Data"]
+        subgraph layer2["📊 Layer 2: Operational Data"]
             direction LR
-            L2A["📊 Log Analytics<br/>Workspace"]
+            L2A["📈 Log Analytics<br/>Workspace"]
             L2B["🔍 Application<br/>Insights"]
             L2C["🗄️ Storage<br/>Account"]
         end
 
-        subgraph layer3["Layer 3: Metadata"]
+        subgraph layer3["📚 Layer 3: Metadata"]
             direction LR
-            L3A["📚 API Center<br/>Catalog"]
+            L3A["📖 API Center<br/>Catalog"]
         end
 
         layer1 --> layer2
@@ -341,8 +363,8 @@ flowchart TB
     end
 
     style baseline fill:#E8EAF6,stroke:#3F51B5,stroke-width:3px
-    style layer1 fill:#F3E5F5,stroke:#7B1FA2,stroke-width:2px
-    style layer2 fill:#E3F2FD,stroke:#1976D2,stroke-width:2px
+    style layer1 fill:#E1BEE7,stroke:#7B1FA2,stroke-width:2px
+    style layer2 fill:#BBDEFB,stroke:#1976D2,stroke-width:2px
     style layer3 fill:#FFE0B2,stroke:#E64A19,stroke-width:2px
 ```
 
@@ -363,6 +385,9 @@ flowchart TB
 
 ```mermaid
 %%{init: {"flowchart": {"htmlLabels": false}} }%%
+%% ============================================
+%% COLOR SCHEME: Standard main group #E8EAF6
+%% ============================================
 flowchart LR
     subgraph lifecycle["📈 Data Lifecycle"]
         direction LR

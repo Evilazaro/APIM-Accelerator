@@ -43,21 +43,24 @@ This Business Architecture Document defines the business capabilities, functions
 
 ```mermaid
 %%{init: {"flowchart": {"htmlLabels": false}} }%%
+%% ============================================
+%% COLOR SCHEME: Semantic (drivers=blue, outcomes=green)
+%% ============================================
 flowchart LR
     subgraph drivers["🎯 Business Drivers"]
         direction TB
-        D1["API-First Strategy<br/>Adoption"]
-        D2["Multi-Team<br/>Collaboration"]
-        D3["Governance &<br/>Compliance"]
-        D4["Time-to-Market<br/>Acceleration"]
+        D1["🌐 API-First Strategy<br/>Adoption"]
+        D2["👥 Multi-Team<br/>Collaboration"]
+        D3["📋 Governance &<br/>Compliance"]
+        D4["⚡ Time-to-Market<br/>Acceleration"]
     end
 
     subgraph outcomes["✅ Business Outcomes"]
         direction TB
-        O1["Unified API<br/>Platform"]
-        O2["Cost-Effective<br/>Multi-Tenancy"]
-        O3["GDPR<br/>Compliance"]
-        O4["One-Command<br/>Deployment"]
+        O1["🔗 Unified API<br/>Platform"]
+        O2["💰 Cost-Effective<br/>Multi-Tenancy"]
+        O3["🔒 GDPR<br/>Compliance"]
+        O4["🚀 One-Command<br/>Deployment"]
     end
 
     D1 --> O1
@@ -65,8 +68,8 @@ flowchart LR
     D3 --> O3
     D4 --> O4
 
-    style drivers fill:#E3F2FD,stroke:#1976D2,stroke-width:2px
-    style outcomes fill:#E8F5E9,stroke:#388E3C,stroke-width:2px
+    style drivers fill:#BBDEFB,stroke:#1976D2,stroke-width:2px
+    style outcomes fill:#C8E6C9,stroke:#388E3C,stroke-width:2px
 ```
 
 ### 1.4 Executive Highlights
@@ -96,24 +99,28 @@ The APIM Accelerator directly supports organizations requiring:
 
 ```mermaid
 %%{init: {"flowchart": {"htmlLabels": false}} }%%
+%% ============================================
+%% COLOR SCHEME: Hierarchical (platform) + Semantic (layers)
+%% Level 1: #E8EAF6 | Core=#BBDEFB | Support=#C8E6C9 | Enable=#FFE0B2
+%% ============================================
 flowchart TB
     subgraph platform["🏢 APIM Platform Business Capabilities"]
         direction TB
 
-        subgraph core_cap["Core Capabilities"]
+        subgraph core_cap["⚙️ Core Capabilities"]
             direction LR
             BC1["🌐 API Gateway<br/>Management"]
             BC2["📋 API Lifecycle<br/>Governance"]
             BC3["👥 Developer<br/>Enablement"]
         end
 
-        subgraph support_cap["Supporting Capabilities"]
+        subgraph support_cap["🛡️ Supporting Capabilities"]
             direction LR
             BC4["📊 Observability<br/>& Monitoring"]
             BC5["🔐 Security &<br/>Compliance"]
         end
 
-        subgraph enabling_cap["Enabling Capabilities"]
+        subgraph enabling_cap["🔧 Enabling Capabilities"]
             direction LR
             BC6["⚡ Infrastructure<br/>Automation"]
             BC7["🏗️ Multi-Team<br/>Workspace Management"]
@@ -144,21 +151,25 @@ flowchart TB
 
 ```mermaid
 %%{init: {"flowchart": {"htmlLabels": false}} }%%
+%% ============================================
+%% COLOR SCHEME: Hierarchical (stakeholders) + Semantic (groups)
+%% Level 1: #E8EAF6 | Internal=#BBDEFB | Governance=#FFE0B2
+%% ============================================
 flowchart TB
     subgraph stakeholders["👥 Stakeholder Ecosystem"]
         direction TB
 
-        subgraph internal["Internal Stakeholders"]
+        subgraph internal["🏢 Internal Stakeholders"]
             direction LR
-            S1["🏢 IT Leadership<br/>Strategic Direction"]
+            S1["🎯 IT Leadership<br/>Strategic Direction"]
             S2["⚙️ Platform Team<br/>Infrastructure Operations"]
             S3["💻 API Developers<br/>API Creation & Consumption"]
         end
 
-        subgraph governance["Governance Stakeholders"]
+        subgraph governance["📋 Governance Stakeholders"]
             direction LR
             S4["🔒 Security Team<br/>Access & Policy Enforcement"]
-            S5["📋 Compliance<br/>Regulatory Adherence"]
+            S5["✅ Compliance<br/>Regulatory Adherence"]
             S6["💰 Finance<br/>Cost Allocation"]
         end
     end
@@ -170,8 +181,8 @@ flowchart TB
     S6 --> S2
 
     style stakeholders fill:#E8EAF6,stroke:#3F51B5,stroke-width:3px
-    style internal fill:#E3F2FD,stroke:#1976D2,stroke-width:2px
-    style governance fill:#FFF3E0,stroke:#E64A19,stroke-width:2px
+    style internal fill:#BBDEFB,stroke:#1976D2,stroke-width:2px
+    style governance fill:#FFE0B2,stroke:#E64A19,stroke-width:2px
 ```
 
 ### 2.4 Business Context Diagram
@@ -179,34 +190,38 @@ flowchart TB
 ```mermaid
 %%{init: {"flowchart": {"htmlLabels": false}} }%%
 flowchart TB
-    subgraph external["External Context"]
+    %% ============================================
+    %% COLOR SCHEME: Semantic context layers
+    %% External=#B2DFDB | Platform=#E8EAF6 | Internal=#FFE0B2
+    %% ============================================
+    subgraph external["🌐 External Context"]
         direction LR
-        EXT1["🌍 API Consumers"]
+        EXT1["👥 API Consumers"]
         EXT2["🔗 Partner Systems"]
         EXT3["☁️ Azure Cloud Platform"]
     end
 
-    subgraph apim_platform["APIM Landing Zone"]
+    subgraph apim_platform["🏢 APIM Landing Zone"]
         direction TB
 
-        subgraph services["Platform Services"]
+        subgraph services["⚙️ Platform Services"]
             direction LR
-            SVC1["API Management<br/>Gateway"]
-            SVC2["API Center<br/>Catalog"]
-            SVC3["Developer<br/>Portal"]
+            SVC1["🌐 API Management<br/>Gateway"]
+            SVC2["📚 API Center<br/>Catalog"]
+            SVC3["🖥️ Developer<br/>Portal"]
         end
 
-        subgraph infra["Shared Infrastructure"]
+        subgraph infra["📊 Shared Infrastructure"]
             direction LR
-            INF1["Log Analytics"]
-            INF2["App Insights"]
-            INF3["Storage"]
+            INF1["📈 Log Analytics"]
+            INF2["🔍 App Insights"]
+            INF3["🗄️ Storage"]
         end
 
         services --> infra
     end
 
-    subgraph internal["Internal Systems"]
+    subgraph internal["🔧 Internal Systems"]
         direction LR
         INT1["🔙 Backend APIs"]
         INT2["🗄️ Data Services"]
@@ -220,11 +235,11 @@ flowchart TB
     SVC3 --> INT3
     EXT3 --> apim_platform
 
-    style external fill:#E0F7FA,stroke:#00796B,stroke-width:2px
+    style external fill:#B2DFDB,stroke:#00796B,stroke-width:2px
     style apim_platform fill:#E8EAF6,stroke:#3F51B5,stroke-width:3px
-    style services fill:#E8F5E9,stroke:#388E3C,stroke-width:2px
-    style infra fill:#E3F2FD,stroke:#1976D2,stroke-width:2px
-    style internal fill:#FFF3E0,stroke:#E64A19,stroke-width:2px
+    style services fill:#C8E6C9,stroke:#388E3C,stroke-width:2px
+    style infra fill:#BBDEFB,stroke:#1976D2,stroke-width:2px
+    style internal fill:#FFE0B2,stroke:#E64A19,stroke-width:2px
 ```
 
 ### 2.5 Business Service Catalog
@@ -255,23 +270,26 @@ flowchart TB
 
 ```mermaid
 %%{init: {"flowchart": {"htmlLabels": false}} }%%
+%% ============================================
+%% COLOR SCHEME: Semantic (principles=blue, capabilities=green)
+%% ============================================
 flowchart LR
-    subgraph principles["Architecture Principles"]
+    subgraph principles["📋 Architecture Principles"]
         direction TB
-        P1["BP-001<br/>API-First"]
-        P2["BP-002<br/>Centralized Governance"]
-        P3["BP-003<br/>Multi-Tenancy"]
-        P4["BP-004<br/>IaC"]
-        P5["BP-005<br/>Observability"]
+        P1["🌐 BP-001<br/>API-First"]
+        P2["🏛️ BP-002<br/>Centralized Governance"]
+        P3["👥 BP-003<br/>Multi-Tenancy"]
+        P4["⚙️ BP-004<br/>IaC"]
+        P5["📊 BP-005<br/>Observability"]
     end
 
-    subgraph capabilities["Business Capabilities"]
+    subgraph capabilities["✅ Business Capabilities"]
         direction TB
-        C1["API Gateway"]
-        C2["API Governance"]
-        C3["Workspaces"]
-        C4["Automation"]
-        C5["Monitoring"]
+        C1["🌐 API Gateway"]
+        C2["📋 API Governance"]
+        C3["🏗️ Workspaces"]
+        C4["🔧 Automation"]
+        C5["📈 Monitoring"]
     end
 
     P1 --> C1
@@ -282,8 +300,8 @@ flowchart LR
     P4 --> C4
     P5 --> C5
 
-    style principles fill:#E3F2FD,stroke:#1976D2,stroke-width:2px
-    style capabilities fill:#E8F5E9,stroke:#388E3C,stroke-width:2px
+    style principles fill:#BBDEFB,stroke:#1976D2,stroke-width:2px
+    style capabilities fill:#C8E6C9,stroke:#388E3C,stroke-width:2px
 ```
 
 ### 3.3 Principle Implementation Status
@@ -306,25 +324,29 @@ The APIM Landing Zone Accelerator provides a production-ready baseline for enter
 
 ```mermaid
 %%{init: {"flowchart": {"htmlLabels": false}} }%%
+%% ============================================
+%% COLOR SCHEME: Hierarchical (baseline) + Semantic (layers)
+%% Level 1: #E8EAF6 | Infra=#BBDEFB | Platform=#C8E6C9 | Gov=#FFE0B2
+%% ============================================
 flowchart TB
     subgraph baseline["📐 Baseline Business Architecture"]
         direction TB
 
-        subgraph layer1["Layer 1: Shared Infrastructure"]
+        subgraph layer1["📊 Layer 1: Shared Infrastructure"]
             direction LR
             L1A["📈 Log Analytics<br/>Workspace"]
             L1B["🔍 Application<br/>Insights"]
             L1C["🗄️ Storage<br/>Account"]
         end
 
-        subgraph layer2["Layer 2: Core Platform"]
+        subgraph layer2["⚙️ Layer 2: Core Platform"]
             direction LR
             L2A["🌐 API Management<br/>Premium Tier"]
             L2B["👥 Team<br/>Workspaces"]
             L2C["🖥️ Developer<br/>Portal"]
         end
 
-        subgraph layer3["Layer 3: Governance"]
+        subgraph layer3["📋 Layer 3: Governance"]
             direction LR
             L3A["📚 API Center<br/>Catalog"]
             L3B["🔗 API Source<br/>Integration"]
@@ -335,9 +357,9 @@ flowchart TB
     end
 
     style baseline fill:#E8EAF6,stroke:#3F51B5,stroke-width:3px
-    style layer1 fill:#E3F2FD,stroke:#1976D2,stroke-width:2px
-    style layer2 fill:#E8F5E9,stroke:#388E3C,stroke-width:2px
-    style layer3 fill:#FFF3E0,stroke:#E64A19,stroke-width:2px
+    style layer1 fill:#BBDEFB,stroke:#1976D2,stroke-width:2px
+    style layer2 fill:#C8E6C9,stroke:#388E3C,stroke-width:2px
+    style layer3 fill:#FFE0B2,stroke:#E64A19,stroke-width:2px
 ```
 
 ### 4.2 Business Component Catalog
@@ -357,6 +379,9 @@ flowchart TB
 
 ```mermaid
 %%{init: {"flowchart": {"htmlLabels": false}} }%%
+%% ============================================
+%% COLOR SCHEME: Standard main group #E8EAF6
+%% ============================================
 flowchart LR
     subgraph value_stream["💰 API Platform Value Stream"]
         direction LR
@@ -421,27 +446,30 @@ Based on the configuration in [infra/settings.yaml](../../infra/settings.yaml):
 
 ```mermaid
 %%{init: {"flowchart": {"htmlLabels": false}} }%%
+%% ============================================
+%% COLOR SCHEME: Semantic (pattern=blue, example=green)
+%% ============================================
 flowchart LR
     subgraph naming["📛 Resource Naming Pattern"]
         direction LR
-        N1["Solution<br/>Name"]
-        N2["Environment<br/>dev|test|prod"]
-        N3["Location<br/>Azure Region"]
-        N4["Resource<br/>Type Suffix"]
+        N1["📦 Solution<br/>Name"]
+        N2["🌍 Environment<br/>dev|test|prod"]
+        N3["📍 Location<br/>Azure Region"]
+        N4["🏷️ Resource<br/>Type Suffix"]
 
         N1 --> N2
         N2 --> N3
         N3 --> N4
     end
 
-    subgraph example["Example"]
-        E1["apim-accelerator-prod-eastus-rg"]
+    subgraph example["✅ Example"]
+        E1["📋 apim-accelerator-prod-eastus-rg"]
     end
 
     naming --> example
 
-    style naming fill:#E3F2FD,stroke:#1976D2,stroke-width:2px
-    style example fill:#E8F5E9,stroke:#388E3C,stroke-width:2px
+    style naming fill:#BBDEFB,stroke:#1976D2,stroke-width:2px
+    style example fill:#C8E6C9,stroke:#388E3C,stroke-width:2px
 ```
 
 ### 7.3 Tagging Standards
@@ -494,27 +522,30 @@ flowchart LR
 
 ```mermaid
 %%{init: {"flowchart": {"htmlLabels": false}} }%%
+%% ============================================
+%% COLOR SCHEME: Semantic (platform=green, deps=blue, tools=purple)
+%% ============================================
 flowchart TB
-    subgraph apim_platform["APIM Landing Zone"]
+    subgraph apim_platform["🏢 APIM Landing Zone"]
         direction TB
-        APIM["API Management"]
-        PORTAL["Developer Portal"]
-        CENTER["API Center"]
+        APIM["🌐 API Management"]
+        PORTAL["🖥️ Developer Portal"]
+        CENTER["📚 API Center"]
     end
 
-    subgraph azure_deps["Azure Platform Dependencies"]
+    subgraph azure_deps["☁️ Azure Platform Dependencies"]
         direction TB
-        AAD["Azure Active<br/>Directory"]
-        ARM["Azure Resource<br/>Manager"]
-        MON["Azure Monitor"]
-        KV["Azure Key Vault<br/>Optional"]
+        AAD["🔐 Azure Active<br/>Directory"]
+        ARM["⚙️ Azure Resource<br/>Manager"]
+        MON["📊 Azure Monitor"]
+        KV["🔑 Azure Key Vault<br/>Optional"]
     end
 
-    subgraph tools["Deployment Tools"]
+    subgraph tools["🛠️ Deployment Tools"]
         direction TB
-        AZD["Azure Developer<br/>CLI"]
-        BICEP["Bicep<br/>Compiler"]
-        AZCLI["Azure CLI"]
+        AZD["🚀 Azure Developer<br/>CLI"]
+        BICEP["📝 Bicep<br/>Compiler"]
+        AZCLI["💻 Azure CLI"]
     end
 
     APIM --> AAD
@@ -526,9 +557,9 @@ flowchart TB
     tools --> azure_deps
     tools --> apim_platform
 
-    style apim_platform fill:#E8F5E9,stroke:#388E3C,stroke-width:2px
-    style azure_deps fill:#E3F2FD,stroke:#1976D2,stroke-width:2px
-    style tools fill:#F3E5F5,stroke:#7B1FA2,stroke-width:2px
+    style apim_platform fill:#C8E6C9,stroke:#388E3C,stroke-width:2px
+    style azure_deps fill:#BBDEFB,stroke:#1976D2,stroke-width:2px
+    style tools fill:#E1BEE7,stroke:#7B1FA2,stroke-width:2px
 ```
 
 ### 8.2 Dependency Matrix
@@ -548,15 +579,18 @@ flowchart TB
 
 ```mermaid
 %%{init: {"flowchart": {"htmlLabels": false}} }%%
+%% ============================================
+%% COLOR SCHEME: Standard main group #E8EAF6
+%% ============================================
 flowchart TB
     subgraph sequence["📦 Deployment Sequence"]
         direction TB
 
-        D1["1️⃣ Pre-provision Hook<br/>Soft-delete cleanup"]
-        D2["2️⃣ Resource Group<br/>Container creation"]
-        D3["3️⃣ Shared Infrastructure<br/>Monitoring foundation"]
-        D4["4️⃣ Core Platform<br/>APIM + Workspaces + Portal"]
-        D5["5️⃣ API Inventory<br/>API Center + Integration"]
+        D1["1️⃣ 🔧 Pre-provision Hook<br/>Soft-delete cleanup"]
+        D2["2️⃣ 📂 Resource Group<br/>Container creation"]
+        D3["3️⃣ 📊 Shared Infrastructure<br/>Monitoring foundation"]
+        D4["4️⃣ ⚙️ Core Platform<br/>APIM + Workspaces + Portal"]
+        D5["5️⃣ 📚 API Inventory<br/>API Center + Integration"]
 
         D1 --> D2
         D2 --> D3
