@@ -28,7 +28,7 @@
 
 ### 1.1 Purpose
 
-This Application Architecture Document defines the application-level architecture for the **APIM Accelerator**, a production-ready Infrastructure as Code (IaC) solution for deploying Azure API Management Landing Zones with enterprise-grade monitoring, multi-team workspaces, and API governance capabilities.
+This Application Architecture Document defines the application-level architecture for the **APIM Accelerator**, a **production-ready Infrastructure as Code (IaC) solution** for deploying Azure API Management Landing Zones with **enterprise-grade monitoring**, **multi-team workspaces**, and **API governance** capabilities.
 
 ### 1.2 Scope
 
@@ -48,7 +48,7 @@ This document covers the Application layer components of the APIM Accelerator, i
 | **Shared Services**     | 5 (Monitoring, Insights, Operations, Types, Constants) |
 | **Governance Services** | 1 (API Center/Inventory)                               |
 | **Deployment Modules**  | 2 (Landing Zone, Shared Infrastructure)                |
-| **Source Traceability** | 100% (all components mapped to source files)           |
+| **Source Traceability** | **100%** (all components mapped to source files)       |
 
 ### 1.4 Architecture Maturity Assessment
 
@@ -69,11 +69,13 @@ This document covers the Application layer components of the APIM Accelerator, i
 
 ### 1.5 Strategic Recommendations
 
-| Priority  | Recommendation                                     | Impact     | Effort |
-| --------- | -------------------------------------------------- | ---------- | ------ |
-| 🔴 High   | Enable VNet integration for production deployments | Security   | Medium |
-| 🟠 Medium | Implement API versioning strategy in API Center    | Governance | Low    |
-| 🟡 Low    | Add multi-region deployment support                | Resilience | High   |
+> 📌 **Action Required**: Address high-priority recommendations before production deployment.
+
+| Priority  | Recommendation                                         | Impact     | Effort |
+| --------- | ------------------------------------------------------ | ---------- | ------ |
+| 🔴 High   | **Enable VNet integration** for production deployments | Security   | Medium |
+| 🟠 Medium | **Implement API versioning strategy** in API Center    | Governance | Low    |
+| 🟡 Low    | Add multi-region deployment support                    | Resilience | High   |
 
 ---
 
@@ -81,7 +83,7 @@ This document covers the Application layer components of the APIM Accelerator, i
 
 ### 2.1 Solution Overview
 
-The APIM Accelerator implements a **layered architecture** separating shared infrastructure, core platform services, and API governance into distinct deployment modules.
+The APIM Accelerator implements a **layered architecture** separating **shared infrastructure**, **core platform services**, and **API governance** into distinct deployment modules.
 
 ```mermaid
 %%{init: {"flowchart": {"htmlLabels": false}} }%%
@@ -199,18 +201,20 @@ sequenceDiagram
 
 ### 3.1 Principle Definitions
 
-The APIM Accelerator adheres to the following architecture principles aligned with TOGAF 10 and Azure Well-Architected Framework:
+The APIM Accelerator adheres to the following architecture principles aligned with **TOGAF 10** and **Azure Well-Architected Framework**:
 
-| ID         | Principle                | Statement                                                           | Rationale                                                    | Implications                                              |
-| ---------- | ------------------------ | ------------------------------------------------------------------- | ------------------------------------------------------------ | --------------------------------------------------------- |
-| **AP-001** | Modularity               | Components SHALL be deployable independently                        | Enables incremental updates and reduces blast radius         | Each Bicep module must have clear inputs/outputs          |
-| **AP-002** | Type Safety              | All configurations SHALL use strongly-typed definitions             | Prevents runtime errors, improves developer experience       | Use of `@export()` type definitions in common-types.bicep |
-| **AP-003** | Configuration as Code    | All infrastructure SHALL be defined in version-controlled templates | Enables reproducibility, auditability, and GitOps            | YAML configuration with Bicep templates                   |
-| **AP-004** | Observability by Default | All services SHALL emit telemetry to centralized monitoring         | Enables proactive issue detection and compliance             | Diagnostic settings on all resources                      |
-| **AP-005** | Security by Design       | Services SHALL use managed identities over credentials              | Eliminates credential management, enables automatic rotation | System-assigned/User-assigned identity support            |
-| **AP-006** | Multi-Tenancy Support    | Platform SHALL support team isolation within shared infrastructure  | Cost-effective multi-team support                            | APIM Workspaces for logical separation                    |
-| **AP-007** | Idempotent Deployment    | All deployments SHALL be safe to re-run                             | Enables CI/CD automation and safe rollbacks                  | Deterministic resource naming with unique suffixes        |
-| **AP-008** | Environment Parity       | Infrastructure SHALL be consistent across environments              | Reduces deployment failures in production                    | YAML-driven configuration with environment parameters     |
+> 💡 **Key Pattern**: All principles use **SHALL** language indicating mandatory compliance requirements.
+
+| ID         | Principle                    | Statement                                                               | Rationale                                                    | Implications                                              |
+| ---------- | ---------------------------- | ----------------------------------------------------------------------- | ------------------------------------------------------------ | --------------------------------------------------------- |
+| **AP-001** | **Modularity**               | Components **SHALL** be deployable independently                        | Enables incremental updates and reduces blast radius         | Each Bicep module must have clear inputs/outputs          |
+| **AP-002** | **Type Safety**              | All configurations **SHALL** use strongly-typed definitions             | Prevents runtime errors, improves developer experience       | Use of `@export()` type definitions in common-types.bicep |
+| **AP-003** | **Configuration as Code**    | All infrastructure **SHALL** be defined in version-controlled templates | Enables reproducibility, auditability, and GitOps            | YAML configuration with Bicep templates                   |
+| **AP-004** | **Observability by Default** | All services **SHALL** emit telemetry to centralized monitoring         | Enables proactive issue detection and compliance             | Diagnostic settings on all resources                      |
+| **AP-005** | **Security by Design**       | Services **SHALL** use managed identities over credentials              | Eliminates credential management, enables automatic rotation | System-assigned/User-assigned identity support            |
+| **AP-006** | **Multi-Tenancy Support**    | Platform **SHALL** support team isolation within shared infrastructure  | Cost-effective multi-team support                            | APIM Workspaces for logical separation                    |
+| **AP-007** | **Idempotent Deployment**    | All deployments **SHALL** be safe to re-run                             | Enables CI/CD automation and safe rollbacks                  | Deterministic resource naming with unique suffixes        |
+| **AP-008** | **Environment Parity**       | Infrastructure **SHALL** be consistent across environments              | Reduces deployment failures in production                    | YAML-driven configuration with environment parameters     |
 
 ### 3.2 Principle Application Matrix
 
@@ -226,10 +230,12 @@ The APIM Accelerator adheres to the following architecture principles aligned wi
 
 ### 3.3 Principle Violations & Remediation
 
-| Violation | Component        | Description                      | Remediation                       |
-| --------- | ---------------- | -------------------------------- | --------------------------------- |
-| ⚠️ AP-004 | Developer Portal | No dedicated diagnostic settings | Add diagnostic settings resource  |
-| ⚠️ AP-004 | API Center       | Limited telemetry integration    | Enable API Center diagnostic logs |
+> ⚠️ **Compliance Gap**: The following components require remediation to achieve full principle compliance.
+
+| Violation     | Component            | Description                      | Remediation                           |
+| ------------- | -------------------- | -------------------------------- | ------------------------------------- |
+| ⚠️ **AP-004** | **Developer Portal** | No dedicated diagnostic settings | **Add diagnostic settings resource**  |
+| ⚠️ **AP-004** | **API Center**       | Limited telemetry integration    | **Enable API Center diagnostic logs** |
 
 ---
 
@@ -369,11 +375,13 @@ graph TD
 
 ### 4.2 Resource Naming Convention
 
-The accelerator implements consistent naming through the `generateUniqueSuffix()` function:
+The accelerator implements **consistent naming** through the `generateUniqueSuffix()` function:
 
 ```
 {solutionName}-{uniqueSuffix}-{resourceType}
 ```
+
+> 💡 **Naming Strategy**: Empty name fields in configuration trigger **automatic name generation** using a deterministic suffix, ensuring unique but reproducible resource names.
 
 | Resource Type        | Abbreviation | Example                             |
 | -------------------- | ------------ | ----------------------------------- |
@@ -387,6 +395,8 @@ The accelerator implements consistent naming through the `generateUniqueSuffix()
 ### 4.3 Configuration Management
 
 Configuration is managed through `infra/settings.yaml`:
+
+> 📌 **Single Source of Truth**: All deployment parameters are centralized in this configuration file, enabling **environment-specific customization** without modifying Bicep templates.
 
 ```yaml
 solutionName: "apim-accelerator"
@@ -421,6 +431,8 @@ inventory:
 
 ### 7.1 Infrastructure as Code Standards
 
+> 📌 **Compliance**: All standards marked ✅ are **enforced** and validated during deployment.
+
 | Standard ID | Category         | Standard                             | Rationale                         | Compliance  |
 | ----------- | ---------------- | ------------------------------------ | --------------------------------- | ----------- |
 | TS-001      | Language         | Bicep (latest)                       | Azure-native IaC with type safety | ✅ Enforced |
@@ -441,13 +453,15 @@ inventory:
 
 ### 7.3 Security Standards
 
-| Standard ID | Category       | Requirement              | Implementation                |
-| ----------- | -------------- | ------------------------ | ----------------------------- |
-| SEC-001     | Identity       | Use Managed Identities   | System-Assigned default       |
-| SEC-002     | Secrets        | No hardcoded credentials | Key Vault integration         |
-| SEC-003     | Network        | VNet option available    | External/Internal VNet types  |
-| SEC-004     | RBAC           | Least privilege roles    | Reader role for APIM identity |
-| SEC-005     | Authentication | Azure AD for portal      | AAD Identity Provider config  |
+> ⚠️ **Security Requirement**: All standards in this section are **mandatory** for production deployments.
+
+| Standard ID | Category           | Requirement                  | Implementation                |
+| ----------- | ------------------ | ---------------------------- | ----------------------------- |
+| **SEC-001** | **Identity**       | **Use Managed Identities**   | System-Assigned default       |
+| **SEC-002** | **Secrets**        | **No hardcoded credentials** | Key Vault integration         |
+| **SEC-003** | **Network**        | VNet option available        | External/Internal VNet types  |
+| **SEC-004** | **RBAC**           | **Least privilege roles**    | Reader role for APIM identity |
+| **SEC-005** | **Authentication** | **Azure AD for portal**      | AAD Identity Provider config  |
 
 ### 7.4 Operational Standards
 
@@ -586,7 +600,7 @@ flowchart LR
 
 ### 8.5 Deployment Order Dependencies
 
-The following deployment order MUST be followed for successful provisioning:
+> ⚠️ **Critical Requirement**: The following deployment order **MUST** be followed for successful provisioning. Violating this order will result in deployment failures due to unresolved resource dependencies.
 
 ```
 1. Resource Group
@@ -605,22 +619,26 @@ The following deployment order MUST be followed for successful provisioning:
 
 ### 8.6 Cross-Layer Dependencies
 
-| Source Layer | Target Layer | Dependency         | Impact                            |
-| ------------ | ------------ | ------------------ | --------------------------------- |
-| Core         | Shared       | Log Analytics ID   | Diagnostic settings configuration |
-| Core         | Shared       | Storage Account ID | Log archival destination          |
-| Core         | Shared       | App Insights ID    | APIM logger configuration         |
-| Inventory    | Core         | APIM Resource ID   | API source integration            |
-| Inventory    | Core         | APIM Name          | Resource naming                   |
+> 💡 **Integration Points**: These dependencies define the **contract** between architecture layers. Changes to outputs require coordination across dependent modules.
+
+| Source Layer  | Target Layer | Dependency             | Impact                            |
+| ------------- | ------------ | ---------------------- | --------------------------------- |
+| **Core**      | **Shared**   | **Log Analytics ID**   | Diagnostic settings configuration |
+| **Core**      | **Shared**   | **Storage Account ID** | Log archival destination          |
+| **Core**      | **Shared**   | **App Insights ID**    | APIM logger configuration         |
+| **Inventory** | **Core**     | **APIM Resource ID**   | API source integration            |
+| **Inventory** | **Core**     | APIM Name              | Resource naming                   |
 
 ### 8.7 Dependency Risks
 
-| Risk                                      | Severity | Mitigation                       |
-| ----------------------------------------- | -------- | -------------------------------- |
-| Shared infrastructure failure blocks Core | High     | Independent retry mechanism      |
-| Log Analytics unavailability              | Medium   | Graceful degradation in logging  |
-| AAD outage impacts Portal                 | Medium   | Cached authentication tokens     |
-| API Center sync failure                   | Low      | Manual API registration fallback |
+> 💡 **Risk Management**: Ensure mitigation strategies are implemented before production deployment.
+
+| Risk                                          | Severity | Mitigation                       |
+| --------------------------------------------- | -------- | -------------------------------- |
+| **Shared infrastructure failure blocks Core** | **High** | **Independent retry mechanism**  |
+| Log Analytics unavailability                  | Medium   | Graceful degradation in logging  |
+| AAD outage impacts Portal                     | Medium   | Cached authentication tokens     |
+| API Center sync failure                       | Low      | Manual API registration fallback |
 
 ---
 
