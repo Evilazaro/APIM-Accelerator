@@ -494,11 +494,21 @@ flowchart TB
 ```mermaid
 %%{init: {"flowchart": {"htmlLabels": false}} }%%
 flowchart LR
-    settings["settings.yaml"]
-    main["main.bicep"]
-    shared["shared/main.bicep"]
-    core["core/main.bicep"]
-    inventory["inventory/main.bicep"]
+    %% ============================================
+    %% COLOR SCHEME DOCUMENTATION
+    %% ============================================
+    %% Config: Green (#C8E6C9) - Configuration files
+    %% Orchestrator: Blue (#BBDEFB) - Entry point
+    %% Shared: Purple (#E1BEE7) - Shared infrastructure
+    %% Core: Orange (#FFE0B2) - Core platform
+    %% Inventory: Red (#FFCDD2) - API governance
+    %% ============================================
+
+    settings["📋 settings.yaml"]:::mdGreen
+    main["🎯 main.bicep"]:::mdBlue
+    shared["📦 shared/main.bicep"]:::mdPurple
+    core["⚙️ core/main.bicep"]:::mdOrange
+    inventory["📚 inventory/main.bicep"]:::mdRed
 
     settings -->|loadYamlContent| main
     main -->|deploy| shared
@@ -507,11 +517,11 @@ flowchart LR
     shared -->|outputs| core
     core -->|outputs| inventory
 
-    style settings fill:#C8E6C9,stroke:#388E3C
-    style main fill:#BBDEFB,stroke:#1976D2
-    style shared fill:#E1BEE7,stroke:#7B1FA2
-    style core fill:#FFE0B2,stroke:#E64A19
-    style inventory fill:#FFCDD2,stroke:#D32F2F
+    classDef mdGreen fill:#C8E6C9,stroke:#388E3C,stroke-width:2px,color:#000
+    classDef mdBlue fill:#BBDEFB,stroke:#1976D2,stroke-width:2px,color:#000
+    classDef mdPurple fill:#E1BEE7,stroke:#7B1FA2,stroke-width:2px,color:#000
+    classDef mdOrange fill:#FFE0B2,stroke:#E64A19,stroke-width:2px,color:#000
+    classDef mdRed fill:#FFCDD2,stroke:#D32F2F,stroke-width:2px,color:#000
 ```
 
 #### 8.3.2 Output Dependencies

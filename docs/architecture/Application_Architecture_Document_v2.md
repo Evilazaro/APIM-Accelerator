@@ -631,6 +631,12 @@ flowchart LR
     %% Identity: Purple (#E1BEE7) - Authentication
     %% ============================================
 
+    classDef mdTeal fill:#B2DFDB,stroke:#00796B,stroke-width:2px,color:#000
+    classDef mdGreen fill:#C8E6C9,stroke:#388E3C,stroke-width:2px,color:#000
+    classDef mdBlue fill:#BBDEFB,stroke:#1976D2,stroke-width:2px,color:#000
+    classDef mdOrange fill:#FFE0B2,stroke:#E64A19,stroke-width:2px,color:#000
+    classDef mdPurple fill:#E1BEE7,stroke:#7B1FA2,stroke-width:2px,color:#000
+
     subgraph dataFlow["📊 Data Flow"]
         API["🌐 API Requests"]:::mdTeal --> APIM["⚙️ API Management"]:::mdGreen
         APIM --> Backend["🔙 Backend Services"]:::mdTeal
@@ -646,12 +652,6 @@ flowchart LR
         DevPortal["🖥️ Developer Portal"]:::mdGreen --> APIM
         DevPortal -->|Auth| AAD["👤 Azure AD"]:::mdPurple
     end
-
-    classDef mdTeal fill:#B2DFDB,stroke:#00796B,stroke-width:2px,color:#000
-    classDef mdGreen fill:#C8E6C9,stroke:#388E3C,stroke-width:2px,color:#000
-    classDef mdBlue fill:#BBDEFB,stroke:#1976D2,stroke-width:2px,color:#000
-    classDef mdOrange fill:#FFE0B2,stroke:#E64A19,stroke-width:2px,color:#000
-    classDef mdPurple fill:#E1BEE7,stroke:#7B1FA2,stroke-width:2px,color:#000
 
     style dataFlow fill:#E8EAF6,stroke:#3F51B5,stroke-width:3px
 ```
