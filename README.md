@@ -38,35 +38,69 @@ The APIM Accelerator implements a **layered architecture pattern** that separate
 This approach guarantees comprehensive telemetry collection from the moment services are deployed. The modular structure allows teams to customize individual layers without affecting others, supporting both greenfield deployments and integration with existing Azure environments.
 
 ```mermaid
-%%{init: {"flowchart": {"htmlLabels": false}} }%%
+---
+config:
+  flowchart:
+    htmlLabels: false
+---
 flowchart TB
+    accTitle: APIM Landing Zone Architecture
+    accDescr: Architectural diagram showing the three-tier deployment structure of the APIM Accelerator including Shared Infrastructure, Core Platform, and API Inventory layers
+    %% ============================================
+    %% DIAGRAM METADATA
+    %% Title: APIM Landing Zone Architecture
+    %% Purpose: Show layered architecture of APIM Accelerator
+    %% Version: 1.0.0 | Updated: 2026-02-05
+    %% ============================================
+
+    %% ============================================
+    %% STANDARD COLOR SCHEME v2.1
+    %% ============================================
+    %% HIERARCHICAL (structural nesting):
+    %%   Level 1: #E8EAF6 (Indigo 50) - Main container
+    %%   Level 2: #C5CAE9 (Indigo 100) - Sub-containers
+    %% SEMANTIC (functional purpose):
+    %%   Blue=#BBDEFB (Info), Green=#C8E6C9 (Success)
+    %%   Orange=#FFE0B2 (Process), Yellow=#FFF9C4 (Warning)
+    %% ============================================
+
+    %% Full classDef palette (14 required)
+    classDef level1Group fill:#E8EAF6,stroke:#3F51B5,stroke-width:3px,color:#000
+    classDef level2Group fill:#C5CAE9,stroke:#3F51B5,stroke-width:2px,color:#000
+    classDef level3Group fill:#9FA8DA,stroke:#3F51B5,stroke-width:2px,color:#000
+    classDef level4Group fill:#7986CB,stroke:#3F51B5,stroke-width:1px,color:#000
     classDef mainGroup fill:#E8EAF6,stroke:#3F51B5,stroke-width:3px,color:#000
+    classDef subGroup fill:#C5CAE9,stroke:#3F51B5,stroke-width:2px,color:#000
     classDef mdBlue fill:#BBDEFB,stroke:#1976D2,stroke-width:2px,color:#000
     classDef mdGreen fill:#C8E6C9,stroke:#388E3C,stroke-width:2px,color:#000
-    classDef mdOrange fill:#FFE0B2,stroke:#E64A19,stroke-width:2px,color:#000
     classDef mdYellow fill:#FFF9C4,stroke:#F57F17,stroke-width:2px,color:#000
+    classDef mdRed fill:#FFCDD2,stroke:#D32F2F,stroke-width:2px,color:#000
+    classDef mdOrange fill:#FFE0B2,stroke:#E64A19,stroke-width:2px,color:#000
+    classDef mdPurple fill:#E1BEE7,stroke:#7B1FA2,stroke-width:2px,color:#000
+    classDef mdTeal fill:#B2DFDB,stroke:#00796B,stroke-width:2px,color:#000
+    classDef mdGrey fill:#F5F5F5,stroke:#616161,stroke-width:2px,color:#000
 
     subgraph landingZone["APIM Landing Zone"]
         direction TB
 
         subgraph shared["Shared Infrastructure"]
             direction LR
-            logAnalytics["Log Analytics<br/>Workspace"]:::mdBlue
-            appInsights["Application<br/>Insights"]:::mdBlue
-            storage["Storage<br/>Account"]:::mdBlue
+            logAnalytics["📊 Log Analytics<br/>Workspace"]:::mdBlue
+            appInsights["📈 Application<br/>Insights"]:::mdBlue
+            storage["🗄️ Storage<br/>Account"]:::mdBlue
         end
 
         subgraph core["Core Platform"]
             direction LR
-            apim["API Management<br/>Premium"]:::mdGreen
-            devPortal["Developer<br/>Portal"]:::mdGreen
-            workspaces["Workspaces"]:::mdGreen
+            apim["🌐 API Management<br/>Premium"]:::mdGreen
+            devPortal["🖥️ Developer<br/>Portal"]:::mdGreen
+            workspaces["📂 Workspaces"]:::mdGreen
         end
 
         subgraph inventory["API Inventory"]
             direction LR
-            apiCenter["API Center"]:::mdOrange
-            apiSource["API Source<br/>Integration"]:::mdOrange
+            apiCenter["📋 API Center"]:::mdOrange
+            apiSource["🔗 API Source<br/>Integration"]:::mdOrange
         end
 
         shared --> core
@@ -82,17 +116,22 @@ flowchart TB
 
     subgraph deployment["Deployment"]
         direction LR
-        azd["Azure Developer CLI"]:::mdYellow
-        bicep["Bicep Templates"]:::mdYellow
+        azd["⚡ Azure Developer CLI"]:::mdYellow
+        bicep["📝 Bicep Templates"]:::mdYellow
     end
 
     deployment -->|"azd up"| landingZone
 
+    %% ============================================
+    %% SUBGRAPH STYLING (5 subgraphs = 5 directives)
+    %% ============================================
     style landingZone fill:#E8EAF6,stroke:#3F51B5,stroke-width:3px
     style shared fill:#E3F2FD,stroke:#1976D2,stroke-width:2px
     style core fill:#E8F5E9,stroke:#388E3C,stroke-width:2px
     style inventory fill:#FFF3E0,stroke:#E64A19,stroke-width:2px
     style deployment fill:#FFFDE7,stroke:#F57F17,stroke-width:2px
+
+    %% Accessibility: WCAG AA verified (4.5:1 contrast ratio)
 ```
 
 ### Component Overview
