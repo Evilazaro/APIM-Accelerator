@@ -318,32 +318,43 @@ flowchart TB
 #### 4.1.3 Module Dependency Graph
 
 ```mermaid
-graph TD
-    subgraph "Entry Point"
-        A[infra/main.bicep]
+%%{init: {"flowchart": {"htmlLabels": false}} }%%
+flowchart TD
+    %% ============================================
+    %% COLOR SCHEME DOCUMENTATION
+    %% ============================================
+    %% Entry Point: Purple (#F3E5F5) - Orchestration
+    %% Shared Layer: Blue (#E3F2FD) - Infrastructure
+    %% Core Layer: Green (#E8F5E9) - Platform
+    %% Inventory: Orange (#FFF3E0) - Governance
+    %% Foundation: Grey (#ECEFF1) - Utilities
+    %% ============================================
+
+    subgraph entryPoint["🚀 Entry Point"]
+        A["📋 infra/main.bicep"]
     end
 
-    subgraph "Shared Layer"
-        B[src/shared/main.bicep]
-        C[src/shared/monitoring/main.bicep]
-        D[src/shared/monitoring/operational/main.bicep]
-        E[src/shared/monitoring/insights/main.bicep]
+    subgraph sharedLayer["📊 Shared Layer"]
+        B["📦 src/shared/main.bicep"]
+        C["📈 src/shared/monitoring/main.bicep"]
+        D["⚙️ src/shared/monitoring/operational/main.bicep"]
+        E["🔍 src/shared/monitoring/insights/main.bicep"]
     end
 
-    subgraph "Core Layer"
-        F[src/core/main.bicep]
-        G[src/core/apim.bicep]
-        H[src/core/developer-portal.bicep]
-        I[src/core/workspaces.bicep]
+    subgraph coreLayer["⚙️ Core Layer"]
+        F["🏗️ src/core/main.bicep"]
+        G["🌐 src/core/apim.bicep"]
+        H["🖥️ src/core/developer-portal.bicep"]
+        I["👥 src/core/workspaces.bicep"]
     end
 
-    subgraph "Inventory Layer"
-        J[src/inventory/main.bicep]
+    subgraph inventoryLayer["📚 Inventory Layer"]
+        J["📖 src/inventory/main.bicep"]
     end
 
-    subgraph "Foundation"
-        K[src/shared/common-types.bicep]
-        L[src/shared/constants.bicep]
+    subgraph foundation["🔧 Foundation"]
+        K["📋 src/shared/common-types.bicep"]
+        L["🔢 src/shared/constants.bicep"]
     end
 
     A --> B
@@ -365,18 +376,24 @@ graph TD
     B -.-> K
     C -.-> L
 
-    style A fill:#F3E5F5,stroke:#7B1FA2
-    style B fill:#E3F2FD,stroke:#1976D2
-    style C fill:#E3F2FD,stroke:#1976D2
-    style D fill:#E3F2FD,stroke:#1976D2
-    style E fill:#E3F2FD,stroke:#1976D2
-    style F fill:#E8F5E9,stroke:#388E3C
-    style G fill:#E8F5E9,stroke:#388E3C
-    style H fill:#E8F5E9,stroke:#388E3C
-    style I fill:#E8F5E9,stroke:#388E3C
-    style J fill:#FFF3E0,stroke:#E64A19
-    style K fill:#ECEFF1,stroke:#607D8B
-    style L fill:#ECEFF1,stroke:#607D8B
+    style entryPoint fill:#F3E5F5,stroke:#7B1FA2,stroke-width:2px
+    style sharedLayer fill:#E3F2FD,stroke:#1976D2,stroke-width:2px
+    style coreLayer fill:#E8F5E9,stroke:#388E3C,stroke-width:2px
+    style inventoryLayer fill:#FFF3E0,stroke:#E64A19,stroke-width:2px
+    style foundation fill:#ECEFF1,stroke:#607D8B,stroke-width:2px
+
+    style A fill:#F3E5F5,stroke:#7B1FA2,stroke-width:2px
+    style B fill:#E3F2FD,stroke:#1976D2,stroke-width:2px
+    style C fill:#E3F2FD,stroke:#1976D2,stroke-width:2px
+    style D fill:#E3F2FD,stroke:#1976D2,stroke-width:2px
+    style E fill:#E3F2FD,stroke:#1976D2,stroke-width:2px
+    style F fill:#E8F5E9,stroke:#388E3C,stroke-width:2px
+    style G fill:#E8F5E9,stroke:#388E3C,stroke-width:2px
+    style H fill:#E8F5E9,stroke:#388E3C,stroke-width:2px
+    style I fill:#E8F5E9,stroke:#388E3C,stroke-width:2px
+    style J fill:#FFF3E0,stroke:#E64A19,stroke-width:2px
+    style K fill:#ECEFF1,stroke:#607D8B,stroke-width:2px
+    style L fill:#ECEFF1,stroke:#607D8B,stroke-width:2px
 ```
 
 ### 4.2 Resource Naming Convention
@@ -527,31 +544,50 @@ output outputName string = resource.property
 The following diagram shows the internal dependency relationships between components:
 
 ```mermaid
-graph LR
-    subgraph "Dependency Flow"
-        A[infra/main.bicep] -->|orchestrates| B[shared/main.bicep]
-        A -->|orchestrates| C[core/main.bicep]
-        A -->|orchestrates| D[inventory/main.bicep]
+%%{init: {"flowchart": {"htmlLabels": false}} }%%
+flowchart LR
+    %% ============================================
+    %% COLOR SCHEME DOCUMENTATION
+    %% ============================================
+    %% Entry: Purple (#F3E5F5) - Orchestration
+    %% Shared: Blue (#E3F2FD) - Infrastructure
+    %% Core: Green (#E8F5E9) - Platform
+    %% Inventory: Orange (#FFF3E0) - Governance
+    %% ============================================
 
-        B -->|deploys| E[monitoring/main.bicep]
-        E -->|deploys| F[operational/main.bicep]
-        E -->|deploys| G[insights/main.bicep]
+    subgraph depFlow["🔄 Dependency Flow"]
+        A["📋 infra/main.bicep"] -->|orchestrates| B["📦 shared/main.bicep"]
+        A -->|orchestrates| C["🏗️ core/main.bicep"]
+        A -->|orchestrates| D["📖 inventory/main.bicep"]
 
-        C -->|deploys| H[apim.bicep]
-        C -->|deploys| I[developer-portal.bicep]
-        C -->|deploys| J[workspaces.bicep]
+        B -->|deploys| E["📊 monitoring/main.bicep"]
+        E -->|deploys| F["⚙️ operational/main.bicep"]
+        E -->|deploys| G["🔍 insights/main.bicep"]
+
+        C -->|deploys| H["🌐 apim.bicep"]
+        C -->|deploys| I["🖥️ developer-portal.bicep"]
+        C -->|deploys| J["👥 workspaces.bicep"]
 
         D -->|references| C
 
-        C -.->|imports| K[common-types.bicep]
-        C -.->|imports| L[constants.bicep]
+        C -.->|imports| K["📋 common-types.bicep"]
+        C -.->|imports| L["🔢 constants.bicep"]
         E -.->|imports| L
     end
 
-    style A fill:#F3E5F5,stroke:#7B1FA2
-    style B fill:#E3F2FD,stroke:#1976D2
-    style C fill:#E8F5E9,stroke:#388E3C
-    style D fill:#FFF3E0,stroke:#E64A19
+    style depFlow fill:#E8EAF6,stroke:#3F51B5,stroke-width:3px
+    style A fill:#F3E5F5,stroke:#7B1FA2,stroke-width:2px
+    style B fill:#E3F2FD,stroke:#1976D2,stroke-width:2px
+    style C fill:#E8F5E9,stroke:#388E3C,stroke-width:2px
+    style D fill:#FFF3E0,stroke:#E64A19,stroke-width:2px
+    style E fill:#E3F2FD,stroke:#1976D2,stroke-width:2px
+    style F fill:#E3F2FD,stroke:#1976D2,stroke-width:2px
+    style G fill:#E3F2FD,stroke:#1976D2,stroke-width:2px
+    style H fill:#E8F5E9,stroke:#388E3C,stroke-width:2px
+    style I fill:#E8F5E9,stroke:#388E3C,stroke-width:2px
+    style J fill:#E8F5E9,stroke:#388E3C,stroke-width:2px
+    style K fill:#ECEFF1,stroke:#607D8B,stroke-width:2px
+    style L fill:#ECEFF1,stroke:#607D8B,stroke-width:2px
 ```
 
 ### 8.2 Dependency Matrix
@@ -583,27 +619,41 @@ graph LR
 ### 8.4 Data Flow Dependencies
 
 ```mermaid
+%%{init: {"flowchart": {"htmlLabels": false}} }%%
 flowchart LR
-    subgraph "Data Flow"
-        API[API Requests] --> APIM[API Management]
-        APIM --> Backend[Backend Services]
+    %% ============================================
+    %% COLOR SCHEME DOCUMENTATION
+    %% ============================================
+    %% API Flow: Teal (#B2DFDB) - External requests
+    %% Platform: Green (#E8F5E9) - Core services
+    %% Monitoring: Blue (#E3F2FD) - Observability
+    %% Governance: Orange (#FFF3E0) - API Center
+    %% Identity: Purple (#E1BEE7) - Authentication
+    %% ============================================
 
-        APIM -->|Telemetry| AI[Application Insights]
-        APIM -->|Logs| LA[Log Analytics]
-        APIM -->|Diagnostics| SA[Storage Account]
+    subgraph dataFlow["📊 Data Flow"]
+        API["🌐 API Requests"]:::mdTeal --> APIM["⚙️ API Management"]:::mdGreen
+        APIM --> Backend["🔙 Backend Services"]:::mdTeal
+
+        APIM -->|Telemetry| AI["🔍 Application Insights"]:::mdBlue
+        APIM -->|Logs| LA["📈 Log Analytics"]:::mdBlue
+        APIM -->|Diagnostics| SA["🗄️ Storage Account"]:::mdBlue
 
         AI --> LA
 
-        APIM -->|API Metadata| AC[API Center]
+        APIM -->|API Metadata| AC["📚 API Center"]:::mdOrange
 
-        DevPortal[Developer Portal] --> APIM
-        DevPortal -->|Auth| AAD[Azure AD]
+        DevPortal["🖥️ Developer Portal"]:::mdGreen --> APIM
+        DevPortal -->|Auth| AAD["👤 Azure AD"]:::mdPurple
     end
 
-    style APIM fill:#E8F5E9,stroke:#388E3C
-    style AI fill:#E3F2FD,stroke:#1976D2
-    style LA fill:#E3F2FD,stroke:#1976D2
-    style AC fill:#FFF3E0,stroke:#E64A19
+    classDef mdTeal fill:#B2DFDB,stroke:#00796B,stroke-width:2px,color:#000
+    classDef mdGreen fill:#C8E6C9,stroke:#388E3C,stroke-width:2px,color:#000
+    classDef mdBlue fill:#BBDEFB,stroke:#1976D2,stroke-width:2px,color:#000
+    classDef mdOrange fill:#FFE0B2,stroke:#E64A19,stroke-width:2px,color:#000
+    classDef mdPurple fill:#E1BEE7,stroke:#7B1FA2,stroke-width:2px,color:#000
+
+    style dataFlow fill:#E8EAF6,stroke:#3F51B5,stroke-width:3px
 ```
 
 ### 8.5 Deployment Order Dependencies

@@ -85,28 +85,28 @@ flowchart TB
         direction TB
 
         subgraph automation["⚡ Deployment Automation"]
-            azd["Azure Developer CLI<br/>(azd)"]
-            hooks["Lifecycle Hooks<br/>(pre-provision.sh)"]
-            azcli["Azure CLI<br/>(az)"]
+            azd["🚀 Azure Developer CLI<br/>(azd)"]
+            hooks["🔗 Lifecycle Hooks<br/>(pre-provision.sh)"]
+            azcli["🖥️ Azure CLI<br/>(az)"]
         end
 
         subgraph iac["📝 Infrastructure as Code"]
-            orchestrator["Main Orchestrator<br/>(infra/main.bicep)"]
-            shared["Shared Module<br/>(src/shared/)"]
-            core["Core Module<br/>(src/core/)"]
-            inventory["Inventory Module<br/>(src/inventory/)"]
+            orchestrator["🎯 Main Orchestrator<br/>(infra/main.bicep)"]
+            shared["📦 Shared Module<br/>(src/shared/)"]
+            core["⚙️ Core Module<br/>(src/core/)"]
+            inventory["📚 Inventory Module<br/>(src/inventory/)"]
         end
 
         subgraph config["⚙️ Configuration"]
-            settings["settings.yaml"]
-            params["main.parameters.json"]
-            types["common-types.bicep"]
+            settings["📋 settings.yaml"]
+            params["📄 main.parameters.json"]
+            types["📝 common-types.bicep"]
         end
 
         subgraph scm["📂 Source Control"]
-            pr["PR Template"]
-            issues["Issue Templates"]
-            docs["Documentation"]
+            pr["🔀 PR Template"]
+            issues["📝 Issue Templates"]
+            docs["📖 Documentation"]
         end
 
         automation --> iac
@@ -250,25 +250,25 @@ flowchart LR
         direction TB
 
         subgraph implemented["✅ Implemented"]
-            iac["Infrastructure as Code<br/>(Bicep)"]
-            azd["AZD Integration"]
-            modular["Modular Architecture"]
-            config["Centralized Config"]
-            hooks["Lifecycle Hooks"]
-            templates["GitHub Templates"]
-            docs["Documentation"]
+            iac["📝 Infrastructure as Code<br/>(Bicep)"]
+            azd["🚀 AZD Integration"]
+            modular["🧩 Modular Architecture"]
+            config["⚙️ Centralized Config"]
+            hooks["🔗 Lifecycle Hooks"]
+            templates["📄 GitHub Templates"]
+            docs["📖 Documentation"]
         end
 
         subgraph partial["⚠️ Partial"]
-            validation["Bicep Validation"]
-            testing["Manual Testing"]
+            validation["🔍 Bicep Validation"]
+            testing["🧪 Manual Testing"]
         end
 
         subgraph gap["❌ Not Detected"]
-            cicd["CI/CD Pipelines"]
-            iac_scan["IaC Security Scanning"]
-            approval["Deployment Approvals"]
-            drift["Drift Detection"]
+            cicd["🔄 CI/CD Pipelines"]
+            iac_scan["🔒 IaC Security Scanning"]
+            approval["✅ Deployment Approvals"]
+            drift["🎯 Drift Detection"]
         end
     end
 
@@ -295,28 +295,28 @@ flowchart LR
 %%{init: {"flowchart": {"htmlLabels": false}} }%%
 flowchart TB
     subgraph modules["🧩 Bicep Module Hierarchy"]
-        main["infra/main.bicep<br/><i>Subscription Scope</i>"]
+        main["🎯 infra/main.bicep<br/><i>Subscription Scope</i>"]
 
         subgraph shared_mod["src/shared/"]
-            shared_main["main.bicep"]
-            monitoring["monitoring/main.bicep"]
-            networking["networking/main.bicep<br/><i>(commented out)</i>"]
+            shared_main["📦 main.bicep"]
+            monitoring["📊 monitoring/main.bicep"]
+            networking["🌐 networking/main.bicep<br/><i>(commented out)</i>"]
         end
 
         subgraph core_mod["src/core/"]
-            core_main["main.bicep"]
-            apim["apim.bicep"]
-            workspaces["workspaces.bicep"]
-            portal["developer-portal.bicep"]
+            core_main["⚙️ main.bicep"]
+            apim["🌐 apim.bicep"]
+            workspaces["👥 workspaces.bicep"]
+            portal["🖥️ developer-portal.bicep"]
         end
 
         subgraph inventory_mod["src/inventory/"]
-            inventory_main["main.bicep"]
+            inventory_main["📚 main.bicep"]
         end
 
         subgraph common["src/shared/ (types)"]
-            types["common-types.bicep"]
-            constants["constants.bicep"]
+            types["📋 common-types.bicep"]
+            constants["🔢 constants.bicep"]
         end
 
         main --> shared_mod
@@ -431,29 +431,29 @@ The pre-provision hook automates cleanup of soft-deleted APIM resources:
 %%{init: {"flowchart": {"htmlLabels": false}} }%%
 flowchart TB
     subgraph external["☁️ External Dependencies"]
-        azure["Azure Cloud Platform"]
-        github["GitHub Repository"]
-        azcli_ext["Azure CLI"]
-        azd_ext["Azure Developer CLI"]
+        azure["🌐 Azure Cloud Platform"]
+        github["📂 GitHub Repository"]
+        azcli_ext["🖥️ Azure CLI"]
+        azd_ext["🚀 Azure Developer CLI"]
     end
 
     subgraph devops_layer["🔧 DevOps Layer"]
-        iac["Infrastructure as Code"]
-        automation["Deployment Automation"]
-        config["Configuration Management"]
-        scm["Source Control"]
+        iac["📝 Infrastructure as Code"]
+        automation["⚡ Deployment Automation"]
+        config["⚙️ Configuration Management"]
+        scm["🔀 Source Control"]
     end
 
     subgraph app_layer["📦 Application Layer"]
-        monitoring["Monitoring Infrastructure"]
-        apim_svc["API Management Service"]
-        inventory_svc["API Center"]
+        monitoring["📊 Monitoring Infrastructure"]
+        apim_svc["🌐 API Management Service"]
+        inventory_svc["📚 API Center"]
     end
 
     subgraph tech_layer["🖥️ Technology Layer"]
-        subscription["Azure Subscription"]
-        resource_group["Resource Groups"]
-        rbac["RBAC/Identity"]
+        subscription["💳 Azure Subscription"]
+        resource_group["📁 Resource Groups"]
+        rbac["🔐 RBAC/Identity"]
     end
 
     external --> devops_layer
