@@ -28,7 +28,9 @@
 
 ### 1.1 Purpose
 
-This Data Architecture Document defines the data entities, data stores, data flows, and data governance mechanisms that the APIM Landing Zone Accelerator utilizes. It provides a comprehensive view of how operational telemetry, configuration data, and API metadata are managed across the platform.
+This Data Architecture Document defines the **data entities**, **data stores**, **data flows**, and **data governance mechanisms** that the APIM Landing Zone Accelerator utilizes. It provides a comprehensive view of how operational telemetry, configuration data, and API metadata are managed across the platform.
+
+> 📌 **Scope**: This document covers the complete data lifecycle from ingestion through archival, enabling compliance and operational intelligence.
 
 ### 1.2 Scope
 
@@ -88,10 +90,12 @@ flowchart LR
 
 The APIM Accelerator data architecture directly supports:
 
-- **Operational Intelligence**: Centralized telemetry collection via Log Analytics and Application Insights
-- **Compliance Requirements**: Long-term data retention in cost-effective blob storage
-- **Configuration Consistency**: Type-safe Bicep definitions ensuring deployment reliability
-- **API Governance**: Structured API metadata management through API Center
+- **Operational Intelligence**: Centralized telemetry collection via **Log Analytics and Application Insights**
+- **Compliance Requirements**: Long-term data retention in **cost-effective blob storage**
+- **Configuration Consistency**: **Type-safe Bicep definitions** ensuring deployment reliability
+- **API Governance**: Structured API metadata management through **API Center**
+
+> 💡 **Key Insight**: The tiered data architecture (hot/cold storage) **optimizes cost while meeting compliance requirements** for data retention.
 
 ---
 
@@ -266,13 +270,15 @@ flowchart TB
 
 ### 3.1 Data Architecture Principles
 
-| Principle ID | Principle Name           | Statement                                                                               | Rationale                                                                           | Implications                                                                  |
-| ------------ | ------------------------ | --------------------------------------------------------------------------------------- | ----------------------------------------------------------------------------------- | ----------------------------------------------------------------------------- |
-| **DP-001**   | Centralized Telemetry    | All operational data must flow to a single Log Analytics workspace                      | Enables unified querying, alerting, and cross-resource correlation                  | Requires standardized diagnostic settings across all resources                |
-| **DP-002**   | Type-Safe Configuration  | All infrastructure configuration must be defined using strongly-typed Bicep definitions | Prevents deployment errors, ensures consistency, enables compile-time validation    | Requires maintenance of type definition files and parameter validation        |
-| **DP-003**   | Tiered Data Retention    | Data retention must be tiered: hot (workspace), cold (storage)                          | Optimizes cost while meeting compliance requirements for data retention             | Requires dual-destination diagnostic settings and retention policy management |
-| **DP-004**   | Data Governance by Tags  | All resources must carry governance metadata via standardized tags                      | Enables cost allocation, compliance tracking, and resource ownership identification | Requires tag enforcement in templates and validation in CI/CD                 |
-| **DP-005**   | Self-Documenting Schemas | Configuration schemas must include descriptions and metadata                            | Reduces documentation burden, enables auto-generated documentation                  | Requires comprehensive @description decorators in Bicep types                 |
+> ⚠️ **Compliance Requirement**: These principles are **mandatory** for data governance and operational consistency.
+
+| Principle ID | Principle Name               | Statement                                                                                   | Rationale                                                                           | Implications                                                                  |
+| ------------ | ---------------------------- | ------------------------------------------------------------------------------------------- | ----------------------------------------------------------------------------------- | ----------------------------------------------------------------------------- |
+| **DP-001**   | **Centralized Telemetry**    | All operational data **must flow to a single Log Analytics workspace**                      | Enables unified querying, alerting, and cross-resource correlation                  | Requires standardized diagnostic settings across all resources                |
+| **DP-002**   | **Type-Safe Configuration**  | All infrastructure configuration **must be defined using strongly-typed Bicep definitions** | Prevents deployment errors, ensures consistency, enables compile-time validation    | Requires maintenance of type definition files and parameter validation        |
+| **DP-003**   | **Tiered Data Retention**    | Data retention **must be tiered**: hot (workspace), cold (storage)                          | Optimizes cost while meeting compliance requirements for data retention             | Requires dual-destination diagnostic settings and retention policy management |
+| **DP-004**   | **Data Governance by Tags**  | All resources **must carry governance metadata** via standardized tags                      | Enables cost allocation, compliance tracking, and resource ownership identification | Requires tag enforcement in templates and validation in CI/CD                 |
+| **DP-005**   | **Self-Documenting Schemas** | Configuration schemas **must include descriptions and metadata**                            | Reduces documentation burden, enables auto-generated documentation                  | Requires comprehensive @description decorators in Bicep types                 |
 
 ### 3.2 Principle Alignment Matrix
 
@@ -474,11 +480,13 @@ flowchart LR
 
 ### 7.3 Data Retention Standards
 
+> ⚠️ **Compliance Critical**: Retention periods **must align with regulatory requirements** (GDPR, HIPAA, SOC 2). Configure appropriately before production deployment.
+
 | Data Store               | Default Retention | Maximum Retention | Compliance Use Case     |
 | ------------------------ | ----------------- | ----------------- | ----------------------- |
-| **Log Analytics**        | 30 days           | 730 days          | Operational analytics   |
-| **Application Insights** | 90 days           | 730 days          | APM and diagnostics     |
-| **Storage Account**      | Unlimited         | Unlimited         | Compliance archival     |
+| **Log Analytics**        | **30 days**       | **730 days**      | Operational analytics   |
+| **Application Insights** | **90 days**       | **730 days**      | APM and diagnostics     |
+| **Storage Account**      | Unlimited         | Unlimited         | **Compliance archival** |
 | **API Center**           | Persistent        | N/A               | API metadata governance |
 
 ### 7.4 Type Definition Standards
@@ -492,13 +500,15 @@ flowchart LR
 
 ### 7.5 Diagnostic Settings Standard
 
-| Property                  | Standard Value | Rationale                  |
-| ------------------------- | -------------- | -------------------------- |
-| **Name Suffix**           | `-diag`        | Consistent identification  |
-| **Log Category**          | `allLogs`      | Comprehensive log capture  |
-| **Metric Category**       | `allMetrics`   | Complete metric collection |
-| **Workspace Destination** | Required       | Real-time analytics        |
-| **Storage Destination**   | Required       | Long-term retention        |
+> 📌 **Implementation Pattern**: These settings ensure **comprehensive telemetry capture** without gaps in observability.
+
+| Property                  | Standard Value | Rationale                      |
+| ------------------------- | -------------- | ------------------------------ |
+| **Name Suffix**           | `-diag`        | Consistent identification      |
+| **Log Category**          | `allLogs`      | **Comprehensive log capture**  |
+| **Metric Category**       | `allMetrics`   | **Complete metric collection** |
+| **Workspace Destination** | **Required**   | Real-time analytics            |
+| **Storage Destination**   | **Required**   | Long-term retention            |
 
 ### 7.6 Configuration Data Standards
 
@@ -621,14 +631,16 @@ flowchart TB
 
 ### 8.6 Data Prerequisites
 
-| Category          | Requirement                                       | Purpose                          |
-| ----------------- | ------------------------------------------------- | -------------------------------- |
-| **Subscription**  | Microsoft.OperationalInsights provider registered | Log Analytics deployment         |
-| **Subscription**  | Microsoft.Insights provider registered            | Application Insights deployment  |
-| **Subscription**  | Microsoft.Storage provider registered             | Storage Account deployment       |
-| **Quotas**        | Log Analytics workspace quota in target region    | Ensure workspace creation        |
-| **Configuration** | settings.yaml properly structured                 | Configuration data validation    |
-| **Types**         | common-types.bicep accessible                     | Type checking during compilation |
+> ⚠️ **Deployment Blockers**: Missing prerequisites **will cause data infrastructure deployment failure**.
+
+| Category          | Requirement                                           | Purpose                          |
+| ----------------- | ----------------------------------------------------- | -------------------------------- |
+| **Subscription**  | **Microsoft.OperationalInsights provider registered** | Log Analytics deployment         |
+| **Subscription**  | **Microsoft.Insights provider registered**            | Application Insights deployment  |
+| **Subscription**  | **Microsoft.Storage provider registered**             | Storage Account deployment       |
+| **Quotas**        | Log Analytics workspace quota in target region        | Ensure workspace creation        |
+| **Configuration** | **settings.yaml properly structured**                 | Configuration data validation    |
+| **Types**         | **common-types.bicep accessible**                     | Type checking during compilation |
 
 ---
 

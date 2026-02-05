@@ -30,6 +30,8 @@
 
 This Application Architecture Document defines the application-level architecture for the **APIM Accelerator**, a **production-ready Infrastructure as Code (IaC) solution** for deploying Azure API Management Landing Zones with **enterprise-grade monitoring**, **multi-team workspaces**, and **API governance** capabilities.
 
+> 📌 **Target Audience**: Platform engineers, cloud architects, and DevOps teams responsible for API infrastructure.
+
 ### 1.2 Scope
 
 This document covers the Application layer components of the APIM Accelerator, including:
@@ -43,12 +45,14 @@ This document covers the Application layer components of the APIM Accelerator, i
 
 | Metric                  | Value                                                  |
 | ----------------------- | ------------------------------------------------------ |
-| **Total Components**    | 12                                                     |
+| **Total Components**    | **12**                                                 |
 | **Core Services**       | 4 (APIM, Portal, Workspaces, Orchestrator)             |
 | **Shared Services**     | 5 (Monitoring, Insights, Operations, Types, Constants) |
 | **Governance Services** | 1 (API Center/Inventory)                               |
 | **Deployment Modules**  | 2 (Landing Zone, Shared Infrastructure)                |
 | **Source Traceability** | **100%** (all components mapped to source files)       |
+
+> 💡 **Quality Indicator**: 100% source traceability ensures every architectural component can be verified against the codebase.
 
 ### 1.4 Architecture Maturity Assessment
 
@@ -76,6 +80,8 @@ This document covers the Application layer components of the APIM Accelerator, i
 | 🔴 High   | **Enable VNet integration** for production deployments | Security   | Medium |
 | 🟠 Medium | **Implement API versioning strategy** in API Center    | Governance | Low    |
 | 🟡 Low    | Add multi-region deployment support                    | Resilience | High   |
+
+> ⚠️ **Production Readiness**: The 🔴 High priority recommendation for **VNet integration MUST be addressed** before deploying to production environments with sensitive data.
 
 ---
 
@@ -203,7 +209,7 @@ sequenceDiagram
 
 The APIM Accelerator adheres to the following architecture principles aligned with **TOGAF 10** and **Azure Well-Architected Framework**:
 
-> 💡 **Key Pattern**: All principles use **SHALL** language indicating mandatory compliance requirements.
+> ⚠️ **Compliance Requirement**: All principles use **SHALL** language indicating **mandatory compliance requirements**. Non-compliance may result in deployment failures or security vulnerabilities.
 
 | ID         | Principle                    | Statement                                                               | Rationale                                                    | Implications                                              |
 | ---------- | ---------------------------- | ----------------------------------------------------------------------- | ------------------------------------------------------------ | --------------------------------------------------------- |
@@ -453,7 +459,7 @@ inventory:
 
 ### 7.3 Security Standards
 
-> ⚠️ **Security Requirement**: All standards in this section are **mandatory** for production deployments.
+> ⚠️ **Critical**: All standards in this section are **MANDATORY** for production deployments. Violations will result in security vulnerabilities.
 
 | Standard ID | Category           | Requirement                  | Implementation                |
 | ----------- | ------------------ | ---------------------------- | ----------------------------- |
@@ -462,6 +468,8 @@ inventory:
 | **SEC-003** | **Network**        | VNet option available        | External/Internal VNet types  |
 | **SEC-004** | **RBAC**           | **Least privilege roles**    | Reader role for APIM identity |
 | **SEC-005** | **Authentication** | **Azure AD for portal**      | AAD Identity Provider config  |
+
+> 📌 **SEC-001 & SEC-002**: These requirements **eliminate credential management overhead** and prevent secret exposure in version control.
 
 ### 7.4 Operational Standards
 
@@ -600,7 +608,7 @@ flowchart LR
 
 ### 8.5 Deployment Order Dependencies
 
-> ⚠️ **Critical Requirement**: The following deployment order **MUST** be followed for successful provisioning. Violating this order will result in deployment failures due to unresolved resource dependencies.
+> ⚠️ **Critical Requirement**: The following deployment order **MUST** be followed for successful provisioning. Violating this order **will result in deployment failures** due to unresolved resource dependencies.
 
 ```
 1. Resource Group
@@ -619,7 +627,7 @@ flowchart LR
 
 ### 8.6 Cross-Layer Dependencies
 
-> 💡 **Integration Points**: These dependencies define the **contract** between architecture layers. Changes to outputs require coordination across dependent modules.
+> � **Integration Contract**: These dependencies define the **contract between architecture layers**. Changes to outputs require coordination across dependent modules.
 
 | Source Layer  | Target Layer | Dependency             | Impact                            |
 | ------------- | ------------ | ---------------------- | --------------------------------- |
@@ -631,7 +639,7 @@ flowchart LR
 
 ### 8.7 Dependency Risks
 
-> 💡 **Risk Management**: Ensure mitigation strategies are implemented before production deployment.
+> ⚠️ **Risk Management**: Ensure mitigation strategies are implemented **before production deployment**.
 
 | Risk                                          | Severity | Mitigation                       |
 | --------------------------------------------- | -------- | -------------------------------- |

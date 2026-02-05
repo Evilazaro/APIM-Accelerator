@@ -28,7 +28,9 @@
 
 ### 1.1 Purpose
 
-This Business Architecture Document defines the business capabilities, functions, and organizational structures that the APIM Landing Zone Accelerator enables. It provides a comprehensive view of how the accelerator supports enterprise API-first strategies through centralized governance, multi-team collaboration, and production-ready infrastructure patterns.
+This Business Architecture Document defines the **business capabilities**, **functions**, and **organizational structures** that the APIM Landing Zone Accelerator enables. It provides a comprehensive view of how the accelerator supports enterprise API-first strategies through centralized governance, multi-team collaboration, and production-ready infrastructure patterns.
+
+> 📌 **Business Value**: This document bridges technical implementation with business outcomes, ensuring stakeholder alignment.
 
 ### 1.2 Scope
 
@@ -86,10 +88,12 @@ flowchart LR
 
 The APIM Accelerator directly supports organizations requiring:
 
-- **Scalable API Foundation**: Enterprise-grade API gateway with Premium tier capabilities
-- **Distributed Team Autonomy**: Workspace-based isolation with centralized governance
+- **Scalable API Foundation**: Enterprise-grade API gateway with **Premium tier capabilities**
+- **Distributed Team Autonomy**: Workspace-based isolation with **centralized governance**
 - **Production Readiness**: Pre-configured monitoring, security, and compliance controls
-- **Operational Efficiency**: Infrastructure as Code with Azure Developer CLI integration
+- **Operational Efficiency**: Infrastructure as Code with **Azure Developer CLI integration**
+
+> 💡 **Key Decision**: Organizations should evaluate whether **Premium tier** is required based on VNet integration, multi-region, and capacity needs.
 
 ---
 
@@ -258,13 +262,15 @@ flowchart TB
 
 ### 3.1 Business Architecture Principles
 
-| Principle ID | Principle Name                                | Statement                                                                                     | Rationale                                                                                  | Implications                                                                      |
-| ------------ | --------------------------------------------- | --------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------ | --------------------------------------------------------------------------------- |
-| **BP-001**   | API-First Strategy                            | All integration capabilities must be exposed through managed APIs                             | Enables consistent governance, security, and discoverability across all integration points | Requires API design reviews, mandatory API registration, and lifecycle management |
-| **BP-002**   | Centralized Governance, Distributed Execution | API governance policies are centrally defined but execution is distributed to team workspaces | Balances enterprise control with team agility and autonomy                                 | Requires clear policy inheritance and exception management processes              |
-| **BP-003**   | Cost-Effective Multi-Tenancy                  | Multiple teams share platform infrastructure with logical isolation                           | Optimizes cost while maintaining appropriate team boundaries                               | Workspace design must ensure isolation without infrastructure duplication         |
-| **BP-004**   | Infrastructure as Code                        | All platform infrastructure defined in version-controlled Bicep templates                     | Ensures reproducibility, auditability, and consistent deployments                          | Requires IaC expertise and proper change management processes                     |
-| **BP-005**   | Observability by Default                      | All components emit telemetry to centralized monitoring infrastructure                        | Enables proactive issue detection, compliance auditing, and capacity planning              | Requires standardized diagnostic settings across all resources                    |
+> ⚠️ **Governance Requirement**: These principles define **mandatory organizational commitments** that influence technology and process decisions.
+
+| Principle ID | Principle Name                                    | Statement                                                                                         | Rationale                                                                                  | Implications                                                                      |
+| ------------ | ------------------------------------------------- | ------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------ | --------------------------------------------------------------------------------- |
+| **BP-001**   | **API-First Strategy**                            | All integration capabilities **must be exposed through managed APIs**                             | Enables consistent governance, security, and discoverability across all integration points | Requires API design reviews, mandatory API registration, and lifecycle management |
+| **BP-002**   | **Centralized Governance, Distributed Execution** | API governance policies are **centrally defined but execution is distributed** to team workspaces | Balances enterprise control with team agility and autonomy                                 | Requires clear policy inheritance and exception management processes              |
+| **BP-003**   | **Cost-Effective Multi-Tenancy**                  | Multiple teams **share platform infrastructure with logical isolation**                           | Optimizes cost while maintaining appropriate team boundaries                               | Workspace design must ensure isolation without infrastructure duplication         |
+| **BP-004**   | **Infrastructure as Code**                        | All platform infrastructure **defined in version-controlled Bicep templates**                     | Ensures reproducibility, auditability, and consistent deployments                          | Requires IaC expertise and proper change management processes                     |
+| **BP-005**   | **Observability by Default**                      | All components **emit telemetry to centralized monitoring** infrastructure                        | Enables proactive issue detection, compliance auditing, and capacity planning              | Requires standardized diagnostic settings across all resources                    |
 
 ### 3.2 Principle Alignment Matrix
 
@@ -474,25 +480,29 @@ flowchart LR
 
 ### 7.3 Tagging Standards
 
-| Tag Name               | Required | Purpose                  | Example Value                    |
-| ---------------------- | -------- | ------------------------ | -------------------------------- |
-| `CostCenter`           | ✅ Yes   | Cost allocation          | CC-1234                          |
-| `BusinessUnit`         | ✅ Yes   | Organizational ownership | IT                               |
-| `Owner`                | ✅ Yes   | Primary contact          | `email@domain.com`               |
-| `ApplicationName`      | ✅ Yes   | Workload identification  | APIM Platform                    |
-| `ServiceClass`         | ✅ Yes   | Priority classification  | Critical, Standard, Experimental |
-| `RegulatoryCompliance` | ✅ Yes   | Compliance requirements  | GDPR, HIPAA, PCI, None           |
-| `environment`          | ✅ Yes   | Deployment stage         | dev, test, staging, prod, uat    |
-| `managedBy`            | ✅ Yes   | Provisioning method      | bicep                            |
+> ⚠️ **Governance Enforcement**: All required tags **MUST be present** on every deployed resource for cost tracking and compliance.
+
+| Tag Name               | Required   | Purpose                  | Example Value                    |
+| ---------------------- | ---------- | ------------------------ | -------------------------------- |
+| `CostCenter`           | **✅ Yes** | Cost allocation          | CC-1234                          |
+| `BusinessUnit`         | **✅ Yes** | Organizational ownership | IT                               |
+| `Owner`                | **✅ Yes** | Primary contact          | `email@domain.com`               |
+| `ApplicationName`      | **✅ Yes** | Workload identification  | APIM Platform                    |
+| `ServiceClass`         | **✅ Yes** | Priority classification  | Critical, Standard, Experimental |
+| `RegulatoryCompliance` | **✅ Yes** | Compliance requirements  | GDPR, HIPAA, PCI, None           |
+| `environment`          | **✅ Yes** | Deployment stage         | dev, test, staging, prod, uat    |
+| `managedBy`            | **✅ Yes** | Provisioning method      | bicep                            |
 
 ### 7.4 Environment Standards
+
+> 💡 **Cost Optimization**: Use appropriate SKU per environment to **avoid unnecessary Premium tier costs** in non-production.
 
 | Environment | SKU Recommendation | Capacity | Use Case                  |
 | ----------- | ------------------ | -------- | ------------------------- |
 | **dev**     | Developer          | 1        | Development and testing   |
 | **test**    | Standard           | 1        | Integration testing       |
 | **staging** | Premium            | 1        | Pre-production validation |
-| **prod**    | Premium            | 1-10     | Production workloads      |
+| **prod**    | **Premium**        | **1-10** | **Production workloads**  |
 | **uat**     | Standard           | 1        | User acceptance testing   |
 
 ### 7.5 Compliance Standards
@@ -624,13 +634,15 @@ flowchart TB
 
 ### 8.6 Prerequisite Requirements
 
-| Category         | Requirement                                         | Documentation                                                                                                         |
-| ---------------- | --------------------------------------------------- | --------------------------------------------------------------------------------------------------------------------- |
-| **Subscription** | Azure subscription with Contributor or Owner role   | [Azure RBAC](https://learn.microsoft.com/azure/role-based-access-control/)                                            |
-| **CLI Tools**    | Azure CLI 2.50+, Azure Developer CLI 1.5+           | [Install Azure CLI](https://learn.microsoft.com/cli/azure/install-azure-cli)                                          |
-| **Quotas**       | API Management Premium SKU quota in target region   | [Azure Quotas](https://learn.microsoft.com/azure/azure-resource-manager/management/azure-subscription-service-limits) |
-| **Permissions**  | `Microsoft.ApiManagement/deletedservices/delete`    | Required for pre-provision hook                                                                                       |
-| **Region**       | Azure region supporting API Management Premium tier | [Products by Region](https://azure.microsoft.com/explore/global-infrastructure/products-by-region/)                   |
+> ⚠️ **Deployment Blockers**: Missing prerequisites **will cause deployment failure**. Verify all requirements before running `azd up`.
+
+| Category         | Requirement                                             | Documentation                                                                                                         |
+| ---------------- | ------------------------------------------------------- | --------------------------------------------------------------------------------------------------------------------- |
+| **Subscription** | Azure subscription with **Contributor or Owner role**   | [Azure RBAC](https://learn.microsoft.com/azure/role-based-access-control/)                                            |
+| **CLI Tools**    | **Azure CLI 2.50+**, **Azure Developer CLI 1.5+**       | [Install Azure CLI](https://learn.microsoft.com/cli/azure/install-azure-cli)                                          |
+| **Quotas**       | API Management **Premium SKU quota** in target region   | [Azure Quotas](https://learn.microsoft.com/azure/azure-resource-manager/management/azure-subscription-service-limits) |
+| **Permissions**  | `Microsoft.ApiManagement/deletedservices/delete`        | Required for pre-provision hook                                                                                       |
+| **Region**       | Azure region supporting **API Management Premium tier** | [Products by Region](https://azure.microsoft.com/explore/global-infrastructure/products-by-region/)                   |
 
 ---
 

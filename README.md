@@ -139,9 +139,9 @@ These features work together to deliver a production-ready API platform that bal
 
 **Overview**
 
-Deploying the APIM Accelerator requires specific Azure permissions, CLI tooling, and subscription configurations to ensure successful provisioning. The requirements are designed to be minimal while providing the flexibility needed for enterprise deployments. Understanding these prerequisites before deployment prevents common issues related to permissions, quotas, and regional availability.
+Deploying the APIM Accelerator requires specific Azure permissions, CLI tooling, and subscription configurations to ensure successful provisioning. The requirements are designed to be minimal while providing the flexibility needed for enterprise deployments. **Understanding these prerequisites before deployment prevents common issues** related to permissions, quotas, and regional availability.
 
-The accelerator uses Azure Developer CLI as the primary deployment mechanism, which orchestrates Bicep template deployment and manages environment configuration. This approach provides a consistent experience across local development and CI/CD pipelines while abstracting the complexity of Azure Resource Manager deployments.
+The accelerator uses **Azure Developer CLI as the primary deployment mechanism**, which orchestrates Bicep template deployment and manages environment configuration. This approach provides a consistent experience across local development and CI/CD pipelines while abstracting the complexity of Azure Resource Manager deployments.
 
 | Category         | Requirement                                                               | More Information                                                                                                      |
 | ---------------- | ------------------------------------------------------------------------- | --------------------------------------------------------------------------------------------------------------------- |
@@ -151,7 +151,7 @@ The accelerator uses Azure Developer CLI as the primary deployment mechanism, wh
 | **Permissions**  | `Microsoft.ApiManagement/deletedservices/delete` (for pre-provision hook) | Required for soft-delete cleanup                                                                                      |
 | **Region**       | Azure region supporting **API Management Premium tier**                   | [Azure Products by Region](https://azure.microsoft.com/explore/global-infrastructure/products-by-region/)             |
 
-> ⚠️ **Important**: API Management Premium tier deployment can take **30-45 minutes**. Plan accordingly for initial provisioning and ensure your subscription has sufficient quota.
+> ⚠️ **Important**: API Management Premium tier deployment can take **30-45 minutes**. Plan accordingly for initial provisioning and **ensure your subscription has sufficient quota**.
 
 ## 🚀 Quick Start
 
@@ -237,6 +237,8 @@ az resource list --resource-group apim-accelerator-<env>-<location>-rg --output 
 
 ### Deployment Sequence
 
+> 💡 **Tip**: Understanding this sequence helps troubleshoot deployment issues and identify dependency failures.
+
 The provisioning follows this sequence:
 
 1. **Pre-provision hook**: Purges soft-deleted APIM resources in target region
@@ -293,7 +295,7 @@ az apic api list --service-name <apicenter-name> --resource-group <rg-name>
 
 The APIM Accelerator centralizes configuration in `infra/settings.yaml`, providing a **single source of truth** for all deployment parameters. This approach separates configuration from infrastructure code, enabling **environment-specific customization** without modifying Bicep templates. The configuration structure mirrors the deployment layers, with sections for shared infrastructure, core platform, and inventory management.
 
-Configuration values support both **explicit naming** (for compliance requirements) and **auto-generation** (for development agility). Empty name fields trigger automatic name generation using a deterministic suffix based on subscription and resource group identifiers, ensuring unique but reproducible resource names across deployments.
+> 📌 **Key Pattern**: Configuration values support both **explicit naming** (for compliance requirements) and **auto-generation** (for development agility). Empty name fields trigger automatic name generation using a deterministic suffix, ensuring unique but reproducible resource names across deployments.
 
 ### Configuration File Structure
 
@@ -343,6 +345,8 @@ inventory:
 | SKU Capacity    | `core.apiManagement.sku.capacity`   | **Scale units (1-10 for Premium)** | `1`                |
 | Identity Type   | `*.identity.type`                   | Managed identity configuration     | `SystemAssigned`   |
 
+> ⚠️ **Required**: The `publisherEmail` parameter **MUST be configured** before deployment—Azure APIM will fail to provision without it.
+
 ### Environment Variables
 
 Set environment-specific values using azd:
@@ -361,7 +365,7 @@ azd env set AZURE_ENV_NAME dev
 
 Contributions to the APIM Accelerator are welcome and help improve the solution for the broader community. Whether you're fixing bugs, adding features, or improving documentation, your input is valuable. The contribution process follows **standard GitHub workflows** with pull requests reviewed by maintainers before merging.
 
-> 📌 **Recommendation**: Open an issue before starting significant work to discuss the approach and ensure alignment with project goals. This helps avoid duplicate efforts and ensures your contribution can be integrated smoothly.
+> � **Tip**: Open an issue before starting significant work to discuss the approach and ensure alignment with project goals. This helps avoid duplicate efforts and ensures your contribution can be integrated smoothly.
 
 ### How to Contribute
 
