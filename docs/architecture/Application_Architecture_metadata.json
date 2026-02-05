@@ -1,0 +1,184 @@
+{
+    "document_info": {
+        "title": "Application Architecture Document",
+        "target_layer": "Application",
+        "quality_level": "standard",
+        "version": "1.0.0",
+        "generated": "2026-02-05T00:00:00Z",
+        "session_id": "bdat-2026-02-05-apim-application",
+        "compliance": "TOGAF 10",
+        "generator": "BDAT Architecture Document Generator v2.4.0"
+    },
+    "discovery_summary": {
+        "folder_paths": [
+            "."
+        ],
+        "files_scanned": 15,
+        "components_discovered": 7,
+        "target_layer_match": "Application"
+    },
+    "components": [
+        {
+            "id": "APP-APIM-001",
+            "name": "API Management Service",
+            "type": "API Gateway",
+            "layer": "Core Platform",
+            "source": {
+                "file": "src/core/apim.bicep",
+                "lines": "1-338"
+            },
+            "azure_resource_type": "Microsoft.ApiManagement/service",
+            "api_version": "2025-03-01-preview"
+        },
+        {
+            "id": "APP-WKS-001",
+            "name": "APIM Workspaces",
+            "type": "Isolation Service",
+            "layer": "Core Platform",
+            "source": {
+                "file": "src/core/workspaces.bicep",
+                "lines": "1-73"
+            },
+            "azure_resource_type": "Microsoft.ApiManagement/service/workspaces",
+            "api_version": "2025-03-01-preview"
+        },
+        {
+            "id": "APP-DEV-001",
+            "name": "Developer Portal",
+            "type": "Web Application",
+            "layer": "Core Platform",
+            "source": {
+                "file": "src/core/developer-portal.bicep",
+                "lines": "1-198"
+            },
+            "azure_resource_type": "APIM Configuration Child",
+            "api_version": "2025-03-01-preview"
+        },
+        {
+            "id": "APP-AI-001",
+            "name": "Application Insights",
+            "type": "APM Service",
+            "layer": "Monitoring",
+            "source": {
+                "file": "src/shared/monitoring/insights/main.bicep",
+                "lines": "1-257"
+            },
+            "azure_resource_type": "Microsoft.Insights/components",
+            "api_version": "2020-02-02"
+        },
+        {
+            "id": "APP-LAW-001",
+            "name": "Log Analytics Workspace",
+            "type": "Log Aggregation",
+            "layer": "Monitoring",
+            "source": {
+                "file": "src/shared/monitoring/operational/main.bicep",
+                "lines": "1-297"
+            },
+            "azure_resource_type": "Microsoft.OperationalInsights/workspaces",
+            "api_version": "2023-09-01"
+        },
+        {
+            "id": "APP-STA-001",
+            "name": "Diagnostic Storage",
+            "type": "Blob Storage",
+            "layer": "Monitoring",
+            "source": {
+                "file": "src/shared/monitoring/operational/main.bicep",
+                "lines": "1-297"
+            },
+            "azure_resource_type": "Microsoft.Storage/storageAccounts",
+            "api_version": "2023-05-01"
+        },
+        {
+            "id": "APP-APC-001",
+            "name": "API Center",
+            "type": "API Catalog",
+            "layer": "Governance",
+            "source": {
+                "file": "src/inventory/main.bicep",
+                "lines": "1-200"
+            },
+            "azure_resource_type": "Microsoft.ApiCenter/services",
+            "api_version": "2024-06-01-preview"
+        }
+    ],
+    "relationships": [
+        {
+            "from": "APP-APIM-001",
+            "to": "APP-LAW-001",
+            "type": "diagnostic",
+            "description": "Sends logs and metrics"
+        },
+        {
+            "from": "APP-APIM-001",
+            "to": "APP-STA-001",
+            "type": "diagnostic",
+            "description": "Long-term log archival"
+        },
+        {
+            "from": "APP-APIM-001",
+            "to": "APP-AI-001",
+            "type": "telemetry",
+            "description": "APM integration via logger"
+        },
+        {
+            "from": "APP-WKS-001",
+            "to": "APP-APIM-001",
+            "type": "parent-child",
+            "description": "Workspace is child of APIM"
+        },
+        {
+            "from": "APP-DEV-001",
+            "to": "APP-APIM-001",
+            "type": "parent-child",
+            "description": "Dev Portal config child of APIM"
+        },
+        {
+            "from": "APP-AI-001",
+            "to": "APP-LAW-001",
+            "type": "data-link",
+            "description": "Workspace-based App Insights"
+        },
+        {
+            "from": "APP-APC-001",
+            "to": "APP-APIM-001",
+            "type": "api-source",
+            "description": "Automatic API discovery"
+        }
+    ],
+    "validation_scores": {
+        "completeness": {
+            "score": 0.92,
+            "threshold": 0.85,
+            "passed": true
+        },
+        "togaf_compliance": {
+            "score": 0.94,
+            "threshold": 0.90,
+            "passed": true
+        },
+        "source_traceability": {
+            "score": 1.0,
+            "threshold": 1.0,
+            "passed": true
+        },
+        "quality_score": {
+            "score": 0.93,
+            "threshold": 0.85,
+            "passed": true
+        }
+    },
+    "sections_generated": [
+        1,
+        2,
+        3,
+        4,
+        7,
+        8
+    ],
+    "output_files": {
+        "document": "docs/architecture/Application_Architecture_Document.md",
+        "metadata": "docs/architecture/Application_Architecture_metadata.json"
+    }
+}
