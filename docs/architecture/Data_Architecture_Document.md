@@ -453,20 +453,23 @@ Based on [infra/settings.yaml](../../infra/settings.yaml):
 
 ```mermaid
 %%{init: {"flowchart": {"htmlLabels": false}} }%%
+%% ============================================
+%% COLOR SCHEME: Semantic data configuration #BBDEFB
+%% ============================================
 flowchart LR
     subgraph config["📊 Log Analytics Standard"]
         direction LR
-        C1["SKU<br/>PerGB2018"]
-        C2["Identity<br/>SystemAssigned"]
-        C3["Self-Monitoring<br/>Enabled"]
-        C4["Dual Destination<br/>Workspace + Storage"]
+        C1["💵 SKU<br/>PerGB2018"]
+        C2["🔐 Identity<br/>SystemAssigned"]
+        C3["📊 Self-Monitoring<br/>Enabled"]
+        C4["🗄️ Dual Destination<br/>Workspace + Storage"]
 
         C1 --> C2
         C2 --> C3
         C3 --> C4
     end
 
-    style config fill:#E3F2FD,stroke:#1976D2,stroke-width:2px
+    style config fill:#BBDEFB,stroke:#1976D2,stroke-width:2px
 ```
 
 ### 7.3 Data Retention Standards
@@ -514,25 +517,28 @@ flowchart LR
 
 ```mermaid
 %%{init: {"flowchart": {"htmlLabels": false}} }%%
+%% ============================================
+%% COLOR SCHEME: Semantic (platform=green, sources=blue, config=purple)
+%% ============================================
 flowchart TB
-    subgraph data_platform["Data Platform"]
+    subgraph data_platform["💾 Data Platform"]
         direction TB
-        LAW["Log Analytics<br/>Workspace"]
-        AI["Application<br/>Insights"]
-        SA["Storage<br/>Account"]
+        LAW["📈 Log Analytics<br/>Workspace"]
+        AI["🔍 Application<br/>Insights"]
+        SA["🗄️ Storage<br/>Account"]
     end
 
-    subgraph data_sources["Data Sources"]
+    subgraph data_sources["🌐 Data Sources"]
         direction TB
-        APIM["API Management<br/>Diagnostics"]
-        PORTAL["Developer Portal<br/>Telemetry"]
-        CENTER["API Center<br/>Logs"]
+        APIM["🌐 API Management<br/>Diagnostics"]
+        PORTAL["🖥️ Developer Portal<br/>Telemetry"]
+        CENTER["📚 API Center<br/>Logs"]
     end
 
-    subgraph config_sources["Configuration Sources"]
+    subgraph config_sources["⚙️ Configuration Sources"]
         direction TB
-        YAML["settings.yaml"]
-        TYPES["common-types.bicep"]
+        YAML["📝 settings.yaml"]
+        TYPES["📋 common-types.bicep"]
     end
 
     APIM --> LAW
@@ -545,9 +551,9 @@ flowchart TB
     TYPES --> APIM
     TYPES --> CENTER
 
-    style data_platform fill:#E8F5E9,stroke:#388E3C,stroke-width:2px
-    style data_sources fill:#E3F2FD,stroke:#1976D2,stroke-width:2px
-    style config_sources fill:#F3E5F5,stroke:#7B1FA2,stroke-width:2px
+    style data_platform fill:#C8E6C9,stroke:#388E3C,stroke-width:2px
+    style data_sources fill:#BBDEFB,stroke:#1976D2,stroke-width:2px
+    style config_sources fill:#E1BEE7,stroke:#7B1FA2,stroke-width:2px
 ```
 
 ### 8.2 Data Dependency Matrix
@@ -567,16 +573,19 @@ flowchart TB
 
 ```mermaid
 %%{init: {"flowchart": {"htmlLabels": false}} }%%
+%% ============================================
+%% COLOR SCHEME: Standard main group #E8EAF6
+%% ============================================
 flowchart TB
     subgraph sequence["📦 Data Deployment Sequence"]
         direction TB
 
-        D1["1️⃣ Load Configuration<br/>settings.yaml + types"]
-        D2["2️⃣ Deploy Storage<br/>Archival destination"]
-        D3["3️⃣ Deploy Log Analytics<br/>Primary telemetry sink"]
-        D4["4️⃣ Configure Self-Monitoring<br/>Workspace diagnostics"]
-        D5["5️⃣ Deploy App Insights<br/>APM telemetry"]
-        D6["6️⃣ Enable Diagnostics<br/>Resource → Workspace"]
+        D1["1️⃣ 📝 Load Configuration<br/>settings.yaml + types"]
+        D2["2️⃣ 📦 Deploy Storage<br/>Archival destination"]
+        D3["3️⃣ 📈 Deploy Log Analytics<br/>Primary telemetry sink"]
+        D4["4️⃣ 📊 Configure Self-Monitoring<br/>Workspace diagnostics"]
+        D5["5️⃣ 🔍 Deploy App Insights<br/>APM telemetry"]
+        D6["6️⃣ ⚙️ Enable Diagnostics<br/>Resource → Workspace"]
 
         D1 --> D2
         D2 --> D3
