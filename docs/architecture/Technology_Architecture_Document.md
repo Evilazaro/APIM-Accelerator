@@ -414,7 +414,7 @@ flowchart LR
 
 The accelerator implements **deterministic naming** through utility functions in [src/shared/constants.bicep](../../src/shared/constants.bicep):
 
-```
+```text
 {solutionName}-{uniqueSuffix}-{resourceType}
 ```
 
@@ -623,7 +623,7 @@ flowchart TB
 
 > ⚠️ **Critical Requirement**: The following deployment order **MUST** be followed. Violating this order **will result in deployment failures**.
 
-```
+```text
 1. Resource Group Creation (subscription scope)
    └── 2. Shared Infrastructure (src/shared/main.bicep)
        ├── 2.1 Storage Account (log archival)
