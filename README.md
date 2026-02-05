@@ -5,15 +5,15 @@
 ![Azure](https://img.shields.io/badge/platform-Azure-0078D4)
 ![Status](https://img.shields.io/badge/status-Production%20Ready-green)
 
-Deploy a production-ready Azure API Management landing zone with integrated monitoring, governance, and multi-team support using Infrastructure as Code.
+Deploy a **production-ready Azure API Management landing zone** with integrated monitoring, governance, and multi-team support using Infrastructure as Code.
 
 **Overview**
 
-The APIM Accelerator provides a complete, enterprise-grade API Management platform on Azure. It solves the challenge of deploying and managing API infrastructure consistently across environments by providing pre-configured Bicep templates that follow Azure best practices and Well-Architected Framework principles.
+The APIM Accelerator provides a complete, **enterprise-grade API Management platform** on Azure. It solves the challenge of deploying and managing API infrastructure consistently across environments by providing pre-configured Bicep templates that follow **Azure best practices and Well-Architected Framework principles**.
 
-This accelerator targets platform engineers, DevOps teams, and cloud architects who need to establish a standardized API gateway solution. It delivers immediate value through automated deployment of monitoring infrastructure, API governance capabilities via API Center integration, and workspace-based team isolation—all deployable with a single command.
+This accelerator targets platform engineers, DevOps teams, and cloud architects who need to establish a standardized API gateway solution. It delivers immediate value through automated deployment of monitoring infrastructure, API governance capabilities via API Center integration, and **workspace-based team isolation**—all deployable with a **single command**.
 
-The solution differentiates itself by providing a holistic landing zone approach rather than individual resource deployments. It handles the complex orchestration between Log Analytics, Application Insights, API Management, and API Center, ensuring proper dependency management and secure configuration out of the box.
+The solution differentiates itself by providing a **holistic landing zone approach** rather than individual resource deployments. It handles the complex orchestration between Log Analytics, Application Insights, API Management, and API Center, ensuring proper dependency management and **secure configuration out of the box**.
 
 ## 📑 Table of Contents
 
@@ -31,11 +31,11 @@ The solution differentiates itself by providing a holistic landing zone approach
 
 **Overview**
 
-The APIM Accelerator implements a layered architecture pattern that separates concerns across three deployment tiers. This design enables independent scaling, simplified troubleshooting, and clear ownership boundaries between infrastructure and application teams.
+The APIM Accelerator implements a **layered architecture pattern** that separates concerns across **three deployment tiers**. This design enables independent scaling, simplified troubleshooting, and clear ownership boundaries between infrastructure and application teams.
 
-The architecture prioritizes observability by establishing monitoring infrastructure first, ensuring all subsequent components automatically integrate with Log Analytics and Application Insights. This approach guarantees comprehensive telemetry collection from the moment services are deployed.
+> 💡 **Tip**: The architecture prioritizes observability by establishing **monitoring infrastructure first**, ensuring all subsequent components automatically integrate with Log Analytics and Application Insights.
 
-The modular structure allows teams to customize individual layers without affecting others, supporting both greenfield deployments and integration with existing Azure environments.
+This approach guarantees comprehensive telemetry collection from the moment services are deployed. The modular structure allows teams to customize individual layers without affecting others, supporting both greenfield deployments and integration with existing Azure environments.
 
 ```mermaid
 %%{init: {"flowchart": {"htmlLabels": false}} }%%
@@ -97,11 +97,11 @@ flowchart TB
 
 ### Component Overview
 
-| Layer | Components | Purpose |
-|-------|------------|---------|
-| **Shared Infrastructure** | Log Analytics, Application Insights, Storage Account | Centralized monitoring and diagnostic log storage |
-| **Core Platform** | API Management, Developer Portal, Workspaces | API gateway, self-service portal, team isolation |
-| **API Inventory** | API Center, API Source Integration | API catalog, governance, and automatic discovery |
+| Layer                     | Components                                           | Purpose                                               |
+| ------------------------- | ---------------------------------------------------- | ----------------------------------------------------- |
+| **Shared Infrastructure** | Log Analytics, Application Insights, Storage Account | **Centralized monitoring** and diagnostic log storage |
+| **Core Platform**         | API Management, Developer Portal, Workspaces         | API gateway, self-service portal, **team isolation**  |
+| **API Inventory**         | API Center, API Source Integration                   | API catalog, **governance**, and automatic discovery  |
 
 ## ✨ Features
 
@@ -113,40 +113,40 @@ The feature set balances immediate deployment needs with long-term governance re
 
 Integration between features is automatic—deploying the accelerator establishes connections between monitoring, security, and governance components without manual configuration.
 
-| Feature | Description | Benefits |
-|---------|-------------|----------|
-| 🚀 **One-Command Deployment** | Deploy entire landing zone with `azd up` using Azure Developer CLI integration | Reduces deployment time from hours to minutes with consistent, repeatable infrastructure |
-| 📊 **Integrated Monitoring** | Pre-configured Log Analytics, Application Insights, and diagnostic settings | Immediate visibility into API performance, errors, and usage patterns |
-| 🏢 **Multi-Team Workspaces** | Logical API grouping with workspace-based isolation (Premium SKU) | Enables independent API lifecycle management per team without infrastructure overhead |
-| 📋 **API Governance** | Azure API Center integration for centralized API catalog and compliance | Automatic API discovery, documentation, and governance policy enforcement |
-| 🔐 **Managed Identity** | System-assigned and user-assigned identity support for secure Azure integration | Eliminates credential management and enables secure access to Key Vault and other services |
-| 🌐 **Developer Portal** | Self-service portal with Azure AD authentication for API consumers | Reduces onboarding friction and enables self-service API discovery and testing |
+| Feature                       | Description                                                                        | Benefits                                                                                       |
+| ----------------------------- | ---------------------------------------------------------------------------------- | ---------------------------------------------------------------------------------------------- |
+| 🚀 **One-Command Deployment** | Deploy entire landing zone with **`azd up`** using Azure Developer CLI integration | **Reduces deployment time from hours to minutes** with consistent, repeatable infrastructure   |
+| 📊 **Integrated Monitoring**  | Pre-configured Log Analytics, Application Insights, and diagnostic settings        | **Immediate visibility** into API performance, errors, and usage patterns                      |
+| 🏢 **Multi-Team Workspaces**  | Logical API grouping with workspace-based isolation **(Premium SKU required)**     | Enables independent API lifecycle management per team without infrastructure overhead          |
+| 📋 **API Governance**         | Azure API Center integration for centralized API catalog and compliance            | Automatic API discovery, documentation, and **governance policy enforcement**                  |
+| 🔐 **Managed Identity**       | System-assigned and user-assigned identity support for secure Azure integration    | **Eliminates credential management** and enables secure access to Key Vault and other services |
+| 🌐 **Developer Portal**       | Self-service portal with Azure AD authentication for API consumers                 | Reduces onboarding friction and enables **self-service API discovery and testing**             |
 
 ## 📋 Requirements
 
 **Overview**
 
-The APIM Accelerator requires specific Azure services and tooling to ensure successful deployment and operation. These requirements establish the foundation for a secure, scalable API platform that meets enterprise standards.
+The APIM Accelerator requires specific Azure services and tooling to ensure successful deployment and operation. These requirements establish the foundation for a **secure, scalable API platform** that meets enterprise standards.
 
-Understanding these prerequisites helps teams plan capacity, estimate costs, and prepare their Azure environment before deployment. The Premium SKU requirement specifically enables advanced features like workspaces and multi-region deployment.
+Understanding these prerequisites helps teams plan capacity, estimate costs, and prepare their Azure environment before deployment. The **Premium SKU requirement** specifically enables advanced features like workspaces and multi-region deployment.
 
-Alternative configurations are possible for development environments using Developer SKU, though production deployments should maintain Premium tier for SLA guarantees.
+> ⚠️ **Important**: Alternative configurations are possible for development environments using Developer SKU, though **production deployments should maintain Premium tier** for SLA guarantees.
 
-| Category | Requirements | More Information |
-|----------|--------------|------------------|
-| **Azure Subscription** | Active Azure subscription with Owner or Contributor role | [Azure Subscriptions](https://learn.microsoft.com/azure/cost-management-billing/manage/create-subscription) |
-| **Azure CLI** | Version 2.50.0 or higher | [Install Azure CLI](https://learn.microsoft.com/cli/azure/install-azure-cli) |
-| **Azure Developer CLI** | Version 1.0.0 or higher (azd) | [Install azd](https://learn.microsoft.com/azure/developer/azure-developer-cli/install-azd) |
-| **Bicep CLI** | Version 0.22.0 or higher (included with Azure CLI) | [Bicep Installation](https://learn.microsoft.com/azure/azure-resource-manager/bicep/install) |
-| **Permissions** | `Microsoft.ApiManagement/*`, `Microsoft.ApiCenter/*`, `Microsoft.OperationalInsights/*` | Required resource provider permissions |
+| Category                | Requirements                                                                            | More Information                                                                                            |
+| ----------------------- | --------------------------------------------------------------------------------------- | ----------------------------------------------------------------------------------------------------------- |
+| **Azure Subscription**  | Active Azure subscription with **Owner or Contributor role**                            | [Azure Subscriptions](https://learn.microsoft.com/azure/cost-management-billing/manage/create-subscription) |
+| **Azure CLI**           | **Version 2.50.0 or higher**                                                            | [Install Azure CLI](https://learn.microsoft.com/cli/azure/install-azure-cli)                                |
+| **Azure Developer CLI** | **Version 1.0.0 or higher** (azd)                                                       | [Install azd](https://learn.microsoft.com/azure/developer/azure-developer-cli/install-azd)                  |
+| **Bicep CLI**           | **Version 0.22.0 or higher** (included with Azure CLI)                                  | [Bicep Installation](https://learn.microsoft.com/azure/azure-resource-manager/bicep/install)                |
+| **Permissions**         | `Microsoft.ApiManagement/*`, `Microsoft.ApiCenter/*`, `Microsoft.OperationalInsights/*` | **Required resource provider permissions**                                                                  |
 
-> ⚠️ **Important**: The Premium SKU is required for workspace functionality. Developer SKU can be used for testing but lacks multi-team isolation features.
+> ⚠️ **Critical**: The **Premium SKU is required for workspace functionality**. Developer SKU can be used for testing but **lacks multi-team isolation features**.
 
 ## 🚀 Quick Start
 
 **Overview**
 
-The Quick Start provides the fastest path to a running APIM landing zone. These commands deploy the complete infrastructure stack using default settings optimized for development and evaluation scenarios.
+The Quick Start provides the **fastest path to a running APIM landing zone**. These commands deploy the complete infrastructure stack using default settings optimized for development and evaluation scenarios.
 
 ```bash
 # Clone the repository
@@ -160,15 +160,15 @@ azd auth login
 azd up
 ```
 
-> 💡 **Tip**: The `azd up` command handles both `azd provision` (infrastructure) and `azd deploy` (configuration) in a single operation.
+> 💡 **Tip**: The **`azd up` command handles both `azd provision` (infrastructure) and `azd deploy` (configuration)** in a single operation.
 
 ## 📦 Deployment
 
 **Overview**
 
-Deployment follows a three-phase approach: environment preparation, resource provisioning, and post-deployment validation. This structured process ensures consistent results across development, staging, and production environments.
+Deployment follows a **three-phase approach**: environment preparation, resource provisioning, and post-deployment validation. This structured process ensures consistent results across development, staging, and production environments.
 
-The Azure Developer CLI orchestrates the entire deployment, executing pre-provision hooks to clean up soft-deleted resources and applying environment-specific configurations from the settings file.
+> 📌 **Note**: The Azure Developer CLI orchestrates the entire deployment, executing **pre-provision hooks to clean up soft-deleted resources** and applying environment-specific configurations from the settings file.
 
 ### Step 1: Environment Setup
 
@@ -184,7 +184,7 @@ azd env set AZURE_LOCATION eastus
 
 ### Step 2: Configure Settings
 
-Modify `infra/settings.yaml` for your environment:
+Modify **`infra/settings.yaml`** for your environment:
 
 ```yaml
 solutionName: "apim-accelerator"
@@ -194,7 +194,7 @@ core:
     publisherEmail: "your-email@domain.com"
     publisherName: "Your Organization"
     sku:
-      name: "Premium"
+      name: "Premium" # Required for workspaces
       capacity: 1
 ```
 
@@ -218,6 +218,8 @@ Provisioning Azure resources...
 
 SUCCESS: Your Azure resources have been provisioned.
 ```
+
+> ⚠️ **Warning**: API Management provisioning **may take 30-45 minutes**. Do not interrupt the deployment process.
 
 ### Step 4: Validate Deployment
 
@@ -267,11 +269,11 @@ az apic api list \
 
 **Overview**
 
-The APIM Accelerator centralizes all configuration in `infra/settings.yaml`, providing a single source of truth for environment-specific settings. This design simplifies management across multiple deployment targets and enables GitOps workflows.
+The APIM Accelerator centralizes all configuration in **`infra/settings.yaml`**, providing a **single source of truth** for environment-specific settings. This design simplifies management across multiple deployment targets and enables GitOps workflows.
 
-Configuration follows a hierarchical structure with three main sections: shared infrastructure, core platform, and inventory services. Each section supports customization while maintaining sensible defaults for rapid deployment.
+Configuration follows a **hierarchical structure** with three main sections: shared infrastructure, core platform, and inventory services. Each section supports customization while maintaining sensible defaults for rapid deployment.
 
-The tagging strategy supports enterprise governance requirements including cost allocation, compliance tracking, and operational ownership.
+> 💡 **Tip**: The tagging strategy supports enterprise governance requirements including **cost allocation, compliance tracking, and operational ownership**.
 
 ### Configuration File Structure
 
@@ -288,7 +290,7 @@ shared:
       identity:
         type: "SystemAssigned"
     applicationInsights:
-      name: ""  # Auto-generated if empty
+      name: "" # Auto-generated if empty
   tags:
     CostCenter: "CC-1234"
     BusinessUnit: "IT"
@@ -326,14 +328,14 @@ azd env set AZURE_SUBSCRIPTION_ID "your-subscription-id"
 
 ### SKU Options
 
-| SKU | Use Case | Capacity Range |
-|-----|----------|----------------|
-| `Developer` | Development and testing only | 1 |
-| `Basic` | Small-scale production | 1-2 |
-| `Standard` | Medium-scale production | 1-4 |
-| `Premium` | Enterprise with workspaces, multi-region | 1-10 |
+| SKU         | Use Case                                     | Capacity Range |
+| ----------- | -------------------------------------------- | -------------- |
+| `Developer` | **Development and testing only**             | 1              |
+| `Basic`     | Small-scale production                       | 1-2            |
+| `Standard`  | Medium-scale production                      | 1-4            |
+| `Premium`   | **Enterprise with workspaces, multi-region** | 1-10           |
 
-> ⚠️ **Note**: Workspace functionality requires Premium SKU. See [API Management pricing](https://azure.microsoft.com/pricing/details/api-management/) for cost details.
+> ⚠️ **Critical**: **Workspace functionality requires Premium SKU**. See [API Management pricing](https://azure.microsoft.com/pricing/details/api-management/) for cost details.
 
 ## 🤝 Contributing
 
@@ -349,8 +351,8 @@ Quality standards include Bicep linting compliance, documentation updates for ne
 
 1. Fork the repository
 2. Create a feature branch: `git checkout -b feature/your-feature`
-3. Make changes following Bicep best practices
-4. Test deployment in a development environment
+3. **Make changes following Bicep best practices**
+4. **Test deployment in a development environment**
 5. Submit a pull request with clear description
 
 ### Development Setup
@@ -369,7 +371,7 @@ az deployment sub what-if \
   --parameters envName=dev location=eastus
 ```
 
-> 💡 **Tip**: Use `az bicep build` to catch syntax errors before committing changes.
+> 💡 **Tip**: Use **`az bicep build`** to catch syntax errors before committing changes.
 
 ## 📝 License
 
