@@ -4,11 +4,11 @@
 
 ---
 
-**Document Version**: 1.0.0  
+**Document Version**: 1.1.0  
 **Target Layer**: Data  
 **Quality Level**: Standard  
 **Generated**: 2026-02-05  
-**Session ID**: bdat-2026-02-05-apim-data  
+**Session ID**: bdat-2026-02-05-apim-data-v2  
 **Compliance**: TOGAF 10
 
 ---
@@ -71,13 +71,15 @@ flowchart LR
 
 ### 1.4 Executive Highlights
 
-| Metric              | Value              | Data Impact                            |
-| ------------------- | ------------------ | -------------------------------------- |
-| **Data Stores**     | 4 Core             | Telemetry, logs, storage, API metadata |
-| **Data Models**     | 6 Type Definitions | Strongly-typed configuration schemas   |
-| **Retention**       | 90-730 days        | Configurable compliance retention      |
-| **Data Ingestion**  | LogAnalytics mode  | Workspace-based telemetry collection   |
-| **Data Redundancy** | Standard_LRS       | Locally-redundant archival storage     |
+| Metric                | Value              | Data Impact                                |
+| --------------------- | ------------------ | ------------------------------------------ |
+| **Data Stores**       | 4 Core             | Telemetry, logs, storage, API metadata     |
+| **Data Models**       | 6 Type Definitions | Strongly-typed configuration schemas       |
+| **Data Components**   | 8 Total            | Complete data ecosystem coverage           |
+| **Retention**         | 90-730 days        | Configurable compliance retention          |
+| **Data Ingestion**    | LogAnalytics mode  | Workspace-based telemetry collection       |
+| **Data Redundancy**   | Standard_LRS       | Locally-redundant archival storage         |
+| **Utility Functions** | 4 Functions        | Naming, suffix generation, identity config |
 
 ### 1.5 Strategic Alignment
 
@@ -348,12 +350,14 @@ flowchart TB
 
 | Component ID | Component Name          | Layer            | Data Purpose                                       | Source Reference                                                                                             |
 | ------------ | ----------------------- | ---------------- | -------------------------------------------------- | ------------------------------------------------------------------------------------------------------------ |
-| **DC-001**   | Diagnostic Storage      | Operational Data | Long-term log retention and compliance archival    | [src/shared/monitoring/operational/main.bicep](../../src/shared/monitoring/operational/main.bicep#L140-L152) |
-| **DC-002**   | Log Analytics Workspace | Operational Data | Centralized log collection, KQL querying, alerting | [src/shared/monitoring/operational/main.bicep](../../src/shared/monitoring/operational/main.bicep#L168-L203) |
-| **DC-003**   | Application Insights    | Operational Data | APM telemetry, distributed tracing, analytics      | [src/shared/monitoring/insights/main.bicep](../../src/shared/monitoring/insights/main.bicep#L1-L257)         |
+| **DC-001**   | Diagnostic Storage      | Operational Data | Long-term log retention and compliance archival    | [src/shared/monitoring/operational/main.bicep](../../src/shared/monitoring/operational/main.bicep#L140-L157) |
+| **DC-002**   | Log Analytics Workspace | Operational Data | Centralized log collection, KQL querying, alerting | [src/shared/monitoring/operational/main.bicep](../../src/shared/monitoring/operational/main.bicep#L168-L210) |
+| **DC-003**   | Application Insights    | Operational Data | APM telemetry, distributed tracing, analytics      | [src/shared/monitoring/insights/main.bicep](../../src/shared/monitoring/insights/main.bicep#L166-L189)       |
 | **DC-004**   | Configuration Data      | Configuration    | Environment-specific deployment parameters         | [infra/settings.yaml](../../infra/settings.yaml#L1-L81)                                                      |
 | **DC-005**   | Type Definitions        | Configuration    | Strongly-typed Bicep schemas for validation        | [src/shared/common-types.bicep](../../src/shared/common-types.bicep#L1-L156)                                 |
-| **DC-006**   | API Metadata Catalog    | Metadata         | API definitions, governance, discoverability       | [src/inventory/main.bicep](../../src/inventory/main.bicep#L1-L200)                                           |
+| **DC-006**   | API Metadata Catalog    | Metadata         | API definitions, governance, discoverability       | [src/inventory/main.bicep](../../src/inventory/main.bicep#L126-L200)                                         |
+| **DC-007**   | Constants & Utilities   | Configuration    | Shared constants, naming functions, RBAC role IDs  | [src/shared/constants.bicep](../../src/shared/constants.bicep#L1-L205)                                       |
+| **DC-008**   | Monitoring Orchestrator | Operational Data | Deployment coordination for monitoring resources   | [src/shared/monitoring/main.bicep](../../src/shared/monitoring/main.bicep#L1-L191)                           |
 
 ### 4.3 Data Lifecycle Flow
 
@@ -561,13 +565,14 @@ flowchart TB
 
 ### 8.4 Internal Data Module Dependencies
 
-| Module                      | Path                                                                                               | Data Inputs              | Data Outputs              |
-| --------------------------- | -------------------------------------------------------------------------------------------------- | ------------------------ | ------------------------- |
-| **Operational Monitoring**  | [src/shared/monitoring/operational/main.bicep](../../src/shared/monitoring/operational/main.bicep) | Identity config, tags    | Workspace ID, Storage ID  |
-| **Application Insights**    | [src/shared/monitoring/insights/main.bicep](../../src/shared/monitoring/insights/main.bicep)       | Workspace ID, Storage ID | Instrumentation Key       |
-| **Monitoring Orchestrator** | [src/shared/monitoring/main.bicep](../../src/shared/monitoring/main.bicep)                         | Monitoring settings      | All monitoring outputs    |
-| **Type Definitions**        | [src/shared/common-types.bicep](../../src/shared/common-types.bicep)                               | None                     | Exported types            |
-| **Constants**               | [src/shared/constants.bicep](../../src/shared/constants.bicep)                                     | None                     | Helper functions, configs |
+| Module                      | Path                                                                                               | Data Inputs              | Data Outputs                          |
+| --------------------------- | -------------------------------------------------------------------------------------------------- | ------------------------ | ------------------------------------- |
+| **Operational Monitoring**  | [src/shared/monitoring/operational/main.bicep](../../src/shared/monitoring/operational/main.bicep) | Identity config, tags    | Workspace ID, Storage ID              |
+| **Application Insights**    | [src/shared/monitoring/insights/main.bicep](../../src/shared/monitoring/insights/main.bicep)       | Workspace ID, Storage ID | Instrumentation Key                   |
+| **Monitoring Orchestrator** | [src/shared/monitoring/main.bicep](../../src/shared/monitoring/main.bicep)                         | Monitoring settings      | All monitoring outputs                |
+| **Type Definitions**        | [src/shared/common-types.bicep](../../src/shared/common-types.bicep)                               | None                     | Exported types (6 types)              |
+| **Constants & Utilities**   | [src/shared/constants.bicep](../../src/shared/constants.bicep)                                     | None                     | Helper functions, configs, role IDs   |
+| **API Inventory**           | [src/inventory/main.bicep](../../src/inventory/main.bicep)                                         | APIM ID, settings        | API Center with workspace integration |
 
 ### 8.5 Data Integration Points
 
@@ -608,24 +613,24 @@ flowchart TB
 
 | Component               | Source File                                  | Lines   |
 | ----------------------- | -------------------------------------------- | ------- |
-| Diagnostic Storage      | src/shared/monitoring/operational/main.bicep | 140-152 |
-| Log Analytics Workspace | src/shared/monitoring/operational/main.bicep | 168-203 |
-| Application Insights    | src/shared/monitoring/insights/main.bicep    | 1-257   |
+| Diagnostic Storage      | src/shared/monitoring/operational/main.bicep | 140-157 |
+| Log Analytics Workspace | src/shared/monitoring/operational/main.bicep | 168-210 |
+| Application Insights    | src/shared/monitoring/insights/main.bicep    | 166-189 |
 | Configuration Data      | infra/settings.yaml                          | 1-81    |
 | Type Definitions        | src/shared/common-types.bicep                | 1-156   |
-| API Center Catalog      | src/inventory/main.bicep                     | 1-200   |
-| Constants               | src/shared/constants.bicep                   | 1-205   |
-| Monitoring Orchestrator | src/shared/monitoring/main.bicep             | 1-91    |
+| API Center Catalog      | src/inventory/main.bicep                     | 126-200 |
+| Constants & Utilities   | src/shared/constants.bicep                   | 1-205   |
+| Monitoring Orchestrator | src/shared/monitoring/main.bicep             | 1-191   |
 
 ### Generation Details
 
-- **Session ID**: bdat-2026-02-05-apim-data
+- **Session ID**: bdat-2026-02-05-apim-data-v2
 - **Target Layer**: Data
 - **Quality Level**: Standard
 - **Sections Generated**: 1, 2, 3, 4, 7, 8
-- **Total Components Discovered**: 6
+- **Total Components Discovered**: 8
 - **Total Diagrams**: 10
-- **Generation Timestamp**: 2026-02-05T00:00:00Z
+- **Generation Timestamp**: 2026-02-05T12:00:00Z
 
 ---
 

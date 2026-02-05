@@ -1,19 +1,19 @@
 {
     "document_info": {
         "title": "Data Architecture Document",
-        "version": "1.0.0",
+        "version": "1.1.0",
         "target_layer": "Data",
         "quality_level": "standard",
-        "generated": "2026-02-05T00:00:00Z",
-        "session_id": "bdat-2026-02-05-apim-data",
+        "generated": "2026-02-05T12:00:00Z",
+        "session_id": "bdat-2026-02-05-apim-data-v2",
         "compliance": "TOGAF 10"
     },
     "discovery_summary": {
         "folder_paths": [
             "."
         ],
-        "files_scanned": 12,
-        "components_discovered": 6,
+        "files_scanned": 13,
+        "components_discovered": 8,
         "diagrams_generated": 10
     },
     "components": [
@@ -23,7 +23,7 @@
             "type": "Data Store",
             "layer": "Data",
             "source_file": "src/shared/monitoring/operational/main.bicep",
-            "source_lines": "140-152",
+            "source_lines": "140-157",
             "confidence": 1.0
         },
         {
@@ -32,7 +32,7 @@
             "type": "Data Store",
             "layer": "Data",
             "source_file": "src/shared/monitoring/operational/main.bicep",
-            "source_lines": "168-203",
+            "source_lines": "168-210",
             "confidence": 1.0
         },
         {
@@ -41,7 +41,7 @@
             "type": "Data Store",
             "layer": "Data",
             "source_file": "src/shared/monitoring/insights/main.bicep",
-            "source_lines": "1-257",
+            "source_lines": "166-189",
             "confidence": 1.0
         },
         {
@@ -68,7 +68,25 @@
             "type": "Metadata Store",
             "layer": "Data",
             "source_file": "src/inventory/main.bicep",
-            "source_lines": "1-200",
+            "source_lines": "126-200",
+            "confidence": 1.0
+        },
+        {
+            "id": "DC-007",
+            "name": "Constants & Utilities",
+            "type": "Configuration Schema",
+            "layer": "Data",
+            "source_file": "src/shared/constants.bicep",
+            "source_lines": "1-205",
+            "confidence": 1.0
+        },
+        {
+            "id": "DC-008",
+            "name": "Monitoring Orchestrator",
+            "type": "Deployment Module",
+            "layer": "Data",
+            "source_file": "src/shared/monitoring/main.bicep",
+            "source_lines": "1-191",
             "confidence": 1.0
         }
     ],
