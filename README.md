@@ -95,21 +95,6 @@ flowchart TB
     style identity fill:#FFFDE7,stroke:#F57F17,stroke-width:2px
 ```
 
-**Deployment Flow**
-
-```mermaid
-%%{init: {"flowchart": {"htmlLabels": false}} }%%
-flowchart LR
-    classDef mdBlue fill:#BBDEFB,stroke:#1976D2,stroke-width:2px,color:#000
-    classDef mdGreen fill:#C8E6C9,stroke:#388E3C,stroke-width:2px,color:#000
-    classDef mdOrange fill:#FFE0B2,stroke:#E64A19,stroke-width:2px,color:#000
-
-    A["azd up"]:::mdBlue --> B["Pre-provision<br/>Hook"]:::mdBlue
-    B --> C["Shared<br/>Infrastructure"]:::mdGreen
-    C --> D["Core Platform<br/>(APIM)"]:::mdGreen
-    D --> E["Inventory<br/>(API Center)"]:::mdOrange
-```
-
 ## ✨ Features
 
 **Overview**
@@ -173,6 +158,19 @@ azd up
 Deployment follows Azure Developer CLI conventions with environment-based configuration. The pre-provision hook automatically purges soft-deleted APIM instances to prevent naming conflicts, enabling clean redeployment cycles. The Bicep modules deploy at subscription scope, creating resource groups and coordinating resource deployment through module dependencies.
 
 Step-by-step deployment ensures each component provisions correctly before dependent services begin. Failed deployments can be restarted without duplicating resources, as Bicep templates are idempotent.
+
+```mermaid
+%%{init: {"flowchart": {"htmlLabels": false}} }%%
+flowchart LR
+    classDef mdBlue fill:#BBDEFB,stroke:#1976D2,stroke-width:2px,color:#000
+    classDef mdGreen fill:#C8E6C9,stroke:#388E3C,stroke-width:2px,color:#000
+    classDef mdOrange fill:#FFE0B2,stroke:#E64A19,stroke-width:2px,color:#000
+
+    A["azd up"]:::mdBlue --> B["Pre-provision<br/>Hook"]:::mdBlue
+    B --> C["Shared<br/>Infrastructure"]:::mdGreen
+    C --> D["Core Platform<br/>(APIM)"]:::mdGreen
+    D --> E["Inventory<br/>(API Center)"]:::mdOrange
+```
 
 ### Step 1: Clone Repository
 
