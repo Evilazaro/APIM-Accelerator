@@ -1,0 +1,297 @@
+{
+    "document_info": {
+        "title": "Data Architecture Document",
+        "version": "1.0.0",
+        "target_layer": "Data",
+        "quality_level": "standard",
+        "generated": "2026-02-05T00:00:00Z",
+        "session_id": "bdat-2026-02-05-apim-data",
+        "compliance": "TOGAF 10"
+    },
+    "discovery_summary": {
+        "folder_paths": [
+            "."
+        ],
+        "files_scanned": 12,
+        "components_discovered": 6,
+        "diagrams_generated": 10
+    },
+    "components": [
+        {
+            "id": "DC-001",
+            "name": "Diagnostic Storage Account",
+            "type": "Data Store",
+            "layer": "Data",
+            "source_file": "src/shared/monitoring/operational/main.bicep",
+            "source_lines": "140-152",
+            "confidence": 1.0
+        },
+        {
+            "id": "DC-002",
+            "name": "Log Analytics Workspace",
+            "type": "Data Store",
+            "layer": "Data",
+            "source_file": "src/shared/monitoring/operational/main.bicep",
+            "source_lines": "168-203",
+            "confidence": 1.0
+        },
+        {
+            "id": "DC-003",
+            "name": "Application Insights",
+            "type": "Data Store",
+            "layer": "Data",
+            "source_file": "src/shared/monitoring/insights/main.bicep",
+            "source_lines": "1-257",
+            "confidence": 1.0
+        },
+        {
+            "id": "DC-004",
+            "name": "Configuration Data",
+            "type": "Configuration Schema",
+            "layer": "Data",
+            "source_file": "infra/settings.yaml",
+            "source_lines": "1-81",
+            "confidence": 1.0
+        },
+        {
+            "id": "DC-005",
+            "name": "Type Definitions",
+            "type": "Data Model",
+            "layer": "Data",
+            "source_file": "src/shared/common-types.bicep",
+            "source_lines": "1-156",
+            "confidence": 1.0
+        },
+        {
+            "id": "DC-006",
+            "name": "API Metadata Catalog",
+            "type": "Metadata Store",
+            "layer": "Data",
+            "source_file": "src/inventory/main.bicep",
+            "source_lines": "1-200",
+            "confidence": 1.0
+        }
+    ],
+    "validation_scores": {
+        "completeness": {
+            "score": 0.91,
+            "threshold": 0.85,
+            "status": "PASS"
+        },
+        "togaf_compliance": {
+            "score": 0.93,
+            "threshold": 0.90,
+            "status": "PASS"
+        },
+        "quality": {
+            "score": 0.90,
+            "threshold": 0.85,
+            "status": "PASS"
+        },
+        "source_traceability": {
+            "score": 1.0,
+            "threshold": 1.0,
+            "status": "PASS"
+        }
+    },
+    "sections_generated": [
+        1,
+        2,
+        3,
+        4,
+        7,
+        8
+    ],
+    "diagrams": [
+        {
+            "id": "D-001",
+            "type": "flowchart",
+            "section": 1,
+            "title": "Key Data Drivers"
+        },
+        {
+            "id": "D-002",
+            "type": "flowchart",
+            "section": 2,
+            "title": "Data Domain Map"
+        },
+        {
+            "id": "D-003",
+            "type": "flowchart",
+            "section": 2,
+            "title": "Data Store Analysis"
+        },
+        {
+            "id": "D-004",
+            "type": "flowchart",
+            "section": 2,
+            "title": "Data Flow Diagram"
+        },
+        {
+            "id": "D-005",
+            "type": "flowchart",
+            "section": 3,
+            "title": "Principle Alignment Matrix"
+        },
+        {
+            "id": "D-006",
+            "type": "flowchart",
+            "section": 4,
+            "title": "Baseline Data Architecture"
+        },
+        {
+            "id": "D-007",
+            "type": "flowchart",
+            "section": 4,
+            "title": "Data Lifecycle Flow"
+        },
+        {
+            "id": "D-008",
+            "type": "flowchart",
+            "section": 7,
+            "title": "Log Analytics Configuration Standard"
+        },
+        {
+            "id": "D-009",
+            "type": "flowchart",
+            "section": 8,
+            "title": "Data Flow Dependencies"
+        },
+        {
+            "id": "D-010",
+            "type": "flowchart",
+            "section": 8,
+            "title": "Data Deployment Sequence"
+        }
+    ],
+    "data_entities": [
+        {
+            "id": "DE-001",
+            "name": "Performance Metrics",
+            "domain": "Telemetry"
+        },
+        {
+            "id": "DE-002",
+            "name": "Diagnostic Logs",
+            "domain": "Telemetry"
+        },
+        {
+            "id": "DE-003",
+            "name": "Application Traces",
+            "domain": "Telemetry"
+        },
+        {
+            "id": "DE-004",
+            "name": "Infrastructure Config",
+            "domain": "Configuration"
+        },
+        {
+            "id": "DE-005",
+            "name": "Type Definitions",
+            "domain": "Configuration"
+        },
+        {
+            "id": "DE-006",
+            "name": "Resource Tags",
+            "domain": "Configuration"
+        },
+        {
+            "id": "DE-007",
+            "name": "API Metadata",
+            "domain": "Catalog"
+        },
+        {
+            "id": "DE-008",
+            "name": "Archived Logs",
+            "domain": "Telemetry"
+        }
+    ],
+    "principles": [
+        {
+            "id": "DP-001",
+            "name": "Centralized Telemetry",
+            "status": "Implemented"
+        },
+        {
+            "id": "DP-002",
+            "name": "Type-Safe Configuration",
+            "status": "Implemented"
+        },
+        {
+            "id": "DP-003",
+            "name": "Tiered Data Retention",
+            "status": "Implemented"
+        },
+        {
+            "id": "DP-004",
+            "name": "Data Governance by Tags",
+            "status": "Implemented"
+        },
+        {
+            "id": "DP-005",
+            "name": "Self-Documenting Schemas",
+            "status": "Implemented"
+        }
+    ],
+    "standards": [
+        {
+            "id": "DST-001",
+            "name": "Diagnostic Destination",
+            "category": "Observability"
+        },
+        {
+            "id": "DST-002",
+            "name": "Log Category Groups",
+            "category": "Observability"
+        },
+        {
+            "id": "DST-003",
+            "name": "Retention Period",
+            "category": "Compliance"
+        },
+        {
+            "id": "DST-004",
+            "name": "Storage Redundancy",
+            "category": "Durability"
+        },
+        {
+            "id": "DST-005",
+            "name": "Type Exports",
+            "category": "Configuration"
+        }
+    ],
+    "dependencies": {
+        "internal": [
+            {
+                "from": "Application Insights",
+                "to": "Log Analytics Workspace",
+                "type": "Telemetry Sink"
+            },
+            {
+                "from": "Log Analytics Workspace",
+                "to": "Storage Account",
+                "type": "Self-monitoring"
+            },
+            {
+                "from": "API Management",
+                "to": "Log Analytics Workspace",
+                "type": "Diagnostic Output"
+            },
+            {
+                "from": "All Modules",
+                "to": "common-types.bicep",
+                "type": "Type Definitions"
+            }
+        ],
+        "external": [
+            {
+                "service": "Azure Monitor",
+                "purpose": "Diagnostic ingestion"
+            },
+            {
+                "service": "Azure Storage",
+                "purpose": "Blob archival"
+            }
+        ]
+    }
+}
