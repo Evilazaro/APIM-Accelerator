@@ -44,40 +44,52 @@ flowchart TB
     %% DIAGRAM METADATA
     %% Title: APIM Accelerator Architecture
     %% Purpose: Show 3-tier landing zone structure
-    %% Version: 1.0.0 | Updated: 2026-02-05
+    %% Version: 2.0.0 | Updated: 2026-02-05
+    %% ============================================
+
+    %% ============================================
+    %% STANDARD COLOR SCHEME v2.1
+    %% ============================================
+    %% HIERARCHICAL (structural nesting):
+    %%   Level 1: #E8EAF6 (Indigo 50) - Main container
+    %%   Level 2: #C5CAE9 (Indigo 100) - Sub-containers
+    %% SEMANTIC (functional purpose - for sibling subgraphs):
+    %%   Blue=#BBDEFB (Monitoring), Green=#C8E6C9 (Platform)
+    %%   Orange=#FFE0B2 (Inventory), Yellow=#FFF9C4 (Security)
     %% ============================================
 
     classDef mainGroup fill:#E8EAF6,stroke:#3F51B5,stroke-width:3px,color:#000
+    classDef subGroup fill:#C5CAE9,stroke:#3F51B5,stroke-width:2px,color:#000
     classDef mdBlue fill:#BBDEFB,stroke:#1976D2,stroke-width:2px,color:#000
     classDef mdGreen fill:#C8E6C9,stroke:#388E3C,stroke-width:2px,color:#000
     classDef mdOrange fill:#FFE0B2,stroke:#E64A19,stroke-width:2px,color:#000
     classDef mdYellow fill:#FFF9C4,stroke:#F57F17,stroke-width:2px,color:#000
 
-    subgraph landing["APIM Landing Zone"]
+    subgraph landing["🏗️ APIM Landing Zone"]
         direction TB
 
-        subgraph shared["Shared Infrastructure"]
+        subgraph shared["📊 Shared Infrastructure"]
             direction LR
-            law["Log Analytics<br/>Workspace"]:::mdBlue
-            ai["Application<br/>Insights"]:::mdBlue
-            storage["Storage Account<br/>(Diagnostics)"]:::mdBlue
+            law["📈 Log Analytics<br/>Workspace"]:::mdBlue
+            ai["🔍 Application<br/>Insights"]:::mdBlue
+            storage["🗄️ Storage Account<br/>(Diagnostics)"]:::mdBlue
         end
 
-        subgraph core["Core Platform"]
+        subgraph core["⚙️ Core Platform"]
             direction LR
-            apim["API Management<br/>(Premium)"]:::mdGreen
-            portal["Developer<br/>Portal"]:::mdGreen
-            workspaces["APIM<br/>Workspaces"]:::mdGreen
+            apim["🌐 API Management<br/>(Premium)"]:::mdGreen
+            portal["👥 Developer<br/>Portal"]:::mdGreen
+            workspaces["📦 APIM<br/>Workspaces"]:::mdGreen
         end
 
-        subgraph inventory["Inventory Management"]
+        subgraph inventory["📚 Inventory Management"]
             direction LR
-            apicenter["API Center"]:::mdOrange
-            catalog["API<br/>Catalog"]:::mdOrange
+            apicenter["🗂️ API Center"]:::mdOrange
+            catalog["📋 API<br/>Catalog"]:::mdOrange
         end
 
-        subgraph identity["Identity & Security"]
-            aad["Azure AD<br/>Integration"]:::mdYellow
+        subgraph identity["🔐 Identity & Security"]
+            aad["🔒 Azure AD<br/>Integration"]:::mdYellow
         end
 
         law --> apim
@@ -90,11 +102,18 @@ flowchart TB
         aad --> portal
     end
 
+    %% ============================================
+    %% SUBGRAPH STYLING
+    %% Level 1: Main container (#E8EAF6)
+    %% Level 2: Functional siblings (semantic colors)
+    %% ============================================
     style landing fill:#E8EAF6,stroke:#3F51B5,stroke-width:3px
-    style shared fill:#E3F2FD,stroke:#1976D2,stroke-width:2px
-    style core fill:#E8F5E9,stroke:#388E3C,stroke-width:2px
-    style inventory fill:#FFF3E0,stroke:#E64A19,stroke-width:2px
-    style identity fill:#FFFDE7,stroke:#F57F17,stroke-width:2px
+    style shared fill:#BBDEFB,stroke:#1976D2,stroke-width:2px
+    style core fill:#C8E6C9,stroke:#388E3C,stroke-width:2px
+    style inventory fill:#FFE0B2,stroke:#E64A19,stroke-width:2px
+    style identity fill:#FFF9C4,stroke:#F57F17,stroke-width:2px
+
+    %% Accessibility: WCAG AA verified (4.5:1 contrast ratio)
 ```
 
 ## ✨ Features
@@ -166,14 +185,30 @@ Step-by-step deployment ensures each component provisions correctly before depen
 ```mermaid
 %%{init: {"flowchart": {"htmlLabels": false}} }%%
 flowchart LR
+    %% ============================================
+    %% DIAGRAM METADATA
+    %% Title: Deployment Flow
+    %% Purpose: Show azd deployment sequence
+    %% Version: 2.0.0 | Updated: 2026-02-05
+    %% ============================================
+
+    %% ============================================
+    %% STANDARD COLOR SCHEME v2.1
+    %% Blue=#BBDEFB (Command/Trigger)
+    %% Green=#C8E6C9 (Infrastructure)
+    %% Orange=#FFE0B2 (Inventory)
+    %% ============================================
+
     classDef mdBlue fill:#BBDEFB,stroke:#1976D2,stroke-width:2px,color:#000
     classDef mdGreen fill:#C8E6C9,stroke:#388E3C,stroke-width:2px,color:#000
     classDef mdOrange fill:#FFE0B2,stroke:#E64A19,stroke-width:2px,color:#000
 
-    A["azd up"]:::mdBlue --> B["Pre-provision<br/>Hook"]:::mdBlue
-    B --> C["Shared<br/>Infrastructure"]:::mdGreen
-    C --> D["Core Platform<br/>(APIM)"]:::mdGreen
-    D --> E["Inventory<br/>(API Center)"]:::mdOrange
+    A["🚀 azd up"]:::mdBlue --> B["⚙️ Pre-provision<br/>Hook"]:::mdBlue
+    B --> C["📊 Shared<br/>Infrastructure"]:::mdGreen
+    C --> D["🌐 Core Platform<br/>(APIM)"]:::mdGreen
+    D --> E["📚 Inventory<br/>(API Center)"]:::mdOrange
+
+    %% Accessibility: WCAG AA verified (4.5:1 contrast ratio)
 ```
 
 ### Step 1: Clone Repository
