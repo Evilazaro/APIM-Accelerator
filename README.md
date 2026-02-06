@@ -5,15 +5,15 @@
 ![Azure](https://img.shields.io/badge/platform-Azure-0078D4)
 ![Status](https://img.shields.io/badge/status-Production--Ready-brightgreen)
 
-Deploy a **production-ready Azure API Management landing zone** with enterprise-grade monitoring, governance, and multi-team support using Infrastructure as Code.
+Deploy a **production-ready Azure API Management landing zone** with **enterprise-grade monitoring**, **governance**, and **multi-team support** using Infrastructure as Code.
 
 **Overview**
 
-The APIM Accelerator provides a **comprehensive, modular Bicep-based solution** for deploying Azure API Management infrastructure following **Azure landing zone best practices**. It enables organizations to establish a secure, scalable API platform with built-in observability, developer portal integration, and **centralized API governance through Azure API Center**.
+The APIM Accelerator provides a **comprehensive, modular Bicep-based solution** for deploying Azure API Management infrastructure following **Azure landing zone best practices**. It enables organizations to establish a **secure, scalable API platform** with built-in observability, developer portal integration, and **centralized API governance through Azure API Center**.
 
 This accelerator addresses the complexity of setting up enterprise API infrastructure by providing pre-configured templates that implement **security best practices**, **monitoring integration**, and **workspace-based multi-tenancy**. Teams can deploy a complete API Management ecosystem in **minutes rather than days**, with all components properly connected and configured for production workloads.
 
-> 📌 **Key Integration**: The solution integrates seamlessly with **Azure Developer CLI (`azd`)** for streamlined deployment workflows, supports multiple environments (dev, test, staging, prod, UAT), and includes **automated pre-provisioning hooks** to handle soft-deleted resource cleanup.
+> 📌 **Key Integration**: The solution integrates seamlessly with **Azure Developer CLI (`azd`)** for streamlined deployment workflows, supports **multiple environments** (dev, test, staging, prod, UAT), and includes **automated pre-provisioning hooks** to handle soft-deleted resource cleanup.
 
 ## 📑 Table of Contents
 
@@ -31,7 +31,7 @@ This accelerator addresses the complexity of setting up enterprise API infrastru
 
 **Overview**
 
-The APIM Accelerator implements a **three-tier landing zone architecture** that separates shared infrastructure, core API Management services, and API inventory capabilities. This modular design enables **independent scaling**, **simplified maintenance**, and **clear separation of concerns** between monitoring, runtime services, and governance layers.
+The APIM Accelerator implements a **three-tier landing zone architecture** that separates **shared infrastructure**, **core API Management services**, and **API inventory capabilities**. This modular design enables **independent scaling**, **simplified maintenance**, and **clear separation of concerns** between monitoring, runtime services, and governance layers.
 
 > 📌 **Design Principle**: The architecture follows **Azure Well-Architected Framework principles**, deploying resources at **subscription scope** while organizing components into logical resource groups. Each tier can be extended or customized **without impacting other layers**, providing flexibility for organizations with varying requirements.
 
@@ -174,9 +174,9 @@ flowchart LR
 
 **Overview**
 
-The APIM Accelerator delivers enterprise-grade API Management capabilities through a carefully designed set of features that address common organizational challenges. Each feature has been implemented following Azure best practices and is production-ready out of the box.
+The APIM Accelerator delivers **enterprise-grade API Management capabilities** through a carefully designed set of features that address common organizational challenges. Each feature has been implemented following **Azure best practices** and is **production-ready out of the box**.
 
-These features work together to provide a complete API platform that scales from small teams to large enterprises. The modular architecture ensures you can adopt features incrementally while maintaining consistency across your API infrastructure.
+These features work together to provide a complete API platform that **scales from small teams to large enterprises**. The modular architecture ensures you can **adopt features incrementally** while maintaining consistency across your API infrastructure.
 
 | Feature                          | Description                                                                                                                                 | Benefits                                                                             |
 | -------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------ |
@@ -192,9 +192,9 @@ These features work together to provide a complete API platform that scales from
 
 **Overview**
 
-Before deploying the APIM Accelerator, ensure your environment meets the following prerequisites. These requirements apply to both local development machines and CI/CD pipeline agents that will execute the deployment.
+Before deploying the APIM Accelerator, ensure your environment meets the following prerequisites. These requirements apply to **both local development machines and CI/CD pipeline agents** that will execute the deployment.
 
-The accelerator is designed to work with standard Azure tooling and requires minimal setup. Most requirements can be satisfied by installing the Azure CLI with the Bicep extension, which bundles the necessary components.
+The accelerator is designed to work with **standard Azure tooling** and requires minimal setup. Most requirements can be satisfied by installing the Azure CLI with the Bicep extension, which bundles the necessary components.
 
 | Category                | Requirement                                                                                         | More Information                                                                           |
 | ----------------------- | --------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------ |
@@ -210,9 +210,9 @@ The accelerator is designed to work with standard Azure tooling and requires min
 
 **Overview**
 
-Get a complete API Management landing zone running in your Azure subscription with **just three commands**. The Quick Start uses Azure Developer CLI to handle authentication, resource provisioning, and configuration automatically.
+Get a complete API Management landing zone running in your Azure subscription with **just three commands**. The Quick Start uses **Azure Developer CLI** to handle authentication, resource provisioning, and configuration automatically.
 
-> ⚠️ **Before You Begin**: This deployment creates all components in a **single resource group with sensible defaults**. For **production deployments**, review the [Configuration](#-configuration) section to customize settings for your organization's requirements.
+> ⚠️ **Before You Begin**: This deployment creates all components in a **single resource group with sensible defaults**. For **production deployments**, review the [Configuration](#-configuration) section to **customize settings for your organization's requirements**.
 
 ```bash
 # Clone the repository
@@ -229,7 +229,7 @@ azd up
 
 **Overview**
 
-The APIM Accelerator supports multiple deployment approaches depending on your operational requirements. All methods use the same Bicep templates and produce **identical infrastructure**, ensuring consistency across development, testing, and production environments.
+The APIM Accelerator supports **multiple deployment approaches** depending on your operational requirements. All methods use the same Bicep templates and produce **identical infrastructure**, ensuring **consistency across development, testing, and production environments**.
 
 > 💡 **Automatic Cleanup**: The deployment process includes a **pre-provision hook that automatically purges** any soft-deleted API Management instances in the target region, **preventing naming conflicts** during redeployment scenarios.
 
@@ -278,9 +278,9 @@ az deployment sub create \
 
 **Overview**
 
-After deployment, the APIM Accelerator provides a fully configured API Management platform ready for use. This section covers common post-deployment tasks including accessing the management portal, configuring APIs, and working with workspaces.
+After deployment, the APIM Accelerator provides a **fully configured API Management platform** ready for use. This section covers common post-deployment tasks including **accessing the management portal**, **configuring APIs**, and **working with workspaces**.
 
-The infrastructure outputs essential connection information needed for integrating applications with the deployed services. Use the Azure CLI or portal to retrieve these values for your development and operations workflows.
+The infrastructure outputs **essential connection information** needed for integrating applications with the deployed services. Use the Azure CLI or portal to retrieve these values for your development and operations workflows.
 
 ### Accessing Deployed Resources
 
@@ -309,7 +309,7 @@ az apim api import \
 
 ### Working with Workspaces
 
-Workspaces provide logical isolation for different teams or projects within a single APIM instance:
+Workspaces provide **logical isolation** for different teams or projects within a single APIM instance:
 
 ```bicep
 // Example: Add a new workspace in settings.yaml
@@ -325,7 +325,7 @@ core:
 
 **Overview**
 
-The APIM Accelerator uses a **centralized YAML configuration file** (`infra/settings.yaml`) that defines all deployment parameters. This approach **separates configuration from infrastructure code**, enabling environment-specific customizations without modifying Bicep templates.
+The APIM Accelerator uses a **centralized YAML configuration file** (`infra/settings.yaml`) that defines all deployment parameters. This approach **separates configuration from infrastructure code**, enabling **environment-specific customizations** without modifying Bicep templates.
 
 > 📌 **Best Practice**: Configuration options are organized by component (shared, core, inventory) with **sensible defaults** that work for most deployments. Override **only** specific values as needed while inheriting defaults for unchanged settings.
 
@@ -393,9 +393,9 @@ tags:
 
 **Overview**
 
-Contributions to the APIM Accelerator are welcome and appreciated. Whether you're fixing bugs, adding features, or improving documentation, your contributions help make this project better for everyone. We follow standard open-source practices to ensure code quality and maintain project consistency.
+Contributions to the APIM Accelerator are welcome and appreciated. Whether you're fixing bugs, adding features, or improving documentation, your contributions help make this project better for everyone. We follow **standard open-source practices** to ensure code quality and maintain project consistency.
 
-Before contributing, please review the project structure and coding conventions used in the Bicep templates. All submissions go through code review to maintain quality and ensure compatibility with existing functionality.
+Before contributing, please review the project structure and **coding conventions** used in the Bicep templates. All submissions go through **code review** to maintain quality and ensure compatibility with existing functionality.
 
 ### How to Contribute
 
