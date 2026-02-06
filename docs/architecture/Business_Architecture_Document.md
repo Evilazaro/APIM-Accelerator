@@ -58,6 +58,8 @@ config:
   theme: base
 ---
 mindmap
+  accTitle: Target Business Outcomes Mindmap
+  accDescr: Shows the five key business value areas delivered by the APIM Accelerator: Time to Market, Governance, Developer Experience, Cost Optimization, and Security
   root((APIM Accelerator<br/>Business Value))
     Time to Market
       Minutes vs Days
@@ -232,6 +234,13 @@ flowchart LR
 
         vs3_1 --> vs3_2 --> vs3_3 --> vs3_4 --> vs3_5
     end
+
+    %% ============================================
+    %% SUBGRAPH STYLING (MRM-S001 compliant)
+    %% ============================================
+    style vs1 fill:#E8EAF6,stroke:#3F51B5,stroke-width:3px
+    style vs2 fill:#E8EAF6,stroke:#3F51B5,stroke-width:3px
+    style vs3 fill:#E8EAF6,stroke:#3F51B5,stroke-width:3px
 ```
 
 ### 2.4 Stakeholder Map
@@ -327,6 +336,17 @@ flowchart TB
     accTitle: APIM Accelerator Target Business Architecture
     accDescr: Shows the layered target state architecture with business capabilities mapped to enabling services
 
+    %% ============================================
+    %% COLOR SCHEME DOCUMENTATION
+    %% ============================================
+    %% Level 1 (Main Groups): Indigo 50 (#E8EAF6) - Business Layer
+    %% SEMANTIC COLORS by function:
+    %%   Business: Indigo (#E8EAF6) - Strategic capabilities
+    %%   Application: Blue (#BBDEFB) - Services
+    %%   Data: Teal (#B2DFDB) - Storage/Analytics
+    %%   Technology: Yellow (#FFF9C4) - Infrastructure
+    %% ============================================
+
     classDef bizCap fill:#E8EAF6,stroke:#3F51B5,stroke-width:2px,color:#000
     classDef appSvc fill:#BBDEFB,stroke:#1976D2,stroke-width:2px,color:#000
     classDef dataSvc fill:#B2DFDB,stroke:#00796B,stroke-width:2px,color:#000
@@ -334,31 +354,31 @@ flowchart TB
 
     subgraph business["🎯 Business Layer"]
         direction LR
-        bc1["API Management<br/>Platform"]:::bizCap
-        bc2["API<br/>Governance"]:::bizCap
-        bc3["Developer<br/>Enablement"]:::bizCap
-        bc4["Observability"]:::bizCap
+        bc1["🔗 API Management<br/>Platform"]:::bizCap
+        bc2["📋 API<br/>Governance"]:::bizCap
+        bc3["👨‍💻 Developer<br/>Enablement"]:::bizCap
+        bc4["📊 Observability"]:::bizCap
     end
 
     subgraph application["⚙️ Application Layer"]
         direction LR
-        as1["Azure API<br/>Management"]:::appSvc
-        as2["Azure API<br/>Center"]:::appSvc
-        as3["Developer<br/>Portal"]:::appSvc
+        as1["☁️ Azure API<br/>Management"]:::appSvc
+        as2["🗃️ Azure API<br/>Center"]:::appSvc
+        as3["🌐 Developer<br/>Portal"]:::appSvc
     end
 
     subgraph data["📊 Data Layer"]
         direction LR
-        ds1["Log Analytics<br/>Workspace"]:::dataSvc
-        ds2["Application<br/>Insights"]:::dataSvc
-        ds3["Storage<br/>Account"]:::dataSvc
+        ds1["📝 Log Analytics<br/>Workspace"]:::dataSvc
+        ds2["🔍 Application<br/>Insights"]:::dataSvc
+        ds3["🗄️ Storage<br/>Account"]:::dataSvc
     end
 
     subgraph technology["🔧 Technology Layer"]
         direction LR
-        ts1["Azure Resource<br/>Manager"]:::techSvc
-        ts2["Azure Developer<br/>CLI"]:::techSvc
-        ts3["Bicep<br/>Templates"]:::techSvc
+        ts1["☁️ Azure Resource<br/>Manager"]:::techSvc
+        ts2["🚀 Azure Developer<br/>CLI"]:::techSvc
+        ts3["📜 Bicep<br/>Templates"]:::techSvc
     end
 
     bc1 -->|"realizedBy"| as1
@@ -394,19 +414,28 @@ flowchart LR
     accTitle: Infrastructure Provisioning Business Process
     accDescr: BPMN-style process flow for provisioning APIM infrastructure
 
+    %% ============================================
+    %% COLOR SCHEME DOCUMENTATION
+    %% ============================================
+    %% SEMANTIC COLORS by function:
+    %%   Start/End: Green (#C8E6C9) - Success states
+    %%   Task: Blue (#BBDEFB) - Process steps
+    %%   Gateway: Yellow (#FFF9C4) - Decision points
+    %% ============================================
+
     classDef startEnd fill:#C8E6C9,stroke:#388E3C,stroke-width:2px,color:#000
     classDef task fill:#BBDEFB,stroke:#1976D2,stroke-width:2px,color:#000
     classDef gateway fill:#FFF9C4,stroke:#F57F17,stroke-width:2px,color:#000
 
-    start((Start)):::startEnd
-    t1["Clone<br/>Repository"]:::task
-    t2["Configure<br/>settings.yaml"]:::task
-    t3["Run azd auth<br/>login"]:::task
-    g1{{"Authenticated?"}}:::gateway
-    t4["Run azd up"]:::task
-    t5["Pre-provision<br/>Hook Executes"]:::task
-    t6["Resources<br/>Provisioned"]:::task
-    finish((End)):::startEnd
+    start(("▶️ Start")):::startEnd
+    t1["📂 Clone<br/>Repository"]:::task
+    t2["⚙️ Configure<br/>settings.yaml"]:::task
+    t3["🔐 Run azd auth<br/>login"]:::task
+    g1{{"❓ Authenticated?"}}:::gateway
+    t4["🚀 Run azd up"]:::task
+    t5["🧹 Pre-provision<br/>Hook Executes"]:::task
+    t6["✅ Resources<br/>Provisioned"]:::task
+    finish(("⏹️ End")):::startEnd
 
     start --> t1 --> t2 --> t3 --> g1
     g1 -->|Yes| t4
