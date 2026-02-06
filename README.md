@@ -66,30 +66,26 @@ flowchart TB
     classDef mdOrange fill:#FFE0B2,stroke:#E64A19,stroke-width:2px,color:#000
 
     subgraph system["🏢 APIM Accelerator Landing Zone"]
-        direction TD
+        direction TB
 
         subgraph shared["📊 Shared Infrastructure"]
-            direction TB
             law["📈 Log Analytics<br/>Workspace"]:::mdTeal
             appins["📊 Application<br/>Insights"]:::mdTeal
             storage["💾 Storage<br/>Account"]:::mdTeal
         end
 
         subgraph core["⚙️ Core Platform"]
-            direction TB
             apim["🌐 API Management<br/>Service"]:::mdBlue
             portal["👤 Developer<br/>Portal"]:::mdBlue
             workspaces["📁 APIM<br/>Workspaces"]:::mdBlue
         end
 
         subgraph inventory["📋 API Inventory"]
-            direction TB
             apicenter["🗂️ Azure API<br/>Center"]:::mdGreen
             apisource["🔗 API Source<br/>Integration"]:::mdGreen
         end
 
         subgraph deploy["🚀 Deployment"]
-            direction TB
             azd["⚡ Azure Developer<br/>CLI (azd)"]:::mdYellow
             bicep["📝 Bicep<br/>Templates"]:::mdYellow
         end
