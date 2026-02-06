@@ -5,15 +5,15 @@
 ![Azure](https://img.shields.io/badge/Azure-API%20Management-0078D4)
 ![Status](https://img.shields.io/badge/status-Production%20Ready-brightgreen)
 
-Deploy a complete, enterprise-grade Azure API Management landing zone with a single command using Azure Developer CLI (azd) and modular Bicep templates.
+Deploy a complete, **enterprise-grade Azure API Management landing zone** with a **single command** using Azure Developer CLI (azd) and modular Bicep templates.
 
 **Overview**
 
-The APIM Accelerator provides a production-ready foundation for organizations looking to centralize API governance, enable developer self-service, and implement enterprise-grade monitoring. It follows Azure Landing Zone principles and best practices to deliver a secure, scalable, and maintainable API platform.
+The APIM Accelerator provides a **production-ready foundation** for organizations looking to centralize API governance, enable developer self-service, and implement enterprise-grade monitoring. It follows **Azure Landing Zone principles** and best practices to deliver a secure, scalable, and maintainable API platform.
 
-This accelerator addresses the challenge of deploying a complete API Management ecosystem by automating the provisioning of interconnected Azure services. It eliminates manual configuration errors, enforces consistent tagging strategies for cost management, and establishes observability from day one. Whether you're building a new API platform or modernizing existing infrastructure, this accelerator reduces deployment time from weeks to minutes.
+This accelerator addresses the challenge of deploying a complete API Management ecosystem by **automating the provisioning of interconnected Azure services**. It eliminates manual configuration errors, enforces consistent tagging strategies for cost management, and establishes observability from day one. Whether you're building a new API platform or modernizing existing infrastructure, this accelerator **reduces deployment time from weeks to minutes**.
 
-The solution targets platform engineers, DevOps teams, and cloud architects who need to deploy Azure API Management with comprehensive monitoring, multi-team workspace isolation, and API governance capabilities. It supports multiple environments (dev, test, staging, prod, uat) with environment-specific configurations managed through a centralized settings file.
+The solution targets **platform engineers, DevOps teams, and cloud architects** who need to deploy Azure API Management with comprehensive monitoring, multi-team workspace isolation, and API governance capabilities. It supports **multiple environments (dev, test, staging, prod, uat)** with environment-specific configurations managed through a centralized settings file.
 
 ## 📋 Table of Contents
 
@@ -31,9 +31,9 @@ The solution targets platform engineers, DevOps teams, and cloud architects who 
 
 **Overview**
 
-The APIM Accelerator implements a three-tier architecture pattern that separates concerns between shared infrastructure, core platform services, and API inventory management. This design enables independent scaling, simplified troubleshooting, and clear ownership boundaries.
+The APIM Accelerator implements a **three-tier architecture pattern** that separates concerns between shared infrastructure, core platform services, and API inventory management. This design enables **independent scaling**, simplified troubleshooting, and **clear ownership boundaries**.
 
-The architecture leverages subscription-level deployments to create resource groups and orchestrate module dependencies automatically. Each tier builds upon the previous one: shared monitoring infrastructure provides observability for core services, while API Center integrates with API Management for centralized governance.
+The architecture leverages **subscription-level deployments** to create resource groups and orchestrate module dependencies automatically. Each tier builds upon the previous one: shared monitoring infrastructure provides observability for core services, while API Center integrates with API Management for centralized governance.
 
 ```mermaid
 ---
@@ -114,16 +114,16 @@ flowchart TB
 
 ### Component Details
 
-| Layer         | Component               | Purpose                                    |
-| ------------- | ----------------------- | ------------------------------------------ |
-| **Shared**    | Log Analytics Workspace | Centralized logging and query analysis     |
-| **Shared**    | Application Insights    | Application performance monitoring (APM)   |
-| **Shared**    | Storage Account         | Diagnostic log retention and compliance    |
-| **Core**      | API Management Service  | API gateway, policies, and rate limiting   |
-| **Core**      | Developer Portal        | Self-service API documentation and testing |
-| **Core**      | APIM Workspaces         | Team isolation and independent lifecycle   |
-| **Inventory** | Azure API Center        | API catalog, governance, and discovery     |
-| **Inventory** | API Source Integration  | Automatic API synchronization from APIM    |
+| Layer         | Component               | Purpose                                        |
+| ------------- | ----------------------- | ---------------------------------------------- |
+| **Shared**    | Log Analytics Workspace | **Centralized logging** and query analysis     |
+| **Shared**    | Application Insights    | **Application performance monitoring (APM)**   |
+| **Shared**    | Storage Account         | Diagnostic log retention and **compliance**    |
+| **Core**      | API Management Service  | **API gateway, policies, and rate limiting**   |
+| **Core**      | Developer Portal        | **Self-service API documentation** and testing |
+| **Core**      | APIM Workspaces         | **Team isolation** and independent lifecycle   |
+| **Inventory** | Azure API Center        | **API catalog, governance, and discovery**     |
+| **Inventory** | API Source Integration  | **Automatic API synchronization** from APIM    |
 
 ## ✨ Features
 
@@ -153,21 +153,23 @@ Before deployment, verify that your environment meets these requirements. The Az
 
 | Category     | Requirement                                 | More Information                                                                           |
 | ------------ | ------------------------------------------- | ------------------------------------------------------------------------------------------ |
-| **Runtime**  | Azure CLI 2.50+                             | [Install Azure CLI](https://docs.microsoft.com/cli/azure/install-azure-cli)                |
-| **Runtime**  | Azure Developer CLI (azd) 1.5+              | [Install azd](https://learn.microsoft.com/azure/developer/azure-developer-cli/install-azd) |
+| **Runtime**  | **Azure CLI 2.50+**                         | [Install Azure CLI](https://docs.microsoft.com/cli/azure/install-azure-cli)                |
+| **Runtime**  | **Azure Developer CLI (azd) 1.5+**          | [Install azd](https://learn.microsoft.com/azure/developer/azure-developer-cli/install-azd) |
 | **Runtime**  | Bicep CLI (bundled with Azure CLI)          | [Bicep Documentation](https://docs.microsoft.com/azure/azure-resource-manager/bicep/)      |
-| **Azure**    | Active Azure subscription                   | [Create Free Account](https://azure.microsoft.com/free/)                                   |
-| **Azure**    | Contributor role at subscription level      | Required for resource group creation                                                       |
+| **Azure**    | **Active Azure subscription**               | [Create Free Account](https://azure.microsoft.com/free/)                                   |
+| **Azure**    | **Contributor role at subscription level**  | Required for resource group creation                                                       |
 | **Azure**    | API Management resource provider registered | Auto-registered on first deployment                                                        |
 | **Optional** | Azure AD tenant for developer portal        | Required for portal authentication                                                         |
 
-> ⚠️ **Important**: Premium SKU is required for multi-region deployments, virtual network integration, and higher SLA guarantees.
+> ⚠️ **Important**: **Premium SKU is required** for multi-region deployments, virtual network integration, and higher SLA guarantees.
 
 ## 🚀 Quick Start
 
 **Overview**
 
-Get started with the APIM Accelerator in under 5 minutes using Azure Developer CLI. This quick start deploys a development environment with all core components configured and ready for API development.
+Get started with the APIM Accelerator in **under 5 minutes** using Azure Developer CLI. This quick start deploys a development environment with all core components configured and ready for API development.
+
+> 💡 **Tip**: Ensure you have completed all [Requirements](#-requirements) before proceeding.
 
 ```bash
 # Clone the repository
@@ -200,7 +202,7 @@ Outputs:
 
 The APIM Accelerator supports multiple deployment methods to accommodate different operational workflows. Azure Developer CLI provides the simplest experience, while direct Bicep deployment offers more control for CI/CD integration.
 
-The deployment creates resources at the subscription scope, automatically provisioning resource groups and orchestrating dependencies between shared infrastructure, core platform, and inventory services.
+The deployment creates resources at the **subscription scope**, automatically provisioning resource groups and orchestrating dependencies between shared infrastructure, core platform, and inventory services.
 
 ### Option 1: Azure Developer CLI (Recommended)
 
@@ -233,7 +235,7 @@ az deployment sub create \
 4. Upload `infra/main.bicep`
 5. Configure parameters and deploy
 
-> 💡 **Tip**: Use `azd down` to clean up all deployed resources when testing is complete.
+> 💡 **Tip**: Use `azd down` to **clean up all deployed resources** when testing is complete.
 
 ### Deployment Sequence
 
@@ -241,8 +243,8 @@ The deployment follows this sequence automatically:
 
 1. **Resource Group Creation** - Creates container for all resources
 2. **Shared Infrastructure** - Deploys monitoring (Log Analytics, App Insights, Storage)
-3. **Core Platform** - Provisions API Management with workspaces
-4. **API Inventory** - Configures API Center with APIM integration
+3. **Core Platform** - Provisions **API Management with workspaces**
+4. **API Inventory** - Configures **API Center with APIM integration**
 
 ## 💻 Usage
 
@@ -306,6 +308,8 @@ The configuration philosophy favors convention over complexity. Reasonable defau
 
 Edit `infra/settings.yaml` to customize your deployment:
 
+> 📌 **Reference**: See [settings.yaml](infra/settings.yaml) for the complete configuration schema.
+
 ```yaml
 # Solution identifier for resource naming
 solutionName: "apim-accelerator"
@@ -343,13 +347,13 @@ core:
 
 ### SKU Recommendations
 
-| Environment | Recommended SKU | Capacity | Use Case                    |
-| ----------- | --------------- | -------- | --------------------------- |
-| Development | Developer       | 1        | Testing and development     |
-| Staging     | Standard        | 1        | Pre-production validation   |
-| Production  | Premium         | 2+       | High availability workloads |
+| Environment | Recommended SKU | Capacity | Use Case                        |
+| ----------- | --------------- | -------- | ------------------------------- |
+| Development | Developer       | 1        | Testing and development         |
+| Staging     | Standard        | 1        | Pre-production validation       |
+| Production  | **Premium**     | **2+**   | **High availability workloads** |
 
-> ⚠️ **Note**: Developer SKU has no SLA and is not suitable for production workloads.
+> ⚠️ **Warning**: Developer SKU has **no SLA** and is **not suitable for production workloads**.
 
 ## 🤝 Contributing
 
@@ -371,9 +375,9 @@ The project follows standard GitHub contribution workflows. Fork the repository,
 
 ### Code Standards
 
-- Follow existing Bicep module patterns in `src/`
+- **Follow existing Bicep module patterns** in `src/`
 - Include comprehensive comments for complex logic
-- Update `settings.yaml` schema when adding new parameters
+- **Update `settings.yaml` schema** when adding new parameters
 - Add appropriate tags for new resources
 
 ### Issue Templates
