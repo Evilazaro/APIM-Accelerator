@@ -69,27 +69,27 @@ flowchart TB
         direction TB
 
         subgraph shared["📊 Shared Infrastructure"]
-            direction LR
+            direction TB
             law["📈 Log Analytics<br/>Workspace"]:::mdTeal
             appins["📊 Application<br/>Insights"]:::mdTeal
             storage["💾 Storage<br/>Account"]:::mdTeal
         end
 
         subgraph core["⚙️ Core Platform"]
-            direction LR
+            direction TB
             apim["🌐 API Management<br/>Service"]:::mdBlue
             portal["👤 Developer<br/>Portal"]:::mdBlue
             workspaces["📁 APIM<br/>Workspaces"]:::mdBlue
         end
 
         subgraph inventory["📋 API Inventory"]
-            direction LR
+            direction TB
             apicenter["🗂️ Azure API<br/>Center"]:::mdGreen
             apisource["🔗 API Source<br/>Integration"]:::mdGreen
         end
 
         subgraph deploy["🚀 Deployment"]
-            direction LR
+            direction TB
             azd["⚡ Azure Developer<br/>CLI (azd)"]:::mdYellow
             bicep["📝 Bicep<br/>Templates"]:::mdYellow
         end
