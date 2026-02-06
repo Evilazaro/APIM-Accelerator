@@ -57,9 +57,8 @@ title: Target Business Outcomes
 config:
   theme: base
 ---
+%%{init: {"mindmap": {"useMaxWidth": true}}}%%
 mindmap
-  accTitle: Target Business Outcomes Mindmap
-  accDescr: Shows the five key business value areas delivered by the APIM Accelerator: Time to Market, Governance, Developer Experience, Cost Optimization, and Security
   root((APIM Accelerator<br/>Business Value))
     Time to Market
       Minutes vs Days
