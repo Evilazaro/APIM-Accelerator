@@ -114,6 +114,15 @@ flowchart TB
     accTitle: APIM Accelerator Business Capability Map
     accDescr: Hierarchical view of business capabilities enabled by the APIM Accelerator
 
+    %% ============================================
+    %% COLOR SCHEME DOCUMENTATION
+    %% ============================================
+    %% HIERARCHICAL COLORS (structural nesting):
+    %%   Level 1: #E8EAF6 (Indigo 50) - Main container
+    %%   Level 2: #C5CAE9 (Indigo 100) - Capability groups
+    %%   Level 3: #BBDEFB (Blue 100) - Individual capabilities
+    %% ============================================
+
     classDef l1Cap fill:#E8EAF6,stroke:#3F51B5,stroke-width:3px,color:#000
     classDef l2Cap fill:#C5CAE9,stroke:#3F51B5,stroke-width:2px,color:#000
     classDef l3Cap fill:#BBDEFB,stroke:#1976D2,stroke-width:1px,color:#000
@@ -123,44 +132,44 @@ flowchart TB
 
         subgraph cap1["BC-001: API Management Platform"]
             direction LR
-            cap1_1["BC-001.1<br/>API Gateway<br/>Operations"]:::l3Cap
-            cap1_2["BC-001.2<br/>Rate Limiting &<br/>Throttling"]:::l3Cap
-            cap1_3["BC-001.3<br/>Request/Response<br/>Transformation"]:::l3Cap
+            cap1_1["🔗 BC-001.1<br/>API Gateway<br/>Operations"]:::l3Cap
+            cap1_2["⚖️ BC-001.2<br/>Rate Limiting &<br/>Throttling"]:::l3Cap
+            cap1_3["🔄 BC-001.3<br/>Request/Response<br/>Transformation"]:::l3Cap
         end
 
         subgraph cap2["BC-002: API Governance"]
             direction LR
-            cap2_1["BC-002.1<br/>Policy<br/>Management"]:::l3Cap
-            cap2_2["BC-002.2<br/>Compliance<br/>Tracking"]:::l3Cap
-            cap2_3["BC-002.3<br/>Version<br/>Control"]:::l3Cap
+            cap2_1["📋 BC-002.1<br/>Policy<br/>Management"]:::l3Cap
+            cap2_2["✅ BC-002.2<br/>Compliance<br/>Tracking"]:::l3Cap
+            cap2_3["📈 BC-002.3<br/>Version<br/>Control"]:::l3Cap
         end
 
         subgraph cap3["BC-003: API Inventory Management"]
             direction LR
-            cap3_1["BC-003.1<br/>API<br/>Discovery"]:::l3Cap
-            cap3_2["BC-003.2<br/>API<br/>Cataloging"]:::l3Cap
-            cap3_3["BC-003.3<br/>Metadata<br/>Management"]:::l3Cap
+            cap3_1["🔍 BC-003.1<br/>API<br/>Discovery"]:::l3Cap
+            cap3_2["🗃️ BC-003.2<br/>API<br/>Cataloging"]:::l3Cap
+            cap3_3["🏷️ BC-003.3<br/>Metadata<br/>Management"]:::l3Cap
         end
 
         subgraph cap4["BC-004: Observability & Insights"]
             direction LR
-            cap4_1["BC-004.1<br/>Performance<br/>Monitoring"]:::l3Cap
-            cap4_2["BC-004.2<br/>Usage<br/>Analytics"]:::l3Cap
-            cap4_3["BC-004.3<br/>Diagnostic<br/>Logging"]:::l3Cap
+            cap4_1["📊 BC-004.1<br/>Performance<br/>Monitoring"]:::l3Cap
+            cap4_2["📀 BC-004.2<br/>Usage<br/>Analytics"]:::l3Cap
+            cap4_3["📝 BC-004.3<br/>Diagnostic<br/>Logging"]:::l3Cap
         end
 
         subgraph cap5["BC-005: Developer Enablement"]
             direction LR
-            cap5_1["BC-005.1<br/>Self-Service<br/>Portal"]:::l3Cap
-            cap5_2["BC-005.2<br/>API<br/>Documentation"]:::l3Cap
-            cap5_3["BC-005.3<br/>Developer<br/>Authentication"]:::l3Cap
+            cap5_1["🌐 BC-005.1<br/>Self-Service<br/>Portal"]:::l3Cap
+            cap5_2["📖 BC-005.2<br/>API<br/>Documentation"]:::l3Cap
+            cap5_3["🔐 BC-005.3<br/>Developer<br/>Authentication"]:::l3Cap
         end
 
         subgraph cap6["BC-006: Multi-Team Collaboration"]
             direction LR
-            cap6_1["BC-006.1<br/>Workspace<br/>Isolation"]:::l3Cap
-            cap6_2["BC-006.2<br/>Access<br/>Control"]:::l3Cap
-            cap6_3["BC-006.3<br/>Team<br/>Onboarding"]:::l3Cap
+            cap6_1["📦 BC-006.1<br/>Workspace<br/>Isolation"]:::l3Cap
+            cap6_2["🔒 BC-006.2<br/>Access<br/>Control"]:::l3Cap
+            cap6_3["🚀 BC-006.3<br/>Team<br/>Onboarding"]:::l3Cap
         end
     end
 
@@ -197,6 +206,16 @@ config:
 flowchart LR
     accTitle: APIM Accelerator Value Streams
     accDescr: Shows the three primary value streams enabled by the platform
+
+    %% ============================================
+    %% COLOR SCHEME DOCUMENTATION
+    %% ============================================
+    %% Level 1 (Main Groups): #E8EAF6 (Indigo 50) - Value streams
+    %% SEMANTIC COLORS by stage type:
+    %%   Stage: Green (#C8E6C9) - Process steps
+    %%   Gate: Yellow (#FFF9C4) - Decision/validation points
+    %%   End: Blue (#BBDEFB) - Completion states
+    %% ============================================
 
     classDef vsStage fill:#C8E6C9,stroke:#388E3C,stroke-width:2px,color:#000
     classDef vsGate fill:#FFF9C4,stroke:#F57F17,stroke-width:2px,color:#000
