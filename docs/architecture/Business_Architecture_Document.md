@@ -551,34 +551,45 @@ flowchart TB
     accTitle: APIM Accelerator Cross-Layer Dependencies
     accDescr: Shows dependencies flowing from Business through Application, Data, and Technology layers
 
+    %% ============================================
+    %% COLOR SCHEME DOCUMENTATION
+    %% ============================================
+    %% Level 1 (Main Groups): Indigo 50 (#E8EAF6)
+    %% SEMANTIC COLORS by layer function:
+    %%   Business: Indigo (#E8EAF6) - Strategic capabilities
+    %%   Application: Blue (#BBDEFB) - Services
+    %%   Data: Teal (#B2DFDB) - Storage/Analytics
+    %%   Technology: Yellow (#FFF9C4) - Infrastructure
+    %% ============================================
+
     classDef bizNode fill:#E8EAF6,stroke:#3F51B5,stroke-width:2px,color:#000
     classDef appNode fill:#BBDEFB,stroke:#1976D2,stroke-width:2px,color:#000
     classDef dataNode fill:#B2DFDB,stroke:#00796B,stroke-width:2px,color:#000
     classDef techNode fill:#FFF9C4,stroke:#F57F17,stroke-width:2px,color:#000
 
     subgraph business["Business Layer"]
-        b1["BC-001: API Management"]:::bizNode
-        b2["BC-002: Governance"]:::bizNode
-        b3["BC-004: Observability"]:::bizNode
-        b4["BC-005: Developer Enablement"]:::bizNode
+        b1["🔗 BC-001: API Management"]:::bizNode
+        b2["📋 BC-002: Governance"]:::bizNode
+        b3["📊 BC-004: Observability"]:::bizNode
+        b4["👨‍💻 BC-005: Developer Enablement"]:::bizNode
     end
 
     subgraph application["Application Layer"]
-        a1["API Management<br/>Service"]:::appNode
-        a2["API Center"]:::appNode
-        a3["Developer Portal"]:::appNode
+        a1["☁️ API Management<br/>Service"]:::appNode
+        a2["🗃️ API Center"]:::appNode
+        a3["🌐 Developer Portal"]:::appNode
     end
 
     subgraph data["Data Layer"]
-        d1["Log Analytics"]:::dataNode
-        d2["App Insights"]:::dataNode
-        d3["Storage Account"]:::dataNode
+        d1["📝 Log Analytics"]:::dataNode
+        d2["🔍 App Insights"]:::dataNode
+        d3["🗄️ Storage Account"]:::dataNode
     end
 
     subgraph technology["Technology Layer"]
-        t1["Azure Resource<br/>Manager"]:::techNode
-        t2["Bicep Templates"]:::techNode
-        t3["Azure Dev CLI"]:::techNode
+        t1["☁️ Azure Resource<br/>Manager"]:::techNode
+        t2["📜 Bicep Templates"]:::techNode
+        t3["🚀 Azure Dev CLI"]:::techNode
     end
 
     %% Business to Application
@@ -645,16 +656,25 @@ flowchart LR
     accTitle: Resource Deployment Sequence
     accDescr: Shows the required deployment order with dependencies
 
+    %% ============================================
+    %% COLOR SCHEME DOCUMENTATION
+    %% ============================================
+    %% SEMANTIC COLORS by deployment phase:
+    %%   Prerequisites: Yellow (#FFF9C4) - Setup requirements
+    %%   Core: Blue (#BBDEFB) - Primary services
+    %%   Dependent: Green (#C8E6C9) - Dependent services
+    %% ============================================
+
     classDef prereq fill:#FFF9C4,stroke:#F57F17,stroke-width:2px,color:#000
     classDef core fill:#BBDEFB,stroke:#1976D2,stroke-width:2px,color:#000
     classDef dependent fill:#C8E6C9,stroke:#388E3C,stroke-width:2px,color:#000
 
-    rg["Resource<br/>Group"]:::prereq
-    shared["Shared<br/>Infrastructure"]:::prereq
-    apim["API<br/>Management"]:::core
-    portal["Developer<br/>Portal"]:::dependent
-    ws["Workspaces"]:::dependent
-    inventory["API<br/>Inventory"]:::dependent
+    rg["📁 Resource<br/>Group"]:::prereq
+    shared["🛠️ Shared<br/>Infrastructure"]:::prereq
+    apim["☁️ API<br/>Management"]:::core
+    portal["🌐 Developer<br/>Portal"]:::dependent
+    ws["📦 Workspaces"]:::dependent
+    inventory["🗃️ API<br/>Inventory"]:::dependent
 
     rg --> shared
     shared --> apim
