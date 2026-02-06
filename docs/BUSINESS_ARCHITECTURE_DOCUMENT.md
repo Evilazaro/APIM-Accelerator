@@ -51,6 +51,34 @@ flowchart LR
     accTitle: APIM Accelerator Business Outcomes
     accDescr: Shows the key business value delivered by the APIM Accelerator including time savings, governance, and collaboration
 
+    %% ============================================
+    %% STANDARD COLOR SCHEME v2.1
+    %% ============================================
+    %% HIERARCHICAL (structural nesting):
+    %%   Level 1: #E8EAF6 (Indigo 50) - Main container
+    %%   Level 2: #C5CAE9 (Indigo 100) - Sub-containers
+    %% SEMANTIC (functional purpose):
+    %%   Green=#C8E6C9 (Success/Value), Blue=#BBDEFB (Info/Outcome)
+    %%   Yellow=#FFF9C4 (Inputs), Indigo=#E8EAF6 (Outputs)
+    %% ============================================
+
+    %% Full classDef palette (14 required)
+    classDef level1Group fill:#E8EAF6,stroke:#3F51B5,stroke-width:3px,color:#000
+    classDef level2Group fill:#C5CAE9,stroke:#3F51B5,stroke-width:2px,color:#000
+    classDef level3Group fill:#9FA8DA,stroke:#3F51B5,stroke-width:2px,color:#000
+    classDef level4Group fill:#7986CB,stroke:#3F51B5,stroke-width:1px,color:#000
+    classDef mainGroup fill:#E8EAF6,stroke:#3F51B5,stroke-width:3px,color:#000
+    classDef subGroup fill:#C5CAE9,stroke:#3F51B5,stroke-width:2px,color:#000
+    classDef mdBlue fill:#BBDEFB,stroke:#1976D2,stroke-width:2px,color:#000
+    classDef mdGreen fill:#C8E6C9,stroke:#388E3C,stroke-width:2px,color:#000
+    classDef mdYellow fill:#FFF9C4,stroke:#F57F17,stroke-width:2px,color:#000
+    classDef mdRed fill:#FFCDD2,stroke:#D32F2F,stroke-width:2px,color:#000
+    classDef mdOrange fill:#FFE0B2,stroke:#E64A19,stroke-width:2px,color:#000
+    classDef mdPurple fill:#E1BEE7,stroke:#7B1FA2,stroke-width:2px,color:#000
+    classDef mdTeal fill:#B2DFDB,stroke:#00796B,stroke-width:2px,color:#000
+    classDef mdGrey fill:#F5F5F5,stroke:#616161,stroke-width:2px,color:#000
+
+    %% Semantic aliases for this diagram
     classDef valueNode fill:#C8E6C9,stroke:#388E3C,stroke-width:2px,color:#000
     classDef outcomeNode fill:#BBDEFB,stroke:#1976D2,stroke-width:2px,color:#000
 
@@ -115,6 +143,35 @@ flowchart TB
     accTitle: APIM Accelerator Business Capability Model
     accDescr: Hierarchical view of business capabilities delivered by the accelerator organized by domain
 
+    %% ============================================
+    %% STANDARD COLOR SCHEME v2.1
+    %% ============================================
+    %% HIERARCHICAL (structural nesting):
+    %%   Level 1: #E8EAF6 (Indigo 50) - Enterprise container
+    %%   Level 2: Semantic colors for functional domains
+    %% SEMANTIC (functional purpose):
+    %%   Yellow=#FFF9C4 (Governance), Teal=#B2DFDB (Operations)
+    %%   Blue=#BBDEFB (Developer Experience), Pink=#F8BBD9 (Collaboration)
+    %%   Green=#C8E6C9 (Capabilities)
+    %% ============================================
+
+    %% Full classDef palette (14 required)
+    classDef level1Group fill:#E8EAF6,stroke:#3F51B5,stroke-width:3px,color:#000
+    classDef level2Group fill:#C5CAE9,stroke:#3F51B5,stroke-width:2px,color:#000
+    classDef level3Group fill:#9FA8DA,stroke:#3F51B5,stroke-width:2px,color:#000
+    classDef level4Group fill:#7986CB,stroke:#3F51B5,stroke-width:1px,color:#000
+    classDef mainGroup fill:#E8EAF6,stroke:#3F51B5,stroke-width:3px,color:#000
+    classDef subGroup fill:#C5CAE9,stroke:#3F51B5,stroke-width:2px,color:#000
+    classDef mdBlue fill:#BBDEFB,stroke:#1976D2,stroke-width:2px,color:#000
+    classDef mdGreen fill:#C8E6C9,stroke:#388E3C,stroke-width:2px,color:#000
+    classDef mdYellow fill:#FFF9C4,stroke:#F57F17,stroke-width:2px,color:#000
+    classDef mdRed fill:#FFCDD2,stroke:#D32F2F,stroke-width:2px,color:#000
+    classDef mdOrange fill:#FFE0B2,stroke:#E64A19,stroke-width:2px,color:#000
+    classDef mdPurple fill:#E1BEE7,stroke:#7B1FA2,stroke-width:2px,color:#000
+    classDef mdTeal fill:#B2DFDB,stroke:#00796B,stroke-width:2px,color:#000
+    classDef mdGrey fill:#F5F5F5,stroke:#616161,stroke-width:2px,color:#000
+
+    %% Semantic aliases for this diagram
     classDef domainNode fill:#E8EAF6,stroke:#3F51B5,stroke-width:3px,color:#000
     classDef capabilityNode fill:#BBDEFB,stroke:#1976D2,stroke-width:2px,color:#000
     classDef subCapNode fill:#C8E6C9,stroke:#388E3C,stroke-width:2px,color:#000
@@ -223,6 +280,34 @@ flowchart LR
     accTitle: API Lifecycle Value Stream for APIM Accelerator
     accDescr: Shows the end-to-end value stream from API design to consumer onboarding
 
+    %% ============================================
+    %% STANDARD COLOR SCHEME v2.1
+    %% ============================================
+    %% HIERARCHICAL (structural nesting):
+    %%   Level 1: #E8EAF6 (Indigo 50) - Main container
+    %%   Level 2: #B2DFDB (Teal 100) - Enablers subgroup
+    %% SEMANTIC (functional purpose):
+    %%   Blue=#BBDEFB (Stages), Green=#C8E6C9 (Enablers)
+    %%   Yellow=#FFF9C4 (Time indicators)
+    %% ============================================
+
+    %% Full classDef palette (14 required)
+    classDef level1Group fill:#E8EAF6,stroke:#3F51B5,stroke-width:3px,color:#000
+    classDef level2Group fill:#C5CAE9,stroke:#3F51B5,stroke-width:2px,color:#000
+    classDef level3Group fill:#9FA8DA,stroke:#3F51B5,stroke-width:2px,color:#000
+    classDef level4Group fill:#7986CB,stroke:#3F51B5,stroke-width:1px,color:#000
+    classDef mainGroup fill:#E8EAF6,stroke:#3F51B5,stroke-width:3px,color:#000
+    classDef subGroup fill:#C5CAE9,stroke:#3F51B5,stroke-width:2px,color:#000
+    classDef mdBlue fill:#BBDEFB,stroke:#1976D2,stroke-width:2px,color:#000
+    classDef mdGreen fill:#C8E6C9,stroke:#388E3C,stroke-width:2px,color:#000
+    classDef mdYellow fill:#FFF9C4,stroke:#F57F17,stroke-width:2px,color:#000
+    classDef mdRed fill:#FFCDD2,stroke:#D32F2F,stroke-width:2px,color:#000
+    classDef mdOrange fill:#FFE0B2,stroke:#E64A19,stroke-width:2px,color:#000
+    classDef mdPurple fill:#E1BEE7,stroke:#7B1FA2,stroke-width:2px,color:#000
+    classDef mdTeal fill:#B2DFDB,stroke:#00796B,stroke-width:2px,color:#000
+    classDef mdGrey fill:#F5F5F5,stroke:#616161,stroke-width:2px,color:#000
+
+    %% Semantic aliases for this diagram
     classDef stageNode fill:#BBDEFB,stroke:#1976D2,stroke-width:2px,color:#000
     classDef enablerNode fill:#C8E6C9,stroke:#388E3C,stroke-width:2px,color:#000
     classDef timeNode fill:#FFF9C4,stroke:#F57F17,stroke-width:1px,color:#000,font-size:10px
@@ -297,6 +382,34 @@ flowchart TD
     accTitle: APIM Accelerator Principle Dependency Graph
     accDescr: Shows how architecture principles depend on and reinforce each other
 
+    %% ============================================
+    %% STANDARD COLOR SCHEME v2.1
+    %% ============================================
+    %% HIERARCHICAL (structural nesting):
+    %%   Level 1: #E8EAF6 (Indigo 50) - Principles container
+    %% SEMANTIC (functional purpose):
+    %%   Blue=#BBDEFB (Foundational principles)
+    %%   Green=#C8E6C9 (Derived principles)
+    %%   Yellow=#FFF9C4 (Outcome principles)
+    %% ============================================
+
+    %% Full classDef palette (14 required)
+    classDef level1Group fill:#E8EAF6,stroke:#3F51B5,stroke-width:3px,color:#000
+    classDef level2Group fill:#C5CAE9,stroke:#3F51B5,stroke-width:2px,color:#000
+    classDef level3Group fill:#9FA8DA,stroke:#3F51B5,stroke-width:2px,color:#000
+    classDef level4Group fill:#7986CB,stroke:#3F51B5,stroke-width:1px,color:#000
+    classDef mainGroup fill:#E8EAF6,stroke:#3F51B5,stroke-width:3px,color:#000
+    classDef subGroup fill:#C5CAE9,stroke:#3F51B5,stroke-width:2px,color:#000
+    classDef mdBlue fill:#BBDEFB,stroke:#1976D2,stroke-width:2px,color:#000
+    classDef mdGreen fill:#C8E6C9,stroke:#388E3C,stroke-width:2px,color:#000
+    classDef mdYellow fill:#FFF9C4,stroke:#F57F17,stroke-width:2px,color:#000
+    classDef mdRed fill:#FFCDD2,stroke:#D32F2F,stroke-width:2px,color:#000
+    classDef mdOrange fill:#FFE0B2,stroke:#E64A19,stroke-width:2px,color:#000
+    classDef mdPurple fill:#E1BEE7,stroke:#7B1FA2,stroke-width:2px,color:#000
+    classDef mdTeal fill:#B2DFDB,stroke:#00796B,stroke-width:2px,color:#000
+    classDef mdGrey fill:#F5F5F5,stroke:#616161,stroke-width:2px,color:#000
+
+    %% Semantic aliases for this diagram
     classDef foundational fill:#BBDEFB,stroke:#1976D2,stroke-width:3px,color:#000
     classDef derived fill:#C8E6C9,stroke:#388E3C,stroke-width:2px,color:#000
     classDef outcome fill:#FFF9C4,stroke:#F57F17,stroke-width:2px,color:#000
@@ -362,11 +475,34 @@ flowchart TB
     accTitle: APIM Accelerator Baseline Architecture
     accDescr: Shows the three-tier baseline architecture with shared, core, and inventory layers
 
+    %% ============================================
+    %% STANDARD COLOR SCHEME v2.1
+    %% ============================================
+    %% HIERARCHICAL (structural nesting):
+    %%   Level 1: #E8EAF6 (Indigo 50) - Baseline Landing Zone
+    %%   Level 2: Semantic colors for functional tiers
+    %% SEMANTIC (functional purpose):
+    %%   Yellow=#FFF9C4 (Shared/Monitoring tier)
+    %%   Blue=#BBDEFB (Core Platform tier)
+    %%   Teal=#B2DFDB (Inventory tier)
+    %%   Green=#C8E6C9 (Workspaces)
+    %% ============================================
+
+    %% Full classDef palette (14 required)
     classDef level1Group fill:#E8EAF6,stroke:#3F51B5,stroke-width:3px,color:#000
+    classDef level2Group fill:#C5CAE9,stroke:#3F51B5,stroke-width:2px,color:#000
+    classDef level3Group fill:#9FA8DA,stroke:#3F51B5,stroke-width:2px,color:#000
+    classDef level4Group fill:#7986CB,stroke:#3F51B5,stroke-width:1px,color:#000
+    classDef mainGroup fill:#E8EAF6,stroke:#3F51B5,stroke-width:3px,color:#000
+    classDef subGroup fill:#C5CAE9,stroke:#3F51B5,stroke-width:2px,color:#000
     classDef mdBlue fill:#BBDEFB,stroke:#1976D2,stroke-width:2px,color:#000
     classDef mdGreen fill:#C8E6C9,stroke:#388E3C,stroke-width:2px,color:#000
-    classDef mdTeal fill:#B2DFDB,stroke:#00796B,stroke-width:2px,color:#000
     classDef mdYellow fill:#FFF9C4,stroke:#F57F17,stroke-width:2px,color:#000
+    classDef mdRed fill:#FFCDD2,stroke:#D32F2F,stroke-width:2px,color:#000
+    classDef mdOrange fill:#FFE0B2,stroke:#E64A19,stroke-width:2px,color:#000
+    classDef mdPurple fill:#E1BEE7,stroke:#7B1FA2,stroke-width:2px,color:#000
+    classDef mdTeal fill:#B2DFDB,stroke:#00796B,stroke-width:2px,color:#000
+    classDef mdGrey fill:#F5F5F5,stroke:#616161,stroke-width:2px,color:#000
 
     subgraph baseline["🏗️ Baseline Landing Zone"]
         direction TB
@@ -533,6 +669,37 @@ flowchart LR
     accTitle: APIM Accelerator Security Standards
     accDescr: Shows the security controls implemented across identity, network, and data layers
 
+    %% ============================================
+    %% STANDARD COLOR SCHEME v2.1
+    %% ============================================
+    %% HIERARCHICAL (structural nesting):
+    %%   Level 1: #E8EAF6 (Indigo 50) - Security container
+    %%   Level 2: Semantic colors for security domains
+    %% SEMANTIC (functional purpose):
+    %%   Yellow=#FFF9C4 (Identity layer)
+    %%   Teal=#B2DFDB (Network layer)
+    %%   Pink=#F8BBD9 (Data layer)
+    %%   Green=#C8E6C9 (Controls)
+    %%   Blue=#BBDEFB (Categories)
+    %% ============================================
+
+    %% Full classDef palette (14 required)
+    classDef level1Group fill:#E8EAF6,stroke:#3F51B5,stroke-width:3px,color:#000
+    classDef level2Group fill:#C5CAE9,stroke:#3F51B5,stroke-width:2px,color:#000
+    classDef level3Group fill:#9FA8DA,stroke:#3F51B5,stroke-width:2px,color:#000
+    classDef level4Group fill:#7986CB,stroke:#3F51B5,stroke-width:1px,color:#000
+    classDef mainGroup fill:#E8EAF6,stroke:#3F51B5,stroke-width:3px,color:#000
+    classDef subGroup fill:#C5CAE9,stroke:#3F51B5,stroke-width:2px,color:#000
+    classDef mdBlue fill:#BBDEFB,stroke:#1976D2,stroke-width:2px,color:#000
+    classDef mdGreen fill:#C8E6C9,stroke:#388E3C,stroke-width:2px,color:#000
+    classDef mdYellow fill:#FFF9C4,stroke:#F57F17,stroke-width:2px,color:#000
+    classDef mdRed fill:#FFCDD2,stroke:#D32F2F,stroke-width:2px,color:#000
+    classDef mdOrange fill:#FFE0B2,stroke:#E64A19,stroke-width:2px,color:#000
+    classDef mdPurple fill:#E1BEE7,stroke:#7B1FA2,stroke-width:2px,color:#000
+    classDef mdTeal fill:#B2DFDB,stroke:#00796B,stroke-width:2px,color:#000
+    classDef mdGrey fill:#F5F5F5,stroke:#616161,stroke-width:2px,color:#000
+
+    %% Semantic aliases for this diagram
     classDef controlNode fill:#C8E6C9,stroke:#388E3C,stroke-width:2px,color:#000
     classDef categoryNode fill:#BBDEFB,stroke:#1976D2,stroke-width:2px,color:#000
 
@@ -610,6 +777,35 @@ flowchart TD
     accTitle: APIM Accelerator Internal Dependencies
     accDescr: Shows the dependency relationships between Bicep modules with data flows
 
+    %% ============================================
+    %% STANDARD COLOR SCHEME v2.1
+    %% ============================================
+    %% HIERARCHICAL (structural nesting):
+    %%   Level 1: #FAFAFA (Grey 50) - Dependencies container
+    %% SEMANTIC (functional purpose):
+    %%   Indigo=#E8EAF6 (Orchestrator)
+    %%   Blue=#BBDEFB (Modules)
+    %%   Green=#C8E6C9 (Shared modules)
+    %%   Yellow=#FFF9C4 (Resources)
+    %% ============================================
+
+    %% Full classDef palette (14 required)
+    classDef level1Group fill:#E8EAF6,stroke:#3F51B5,stroke-width:3px,color:#000
+    classDef level2Group fill:#C5CAE9,stroke:#3F51B5,stroke-width:2px,color:#000
+    classDef level3Group fill:#9FA8DA,stroke:#3F51B5,stroke-width:2px,color:#000
+    classDef level4Group fill:#7986CB,stroke:#3F51B5,stroke-width:1px,color:#000
+    classDef mainGroup fill:#E8EAF6,stroke:#3F51B5,stroke-width:3px,color:#000
+    classDef subGroup fill:#C5CAE9,stroke:#3F51B5,stroke-width:2px,color:#000
+    classDef mdBlue fill:#BBDEFB,stroke:#1976D2,stroke-width:2px,color:#000
+    classDef mdGreen fill:#C8E6C9,stroke:#388E3C,stroke-width:2px,color:#000
+    classDef mdYellow fill:#FFF9C4,stroke:#F57F17,stroke-width:2px,color:#000
+    classDef mdRed fill:#FFCDD2,stroke:#D32F2F,stroke-width:2px,color:#000
+    classDef mdOrange fill:#FFE0B2,stroke:#E64A19,stroke-width:2px,color:#000
+    classDef mdPurple fill:#E1BEE7,stroke:#7B1FA2,stroke-width:2px,color:#000
+    classDef mdTeal fill:#B2DFDB,stroke:#00796B,stroke-width:2px,color:#000
+    classDef mdGrey fill:#F5F5F5,stroke:#616161,stroke-width:2px,color:#000
+
+    %% Semantic aliases for this diagram
     classDef orchestrator fill:#E8EAF6,stroke:#3F51B5,stroke-width:3px,color:#000
     classDef module fill:#BBDEFB,stroke:#1976D2,stroke-width:2px,color:#000
     classDef shared fill:#C8E6C9,stroke:#388E3C,stroke-width:2px,color:#000
@@ -675,6 +871,35 @@ flowchart LR
     accTitle: APIM Accelerator External Dependencies
     accDescr: Shows dependencies on Azure services and external tools
 
+    %% ============================================
+    %% STANDARD COLOR SCHEME v2.1
+    %% ============================================
+    %% HIERARCHICAL (structural nesting):
+    %%   Level 1: #E8EAF6 (Indigo 50) - Accelerator container
+    %%   Level 1: #E8F5E9 (Green 50) - Azure container
+    %%   Level 1: #FFF8E1 (Amber 50) - Tools container
+    %% SEMANTIC (functional purpose):
+    %%   Blue=#BBDEFB (Internal), Green=#C8E6C9 (Azure)
+    %%   Yellow=#FFF9C4 (Tools)
+    %% ============================================
+
+    %% Full classDef palette (14 required)
+    classDef level1Group fill:#E8EAF6,stroke:#3F51B5,stroke-width:3px,color:#000
+    classDef level2Group fill:#C5CAE9,stroke:#3F51B5,stroke-width:2px,color:#000
+    classDef level3Group fill:#9FA8DA,stroke:#3F51B5,stroke-width:2px,color:#000
+    classDef level4Group fill:#7986CB,stroke:#3F51B5,stroke-width:1px,color:#000
+    classDef mainGroup fill:#E8EAF6,stroke:#3F51B5,stroke-width:3px,color:#000
+    classDef subGroup fill:#C5CAE9,stroke:#3F51B5,stroke-width:2px,color:#000
+    classDef mdBlue fill:#BBDEFB,stroke:#1976D2,stroke-width:2px,color:#000
+    classDef mdGreen fill:#C8E6C9,stroke:#388E3C,stroke-width:2px,color:#000
+    classDef mdYellow fill:#FFF9C4,stroke:#F57F17,stroke-width:2px,color:#000
+    classDef mdRed fill:#FFCDD2,stroke:#D32F2F,stroke-width:2px,color:#000
+    classDef mdOrange fill:#FFE0B2,stroke:#E64A19,stroke-width:2px,color:#000
+    classDef mdPurple fill:#E1BEE7,stroke:#7B1FA2,stroke-width:2px,color:#000
+    classDef mdTeal fill:#B2DFDB,stroke:#00796B,stroke-width:2px,color:#000
+    classDef mdGrey fill:#F5F5F5,stroke:#616161,stroke-width:2px,color:#000
+
+    %% Semantic aliases for this diagram
     classDef internal fill:#BBDEFB,stroke:#1976D2,stroke-width:2px,color:#000
     classDef azure fill:#C8E6C9,stroke:#388E3C,stroke-width:2px,color:#000
     classDef tool fill:#FFF9C4,stroke:#F57F17,stroke-width:2px,color:#000
