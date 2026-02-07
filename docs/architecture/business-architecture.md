@@ -16,18 +16,20 @@
 
 ### Overview
 
-The APIM Accelerator is a production-ready Azure API Management Landing Zone accelerator designed to enable organizations to rapidly deploy enterprise-grade API infrastructure. This Business Architecture document provides a comprehensive analysis of the business capabilities, value streams, strategic objectives, and governance structures that the solution addresses.
+The APIM Accelerator is a **production-ready Azure API Management Landing Zone accelerator** designed to enable organizations to **rapidly deploy enterprise-grade API infrastructure**. This Business Architecture document provides a comprehensive analysis of the business capabilities, value streams, strategic objectives, and governance structures that the solution addresses.
 
-The accelerator targets **platform engineering teams**, **cloud architects**, and **DevOps engineers** who require scalable, secure, and compliant API management capabilities. It addresses the business need for centralized API governance, multi-team collaboration, and reduced time-to-production for API platforms.
+The accelerator targets **platform engineering teams**, **cloud architects**, and **DevOps engineers** who require scalable, secure, and compliant API management capabilities. It addresses the business need for **centralized API governance**, **multi-team collaboration**, and **reduced time-to-production** for API platforms.
 
 ### Strategic Alignment
 
 The APIM Accelerator aligns with key organizational objectives:
 
-- **Digital Transformation**: Enables API-first strategies by providing foundational infrastructure
-- **Developer Productivity**: Reduces deployment complexity from days to minutes with one-command deployment
-- **Security & Compliance**: Built-in GDPR compliance, managed identity support, and audit logging
-- **Cost Optimization**: Premium SKU workspace isolation enables cost-effective multi-team support
+- **Digital Transformation**: Enables **API-first strategies** by providing foundational infrastructure
+- **Developer Productivity**: Reduces deployment complexity **from days to minutes** with one-command deployment
+- **Security & Compliance**: Built-in **GDPR compliance**, **managed identity support**, and **audit logging**
+- **Cost Optimization**: **Premium SKU workspace isolation** enables cost-effective multi-team support
+
+> 💡 **Key Benefit**: One-command deployment with `azd up` dramatically reduces time-to-value for API platform teams.
 
 ### Capability Coverage
 
@@ -198,7 +200,9 @@ The analysis covers the following source paths:
 
 ### Summary
 
-The Architecture Landscape reveals a well-structured solution with **43 identified business components** across all 11 component types. The solution demonstrates particularly strong maturity (Level 4) in core platform capabilities, monitoring infrastructure, and deployment automation. Areas for potential improvement include governance formalization and developer experience enhancement.
+The Architecture Landscape reveals a well-structured solution with **43 identified business components** across all 11 component types. The solution demonstrates particularly strong maturity (**Level 4**) in core platform capabilities, monitoring infrastructure, and deployment automation. Areas for potential improvement include **governance formalization** and **developer experience enhancement**.
+
+> 📌 **Architecture Insight**: Level 4 (Measured) maturity indicates quantified processes with established metrics and continuous measurement.
 
 ---
 
@@ -210,15 +214,15 @@ The APIM Accelerator adheres to TOGAF 10 Business Architecture principles, empha
 
 ### Core Principles
 
-| ID         | Principle                     | Rationale                                                                     | Implications                                                                  |
-| ---------- | ----------------------------- | ----------------------------------------------------------------------------- | ----------------------------------------------------------------------------- |
-| **BP-001** | **Capability-Driven Design**  | Business capabilities define what the organization can do, independent of how | Infrastructure modules align to capability areas (core, shared, inventory)    |
-| **BP-002** | **Value Stream Optimization** | End-to-end value delivery must be measurable and optimized                    | One-command deployment reduces time-to-value from days to minutes             |
-| **BP-003** | **Security by Default**       | Security is a foundational capability, not an afterthought                    | Managed identity, RBAC, and compliance tags built into every resource         |
-| **BP-004** | **Observability First**       | All components must be observable for effective operations                    | Monitoring infrastructure deploys first as a dependency                       |
-| **BP-005** | **Multi-Tenancy Isolation**   | Teams require logical isolation within shared infrastructure                  | Workspace-based architecture enables cost-effective team separation           |
-| **BP-006** | **Infrastructure as Code**    | All infrastructure must be version-controlled and reproducible                | Bicep templates with YAML configuration enable GitOps workflows               |
-| **BP-007** | **Self-Service Enablement**   | Reduce friction for API consumers and publishers                              | Developer portal with Azure AD integration provides self-service capabilities |
+| ID         | Principle                     | Rationale                                                                     | Implications                                                                        |
+| ---------- | ----------------------------- | ----------------------------------------------------------------------------- | ----------------------------------------------------------------------------------- |
+| **BP-001** | **Capability-Driven Design**  | Business capabilities define what the organization can do, independent of how | Infrastructure modules **MUST** align to capability areas (core, shared, inventory) |
+| **BP-002** | **Value Stream Optimization** | End-to-end value delivery **MUST** be measurable and optimized                | One-command deployment reduces time-to-value from days to minutes                   |
+| **BP-003** | **Security by Default**       | Security is a **foundational capability**, not an afterthought                | **Managed identity, RBAC, and compliance tags** built into every resource           |
+| **BP-004** | **Observability First**       | All components **MUST** be observable for effective operations                | Monitoring infrastructure **deploys first** as a dependency                         |
+| **BP-005** | **Multi-Tenancy Isolation**   | Teams **require** logical isolation within shared infrastructure              | Workspace-based architecture enables cost-effective team separation                 |
+| **BP-006** | **Infrastructure as Code**    | All infrastructure **MUST** be version-controlled and reproducible            | Bicep templates with YAML configuration enable GitOps workflows                     |
+| **BP-007** | **Self-Service Enablement**   | Reduce friction for API consumers and publishers                              | Developer portal with Azure AD integration provides self-service capabilities       |
 
 ### Principle Hierarchy
 
@@ -340,7 +344,9 @@ xychart-beta
 
 ### Summary
 
-The current state baseline reveals a mature implementation with most capabilities at Level 3-4 maturity. Key gaps exist in API Governance and Developer Self-Service, which require enhancement to reach target maturity levels. The platform provisioning value stream demonstrates excellent performance with ~5-minute deployment time.
+The current state baseline reveals a mature implementation with most capabilities at **Level 3-4 maturity**. Key gaps exist in **API Governance** and **Developer Self-Service**, which **require enhancement** to reach target maturity levels. The platform provisioning value stream demonstrates excellent performance with **~5-minute deployment time**.
+
+> ⚠️ **Gap Alert**: API Governance and Developer Self-Service capabilities require priority focus to advance from Level 3 to Level 4 maturity.
 
 ---
 
@@ -564,13 +570,15 @@ See Section 2.6 for summary. No additional specifications detected in source fil
 
 ### 5.8 Business Rules Specifications
 
-| Rule ID | Rule                                | Enforcement                | Source                      |
-| ------- | ----------------------------------- | -------------------------- | --------------------------- |
-| BR-001  | Premium SKU required for workspaces | Deployment validation      | `README.md:139-140`         |
-| BR-002  | Managed identity mandatory          | Bicep parameter validation | `infra/settings.yaml:13-15` |
-| BR-003  | CORS policy for developer portal    | APIM policy configuration  | `developer-portal.bicep`    |
-| BR-004  | Naming convention enforcement       | Variable composition       | `infra/main.bicep:78-82`    |
-| BR-005  | Tag requirements for governance     | Bicep union operations     | `infra/settings.yaml:26-37` |
+| Rule ID | Rule                                          | Enforcement                | Source                      |
+| ------- | --------------------------------------------- | -------------------------- | --------------------------- |
+| BR-001  | **Premium SKU required** for workspaces       | Deployment validation      | `README.md:139-140`         |
+| BR-002  | **Managed identity mandatory**                | Bicep parameter validation | `infra/settings.yaml:13-15` |
+| BR-003  | **CORS policy required** for developer portal | APIM policy configuration  | `developer-portal.bicep`    |
+| BR-004  | **Naming convention enforcement**             | Variable composition       | `infra/main.bicep:78-82`    |
+| BR-005  | **Tag requirements** for governance           | Bicep union operations     | `infra/settings.yaml:26-37` |
+
+> ⚠️ **Critical Constraint**: BR-001 and BR-002 are mandatory requirements—workspaces will not function without Premium SKU and managed identity configuration.
 
 ### 5.9 Business Events Specifications
 

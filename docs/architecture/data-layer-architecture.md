@@ -15,19 +15,21 @@
 
 ### Overview
 
-The APIM Accelerator Data Layer provides a comprehensive data management foundation for the Azure API Management landing zone. This infrastructure-as-code solution implements a modern observability data architecture with centralized log aggregation, long-term storage, and telemetry collection capabilities.
+The APIM Accelerator Data Layer provides a **comprehensive data management foundation** for the Azure API Management landing zone. This infrastructure-as-code solution implements a **modern observability data architecture** with **centralized log aggregation**, **long-term storage**, and **telemetry collection** capabilities.
 
-The data landscape encompasses 3 primary data stores, 2 data flow pipelines, and multiple configuration-driven data models. The architecture follows Azure best practices for data governance, implementing tag-based cost tracking, managed identity security, and configurable retention policies.
+The data landscape encompasses **3 primary data stores**, **2 data flow pipelines**, and multiple configuration-driven data models. The architecture follows **Azure best practices for data governance**, implementing **tag-based cost tracking**, **managed identity security**, and **configurable retention policies**.
 
 ### Summary
 
 | Metric             | Value                                                    |
 | ------------------ | -------------------------------------------------------- |
-| Total Data Stores  | 3 (Log Analytics, Storage Account, Application Insights) |
-| Data Flow Patterns | 2 (Diagnostic Pipeline, Telemetry Pipeline)              |
-| Data Retention     | 90-730 days (configurable)                               |
-| Data Governance    | Tag-based ownership, RBAC, managed identities            |
-| Compliance Tags    | GDPR-aware, cost center tracking                         |
+| Total Data Stores  | **3** (Log Analytics, Storage Account, Application Insights) |
+| Data Flow Patterns | **2** (Diagnostic Pipeline, Telemetry Pipeline)              |
+| Data Retention     | **90-730 days** (configurable)                               |
+| Data Governance    | **Tag-based ownership, RBAC, managed identities**            |
+| Compliance Tags    | **GDPR-aware**, cost center tracking                         |
+
+> 📌 **Key Architecture Decision**: Hot-warm-cold storage tier strategy optimizes cost while maintaining real-time analysis capability.
 
 ---
 
@@ -35,9 +37,11 @@ The data landscape encompasses 3 primary data stores, 2 data flow pipelines, and
 
 ### Overview
 
-The Data Layer operates within the Azure cloud ecosystem, providing observability and monitoring data infrastructure for the APIM Accelerator solution. The architecture is organized into three distinct data domains: Operational Logging, Application Telemetry, and Configuration State.
+The Data Layer operates within the Azure cloud ecosystem, providing observability and monitoring data infrastructure for the APIM Accelerator solution. The architecture is organized into **three distinct data domains**: **Operational Logging**, **Application Telemetry**, and **Configuration State**.
 
-The storage tier strategy implements a hot-warm-cold pattern: Log Analytics for immediate analysis (hot), Application Insights for performance telemetry (warm), and Azure Storage for long-term archival (cold). Integration zones are established through Azure's native diagnostic settings and managed identity authentication.
+The storage tier strategy implements a **hot-warm-cold pattern**: **Log Analytics for immediate analysis (hot)**, **Application Insights for performance telemetry (warm)**, and **Azure Storage for long-term archival (cold)**. Integration zones are established through Azure's native diagnostic settings and **managed identity authentication**.
+
+> 💡 **Best Practice**: The hub-and-spoke pattern with Log Analytics as the central hub enables unified querying across all telemetry sources.
 
 ### Data Domain Map
 
@@ -120,32 +124,34 @@ The Data Layer adheres to core TOGAF data architecture principles that ensure da
 
 ### Principle 1: Single Source of Truth
 
-All configuration data is defined in `infra/settings.yaml`, which serves as the canonical source for monitoring, identity, and tagging configurations. Bicep modules reference this centralized configuration to ensure consistency across deployments.
+All configuration data **MUST** be defined in `infra/settings.yaml`, which serves as the **canonical source** for monitoring, identity, and tagging configurations. Bicep modules reference this centralized configuration to ensure consistency across deployments.
 
-**Rationale**: Eliminates configuration drift and ensures reproducible deployments.
+**Rationale**: Eliminates configuration drift and ensures **reproducible deployments**.
 
 ### Principle 2: Data Quality Gates
 
-Diagnostic settings capture `allLogs` and `allMetrics` categories to ensure comprehensive observability coverage. Retention policies (90-730 days) are enforced at the resource level.
+Diagnostic settings **MUST** capture `allLogs` and `allMetrics` categories to ensure **comprehensive observability coverage**. Retention policies (**90-730 days**) are **enforced at the resource level**.
 
 **Rationale**: Ensures complete telemetry capture for troubleshooting and compliance.
 
 ### Principle 3: Privacy-by-Design
 
-Managed identities are used for all data access, eliminating credential exposure. Storage accounts use Standard_LRS with role-based access control.
+**Managed identities MUST be used** for all data access, **eliminating credential exposure**. Storage accounts use **Standard_LRS with role-based access control**.
 
-**Rationale**: Reduces attack surface and supports regulatory compliance (GDPR, HIPAA).
+**Rationale**: Reduces attack surface and supports **regulatory compliance (GDPR, HIPAA)**.
+
+> ⚠️ **Security Requirement**: Never use connection strings or shared keys for data store access—managed identities are mandatory.
 
 ### Principle 4: Governance-First
 
-All data resources inherit governance tags from the shared configuration:
+All data resources **MUST** inherit governance tags from the shared configuration:
 
-- `CostCenter`: Financial accountability
-- `Owner`: Operational responsibility
-- `RegulatoryCompliance`: Compliance mapping
-- `ServiceClass`: SLA tier classification
+- `CostCenter`: **Financial accountability**
+- `Owner`: **Operational responsibility**
+- `RegulatoryCompliance`: **Compliance mapping**
+- `ServiceClass`: **SLA tier classification**
 
-**Rationale**: Enables cost tracking, ownership clarity, and compliance reporting.
+**Rationale**: Enables **cost tracking, ownership clarity, and compliance reporting**.
 
 ### Summary
 
@@ -247,7 +253,9 @@ flowchart TB
 
 ### Summary
 
-The baseline architecture provides a solid foundation for observability data management. Key strengths include comprehensive diagnostic capture, managed identity security, and tag-based governance. Opportunities exist to enhance data lineage tracking and implement proactive data quality monitoring.
+The baseline architecture provides a solid foundation for observability data management. Key strengths include **comprehensive diagnostic capture**, **managed identity security**, and **tag-based governance**. Opportunities exist to enhance **data lineage tracking** and implement **proactive data quality monitoring**.
+
+> 📌 **Maturity Gap**: Data Lineage is at Level 2 (Managed)—consider implementing explicit lineage tracking for compliance scenarios.
 
 ---
 
