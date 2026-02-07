@@ -21,8 +21,8 @@ The data landscape encompasses **3 primary data stores**, **2 data flow pipeline
 
 ### Summary
 
-| Metric             | Value                                                    |
-| ------------------ | -------------------------------------------------------- |
+| Metric             | Value                                                        |
+| ------------------ | ------------------------------------------------------------ |
 | Total Data Stores  | **3** (Log Analytics, Storage Account, Application Insights) |
 | Data Flow Patterns | **2** (Diagnostic Pipeline, Telemetry Pipeline)              |
 | Data Retention     | **90-730 days** (configurable)                               |
