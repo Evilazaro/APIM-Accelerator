@@ -100,10 +100,10 @@ flowchart TB
     configDomain --> storageDomain
 
     style dataLayer fill:#E8EAF6,stroke:#3F51B5,stroke-width:3px
-    style operationalDomain fill:#E3F2FD,stroke:#1976D2,stroke-width:2px
-    style telemetryDomain fill:#E8F5E9,stroke:#388E3C,stroke-width:2px
-    style storageDomain fill:#E0F2F1,stroke:#00796B,stroke-width:2px
-    style configDomain fill:#FFF3E0,stroke:#E64A19,stroke-width:2px
+    style operationalDomain fill:#BBDEFB,stroke:#1976D2,stroke-width:2px
+    style telemetryDomain fill:#C8E6C9,stroke:#388E3C,stroke-width:2px
+    style storageDomain fill:#B2DFDB,stroke:#00796B,stroke-width:2px
+    style configDomain fill:#FFE0B2,stroke:#E64A19,stroke-width:2px
 ```
 
 ### Summary
@@ -226,13 +226,13 @@ flowchart TB
     kql --> dashboards
     kql --> alerts
 
-    style sources fill:#E3F2FD,stroke:#1976D2,stroke-width:2px
-    style processing fill:#FFF3E0,stroke:#E64A19,stroke-width:2px
+    style sources fill:#BBDEFB,stroke:#1976D2,stroke-width:2px
+    style processing fill:#FFE0B2,stroke:#E64A19,stroke-width:2px
     style storage fill:#E8EAF6,stroke:#3F51B5,stroke-width:2px
-    style hotTier fill:#FFEBEE,stroke:#D32F2F,stroke-width:1px
-    style warmTier fill:#FFF8E1,stroke:#F57F17,stroke-width:1px
-    style coldTier fill:#E0F7FA,stroke:#00796B,stroke-width:1px
-    style consumption fill:#F3E5F5,stroke:#7B1FA2,stroke-width:2px
+    style hotTier fill:#FFCDD2,stroke:#D32F2F,stroke-width:1px
+    style warmTier fill:#FFF9C4,stroke:#F57F17,stroke-width:1px
+    style coldTier fill:#B2DFDB,stroke:#00796B,stroke-width:1px
+    style consumption fill:#E1BEE7,stroke:#7B1FA2,stroke-width:2px
 ```
 
 ### Governance Maturity Assessment
@@ -439,10 +439,10 @@ flowchart LR
     kql --> alerts
     storage --> audit
 
-    style producers fill:#E3F2FD,stroke:#1976D2,stroke-width:2px
-    style transforms fill:#FFF8E1,stroke:#F57F17,stroke-width:2px
+    style producers fill:#BBDEFB,stroke:#1976D2,stroke-width:2px
+    style transforms fill:#FFF9C4,stroke:#F57F17,stroke-width:2px
     style stores fill:#E8EAF6,stroke:#3F51B5,stroke-width:2px
-    style consumers fill:#F3E5F5,stroke:#7B1FA2,stroke-width:2px
+    style consumers fill:#E1BEE7,stroke:#7B1FA2,stroke-width:2px
 ```
 
 ### Integration Patterns
