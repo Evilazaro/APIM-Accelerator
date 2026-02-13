@@ -37,11 +37,23 @@ flowchart TB
     %% AZURE / FLUENT ARCHITECTURE PATTERN v1.1
     %% (Semantic + Structural + Font + Accessibility Governance)
     %% ═══════════════════════════════════════════════════════════════════════════
-    %% Hierarchical: #FFFFFF (L1) → #F3F2F1 (L2) for container nesting
-    %% Semantic: Green=#DFF6DD (Monitoring), Blue=#DEECF9 (Core Platform),
-    %%           Teal=#C8F0E7 (Governance), Grey=#F3F2F1 (Deployment Tools)
-    %% Font Governance: Dark text on light backgrounds for WCAG AA
-    %%   - Blue #DEECF9 → #004578 | Green #DFF6DD → #0B6A0B | Teal #C8F0E7 → #323130
+    %% STANDARD COLOR SCHEME v2.1
+    %% COLOR SCHEME DOCUMENTATION
+    %%
+    %% Hierarchical Container Colors (Nesting Depth):
+    %%   Level 1: #FFFFFF (White) - Top-level subscription/tenant containers
+    %%   Level 2: #F3F2F1 (Light Grey) - Resource group containers
+    %%   Level 3+: Same as Level 2 (#F3F2F1) - Nested organizational containers
+    %%
+    %% Semantic Functional Colors (3/5 used in this diagram):
+    %%   Blue (#DEECF9): Core Platform Layer - API Management services
+    %%   Green (#DFF6DD): Shared Services Layer - Monitoring infrastructure
+    %%   Teal (#C8F0E7): Governance Layer - API Center catalog
+    %%   Grey (neutral): Deployment Tools - Infrastructure provisioning
+    %%
+    %% Font Governance (WCAG AA - 4.5:1 contrast minimum):
+    %%   Blue #DEECF9 → #004578 text | Green #DFF6DD → #0B6A0B text
+    %%   Teal #C8F0E7 → #00666B text | Grey #F3F2F1 → #323130 text
     %% ═══════════════════════════════════════════════════════════════════════════
 
     subgraph azure["☁️ Azure Subscription"]
@@ -91,7 +103,7 @@ flowchart TB
 
     deployment ==>|Provisions| azure
 
-    %% SUBGRAPH STYLING (5 subgraphs = 5 style directives - MRM-S001 compliant)
+    %% SUBGRAPH STYLING (6 subgraphs = 6 style directives - MRM-S001 compliant)
     style azure fill:#FFFFFF,stroke:#605E5C,stroke-width:3px
     style rg fill:#F3F2F1,stroke:#605E5C,stroke-width:2px
     style shared fill:#DFF6DD,stroke:#0B6A0B,stroke-width:2px
@@ -99,9 +111,25 @@ flowchart TB
     style inventory fill:#C8F0E7,stroke:#00666B,stroke-width:2px
     style deployment fill:#F3F2F1,stroke:#605E5C,stroke-width:2px
 
-    %% CLASSDEF DECLARATIONS (Azure/Fluent UI v1.1 - 100-level fills for WCAG AA)
+    %% ═══════════════════════════════════════════════════════════════════════════
+    %% CLASSDEF DECLARATIONS (13+ Required - Azure/Fluent UI v1.1)
+    %% ═══════════════════════════════════════════════════════════════════════════
+
+    %% Hierarchical Container Classes (Nesting Levels)
+    classDef level1Group fill:#FFFFFF,stroke:#605E5C,stroke-width:3px,color:#323130
+    classDef level2Group fill:#F3F2F1,stroke:#605E5C,stroke-width:2px,color:#323130
+    classDef level3Group fill:#F3F2F1,stroke:#605E5C,stroke-width:2px,color:#323130
+    classDef level4Group fill:#F3F2F1,stroke:#605E5C,stroke-width:1px,color:#323130
+    classDef mainGroup fill:#FFFFFF,stroke:#605E5C,stroke-width:3px,color:#323130
+    classDef subGroup fill:#F3F2F1,stroke:#605E5C,stroke-width:2px,color:#323130
+
+    %% Semantic Functional Classes (Azure/Fluent UI - WCAG AA compliant)
     classDef azureBlue fill:#DEECF9,stroke:#004578,stroke-width:2px,color:#004578
     classDef azureGreen fill:#DFF6DD,stroke:#0B6A0B,stroke-width:2px,color:#0B6A0B
+    classDef azureRed fill:#FDE7E9,stroke:#A4262C,stroke-width:2px,color:#A4262C
+    classDef azureOrange fill:#FFF4CE,stroke:#986F0B,stroke-width:2px,color:#986F0B
+    classDef azureYellow fill:#FFF9C4,stroke:#F57F17,stroke-width:2px,color:#323130
+    classDef azurePurple fill:#E7E2FA,stroke:#5B2F91,stroke-width:2px,color:#5B2F91
     classDef azureTeal fill:#C8F0E7,stroke:#00666B,stroke-width:2px,color:#00666B
     classDef neutralGrey fill:#F3F2F1,stroke:#605E5C,stroke-width:2px,color:#323130
 ```
