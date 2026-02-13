@@ -11,6 +11,9 @@
 *.sln.docstates
 *.env
 
+audit-report.json
+extracted-diagrams.json
+
 # User-specific files (MonoDevelop/Xamarin Studio)
 *.userprefs
 
