@@ -21,6 +21,9 @@ mono_crash.*
 # Prompt folder
 [Pp]rompts/
 
+# Refactored folder
+[Rr]efactored/
+
 # Build results
 [Dd]ebug/
 [Dd]ebugPublic/
