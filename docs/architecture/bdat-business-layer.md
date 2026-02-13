@@ -342,7 +342,7 @@ flowchart TB
 
 The Business Layer exposes services through a **workspace-based multi-tenancy model**:
 
-````mermaid
+```mermaid
 ---
 title: "APIM Business Services Architecture"
 config:
@@ -438,6 +438,19 @@ flowchart TB
     classDef neutralGrey fill:#F3F2F1,stroke:#605E5C,stroke-width:2px,color:#323130
 
     %% Subgraph styling (4 subgraphs = 4 style directives)
+    style shared fill:#FFFFFF,stroke:#004578,stroke-width:3px
+    style ws1 fill:#FFFFFF,stroke:#0B6A0B,stroke-width:2px
+    style ws2 fill:#FFFFFF,stroke:#0B6A0B,stroke-width:2px
+    style ws3 fill:#FFFFFF,stroke:#0B6A0B,stroke-width:2px
+```
+
+### 4.2 Core Business Services
+
+#### 4.2.1 Workspace Management Service
+
+**Description**: Provision and manage isolated workspaces for business units, teams, or external partners.
+
+| Attribute          | Value                                                            |
 | ------------------ | ---------------------------------------------------------------- |
 | **Service Owner**  | Platform Operations Team                                         |
 | **Consumers**      | Business Unit Leaders, Platform Admins                           |
@@ -531,7 +544,7 @@ flowchart TB
 
 Key business processes supported by the APIM platform:
 
-```mermaid
+````mermaid
 ---
 title: "APIM Business Processes"
 config:
