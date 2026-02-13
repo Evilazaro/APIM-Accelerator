@@ -407,20 +407,29 @@ flowchart TB
     end
 
     %% Service relationships
-    WS1_API1 & WS1_API2 -->|"Registered in"| SHARED_CAT
-    WS2_API1 & WS2_API2 -->|"Registered in"| SHARED_CAT
-    WS3_API1 & WS3_API2 -->|"Registered in"| SHARED_CAT
+    WS1_API1 -->|"Registered in"| SHARED_CAT
+    WS1_API2 -->|"Registered in"| SHARED_CAT
+    WS2_API1 -->|"Registered in"| SHARED_CAT
+    WS2_API2 -->|"Registered in"| SHARED_CAT
+    WS3_API1 -->|"Registered in"| SHARED_CAT
+    WS3_API2 -->|"Registered in"| SHARED_CAT
 
     SHARED_CAT -->|"Discoverable via"| SHARED_PORT
     SHARED_AUTH -->|"Secures"| SHARED_PORT
 
-    WS1_API1 & WS1_API2 -->|"Telemetry"| SHARED_MON
-    WS2_API1 & WS2_API2 -->|"Telemetry"| SHARED_MON
-    WS3_API1 & WS3_API2 -->|"Telemetry"| SHARED_MON
+    WS1_API1 -->|"Telemetry"| SHARED_MON
+    WS1_API2 -->|"Telemetry"| SHARED_MON
+    WS2_API1 -->|"Telemetry"| SHARED_MON
+    WS2_API2 -->|"Telemetry"| SHARED_MON
+    WS3_API1 -->|"Telemetry"| SHARED_MON
+    WS3_API2 -->|"Telemetry"| SHARED_MON
 
-    WS1_POL -->|"Applied to"| WS1_API1 & WS1_API2
-    WS2_POL -->|"Applied to"| WS2_API1 & WS2_API2
-    WS3_POL -->|"Applied to"| WS3_API1 & WS3_API2
+    WS1_POL -->|"Applied to"| WS1_API1
+    WS1_POL -->|"Applied to"| WS1_API2
+    WS2_POL -->|"Applied to"| WS2_API1
+    WS2_POL -->|"Applied to"| WS2_API2
+    WS3_POL -->|"Applied to"| WS3_API1
+    WS3_POL -->|"Applied to"| WS3_API2
 
     %% Centralized classDefs (4 semantic colors)
     classDef azureGreen fill:#DFF6DD,stroke:#0B6A0B,stroke-width:2px,color:#323130
