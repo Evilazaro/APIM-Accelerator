@@ -601,6 +601,18 @@ flowchart LR
     PROC5 --> END
 
     %% Centralized classDefs (4 semantic colors)
+    classDef azureGreen fill:#DFF6DD,stroke:#0B6A0B,stroke-width:2px,color:#323130
+    classDef azureBlue fill:#DEECF9,stroke:#004578,stroke-width:2px,color:#323130
+    classDef azureOrange fill:#FDE7E9,stroke:#A4262C,stroke-width:2px,color:#323130
+    classDef neutralGrey fill:#F3F2F1,stroke:#605E5C,stroke-width:2px,color:#323130
+```
+
+### 5.2 Process Details
+
+#### 5.2.1 API Publication Process
+
+**Process Owner**: API Publisher (Business Unit Team)
+**Duration**: 30 minutes (automated) to 2 days (if manual approval required)
 **Frequency**: On-demand (avg 20 APIs/month across organization)
 
 **Process Flow**:
