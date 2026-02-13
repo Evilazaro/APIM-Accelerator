@@ -95,7 +95,7 @@ config:
   themeVariables:
     fontSize: '16px'
   flowchart:
-    htmlLabels: true
+    htmlLabels: false
     curve: cardinal
 ---
 flowchart TB
@@ -129,15 +129,15 @@ flowchart TB
 
     %% Tier 1: Shared Infrastructure (Observability)
     subgraph tier1["🏢 Tier 1: Shared Infrastructure"]
-        LA["📊 Log Analytics<br/>Workspace"]:::azureBlue
-        AI["📈 Application<br/>Insights"]:::azureBlue
-        SA["💾 Storage<br/>Account"]:::azureBlue
+        LA["📊 Log Analytics Workspace"]:::azureBlue
+        AI["📈 Application Insights"]:::azureBlue
+        SA["💾 Storage Account"]:::azureBlue
     end
 
     %% Tier 2: Core API Platform
     subgraph tier2["⚙️ Tier 2: Core API Platform"]
-        APIM["🌐 API Management<br/>Premium"]:::azureGreen
-        DEV["📖 Developer<br/>Portal"]:::azureGreen
+        APIM["🌐 API Management Premium"]:::azureGreen
+        DEV["📖 Developer Portal"]:::azureGreen
         WS1["📁 Workspace 1"]:::azureGreen
         WS2["📁 Workspace N"]:::azureGreen
 
@@ -149,15 +149,15 @@ flowchart TB
     %% Tier 3: Governance & Inventory
     subgraph tier3["🛡️ Tier 3: Governance & Inventory"]
         APIC["📚 API Center"]:::azureOrange
-        GOV["🔒 Governance<br/>Policies"]:::azureOrange
+        GOV["🔒 Governance Policies"]:::azureOrange
 
         APIC --> GOV
     end
 
     %% External Systems Integration
     subgraph external["🔌 External Systems"]
-        BACKEND["⚙️ Backend<br/>Services"]:::neutralGrey
-        CLIENT["👤 API<br/>Clients"]:::neutralGrey
+        BACKEND["⚙️ Backend Services"]:::neutralGrey
+        CLIENT["👤 API Clients"]:::neutralGrey
     end
 
     %% Cross-tier Data Flows
