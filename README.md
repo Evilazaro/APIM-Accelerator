@@ -6,13 +6,13 @@
 [![API Management](https://img.shields.io/badge/API%20Management-Premium-blue)](https://azure.microsoft.com/services/api-management/)
 [![PRs Welcome](https://img.shields.io/badge/PRs-welcome-brightgreen.svg)](CONTRIBUTING.md)
 
-An enterprise-grade Azure API Management (APIM) landing zone accelerator that provides production-ready infrastructure-as-code templates for deploying a complete API platform with monitoring, governance, and multi-tenancy support. Deploy a fully configured APIM instance with Azure Developer CLI in under 30 minutes.
+An **enterprise-grade** Azure API Management (APIM) landing zone accelerator that provides **production-ready** infrastructure-as-code templates for deploying a complete API platform with monitoring, governance, and multi-tenancy support. **Deploy a fully configured APIM instance with Azure Developer CLI in under 30 minutes**.
 
 ## Overview
 
 **Overview**
 
-The APIM-Accelerator is a comprehensive Infrastructure-as-Code (IaC) solution designed to rapidly deploy enterprise-grade Azure API Management landing zones. This accelerator eliminates weeks of manual configuration by providing battle-tested Bicep templates that implement Azure best practices for API platform deployments.
+The APIM-Accelerator is a comprehensive **Infrastructure-as-Code (IaC)** solution designed to **rapidly deploy enterprise-grade Azure API Management landing zones**. This accelerator **eliminates weeks of manual configuration** by providing battle-tested Bicep templates that implement Azure best practices for API platform deployments.
 
 > 💡 **Why This Matters**: Traditional APIM deployments require extensive Azure expertise and weeks of infrastructure setup. This accelerator reduces deployment time from weeks to minutes while ensuring enterprise-grade security, monitoring, and governance from day one.
 
@@ -22,7 +22,7 @@ This project provides a complete API management platform including centralized m
 
 **Key Benefits:**
 
-- **Accelerated Time-to-Market**: Deploy production-ready APIM in 30 minutes vs. weeks of manual setup
+- **Accelerated Time-to-Market**: Deploy production-ready APIM in **30 minutes** vs. weeks of manual setup
 - **Enterprise-Grade Architecture**: Built-in monitoring, security, and governance patterns
 - **Multi-Environment Support**: Consistent deployments across dev, test, staging, UAT, and production
 - **Cost Optimization**: Configurable SKUs and scaling options to match workload requirements
@@ -44,7 +44,7 @@ This project provides a complete API management platform including centralized m
 
 ## Quick Start
 
-Get a complete APIM landing zone running in 3 steps:
+Get a complete APIM landing zone running in **3 steps**:
 
 ```bash
 # 1. Clone the repository
@@ -79,7 +79,7 @@ Endpoint: https://apim-accelerator-dev-eastus.azure-api.net
 Developer Portal: https://apim-accelerator-dev-eastus.developer.azure-api.net
 ```
 
-> ⚠️ **Note**: Initial deployment takes 25-40 minutes due to APIM Premium service provisioning. Subsequent updates are faster (5-15 minutes).
+> ⚠️ **Deployment Time**: Initial deployment takes **25-40 minutes** due to APIM Premium service provisioning. Subsequent updates are faster (5-15 minutes).
 
 ## Architecture
 
@@ -205,14 +205,14 @@ flowchart TB
 
 **Overview**
 
-The APIM-Accelerator supports two deployment methods: Azure Developer CLI (`azd`) for rapid provisioning and Azure CLI for granular control. Both methods use the same underlying Bicep templates to ensure consistency across deployment workflows.
+The APIM-Accelerator supports **two deployment methods**: Azure Developer CLI (`azd`) for rapid provisioning and Azure CLI for granular control. Both methods use the same underlying Bicep templates to ensure consistency across deployment workflows.
 
-> 💡 **Recommended**: Use `azd` for most scenarios as it handles lifecycle hooks, environment configuration, and dependency orchestration automatically.
+> 💡 **Recommended**: Use **`azd`** for most scenarios as it handles lifecycle hooks, environment configuration, and dependency orchestration automatically.
 
 ### Method 1: Azure Developer CLI (Recommended)
 
 ```bash
-# Prerequisites: Install Azure Developer CLI
+# Prerequisites: Install Azure Developer CLI (REQUIRED)
 # Windows: winget install microsoft.azd
 # macOS: brew tap azure/azd && brew install azd
 # Linux: curl -fsSL https://aka.ms/install-azd.sh | bash
@@ -293,7 +293,7 @@ azd monitor
 azd down --force --purge
 ```
 
-> 🔒 **Security Note**: The `azd down` command permanently deletes all resources and data. Use with caution in production environments.
+> 🔒 **Security Warning**: The `azd down` command **permanently deletes all resources and data**. Use with caution in production environments.
 
 ## Usage
 
@@ -420,16 +420,16 @@ The APIM-Accelerator provides a comprehensive set of enterprise-grade capabiliti
 
 The APIM-Accelerator requires specific tools, Azure resources, and permissions to deploy successfully. This section provides detailed prerequisites and validation steps to ensure smooth deployment.
 
-> 💡 **Before You Start**: Verify all prerequisites before attempting deployment to avoid common configuration errors that account for 60% of failed deployments.
+> 💡 **Before You Start**: **Verify all prerequisites** before attempting deployment to avoid common configuration errors that account for **60% of failed deployments**.
 
 ### Azure Prerequisites
 
-| Requirement               | Version            | Purpose                              | Validation Command                                                                                                              |
-| ------------------------- | ------------------ | ------------------------------------ | ------------------------------------------------------------------------------------------------------------------------------- |
-| ☁️ **Azure Subscription** | Active             | Host all Azure resources             | `az account show --query "state"`                                                                                               |
-| 🔑 **Contributor Role**   | Subscription-level | Create resource groups and resources | `az role assignment list --assignee $(az account show --query user.name -o tsv) --query "[?roleDefinitionName=='Contributor']"` |
-| 💳 **Available Credits**  | ~$2,700/month      | Premium APIM service costs           | Check Azure Portal billing                                                                                                      |
-| 📍 **Region Support**     | APIM availability  | Deploy APIM Premium tier             | `az provider show --namespace Microsoft.ApiManagement --query "resourceTypes[?resourceType=='service'].locations" -o table`     |
+| Requirement               | Version                           | Purpose                              | Validation Command                                                                                                              |
+| ------------------------- | --------------------------------- | ------------------------------------ | ------------------------------------------------------------------------------------------------------------------------------- |
+| ☁️ **Azure Subscription** | **Active** (REQUIRED)             | Host all Azure resources             | `az account show --query "state"`                                                                                               |
+| 🔑 **Contributor Role**   | **Subscription-level** (REQUIRED) | Create resource groups and resources | `az role assignment list --assignee $(az account show --query user.name -o tsv) --query "[?roleDefinitionName=='Contributor']"` |
+| 💳 **Available Credits**  | **~$2,700/month**                 | Premium APIM service costs           | Check Azure Portal billing                                                                                                      |
+| 📍 **Region Support**     | **APIM availability**             | Deploy APIM Premium tier             | `az provider show --namespace Microsoft.ApiManagement --query "resourceTypes[?resourceType=='service'].locations" -o table`     |
 
 ### Local Development Tools
 
@@ -508,7 +508,7 @@ Ensure your subscription has sufficient quotas:
 
 **Overview**
 
-The APIM-Accelerator uses a centralized YAML configuration file ([`infra/settings.yaml`](infra/settings.yaml)) to manage all deployment settings, enabling consistent configurations across environments while supporting customization for specific requirements.
+The APIM-Accelerator uses a **centralized YAML configuration file** ([`infra/settings.yaml`](infra/settings.yaml)) to manage all deployment settings, enabling consistent configurations across environments while supporting customization for specific requirements.
 
 > 📌 **Configuration Philosophy**: All environment-specific values are externalized to `settings.yaml`, while deployment-time parameters (environment name, location) are passed via command-line arguments or environment variables.
 
@@ -536,8 +536,8 @@ shared:
 core:
   apiManagement:
     name: "" # Auto-generated if empty
-    publisherEmail: "admin@example.com" # REQUIRED
-    publisherName: "Your Organization" # REQUIRED
+    publisherEmail: "admin@example.com" # **REQUIRED**
+    publisherName: "Your Organization" # **REQUIRED**
     sku:
       name: "Premium" # Options: Developer, Basic, Standard, Premium
       capacity: 1 # Scale units: Premium (1-10), Standard (1-4)
@@ -761,8 +761,8 @@ We welcome contributions from the community! Whether you're fixing bugs, improvi
 
 - **Bicep Style**: Follow [Azure Bicep best practices](https://learn.microsoft.com/azure/azure-resource-manager/bicep/best-practices)
 - **Commit Messages**: Use conventional commits format: `feat:`, `fix:`, `docs:`, `chore:`
-- **Documentation**: Update README.md and inline comments for user-facing changes
-- **Testing**: Validate deployments in dev environment before submitting PR
+- **Documentation**: **Update README.md and inline comments** for user-facing changes
+- **Testing**: **Validate deployments in dev environment** before submitting PR
 
 ### Reporting Issues
 
@@ -813,12 +813,12 @@ copies of the Software...
 
 **Common Issues:**
 
-| Problem                                   | Solution                                                       |
-| ----------------------------------------- | -------------------------------------------------------------- |
-| ❌ Deployment fails with "Quota exceeded" | Request quota increase via Azure Portal → Quotas               |
-| ❌ "Publisher email is required" error    | Set `publisherEmail` in [`settings.yaml`](infra/settings.yaml) |
-| ❌ azd command not found                  | Install Azure Developer CLI: `winget install Microsoft.Azd`    |
-| ❌ Bicep build errors                     | Update Bicep CLI: `az bicep upgrade`                           |
+| Problem                                   | Solution                                                           |
+| ----------------------------------------- | ------------------------------------------------------------------ |
+| ❌ Deployment fails with "Quota exceeded" | **Request quota increase** via Azure Portal → Quotas               |
+| ❌ "Publisher email is required" error    | **Set `publisherEmail`** in [`settings.yaml`](infra/settings.yaml) |
+| ❌ azd command not found                  | **Install Azure Developer CLI**: `winget install Microsoft.Azd`    |
+| ❌ Bicep build errors                     | **Update Bicep CLI**: `az bicep upgrade`                           |
 
 > ⚠️ **Still Stuck?** Open a [GitHub Issue](https://github.com/Evilazaro/APIM-Accelerator/issues/new) with deployment logs and error messages.
 
