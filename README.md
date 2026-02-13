@@ -161,13 +161,13 @@ flowchart TB
     end
 
     %% Cross-tier Data Flows
-    LA --> APIM
-    AI --> APIM
-    SA --> APIM
+    LA -->|"Diagnostic Logs"| APIM
+    AI -->|"Telemetry & Metrics"| APIM
+    SA -->|"Log Archive"| APIM
 
-    APIM --> APIC
-    APIM --> BACKEND
-    CLIENT --> APIM
+    APIM -->|"API Metadata"| APIC
+    APIM -->|"Proxied Requests"| BACKEND
+    CLIENT -->|"API Requests"| APIM
 
     %% Centralized classDefs (4 semantic colors - 100-level fills for optimal contrast)
     classDef azureBlue fill:#DEECF9,stroke:#004578,stroke-width:2px,color:#323130
