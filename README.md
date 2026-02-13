@@ -141,9 +141,9 @@ flowchart TB
         WS1["📁 Workspace 1"]:::azureGreen
         WS2["📁 Workspace N"]:::azureGreen
 
-        APIM --> DEV
-        APIM --> WS1
-        APIM --> WS2
+        APIM -->|"Documentation"| DEV
+        APIM -->|"API Deployment"| WS1
+        APIM -->|"API Deployment"| WS2
     end
 
     %% Tier 3: Governance & Inventory
@@ -151,7 +151,7 @@ flowchart TB
         APIC["📚 API Center"]:::azureOrange
         GOV["🔒 Governance Policies"]:::azureOrange
 
-        APIC --> GOV
+        APIC -->|"Policy Enforcement"| GOV
     end
 
     %% External Systems Integration
