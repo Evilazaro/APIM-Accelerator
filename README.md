@@ -30,32 +30,46 @@ The APIM Accelerator implements a 3-tier modular architecture following Azure la
 title: "APIM Accelerator - 3-Tier Landing Zone Architecture"
 ---
 flowchart TB
+    accTitle: APIM Accelerator Architecture
+    accDescr: Shows 3-tier landing zone architecture with shared services, core APIM platform, governance layer, and deployment tools with Azure subscription organization
+
+    %% ═══════════════════════════════════════════════════════════════════════════
+    %% AZURE / FLUENT ARCHITECTURE PATTERN v1.1
+    %% (Semantic + Structural + Font + Accessibility Governance)
+    %% ═══════════════════════════════════════════════════════════════════════════
+    %% Hierarchical: #FFFFFF (L1) → #F3F2F1 (L2) for container nesting
+    %% Semantic: Green=#DFF6DD (Monitoring), Blue=#DEECF9 (Core Platform),
+    %%           Teal=#C8F0E7 (Governance), Grey=#F3F2F1 (Deployment Tools)
+    %% Font Governance: Dark text on light backgrounds for WCAG AA
+    %%   - Blue #DEECF9 → #004578 | Green #DFF6DD → #0B6A0B | Teal #C8F0E7 → #323130
+    %% ═══════════════════════════════════════════════════════════════════════════
+
     subgraph azure["☁️ Azure Subscription"]
         subgraph rg["📦 Resource Group: apim-accelerator-{env}-{location}-rg"]
 
             subgraph shared["🔧 Shared Services Layer"]
                 direction TB
-                law["📊 Log Analytics Workspace<br/>Centralized logging"]
-                ai["📈 Application Insights<br/>APM & diagnostics"]
-                sa["💾 Storage Account<br/>Log archival"]
+                law["📊 Log Analytics Workspace<br/>Centralized logging"]:::azureGreen
+                ai["📈 Application Insights<br/>APM & diagnostics"]:::azureGreen
+                sa["💾 Storage Account<br/>Log archival"]:::azureGreen
                 law --> ai
                 law --> sa
             end
 
             subgraph core["🎯 Core Platform Layer"]
                 direction TB
-                apim["🚀 API Management Service<br/>Premium SKU<br/>Managed Identity"]
-                portal["🌐 Developer Portal<br/>OAuth2 / OpenID Connect"]
-                ws["👥 Workspaces<br/>Multi-tenant isolation"]
+                apim["🚀 API Management Service<br/>Premium SKU<br/>Managed Identity"]:::azureBlue
+                portal["🌐 Developer Portal<br/>OAuth2 / OpenID Connect"]:::azureBlue
+                ws["👥 Workspaces<br/>Multi-tenant isolation"]:::azureBlue
                 apim --> portal
                 apim --> ws
             end
 
             subgraph inventory["📋 Governance Layer"]
                 direction TB
-                apic["📚 API Center<br/>Centralized catalog"]
-                apis["🔗 API Source<br/>APIM integration"]
-                rbac["🔐 RBAC Roles<br/>Data Reader & Compliance Manager"]
+                apic["📚 API Center<br/>Centralized catalog"]:::azureTeal
+                apis["🔗 API Source<br/>APIM integration"]:::azureTeal
+                rbac["🔐 RBAC Roles<br/>Data Reader & Compliance Manager"]:::azureTeal
                 apic --> apis
                 apic --> rbac
             end
@@ -68,20 +82,28 @@ flowchart TB
     end
 
     subgraph deployment["🚀 Deployment Tools"]
-        azd["Azure Developer CLI<br/>azd up"]
-        bicep["Bicep Templates<br/>IaC Orchestration"]
-        hooks["Pre-provision Hooks<br/>Validation & Setup"]
+        azd["Azure Developer CLI<br/>azd up"]:::neutralGrey
+        bicep["Bicep Templates<br/>IaC Orchestration"]:::neutralGrey
+        hooks["Pre-provision Hooks<br/>Validation & Setup"]:::neutralGrey
         azd --> hooks
         hooks --> bicep
     end
 
     deployment ==>|Provisions| azure
 
-    style azure fill:#E8F4FD,stroke:#0078D4,stroke-width:2px
-    style shared fill:#D4EDDA,stroke:#28A745,stroke-width:2px
-    style core fill:#FFF3CD,stroke:#FFC107,stroke-width:2px
-    style inventory fill:#F8D7DA,stroke:#DC3545,stroke-width:2px
-    style deployment fill:#E7E9EB,stroke:#5C636A,stroke-width:2px
+    %% SUBGRAPH STYLING (5 subgraphs = 5 style directives - MRM-S001 compliant)
+    style azure fill:#FFFFFF,stroke:#605E5C,stroke-width:3px
+    style rg fill:#F3F2F1,stroke:#605E5C,stroke-width:2px
+    style shared fill:#DFF6DD,stroke:#0B6A0B,stroke-width:2px
+    style core fill:#DEECF9,stroke:#004578,stroke-width:2px
+    style inventory fill:#C8F0E7,stroke:#00666B,stroke-width:2px
+    style deployment fill:#F3F2F1,stroke:#605E5C,stroke-width:2px
+
+    %% CLASSDEF DECLARATIONS (Azure/Fluent UI v1.1 - 100-level fills for WCAG AA)
+    classDef azureBlue fill:#DEECF9,stroke:#004578,stroke-width:2px,color:#004578
+    classDef azureGreen fill:#DFF6DD,stroke:#0B6A0B,stroke-width:2px,color:#0B6A0B
+    classDef azureTeal fill:#C8F0E7,stroke:#00666B,stroke-width:2px,color:#00666B
+    classDef neutralGrey fill:#F3F2F1,stroke:#605E5C,stroke-width:2px,color:#323130
 ```
 
 **Component Roles:**
