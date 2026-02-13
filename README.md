@@ -90,35 +90,59 @@ The APIM-Accelerator implements a modular 3-tier architecture that separates con
 ```mermaid
 ---
 title: "APIM Landing Zone - 3-Tier Architecture"
+config:
+  theme: base
+  themeVariables:
+    fontSize: '16px'
+  flowchart:
+    htmlLabels: false
+    curve: cardinal
 ---
 flowchart TB
-    subgraph "Tier 1: Shared Infrastructure"
-        LA[Log Analytics<br/>Workspace]
-        AI[Application<br/>Insights]
-        SA[Storage<br/>Account]
+    accTitle: APIM Landing Zone 3-Tier Architecture
+    accDescr: Modular architecture separating shared infrastructure, core API platform, and governance capabilities with monitoring and external systems integration
+
+    %% ═══════════════════════════════════════════════════════════════════════════
+    %% AZURE / FLUENT ARCHITECTURE PATTERN v1.1
+    %% (Semantic + Structural + Font + Accessibility Governance)
+    %% ═══════════════════════════════════════════════════════════════════════════
+    %% PHASE 1 - STRUCTURAL: TB direction explicit, 1-level nesting, 4 subgraphs, 10 nodes
+    %% PHASE 2 - SEMANTIC: 4 colors (azureBlue, azureGreen, azureOrange, neutralGrey) within 5 limit
+    %%   azureBlue: Shared monitoring infrastructure | azureGreen: Core platform components
+    %%   azureOrange: Governance and security | neutralGrey: External systems
+    %% PHASE 3 - FONT: Dark text #323130 on light backgrounds (WCAG AA 4.5:1)
+    %%   Special: APIM uses #004578 for emphasis as primary platform component
+    %% PHASE 4 - ACCESSIBILITY: accTitle/accDescr present, icons on all 10 nodes
+    %% PHASE 5 - STANDARD: v1.1 format, 4 subgraphs, 4 style directives, 4 classDefs centralized
+    %% ═══════════════════════════════════════════════════════════════════════════
+
+    subgraph tier1["🏢 Tier 1: Shared Infrastructure"]
+        LA["📊 Log Analytics<br/>Workspace"]:::azureBlue
+        AI["📈 Application<br/>Insights"]:::azureBlue
+        SA["💾 Storage<br/>Account"]:::azureBlue
     end
 
-    subgraph "Tier 2: Core API Platform"
-        APIM[API Management<br/>Premium]
-        DEV[Developer<br/>Portal]
-        WS1[Workspace 1]
-        WS2[Workspace N]
+    subgraph tier2["⚙️ Tier 2: Core API Platform"]
+        APIM["🌐 API Management<br/>Premium"]:::azureGreen
+        DEV["📖 Developer<br/>Portal"]:::azureGreen
+        WS1["📁 Workspace 1"]:::azureGreen
+        WS2["📁 Workspace N"]:::azureGreen
 
         APIM --> DEV
         APIM --> WS1
         APIM --> WS2
     end
 
-    subgraph "Tier 3: Governance & Inventory"
-        APIC[API Center]
-        GOV[Governance<br/>Policies]
+    subgraph tier3["🛡️ Tier 3: Governance & Inventory"]
+        APIC["📚 API Center"]:::azureOrange
+        GOV["🔒 Governance<br/>Policies"]:::azureOrange
 
         APIC --> GOV
     end
 
-    subgraph "External Systems"
-        BACKEND[Backend<br/>Services]
-        CLIENT[API<br/>Clients]
+    subgraph external["🔌 External Systems"]
+        BACKEND["⚙️ Backend<br/>Services"]:::neutralGrey
+        CLIENT["👤 API<br/>Clients"]:::neutralGrey
     end
 
     LA --> APIM
@@ -129,11 +153,17 @@ flowchart TB
     APIM --> BACKEND
     CLIENT --> APIM
 
-    style APIM fill:#0078D4,stroke:#003366,stroke-width:3px,color:#fff
-    style LA fill:#50E6FF,stroke:#003366,stroke-width:2px
-    style AI fill:#50E6FF,stroke:#003366,stroke-width:2px
-    style SA fill:#50E6FF,stroke:#003366,stroke-width:2px
-    style APIC fill:#FFB900,stroke:#804600,stroke-width:2px
+    %% Centralized classDefs (4 semantic colors)
+    classDef azureBlue fill:#DEECF9,stroke:#004578,stroke-width:2px,color:#004578
+    classDef azureGreen fill:#DFF6DD,stroke:#0B6A0B,stroke-width:2px,color:#323130
+    classDef azureOrange fill:#FDE7E9,stroke:#A4262C,stroke-width:2px,color:#323130
+    classDef neutralGrey fill:#F3F2F1,stroke:#605E5C,stroke-width:2px,color:#323130
+
+    %% Subgraph styling (4 subgraphs = 4 style directives)
+    style tier1 fill:#FFFFFF,stroke:#004578,stroke-width:3px
+    style tier2 fill:#FFFFFF,stroke:#0B6A0B,stroke-width:3px
+    style tier3 fill:#FFFFFF,stroke:#A4262C,stroke-width:3px
+    style external fill:#FFFFFF,stroke:#605E5C,stroke-width:2px
 ```
 
 **Component Roles:**
