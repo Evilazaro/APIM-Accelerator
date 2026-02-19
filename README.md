@@ -118,16 +118,16 @@ flowchart TB
     Dev -->|"HTTPS"| APIM
 
     %% Centralized classDefs
-    classDef external   fill:#FFF4CE,stroke:#986F0B,stroke-width:2px,color:#3B2C00
-    classDef monitoring fill:#E1DFDD,stroke:#8A8886,stroke-width:2px,color:#323130
-    classDef core       fill:#DEECF9,stroke:#0078D4,stroke-width:2px,color:#004578
+    classDef external   fill:#FFF4CE,stroke:#986F0B,stroke-width:3px,color:#3B2C00
+    classDef monitoring fill:#DEECF9,stroke:#0078D4,stroke-width:2px,color:#004578
+    classDef core       fill:#0078D4,stroke:#004578,stroke-width:3px,color:#FFFFFF
     classDef inventory  fill:#DFF6DD,stroke:#107C10,stroke-width:2px,color:#054B16
 
     %% Subgraph style directives (4 subgraphs = 4 style directives)
-    style azure     fill:#F3F2F1,stroke:#8A8886,stroke-width:2px,color:#323130
-    style shared    fill:#F3F2F1,stroke:#8A8886,stroke-width:1px,color:#323130
-    style apimcore  fill:#F3F2F1,stroke:#0078D4,stroke-width:1px,color:#323130
-    style inv       fill:#F3F2F1,stroke:#107C10,stroke-width:1px,color:#323130
+    style azure     fill:#F3F2F1,stroke:#323130,stroke-width:3px,color:#323130
+    style shared    fill:#EFF6FC,stroke:#0078D4,stroke-width:2px,color:#004578
+    style apimcore  fill:#EFF6FC,stroke:#0078D4,stroke-width:2px,color:#004578
+    style inv       fill:#F1FFF1,stroke:#107C10,stroke-width:2px,color:#054B16
 ```
 
 **Deployment Sequence**: The orchestration template (`infra/main.bicep`) deploys at subscription scope in four ordered steps:
