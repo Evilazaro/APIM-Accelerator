@@ -178,37 +178,63 @@ The primary architectural gaps identified in the Landscape are the absence of co
 #### Context Diagram
 
 ```mermaid
-C4Context
-    title APIM Accelerator - System Context
+---
+title: APIM Accelerator - System Context
+config:
+  theme: base
+  look: classic
+  layout: dagre
+  themeVariables:
+    fontSize: "16px"
+---
+flowchart TD
     accTitle: APIM Accelerator System Context Diagram
     accDescr: Shows the actors and external systems interacting with the APIM Accelerator landing zone
 
-    %% C4 diagram with Azure-aligned theme variables
+    %% ═══════════════════════════════════════════════════════════════════════════
+    %% AZURE / FLUENT ARCHITECTURE PATTERN v1.1
+    %% (Semantic + Structural + Font + Accessibility Governance)
+    %% ═══════════════════════════════════════════════════════════════════════════
+    %% PHASE 1 - STRUCTURAL: Direction explicit, flat topology, nesting ≤ 3
+    %% PHASE 2 - SEMANTIC: Colors justified, max 5 semantic classes, neutral-first
+    %% PHASE 3 - FONT: Dark text on light backgrounds, contrast ≥ 4.5:1
+    %% PHASE 4 - ACCESSIBILITY: accTitle/accDescr present, icons on all nodes
+    %% PHASE 5 - STANDARD: Governance block present, classDefs centralized
+    %% ═══════════════════════════════════════════════════════════════════════════
 
-    Person(developer, "API Developer", "Discovers and subscribes to APIs via the Developer Portal")
-    Person(apiConsumer, "API Consumer", "Invokes APIs via the APIM Gateway with subscription credentials")
-    Person(platformEng, "Platform Engineer", "Deploys and manages the landing zone via Azure Developer CLI")
+    DEV["👤 API Developer\nDiscovers and subscribes\nvia Developer Portal"]
+    CONSUMER["👤 API Consumer\nInvokes APIs via\nAPIM Gateway"]
+    PLAT["🛠️ Platform Engineer\nDeploys via\nAzure Developer CLI"]
 
-    System_Boundary(lz, "APIM Accelerator Landing Zone") {
-        System(apim, "API Management", "API gateway providing routing, policy enforcement, and subscription management")
-        System(portal, "Developer Portal", "Self-service web portal for API discovery, testing, and subscriptions")
-        System(apic, "API Center", "Centralized API catalog and governance platform")
-        System(obs, "Observability Stack", "Application Insights, Log Analytics Workspace, and Storage Account")
-    }
+    subgraph LZ["☁️ APIM Accelerator Landing Zone"]
+        APIM["🚪 API Management\nGateway · policy · subscriptions"]
+        PORTAL["🌐 Developer Portal\nSelf-service discovery & testing"]
+        APIC["🗂️ API Center\nCentralised API catalog"]
+        OBS["📊 Observability Stack\nApp Insights · Log Analytics · Storage"]
+    end
 
-    System_Ext(aad, "Azure Active Directory", "External OAuth2/OIDC identity provider for portal and API auth")
-    System_Ext(backends, "Backend APIs", "Upstream services registered in APIM as API backends")
+    AAD["🔑 Azure Active Directory\nExternal OAuth2/OIDC identity provider"]
+    BACKENDS["🖥️ Backend APIs\nUpstream services registered in APIM"]
 
-    Rel(developer, portal, "Browse, test, subscribe", "HTTPS")
-    Rel(apiConsumer, apim, "Invoke registered APIs", "HTTPS/REST")
-    Rel(platformEng, lz, "Provision and configure", "azd CLI / ARM")
-    Rel(apim, backends, "Forward requests to backends", "HTTPS")
-    Rel(portal, aad, "Authenticate developers", "OAuth2/MSAL-2")
-    Rel(apim, aad, "Validate subscriber tokens", "OAuth2/OIDC")
-    Rel(apim, obs, "Push telemetry and diagnostics", "HTTP / Azure Diagnostics")
-    Rel(apic, apim, "Pull and synchronise API definitions", "HTTPS/REST")
+    DEV -->|"Browse, test, subscribe · HTTPS"| PORTAL
+    CONSUMER -->|"Invoke APIs · HTTPS/REST"| APIM
+    PLAT -->|"Provision & configure · azd / ARM"| LZ
 
-    UpdateLayoutConfig($c4ShapeInRow="3", $c4BoundaryInRow="1")
+    PORTAL -->|"Authenticate developers · OAuth2/MSAL-2"| AAD
+    APIM -->|"Validate subscriber tokens · OAuth2/OIDC"| AAD
+    APIM -->|"Forward requests · HTTPS"| BACKENDS
+    APIM -->|"Telemetry & diagnostics · HTTP/Azure Diagnostics"| OBS
+    APIC -->|"Pull API definitions · HTTPS/REST"| APIM
+
+    classDef actor fill:#FEFCE8,stroke:#A16207,color:#713F12
+    classDef internal fill:#F0FDF4,stroke:#166534,color:#14532D
+    classDef external fill:#F5F3FF,stroke:#5B21B6,color:#3B0764
+    classDef obs fill:#EFF6FF,stroke:#1D4ED8,color:#1E3A5F
+
+    class DEV,CONSUMER,PLAT actor
+    class APIM,PORTAL,APIC internal
+    class AAD,BACKENDS external
+    class OBS obs
 ```
 
 #### Service Ecosystem Map
