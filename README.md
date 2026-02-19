@@ -67,25 +67,20 @@ config:
     htmlLabels: false
 ---
 flowchart TB
-    accTitle: APIM Accelerator Architecture Diagram
-    accDescr: Azure API Management landing zone with shared monitoring, core APIM platform with developer portal and workspaces, and API Center for centralized API governance
+    accTitle: APIM Accelerator Landing Zone
+    accDescr: Azure API Management landing zone with shared monitoring infrastructure, core APIM platform including developer portal and workspaces, and API Center for centralized API governance
 
     %% ═══════════════════════════════════════════════════════════════════════════
     %% AZURE / FLUENT ARCHITECTURE PATTERN v1.1
     %% (Semantic + Structural + Font + Accessibility Governance)
     %% ═══════════════════════════════════════════════════════════════════════════
-    %% Structural: #F3F2F1 neutral containers (Neutral Gray 10) for subgraphs
-    %% Semantic: Info/Blue (monitoring), Neutral/Gray (core), Success/Green (inventory)
-    %% Warning/Yellow (external developer), Neutral white (inner nodes)
-    %% Font governance: Dark text for WCAG AA contrast compliance
-    %% Direction: TB for layered deployment sequence (top to bottom)
-    %% Max semantic colors: 4 within 5-color limit
+    %% PHASE 1 - STRUCTURAL: TB direction explicit, 2-level nesting, 3 functional subgraphs
+    %% PHASE 2 - SEMANTIC: 4 colors (external/warning, monitoring/info, core/neutral, inventory/success) ≤ 5
+    %%   external: Developer consumer | monitoring: Observability stack | core: APIM platform | inventory: API governance
+    %% PHASE 3 - FONT: Dark text on 100-level fills, contrast ≥ 4.5:1 (WCAG AA)
+    %% PHASE 4 - ACCESSIBILITY: accTitle/accDescr present, semantic icons on all content nodes
+    %% PHASE 5 - STANDARD: v1.1 format, classDefs centralized below subgraphs, 4 style directives
     %% ═══════════════════════════════════════════════════════════════════════════
-
-    classDef external   fill:#FFF4CE,stroke:#986F0B,stroke-width:2px,color:#3B2C00
-    classDef monitoring fill:#DEECF9,stroke:#0078D4,stroke-width:2px,color:#004578
-    classDef core       fill:#FAFAFA,stroke:#8A8886,stroke-width:2px,color:#323130
-    classDef inventory  fill:#DFF6DD,stroke:#107C10,stroke-width:2px,color:#054B16
 
     Dev["👤 Developer /\nAPI Consumer"]:::external
 
@@ -121,10 +116,17 @@ flowchart TB
 
     Dev -->|"HTTPS"| APIM
 
-    style azure     fill:#F3F2F1,stroke:#8A8886,stroke-width:2px
-    style shared    fill:#F3F2F1,stroke:#0078D4,stroke-width:1px
-    style apimcore  fill:#F3F2F1,stroke:#8A8886,stroke-width:1px
-    style inv       fill:#F3F2F1,stroke:#107C10,stroke-width:1px
+    %% Centralized classDefs
+    classDef external   fill:#FFF4CE,stroke:#986F0B,stroke-width:2px,color:#3B2C00
+    classDef monitoring fill:#DEECF9,stroke:#0078D4,stroke-width:2px,color:#004578
+    classDef core       fill:#E1DFDD,stroke:#8A8886,stroke-width:2px,color:#323130
+    classDef inventory  fill:#DFF6DD,stroke:#107C10,stroke-width:2px,color:#054B16
+
+    %% Subgraph style directives (4 subgraphs = 4 style directives)
+    style azure     fill:#F3F2F1,stroke:#8A8886,stroke-width:2px,color:#323130
+    style shared    fill:#F3F2F1,stroke:#0078D4,stroke-width:1px,color:#323130
+    style apimcore  fill:#F3F2F1,stroke:#8A8886,stroke-width:1px,color:#323130
+    style inv       fill:#F3F2F1,stroke:#107C10,stroke-width:1px,color:#323130
 ```
 
 **Deployment Sequence**: The orchestration template (`infra/main.bicep`) deploys at subscription scope in four ordered steps:
