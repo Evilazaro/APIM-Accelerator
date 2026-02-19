@@ -6,37 +6,55 @@
 [![Azure Developer CLI](https://img.shields.io/badge/azd-Compatible-0078D4?style=flat&logo=microsoftazure&logoColor=white)](https://learn.microsoft.com/azure/developer/azure-developer-cli/)
 [![IaC](https://img.shields.io/badge/IaC-Infrastructure%20as%20Code-blueviolet)](https://learn.microsoft.com/azure/azure-resource-manager/bicep/overview)
 
-A production-ready Azure landing zone accelerator that provisions a complete **API Management** platform — including centralized observability, enterprise-grade API governance, developer portal, and multi-team workspace isolation — using Azure Bicep and the Azure Developer CLI (`azd`).
-
-## Table of Contents
-
-- [Features](#features)
-- [Architecture](#architecture)
-- [Requirements](#requirements)
-- [Quick Start](#quick-start)
-- [Configuration](#configuration)
-- [Contributing](#contributing)
-- [License](#license)
-
-## Features
+A production-ready Azure landing zone accelerator that provisions a complete **API Management** platform using Azure Bicep and the Azure Developer CLI (`azd`).
 
 **Overview**
 
-The APIM Accelerator eliminates the undifferentiated heavy lifting of standing up a production-grade Azure API Management landing zone. It provides a repeatable, modular Bicep deployment that wires together monitoring, the core API Management service, and a centralized API inventory in a single `azd up` command — enabling teams to focus on building APIs rather than platform plumbing.
+The APIM Accelerator eliminates the undifferentiated heavy lifting of standing up a production-grade Azure API Management landing zone. It provides a repeatable, modular Bicep deployment that wires together centralized observability, the core API Management service, and a centralized API inventory — deployed in a single `azd up` command from a single configuration file.
 
-| Feature                        | Description                                                                                                             | Source                             |
-| ------------------------------ | ----------------------------------------------------------------------------------------------------------------------- | ---------------------------------- |
-| Azure API Management (Premium) | Deploys API Management with configurable SKU, scale units, managed identity, and full diagnostic integration            | `src/core/apim.bicep`              |
-| Developer Portal               | Self-service developer portal with OAuth2/OpenID Connect authentication and API documentation                           | `src/core/developer-portal.bicep`  |
-| APIM Workspaces                | Workspace-based isolation for multiple teams or projects within a single APIM instance                                  | `src/core/workspaces.bicep`        |
-| Centralized Observability      | Log Analytics workspace, Application Insights, and Storage Account wired as diagnostic sinks for all platform resources | `src/shared/monitoring/main.bicep` |
-| API Center Governance          | Azure API Center with automated API source integration for centralized API catalog, discovery, and compliance           | `src/inventory/main.bicep`         |
-| Managed Identity               | System-assigned or user-assigned managed identity support across all services for credential-free Azure integration     | `src/shared/common-types.bicep`    |
-| Governance Tagging             | Comprehensive resource tagging strategy covering cost center, business unit, regulatory compliance, and support contact | `infra/settings.yaml`              |
-| Soft-Delete Cleanup            | Pre-provision hook that purges soft-deleted APIM instances to prevent naming conflicts during redeployment              | `infra/azd-hooks/pre-provision.sh` |
-| azd Integration                | Full Azure Developer CLI lifecycle support: `azd up`, `azd provision`, `azd deploy` with pre-provision hooks            | `azure.yaml`                       |
+This accelerator removes the need to manually coordinate the sequencing and configuration of Log Analytics, Application Insights, Storage, APIM, and API Center. Each module exposes strongly-typed parameters and outputs that flow automatically through the orchestration layer, enforcing naming conventions and governance tagging across every resource.
 
-## Architecture
+Designed for platform engineering teams managing Azure API ecosystems, the accelerator supports environments from development (Developer SKU, single scale unit) to enterprise production (Premium SKU, multi-region, VNet integration) with identical code paths and configuration-driven differences.
+
+## 📑 Table of Contents
+
+- [✨ Features](#-features)
+- [🏗️ Architecture](#️-architecture)
+- [📋 Requirements](#-requirements)
+- [🚀 Quick Start](#-quick-start)
+- [🔧 Configuration](#-configuration)
+- [🤝 Contributing](#-contributing)
+- [📝 License](#-license)
+
+## ✨ Features
+
+**Overview**
+
+The accelerator's feature set is designed around the three concerns that dominate APIM platform engineering: observability, governance, and developer experience. Features are implemented as composable Bicep modules with typed interfaces — each module can be deployed independently or replaced with a custom implementation while preserving compatibility with the orchestration layer.
+
+Observability, identity, and tagging are applied uniformly to all resources through shared configuration, removing the per-resource boilerplate that leads to configuration drift in manually assembled landing zones.
+
+As platform requirements evolve — new workspaces, additional APIM policies, VNet integration, multi-region rollout — the configuration-driven design allows expanding capabilities without rewriting infrastructure code.
+
+| Feature                          | Description                                                                                                              | Benefits                                                                                                                          |
+| -------------------------------- | ------------------------------------------------------------------------------------------------------------------------ | --------------------------------------------------------------------------------------------------------------------------------- |
+| 🔧 **API Management (Premium)**  | Deploys APIM with configurable SKU, scale units, managed identity, and full diagnostic integration.                      | Supports all production requirements: VNet integration, multi-region, high SLA, and built-in caching.                             |
+| 🌐 **Developer Portal**          | Self-service portal with OAuth2/OpenID Connect authentication and API documentation capability.                          | Reduces onboarding friction for API consumers; enables self-service API discovery and testing.                                    |
+| 🗂️ **APIM Workspaces**           | Workspace-based isolation for multiple teams or projects within a single APIM instance.                                  | Provides logical separation and independent lifecycle management without the cost of multiple APIM instances.                     |
+| 📊 **Centralized Observability** | Log Analytics workspace, Application Insights, and Storage Account wired as diagnostic sinks for all platform resources. | Single pane of glass for platform monitoring; diagnostic settings applied consistently with no manual per-resource configuration. |
+| 🗃️ **API Center Governance**     | Azure API Center with automated APIM source integration for centralized API catalog, discovery, and compliance.          | Enables organization-wide API inventory without manual catalog maintenance; APIs sync automatically from APIM.                    |
+| 🔐 **Managed Identity**          | System-assigned or user-assigned managed identity support across all services.                                           | Eliminates stored credentials; enables secure, auditable access to dependent Azure services.                                      |
+| 🏷️ **Governance Tagging**        | Comprehensive resource tagging covering cost center, business unit, regulatory compliance, and support contact.          | Enables cost allocation, chargeback, and policy enforcement across all provisioned resources.                                     |
+| 🧹 **Soft-Delete Cleanup**       | Pre-provision hook that purges soft-deleted APIM instances to prevent naming conflicts during redeployment.              | Eliminates a common redeployment failure mode; enables clean environment teardown and rebuild cycles.                             |
+| ⚡ **azd Integration**           | Full Azure Developer CLI lifecycle: `azd up`, `azd provision`, `azd deploy` with pre-provision hooks.                    | Single command to provision and deploy; consistent developer experience across local and CI/CD environments.                      |
+
+## 🏗️ Architecture
+
+**Overview**
+
+The accelerator implements a layered landing zone architecture with three independently deployable tiers: shared observability, core APIM platform, and API inventory governance. Each tier is a discrete Bicep module with typed inputs and outputs, enabling teams to extend or replace individual layers without disrupting others.
+
+The orchestration template (`infra/main.bicep`) deploys at Azure subscription scope, creating the resource group and sequencing the three module layers in dependency order. Monitoring infrastructure is always deployed first, as its outputs (Log Analytics workspace ID, Application Insights resource ID, Storage account ID) are required by the APIM diagnostic settings in the core layer.
 
 ```mermaid
 ---
@@ -116,29 +134,37 @@ flowchart TB
 3. Core API Management platform (depends on monitoring outputs)
 4. API Center inventory module (depends on APIM outputs)
 
-## Requirements
+## 📋 Requirements
 
 **Overview**
 
-The accelerator targets Azure subscription owners or contributors who need to stand up a governed API Management landing zone. The toolchain is intentionally minimal — the Azure Developer CLI handles authentication, subscription selection, and the full provisioning lifecycle, while the Azure CLI is required only for the soft-delete cleanup hook.
+The accelerator targets Azure subscription owners or contributors who need to stand up a governed API Management landing zone. The toolchain is intentionally minimal — `azd` handles authentication, subscription selection, and the full provisioning lifecycle, while `az` CLI is required only for the soft-delete cleanup pre-provision hook.
 
-| Requirement                                                                                                | Version                                 | Notes                                                                           |
-| ---------------------------------------------------------------------------------------------------------- | --------------------------------------- | ------------------------------------------------------------------------------- |
-| [Azure subscription](https://azure.microsoft.com/free/)                                                    | Active                                  | Must support API Management Premium SKU in target region                        |
-| [Azure Developer CLI (`azd`)](https://learn.microsoft.com/azure/developer/azure-developer-cli/install-azd) | ≥ 1.5.0                                 | Used for `azd up`, `azd provision`, `azd deploy`                                |
-| [Azure CLI (`az`)](https://learn.microsoft.com/cli/azure/install-azure-cli)                                | ≥ 2.55.0                                | Required by the pre-provision soft-delete cleanup hook                          |
-| [Bicep CLI](https://learn.microsoft.com/azure/azure-resource-manager/bicep/install)                        | ≥ 0.26.0                                | Bundled with Azure CLI ≥ 2.55.0; used for template compilation                  |
-| RBAC permissions                                                                                           | Contributor + User Access Administrator | Required at subscription scope for resource group creation and role assignments |
+> 💡 **Why This Matters**: Missing or outdated prerequisites are the most common cause of mid-deployment failures. API Management Premium SKU provisioning takes 30–45 minutes — a failed pre-flight check discovered after 40 minutes means starting over. Validating all requirements before running `azd up` eliminates this failure mode entirely.
 
-> **Note**: The `infra/azd-hooks/pre-provision.sh` hook runs on POSIX shells (`sh`/`bash`). On Windows, `azd` executes hooks inside WSL or Git Bash. Ensure one of these environments is available before running `azd up`.
+> 📌 **How It Works**: The `infra/azd-hooks/pre-provision.sh` script runs automatically before infrastructure provisioning via the `azd` lifecycle hook defined in `azure.yaml`. It purges soft-deleted APIM instances in the target region, then `azd` proceeds with the Bicep deployment using parameters from `infra/main.parameters.json`.
 
-> **Note**: API Management Premium SKU provisioning typically takes **30–45 minutes** in Azure. This is expected behavior and is not indicative of a deployment failure.
+### Prerequisites
 
-## Quick Start
+| Category                   | Requirements                                                                   | More Information                                                                           |
+| -------------------------- | ------------------------------------------------------------------------------ | ------------------------------------------------------------------------------------------ |
+| ☁️ **Azure Subscription**  | Active subscription supporting API Management Premium SKU in the target region | [Azure Free Account](https://azure.microsoft.com/free/)                                    |
+| 🚀 **Azure Developer CLI** | `azd` ≥ 1.5.0                                                                  | [Install azd](https://learn.microsoft.com/azure/developer/azure-developer-cli/install-azd) |
+| ⚙️ **Azure CLI**           | `az` ≥ 2.55.0 — required by the pre-provision soft-delete cleanup hook         | [Install Azure CLI](https://learn.microsoft.com/cli/azure/install-azure-cli)               |
+| 📦 **Bicep CLI**           | ≥ 0.26.0 — bundled with Azure CLI ≥ 2.55.0                                     | [Install Bicep](https://learn.microsoft.com/azure/azure-resource-manager/bicep/install)    |
+| 🔐 **RBAC Permissions**    | Contributor + User Access Administrator at subscription scope                  | Required for resource group creation and role assignments                                  |
 
-**Installation**
+> ⚠️ **Windows Users**: The `infra/azd-hooks/pre-provision.sh` hook runs on POSIX shells (`sh`/`bash`). On Windows, `azd` executes hooks inside WSL or Git Bash. Ensure one of these environments is available before running `azd up`.
 
-Clone the repository and initialize the Azure Developer CLI environment:
+## 🚀 Quick Start
+
+**Overview**
+
+The entire landing zone — resource group, monitoring stack, APIM service, developer portal, workspaces, and API Center — deploys with a single `azd up` command. Before first use, edit `infra/settings.yaml` to set your publisher email and organization name. All resource names are auto-generated from the solution name and target region if left empty.
+
+> ⚠️ **Note**: API Management Premium SKU provisioning typically takes **30–45 minutes**. This is expected and not indicative of a failure.
+
+**Clone and authenticate**:
 
 ```bash
 git clone https://github.com/Evilazaro/APIM-Accelerator.git
@@ -188,7 +214,7 @@ azd provision
 azd down
 ```
 
-## Configuration
+## 🔧 Configuration
 
 **Overview**
 
@@ -260,13 +286,17 @@ publicNetworkAccess: false
 
 > **Important**: VNet integration requires Premium SKU. Provide the `subnetResourceId` via the `apiManagementSettings` parameter when using `External` or `Internal` VNet types.
 
-## Contributing
+## 🤝 Contributing
 
 **Overview**
 
-Contributions are welcome and encouraged. This accelerator is designed to be extended — whether adding new APIM policies, integrating additional Azure services, introducing new Bicep modules, or improving the observability stack. Follow the workflow below to ensure changes are validated and consistent with the existing architecture patterns before submitting a pull request.
+Contributions are welcome and encouraged. This accelerator is designed to be extended — whether adding new APIM policies, integrating additional Azure services, introducing new Bicep modules, or improving the observability stack. The modular architecture makes it straightforward to add new components without disrupting existing deployments.
 
-**Development Setup**
+All Bicep changes should follow the naming, typing, and tagging conventions already established in the codebase. New modules must expose typed parameters using the type definitions in `src/shared/common-types.bicep` and wire diagnostic settings to the shared monitoring infrastructure outputs.
+
+> 💡 **Tip**: Run `az bicep lint --file infra/main.bicep` before opening a pull request to catch linting violations early.
+
+**Development setup**:
 
 1. Fork the repository via the GitHub web UI, then clone your fork. To work against the upstream directly:
 
@@ -291,7 +321,7 @@ azd env new dev
 azd provision --environment dev
 ```
 
-**Pull Request Guidelines**
+**Pull request guidelines**:
 
 - All Bicep module parameters must include `@description()` decorators
 - Resource names must follow the `{solutionName}-{uniqueSuffix}-{resourceType}` convention defined in `src/shared/constants.bicep`
@@ -299,8 +329,6 @@ azd provision --environment dev
 - Tag all new resources using the `commonTags` variable pattern from `infra/main.bicep`
 - Update `infra/settings.yaml` and `src/shared/common-types.bicep` when introducing new configurable settings
 
-> **Tip**: Run `az bicep lint --file infra/main.bicep` before opening a pull request to catch linting violations early.
-
-## License
+## 📝 License
 
 [MIT](./LICENSE) — Copyright (c) 2025 Evilázaro Alves
