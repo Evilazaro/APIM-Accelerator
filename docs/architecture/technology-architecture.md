@@ -906,54 +906,57 @@ config:
   themeVariables:
     fontSize: '15px'
 ---
-flowchart LR
+flowchart TB
     accTitle: APIM Accelerator Service to Infrastructure Mapping
-    accDescr: Maps logical services to underlying Azure infrastructure resources showing data flows, identity bindings, and monitoring integrations
+    accDescr: Maps logical API platform services to underlying Azure infrastructure and identity resources
 
     %% ═══════════════════════════════════════════════════════════════════════════
     %% AZURE / FLUENT ARCHITECTURE PATTERN v1.1 — Service-Infrastructure Map
     %% ═══════════════════════════════════════════════════════════════════════════
 
     subgraph Services["🔷 Logical Services"]
-        S_GATEWAY["⚙️ API Gateway Service\nRoute, Policy, Auth"]:::primary
-        S_PORTAL["🖥️ Developer Self-Service\nDiscover, Subscribe, Test"]:::primary
-        S_GOVERN["📋 API Governance Service\nCatalog, Compliance"]:::secondary
-        S_OBS["📊 Observability Service\nMonitor, Trace, Alert"]:::monitoring
+        direction LR
+        S_GATEWAY["⚙️ API Gateway\nRoute · Policy · Auth"]:::primary
+        S_PORTAL["🖥️ Developer Self-Service\nDiscover · Subscribe · Test"]:::primary
+        S_GOVERN["📋 API Governance\nCatalog · Compliance"]:::secondary
+        S_OBS["📊 Observability\nMonitor · Trace · Alert"]:::monitoring
     end
 
-    subgraph Infra["☁️ Azure Infrastructure Resources"]
-        R_APIM["⚙️ APIM Service\nPremium · 1u"]:::primary
-        R_WS["📁 APIM Workspaces\nworkspace1"]:::primary
-        R_APC["📋 API Center + Workspace\n+ API Source"]:::secondary
-        R_LAW["📊 Log Analytics\nPerGB2018"]:::monitoring
+    subgraph Infra["☁️ Azure Infrastructure"]
+        direction LR
+        R_APIM["⚙️ APIM Premium · 1u"]:::primary
+        R_WS["📁 Workspace workspace1"]:::primary
+        R_APC["📋 API Center + Workspace + Source"]:::secondary
+        R_LAW["📊 Log Analytics PerGB2018"]:::monitoring
         R_AI["🔭 Application Insights"]:::monitoring
-        R_ST["💾 Storage Account\nStandard_LRS"]:::neutral
+        R_ST["💾 Storage Account LRS"]:::neutral
     end
 
     subgraph Identity["🔐 Identity Plane"]
-        I_MI_APIM["🪪 APIM MI\nSystemAssigned"]:::identity
-        I_MI_APC["🪪 API Center MI\nSystemAssigned"]:::identity
-        I_MI_LAW["🪪 Log Analytics MI\nSystemAssigned"]:::identity
-        I_AAD["🔐 Azure AD\nOAuth2 / MSAL-2"]:::identity
+        direction LR
+        I_APIM["🪪 APIM SystemAssigned MI"]:::identity
+        I_APC["🪪 API Center SystemAssigned MI"]:::identity
+        I_LAW["🪪 Log Analytics MI"]:::identity
+        I_AAD["🔐 Azure AD OAuth2"]:::identity
     end
 
-    S_GATEWAY -->|hosted on| R_APIM
-    S_GATEWAY -->|workspace isolation| R_WS
-    S_PORTAL -->|hosted on| R_APIM
-    S_PORTAL -->|auth via| I_AAD
-    S_GOVERN -->|hosted on| R_APC
-    S_OBS -->|data store| R_LAW
-    S_OBS -->|APM + trace| R_AI
-    S_OBS -->|archive| R_ST
+    S_GATEWAY --> R_APIM
+    S_GATEWAY --> R_WS
+    S_PORTAL --> R_APIM
+    S_PORTAL --> I_AAD
+    S_GOVERN --> R_APC
+    S_OBS --> R_LAW
+    S_OBS --> R_AI
+    S_OBS --> R_ST
 
-    R_APIM -->|telemetry| R_AI
-    R_APIM -->|logs + metrics| R_LAW
-    R_APIM -->|archive| R_ST
-    R_APIM -->|identity| I_MI_APIM
-    R_APC -->|logs| R_LAW
-    R_APC -->|identity| I_MI_APC
-    R_LAW -->|identity| I_MI_LAW
-    R_AI -->|linked workspace| R_LAW
+    R_APIM --> R_AI
+    R_APIM --> R_LAW
+    R_APIM --> R_ST
+    R_APIM --> I_APIM
+    R_APC --> R_LAW
+    R_APC --> I_APC
+    R_LAW --> I_LAW
+    R_AI --> R_LAW
 
     classDef primary fill:#0078D4,stroke:#005A9E,stroke-width:2px,color:#FFFFFF
     classDef secondary fill:#00B7C3,stroke:#007C85,stroke-width:2px,color:#1A1A1A
