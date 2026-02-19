@@ -434,6 +434,65 @@ Stakeholders at the platform engineering, application, and security layers shoul
 
 **Implications**: Teams requiring API isolation must request a new workspace name entry in `infra/settings.yaml`. Separate APIM instances must not be created without an ADR documenting the exception.
 
+### Architecture Principle Relationships
+
+The following diagram maps the six architecture principles and their mutual reinforcement relationships, showing how each principle supports and depends on others to form a coherent governance framework.
+
+```mermaid
+---
+title: APIM Accelerator - Architecture Principle Relationships
+config:
+  theme: base
+  look: classic
+  layout: dagre
+  themeVariables:
+    fontSize: "16px"
+---
+flowchart TD
+    accTitle: Architecture Principle Relationship Diagram
+    accDescr: Shows how the six architecture principles reinforce and depend on each other in the APIM Accelerator platform
+
+    %% ═══════════════════════════════════════════════════════════════════════════
+    %% AZURE / FLUENT ARCHITECTURE PATTERN v1.1
+    %% (Semantic + Structural + Font + Accessibility Governance)
+    %% ═══════════════════════════════════════════════════════════════════════════
+    %% PHASE 1 - STRUCTURAL: Direction explicit, flat topology, nesting ≤ 3
+    %% PHASE 2 - SEMANTIC: Colors justified, max 5 semantic classes, neutral-first
+    %% PHASE 3 - FONT: Dark text on light backgrounds, contrast ≥ 4.5:1
+    %% PHASE 4 - ACCESSIBILITY: accTitle/accDescr present, icons on all nodes
+    %% PHASE 5 - STANDARD: Governance block present, classDefs centralized
+    %% ═══════════════════════════════════════════════════════════════════════════
+
+    P1["🔐 P1: Security First\nManaged Identity\nover Credentials"]
+    P2["📦 P2: Infrastructure as Code\nAll Resources\nin Bicep"]
+    P3["📊 P3: Observability by Default\nDiagnostics on\nEvery Resource"]
+    P4["📋 P4: API-First Design\nConsumer Contract\nbefore Implementation"]
+    P5["🔗 P5: Loose Coupling\nModule Boundaries\nvia Output Contracts"]
+    P6["🏢 P6: Multi-Tenancy\nWorkspace Isolation\nnot Separate Instances"]
+
+    P2 -->|"Enforces identity policy"| P1
+    P2 -->|"Enables diagnostic resources"| P3
+    P2 -->|"Enables module interfaces"| P5
+    P1 -->|"Enables identity-based isolation"| P6
+    P4 -->|"Defines contract surface for"| P5
+    P5 -->|"Isolates tenant boundaries via"| P6
+    P3 -->|"Measures SLO evidence for"| P4
+
+    classDef security fill:#FEF2F2,stroke:#B91C1C,color:#7F1D1D
+    classDef iac fill:#EFF6FF,stroke:#1D4ED8,color:#1E3A5F
+    classDef obs fill:#F0FDF4,stroke:#166534,color:#14532D
+    classDef api fill:#FFF7ED,stroke:#92400E,color:#78350F
+    classDef coupling fill:#F5F3FF,stroke:#5B21B6,color:#3B0764
+    classDef tenant fill:#FEFCE8,stroke:#A16207,color:#713F12
+
+    class P1 security
+    class P2 iac
+    class P3 obs
+    class P4 api
+    class P5 coupling
+    class P6 tenant
+```
+
 ---
 
 ## Section 4: Current State Baseline
@@ -593,6 +652,119 @@ The Component Catalog provides detailed specifications for all Application layer
 Because all application services in the APIM-Accelerator are Azure PaaS resources configured through Bicep, resilience, scaling, and health attributes reflect platform-managed capabilities inherited from the selected Azure service tier and SKU. Where configurations are explicitly parameterizable (such as APIM SKU capacity), those parameters are documented with their current defaults from `infra/settings.yaml`.
 
 Custom IaC modules (Bicep orchestration components) are documented with their parameter contract, dependency graph, and output contract as the equivalent of API surface, since they serve as the integration interface for infrastructure pipelines.
+
+### Diagrams
+
+#### API Request Processing Sequence
+
+The following sequence diagram shows the end-to-end processing of an authenticated API request through the APIM Gateway, including policy enforcement, backend forwarding, and asynchronous telemetry emission.
+
+```mermaid
+---
+title: APIM Accelerator - API Request Processing Sequence
+config:
+  theme: base
+  look: classic
+  layout: dagre
+  themeVariables:
+    fontSize: "16px"
+---
+sequenceDiagram
+    accTitle: APIM API Request Processing Sequence Diagram
+    accDescr: Shows the end-to-end flow of an authenticated API request from consumer through APIM Gateway to backend and telemetry systems
+
+    %% ═══════════════════════════════════════════════════════════════════════════
+    %% AZURE / FLUENT ARCHITECTURE PATTERN v1.1
+    %% (Semantic + Structural + Font + Accessibility Governance)
+    %% ═══════════════════════════════════════════════════════════════════════════
+    %% PHASE 1 - STRUCTURAL: Direction explicit, flat topology, nesting ≤ 3
+    %% PHASE 2 - SEMANTIC: Colors justified, max 5 semantic classes, neutral-first
+    %% PHASE 3 - FONT: Dark text on light backgrounds, contrast ≥ 4.5:1
+    %% PHASE 4 - ACCESSIBILITY: accTitle/accDescr present, icons on all nodes
+    %% PHASE 5 - STANDARD: Governance block present, classDefs centralized
+    %% ═══════════════════════════════════════════════════════════════════════════
+
+    participant Consumer as 👤 API Consumer
+    participant AAD as 🔑 Azure AD
+    participant APIM as 🚪 APIM Gateway
+    participant Backend as 🖥️ Backend API
+    participant AppInsights as 📈 App Insights
+    participant LogAnalytics as 📊 Log Analytics
+
+    Consumer->>AAD: Request OAuth2 token (client credentials)
+    AAD-->>Consumer: Access token (JWT)
+    Consumer->>APIM: HTTPS POST /api/resource (Bearer token)
+    APIM->>AAD: Validate JWT token (validate-jwt policy)
+    AAD-->>APIM: Token claims valid
+    APIM->>APIM: Apply rate-limit, quota, transformation policies
+    APIM->>Backend: HTTPS forward request
+    Backend-->>APIM: HTTP 200 response
+    APIM->>APIM: Apply response transformation policies
+    APIM-->>Consumer: HTTP 200 response (transformed)
+    APIM-)AppInsights: Telemetry event (async, buffered)
+    APIM-)LogAnalytics: Diagnostic log entry (async, streaming)
+    AppInsights-)LogAnalytics: Workspace-based telemetry ingestion
+```
+
+#### APIM Workspace Multi-Tenancy Architecture
+
+The following diagram shows how APIM Premium Workspaces provide logical multi-tenant isolation within a single APIM service instance, driven entirely by configuration in `infra/settings.yaml`.
+
+```mermaid
+---
+title: APIM Accelerator - Workspace Multi-Tenancy Architecture
+config:
+  theme: base
+  look: classic
+  layout: dagre
+  themeVariables:
+    fontSize: "16px"
+---
+flowchart TD
+    accTitle: APIM Workspace Multi-Tenancy Architecture
+    accDescr: Shows how APIM Premium workspaces provide logical multi-tenant API isolation within a single APIM service instance driven by settings.yaml configuration
+
+    %% ═══════════════════════════════════════════════════════════════════════════
+    %% AZURE / FLUENT ARCHITECTURE PATTERN v1.1
+    %% (Semantic + Structural + Font + Accessibility Governance)
+    %% ═══════════════════════════════════════════════════════════════════════════
+    %% PHASE 1 - STRUCTURAL: Direction explicit, flat topology, nesting ≤ 3
+    %% PHASE 2 - SEMANTIC: Colors justified, max 5 semantic classes, neutral-first
+    %% PHASE 3 - FONT: Dark text on light backgrounds, contrast ≥ 4.5:1
+    %% PHASE 4 - ACCESSIBILITY: accTitle/accDescr present, icons on all nodes
+    %% PHASE 5 - STANDARD: Governance block present, classDefs centralized
+    %% ═══════════════════════════════════════════════════════════════════════════
+
+    GATEWAY["🚪 APIM Gateway\nPremium SKU · Shared Compute\nsrc/core/apim.bicep"]
+
+    subgraph WS1["📁 Workspace: workspace1 (Team A)"]
+        API1["📡 Team-A APIs\nProducts and Subscriptions"]
+        POL1["📋 Team-A Policies\nIsolated Policy Scope"]
+    end
+
+    subgraph WS2["📁 Workspace: workspace2 (Team B)\n(Future — add entry to settings.yaml)"]
+        API2["📡 Team-B APIs\nProducts and Subscriptions"]
+        POL2["📋 Team-B Policies\nIsolated Policy Scope"]
+    end
+
+    CONSUMER_A["👤 Team-A Consumers"] --> GATEWAY
+    CONSUMER_B["👤 Team-B Consumers"] --> GATEWAY
+    GATEWAY --> WS1
+    GATEWAY --> WS2
+
+    SETTINGS["⚙️ infra/settings.yaml\nworkspaces array\n(Bicep for-loop creates N workspaces)"] -->|"Creates at provision time"| WS1
+    SETTINGS -->|"Creates at provision time"| WS2
+
+    classDef gateway fill:#F0FDF4,stroke:#166534,color:#14532D
+    classDef ws fill:#EFF6FF,stroke:#1D4ED8,color:#1E3A5F
+    classDef config fill:#FEFCE8,stroke:#A16207,color:#713F12
+    classDef consumer fill:#F5F3FF,stroke:#5B21B6,color:#3B0764
+
+    class GATEWAY gateway
+    class API1,POL1,API2,POL2 ws
+    class SETTINGS config
+    class CONSUMER_A,CONSUMER_B consumer
+```
 
 ### 5.1 Application Services
 
