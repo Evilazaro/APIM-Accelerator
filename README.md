@@ -75,8 +75,9 @@ flowchart TB
     %% (Semantic + Structural + Font + Accessibility Governance)
     %% ═══════════════════════════════════════════════════════════════════════════
     %% PHASE 1 - STRUCTURAL: TB direction explicit, 2-level nesting, 3 functional subgraphs
-    %% PHASE 2 - SEMANTIC: 4 colors (external/warning, monitoring/info, core/neutral, inventory/success) ≤ 5
-    %%   external: Developer consumer | monitoring: Observability stack | core: APIM platform | inventory: API governance
+    %% PHASE 2 - SEMANTIC: 4 colors (external/warning, monitoring/neutral, core/blue, inventory/success) ≤ 5
+    %%   external: Developer consumer | monitoring: Observability support stack (neutral)
+    %%   core: Primary Azure APIM platform (Azure blue) | inventory: API governance (green)
     %% PHASE 3 - FONT: Dark text on 100-level fills, contrast ≥ 4.5:1 (WCAG AA)
     %% PHASE 4 - ACCESSIBILITY: accTitle/accDescr present, semantic icons on all content nodes
     %% PHASE 5 - STANDARD: v1.1 format, classDefs centralized below subgraphs, 4 style directives
@@ -118,14 +119,14 @@ flowchart TB
 
     %% Centralized classDefs
     classDef external   fill:#FFF4CE,stroke:#986F0B,stroke-width:2px,color:#3B2C00
-    classDef monitoring fill:#DEECF9,stroke:#0078D4,stroke-width:2px,color:#004578
-    classDef core       fill:#E1DFDD,stroke:#8A8886,stroke-width:2px,color:#323130
+    classDef monitoring fill:#E1DFDD,stroke:#8A8886,stroke-width:2px,color:#323130
+    classDef core       fill:#DEECF9,stroke:#0078D4,stroke-width:2px,color:#004578
     classDef inventory  fill:#DFF6DD,stroke:#107C10,stroke-width:2px,color:#054B16
 
     %% Subgraph style directives (4 subgraphs = 4 style directives)
     style azure     fill:#F3F2F1,stroke:#8A8886,stroke-width:2px,color:#323130
-    style shared    fill:#F3F2F1,stroke:#0078D4,stroke-width:1px,color:#323130
-    style apimcore  fill:#F3F2F1,stroke:#8A8886,stroke-width:1px,color:#323130
+    style shared    fill:#F3F2F1,stroke:#8A8886,stroke-width:1px,color:#323130
+    style apimcore  fill:#F3F2F1,stroke:#0078D4,stroke-width:1px,color:#323130
     style inv       fill:#F3F2F1,stroke:#107C10,stroke-width:1px,color:#323130
 ```
 
