@@ -178,16 +178,8 @@ The primary architectural gaps identified in the Landscape are the absence of co
 #### Context Diagram
 
 ```mermaid
----
-title: APIM Accelerator - System Context
-config:
-  theme: base
-  look: classic
-  layout: dagre
-  themeVariables:
-    fontSize: "16px"
----
 C4Context
+    title APIM Accelerator - System Context
     accTitle: APIM Accelerator System Context Diagram
     accDescr: Shows the actors and external systems interacting with the APIM Accelerator landing zone
 
