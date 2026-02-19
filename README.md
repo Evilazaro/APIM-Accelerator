@@ -10,11 +10,11 @@ A production-ready Azure landing zone accelerator that provisions a complete **A
 
 **Overview**
 
-The APIM Accelerator eliminates the undifferentiated heavy lifting of standing up a production-grade Azure API Management landing zone. It provides a repeatable, modular Bicep deployment that wires together centralized observability, the core API Management service, and a centralized API inventory — deployed in a single `azd up` command from a single configuration file.
+The APIM Accelerator **eliminates the undifferentiated heavy lifting** of standing up a production-grade Azure API Management landing zone. It provides a **repeatable, modular Bicep deployment** that wires together centralized observability, the core API Management service, and a centralized API inventory — deployed in a **single `azd up` command** from a single configuration file.
 
-This accelerator removes the need to manually coordinate the sequencing and configuration of Log Analytics, Application Insights, Storage, APIM, and API Center. Each module exposes strongly-typed parameters and outputs that flow automatically through the orchestration layer, enforcing naming conventions and governance tagging across every resource.
+This accelerator **removes the need to manually coordinate** the sequencing and configuration of Log Analytics, Application Insights, Storage, APIM, and API Center. Each module exposes **strongly-typed parameters and outputs** that flow automatically through the orchestration layer, enforcing **naming conventions and governance tagging** across every resource.
 
-Designed for platform engineering teams managing Azure API ecosystems, the accelerator supports environments from development (Developer SKU, single scale unit) to enterprise production (Premium SKU, multi-region, VNet integration) with identical code paths and configuration-driven differences.
+Designed for platform engineering teams managing Azure API ecosystems, the accelerator supports environments from development (Developer SKU, single scale unit) to **enterprise production (Premium SKU, multi-region, VNet integration)** with **identical code paths** and **configuration-driven differences**.
 
 ## 📑 Table of Contents
 
@@ -30,9 +30,9 @@ Designed for platform engineering teams managing Azure API ecosystems, the accel
 
 **Overview**
 
-The accelerator's feature set is designed around the three concerns that dominate APIM platform engineering: observability, governance, and developer experience. Features are implemented as composable Bicep modules with typed interfaces — each module can be deployed independently or replaced with a custom implementation while preserving compatibility with the orchestration layer.
+The accelerator's feature set is designed around the three concerns that dominate APIM platform engineering: **observability, governance, and developer experience**. Features are implemented as **composable Bicep modules with typed interfaces** — each module can be **deployed independently or replaced** with a custom implementation while preserving compatibility with the orchestration layer.
 
-Observability, identity, and tagging are applied uniformly to all resources through shared configuration, removing the per-resource boilerplate that leads to configuration drift in manually assembled landing zones.
+Observability, identity, and tagging are **applied uniformly to all resources** through shared configuration, removing the per-resource boilerplate that leads to **configuration drift** in manually assembled landing zones.
 
 As platform requirements evolve — new workspaces, additional APIM policies, VNet integration, multi-region rollout — the configuration-driven design allows expanding capabilities without rewriting infrastructure code.
 
@@ -54,7 +54,7 @@ As platform requirements evolve — new workspaces, additional APIM policies, VN
 
 The accelerator implements a layered landing zone architecture with three independently deployable tiers: shared observability, core APIM platform, and API inventory governance. Each tier is a discrete Bicep module with typed inputs and outputs, enabling teams to extend or replace individual layers without disrupting others.
 
-The orchestration template (`infra/main.bicep`) deploys at Azure subscription scope, creating the resource group and sequencing the three module layers in dependency order. Monitoring infrastructure is always deployed first, as its outputs (Log Analytics workspace ID, Application Insights resource ID, Storage account ID) are required by the APIM diagnostic settings in the core layer.
+The orchestration template (`infra/main.bicep`) deploys at Azure subscription scope, creating the resource group and sequencing the three module layers in dependency order. **Monitoring infrastructure is always deployed first**, as its outputs (Log Analytics workspace ID, Application Insights resource ID, Storage account ID) are **required by the APIM diagnostic settings** in the core layer.
 
 ```mermaid
 ---
@@ -134,8 +134,8 @@ flowchart TB
 
 1. Resource group provisioning
 2. Shared monitoring infrastructure (Log Analytics → Application Insights → Storage)
-3. Core API Management platform (depends on monitoring outputs)
-4. API Center inventory module (depends on APIM outputs)
+3. Core API Management platform (**depends on monitoring outputs**)
+4. API Center inventory module (**depends on APIM outputs**)
 
 ## 📋 Requirements
 
@@ -143,7 +143,7 @@ flowchart TB
 
 The accelerator targets Azure subscription owners or contributors who need to stand up a governed API Management landing zone. The toolchain is intentionally minimal — `azd` handles authentication, subscription selection, and the full provisioning lifecycle, while `az` CLI is required only for the soft-delete cleanup pre-provision hook.
 
-> 💡 **Why This Matters**: Missing or outdated prerequisites are the most common cause of mid-deployment failures. API Management Premium SKU provisioning takes 30–45 minutes — a failed pre-flight check discovered after 40 minutes means starting over. Validating all requirements before running `azd up` eliminates this failure mode entirely.
+> 💡 **Why This Matters**: Missing or outdated prerequisites are the **most common cause of mid-deployment failures**. API Management Premium SKU provisioning takes **30–45 minutes** — a failed pre-flight check discovered after 40 minutes means starting over. **Validating all requirements before running `azd up`** eliminates this failure mode entirely.
 
 > 📌 **How It Works**: The `infra/azd-hooks/pre-provision.sh` script runs automatically before infrastructure provisioning via the `azd` lifecycle hook defined in `azure.yaml`. It purges soft-deleted APIM instances in the target region, then `azd` proceeds with the Bicep deployment using parameters from `infra/main.parameters.json`.
 
@@ -163,7 +163,7 @@ The accelerator targets Azure subscription owners or contributors who need to st
 
 **Overview**
 
-The entire landing zone — resource group, monitoring stack, APIM service, developer portal, workspaces, and API Center — deploys with a single `azd up` command. Before first use, edit `infra/settings.yaml` to set your publisher email and organization name. All resource names are auto-generated from the solution name and target region if left empty.
+The entire landing zone — resource group, monitoring stack, APIM service, developer portal, workspaces, and API Center — deploys with a **single `azd up` command**. **Before first use, edit `infra/settings.yaml`** to set your publisher email and organization name. All resource names are auto-generated from the solution name and target region if left empty.
 
 > ⚠️ **Note**: API Management Premium SKU provisioning typically takes **30–45 minutes**. This is expected and not indicative of a failure.
 
@@ -221,7 +221,7 @@ azd down
 
 **Overview**
 
-All environment-specific settings are centralized in `infra/settings.yaml`. This single configuration file controls resource naming, SKU selection, identity types, publisher information, governance tags, and API Center settings. Modifying this file is the primary way to customize the accelerator before running `azd up`. Resource names left empty are auto-generated using a deterministic unique suffix derived from the subscription ID, resource group, solution name, and target location.
+**All environment-specific settings are centralized** in `infra/settings.yaml`. This single configuration file controls resource naming, SKU selection, identity types, publisher information, governance tags, and API Center settings. **Modifying this file is the primary way to customize the accelerator** before running `azd up`. Resource names left empty are auto-generated using a **deterministic unique suffix** derived from the subscription ID, resource group, solution name, and target location.
 
 **Core Configuration** (`infra/settings.yaml`):
 
@@ -287,7 +287,7 @@ virtualNetworkType: "Internal" # None | External | Internal
 publicNetworkAccess: false
 ```
 
-> **Important**: VNet integration requires Premium SKU. Provide the `subnetResourceId` via the `apiManagementSettings` parameter when using `External` or `Internal` VNet types.
+> ⚠️ **Important**: VNet integration **requires Premium SKU**. Provide the `subnetResourceId` via the `apiManagementSettings` parameter when using `External` or `Internal` VNet types.
 
 ## 🤝 Contributing
 
@@ -295,7 +295,7 @@ publicNetworkAccess: false
 
 Contributions are welcome and encouraged. This accelerator is designed to be extended — whether adding new APIM policies, integrating additional Azure services, introducing new Bicep modules, or improving the observability stack. The modular architecture makes it straightforward to add new components without disrupting existing deployments.
 
-All Bicep changes should follow the naming, typing, and tagging conventions already established in the codebase. New modules must expose typed parameters using the type definitions in `src/shared/common-types.bicep` and wire diagnostic settings to the shared monitoring infrastructure outputs.
+All Bicep changes **must follow the naming, typing, and tagging conventions** already established in the codebase. **New modules must expose typed parameters** using the type definitions in `src/shared/common-types.bicep` and **wire diagnostic settings to the shared monitoring infrastructure outputs**.
 
 > 💡 **Tip**: Run `az bicep lint --file infra/main.bicep` before opening a pull request to catch linting violations early.
 
@@ -326,11 +326,11 @@ azd provision --environment dev
 
 **Pull request guidelines**:
 
-- All Bicep module parameters must include `@description()` decorators
-- Resource names must follow the `{solutionName}-{uniqueSuffix}-{resourceType}` convention defined in `src/shared/constants.bicep`
-- New Azure services must be wired into the shared monitoring infrastructure via diagnostic settings
-- Tag all new resources using the `commonTags` variable pattern from `infra/main.bicep`
-- Update `infra/settings.yaml` and `src/shared/common-types.bicep` when introducing new configurable settings
+- All Bicep module parameters **must** include `@description()` decorators
+- Resource names **must** follow the `{solutionName}-{uniqueSuffix}-{resourceType}` convention defined in `src/shared/constants.bicep`
+- New Azure services **must** be wired into the shared monitoring infrastructure via diagnostic settings
+- **Tag all new resources** using the `commonTags` variable pattern from `infra/main.bicep`
+- **Update `infra/settings.yaml`** and `src/shared/common-types.bicep` when introducing new configurable settings
 
 ## 📝 License
 
