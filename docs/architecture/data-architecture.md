@@ -9,46 +9,6 @@
 
 ---
 
-```yaml
-chain_of_thought:
-  phase: "Data Layer Analysis"
-  inputs_validated:
-    folder_paths_exist: true
-    target_layer_valid: "Data"
-    dependencies_loaded:
-      - "base-layer-config.prompt.md"
-      - "error-taxonomy.prompt.md"
-    scan_results_available: true
-  strategy:
-    primary_approach: "Schema type definition detection (*.bicep type definitions, settings.yaml, *.json parameters)"
-    fallback_if_failed: "Search for data entities in /src/shared/, /infra/ folders"
-    expected_output: "11 subsections (5.1-5.11) with data classification, storage type, governance"
-  gate_checks:
-    - criterion: "Data classification assigned"
-      threshold: "All components have PII|PHI|Financial|Public|Internal|Confidential"
-      action_if_fail: "Review source, mark 'Unknown' if cannot determine, flag for review"
-    - criterion: "Section 5 mandatory table schema"
-      threshold: "Each 5.N table has 10 columns: Component, Description, Classification, Storage, Owner, Retention, Freshness SLA, Source Systems, Consumers, Source File"
-      action_if_fail: "E-017: Add missing columns with 'Not detected' values"
-    - criterion: "Source file format"
-      threshold: "All match path/file.ext:line-range format"
-      action_if_fail: "E-004: Fix markdown links to plain text"
-  risk_factors:
-    - risk: "Exposing PII/PHI/credentials in output"
-      likelihood: "low"
-      mitigation: "All @secure() parameters and outputs are noted as metadata; actual secret values are never extracted"
-    - risk: "Missing Section 5 Summary"
-      likelihood: "low"
-      mitigation: "E-016 gate enforced: Summary added after subsection 5.11"
-    - risk: "IaC-centric data layer with non-traditional data artifacts"
-      likelihood: "high"
-      mitigation: "Classified Bicep type definitions as Data Entities, configuration constants as Data Models, telemetry stores as Data Stores"
-  estimated_duration_seconds: 190
-  proceed: true
-```
-
----
-
 ## Section 1: Executive Summary
 
 ### Overview
