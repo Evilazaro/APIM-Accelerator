@@ -75,10 +75,10 @@ flowchart TB
     %% (Semantic + Structural + Font + Accessibility Governance)
     %% ═══════════════════════════════════════════════════════════════════════════
     %% PHASE 1 - STRUCTURAL: TB direction explicit, 2-level nesting, 3 functional subgraphs
-    %% PHASE 2 - SEMANTIC: 4 colors (external/warning, monitoring/neutral, core/blue, inventory/success) ≤ 5
-    %%   external: Developer consumer | monitoring: Observability support stack (neutral)
-    %%   core: Primary Azure APIM platform (Azure blue) | inventory: API governance (green)
-    %% PHASE 3 - FONT: Dark text on 100-level fills, contrast ≥ 4.5:1 (WCAG AA)
+    %% PHASE 2 - SEMANTIC: 4 colors (external/warning, monitoring/blue-light, core/azure-solid, inventory/success) ≤ 5
+    %%   external: Developer consumer | monitoring: Observability stack (light blue)
+    %%   core: Primary Azure APIM platform (Azure brand blue, high contrast) | inventory: API governance (green)
+    %% PHASE 3 - FONT: White text on solid blue core nodes (WCAG AA), dark text elsewhere
     %% PHASE 4 - ACCESSIBILITY: accTitle/accDescr present, semantic icons on all content nodes
     %% PHASE 5 - STANDARD: v1.1 format, classDefs centralized below subgraphs, 4 style directives
     %% ═══════════════════════════════════════════════════════════════════════════
