@@ -211,7 +211,7 @@ shared:
 core:
   apiManagement:
     name: "" # Leave empty for auto-generated name
-    publisherEmail: "admin@contoso.com"
+    publisherEmail: "evilazaro@gmail.com"
     publisherName: "Contoso"
     sku:
       name: "Premium" # Developer | Basic | Standard | Premium | Consumption
@@ -240,13 +240,13 @@ inventory:
 
 **Governance Tags** (`infra/settings.yaml`, `shared.tags`):
 
-| Tag Key                | Example Value       | Purpose                         |
-| ---------------------- | ------------------- | ------------------------------- |
-| `CostCenter`           | `CC-1234`           | Cost allocation tracking        |
-| `BusinessUnit`         | `IT`                | Organizational unit attribution |
-| `ServiceClass`         | `Critical`          | Workload tier classification    |
-| `RegulatoryCompliance` | `GDPR`              | Compliance requirements         |
-| `Owner`                | `admin@contoso.com` | Resource owner contact          |
+| Tag Key                | Example Value         | Purpose                         |
+| ---------------------- | --------------------- | ------------------------------- |
+| `CostCenter`           | `CC-1234`             | Cost allocation tracking        |
+| `BusinessUnit`         | `IT`                  | Organizational unit attribution |
+| `ServiceClass`         | `Critical`            | Workload tier classification    |
+| `RegulatoryCompliance` | `GDPR`                | Compliance requirements         |
+| `Owner`                | `evilazaro@gmail.com` | Resource owner contact          |
 
 **Virtual Network Integration** (`src/core/apim.bicep`):
 
@@ -268,7 +268,7 @@ Contributions are welcome and encouraged. This accelerator is designed to be ext
 
 **Development Setup**
 
-1. Fork the repository on GitHub, then clone your fork:
+1. Fork the repository via the GitHub web UI, then clone your fork. To work against the upstream directly:
 
 ```bash
 git clone https://github.com/Evilazaro/APIM-Accelerator.git
