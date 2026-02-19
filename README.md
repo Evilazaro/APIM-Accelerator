@@ -156,15 +156,15 @@ azd up
 
 `azd` will prompt for the following inputs:
 
-```
+```text
 ? Enter a new environment name: dev
-? Select an Azure Subscription: <your subscription>
+? Select an Azure Subscription: (select your subscription from the list)
 ? Select an Azure location: eastus
 ```
 
 **Expected Output**
 
-```
+```text
 (✓) Done: Resource group: apim-accelerator-dev-eastus-rg
 (✓) Done: Monitoring - Log Analytics Workspace
 (✓) Done: Monitoring - Application Insights
@@ -228,7 +228,7 @@ inventory:
       type: "SystemAssigned"
 ```
 
-**Supported API Management SKUs** (`src/common-types.bicep`):
+**Supported API Management SKUs** (`src/shared/common-types.bicep`):
 
 | SKU                       | Use Case                  | SLA    | VNet Support            |
 | ------------------------- | ------------------------- | ------ | ----------------------- |
@@ -268,10 +268,10 @@ Contributions are welcome and encouraged. This accelerator is designed to be ext
 
 **Development Setup**
 
-1. Fork and clone the repository:
+1. Fork the repository on GitHub, then clone your fork:
 
 ```bash
-git clone https://github.com/<your-fork>/APIM-Accelerator.git
+git clone https://github.com/Evilazaro/APIM-Accelerator.git
 cd APIM-Accelerator
 ```
 
