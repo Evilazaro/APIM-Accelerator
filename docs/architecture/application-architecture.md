@@ -2082,6 +2082,132 @@ flowchart LR
 | Catalog Federation     | API Center + APIM    | HTTPS/REST             | Medium      | Eventual consistency; sync gap possible    |
 | OAuth2 Authentication  | Portal/APIM + AAD    | OAuth2/OIDC            | Very High   | AAD 99.99% SLA                             |
 
+### Data Flow Diagram
+
+```mermaid
+---
+title: APIM Accelerator - Runtime Data Flows
+config:
+  theme: base
+  look: classic
+  layout: dagre
+  themeVariables:
+    fontSize: "16px"
+---
+flowchart LR
+    accTitle: APIM Accelerator Runtime Data Flow Diagram
+    accDescr: Shows all eight data flows DF-001 through DF-008 with protocol labels and data types for each integration path
+
+    %% ═══════════════════════════════════════════════════════════════════════════
+    %% AZURE / FLUENT ARCHITECTURE PATTERN v1.1
+    %% (Semantic + Structural + Font + Accessibility Governance)
+    %% ═══════════════════════════════════════════════════════════════════════════
+    %% PHASE 1 - STRUCTURAL: Direction explicit, flat topology, nesting ≤ 3
+    %% PHASE 2 - SEMANTIC: Colors justified, max 5 semantic classes, neutral-first
+    %% PHASE 3 - FONT: Dark text on light backgrounds, contrast ≥ 4.5:1
+    %% PHASE 4 - ACCESSIBILITY: accTitle/accDescr present, icons on all nodes
+    %% PHASE 5 - STANDARD: Governance block present, classDefs centralized
+    %% ═══════════════════════════════════════════════════════════════════════════
+
+    CONSUMER["👤 API Consumer"]
+    APIMGW["🚪 APIM Gateway"]
+    BACKEND["🖥️ Backend APIs"]
+    PORTAL["🌐 Dev Portal"]
+    AAD2["🔑 Azure AD"]
+    AI3["📈 App Insights"]
+    LAW3["📊 Log Analytics"]
+    SA3["🗄️ Storage Account"]
+    APC3["🗂️ API Center"]
+
+    CONSUMER -->|"DF-001 · HTTPS\nHTTP Request/Response\n(per request)"| APIMGW
+    APIMGW -->|"DF-005 · HTTPS\nForwarded Request\n(per request)"| BACKEND
+    APIMGW -->|"DF-002 · HTTP Instrumentation\nTelemetry Events\n(batched async)"| AI3
+    APIMGW -->|"DF-003 · Azure Diagnostics\nallLogs + AllMetrics\n(streaming)"| LAW3
+    APIMGW -->|"DF-004 · Azure Diagnostics\nArchived Logs\n(streaming)"| SA3
+    APC3 -->|"DF-006 · HTTPS/REST\nAPI Definition Pull\n(periodic)"| APIMGW
+    AI3 -->|"DF-007 · Azure Internal\nTelemetry Ingestion\n(continuous)"| LAW3
+    PORTAL -->|"DF-008 · OAuth2\nAuth Code Exchange\n(per sign-in)"| AAD2
+
+    classDef gateway fill:#F0FDF4,stroke:#166534,color:#14532D
+    classDef obs fill:#EFF6FF,stroke:#1D4ED8,color:#1E3A5F
+    classDef inventory fill:#FFF7ED,stroke:#92400E,color:#78350F
+    classDef external fill:#F5F3FF,stroke:#5B21B6,color:#3B0764
+    classDef consumer fill:#FEFCE8,stroke:#A16207,color:#713F12
+
+    class APIMGW,PORTAL gateway
+    class AI3,LAW3,SA3 obs
+    class APC3 inventory
+    class AAD2,BACKEND external
+    class CONSUMER consumer
+```
+
+### Event Subscription Map
+
+```mermaid
+---
+title: APIM Accelerator - Event Streams and Subscription Map
+config:
+  theme: base
+  look: classic
+  layout: dagre
+  themeVariables:
+    fontSize: "16px"
+---
+flowchart TD
+    accTitle: APIM Accelerator Event Streams and Subscription Map
+    accDescr: Maps all four application event streams to their producers and consumers showing protocol and delivery pattern for each
+
+    %% ═══════════════════════════════════════════════════════════════════════════
+    %% AZURE / FLUENT ARCHITECTURE PATTERN v1.1
+    %% (Semantic + Structural + Font + Accessibility Governance)
+    %% ═══════════════════════════════════════════════════════════════════════════
+    %% PHASE 1 - STRUCTURAL: Direction explicit, flat topology, nesting ≤ 3
+    %% PHASE 2 - SEMANTIC: Colors justified, max 5 semantic classes, neutral-first
+    %% PHASE 3 - FONT: Dark text on light backgrounds, contrast ≥ 4.5:1
+    %% PHASE 4 - ACCESSIBILITY: accTitle/accDescr present, icons on all nodes
+    %% PHASE 5 - STANDARD: Governance block present, classDefs centralized
+    %% ═══════════════════════════════════════════════════════════════════════════
+
+    subgraph PRODUCERS["📤 Event Producers"]
+        APIMGW2["🚪 APIM Gateway\nsrc/core/apim.bicep"]
+        AZDEV["🛠️ Azure Developer CLI\nazure.yaml"]
+        APIMIDENT["🔐 APIM Managed Identity\nsrc/core/apim.bicep"]
+    end
+
+    subgraph STREAMS["⚡ Event Streams"]
+        DIAGSTREAM["📋 APIM Diagnostic\nEvent Stream · 2.7\nallLogs category"]
+        TELSTREAM["📈 App Insights\nTelemetry Events · 2.7\nRequest/Dependency/Exception"]
+        SECEVT["🛡️ RBAC Role\nAssignment Events · 2.7\nARM Activity Log"]
+        LCEVT["🔄 AZD Pre-Provision\nLifecycle Events · 2.7\nShell hook"]
+    end
+
+    subgraph CONSUMERS["📥 Event Consumers"]
+        LAW4["📊 Log Analytics\n(allLogs queryable via KQL)"]
+        SA4["🗄️ Storage Account\n(long-term archive)"]
+        ACTLOG["📜 Azure Activity Log\n(ARM security audit)"]
+        CONSOLE["💻 AZD Console Output\n(operator visibility)"]
+    end
+
+    APIMGW2 -->|"Push · Azure Diagnostics"| DIAGSTREAM
+    APIMGW2 -->|"Push · HTTP instrumentation"| TELSTREAM
+    APIMIDENT -->|"ARM provision event"| SECEVT
+    AZDEV -->|"Shell hook execution"| LCEVT
+
+    DIAGSTREAM -->|"Streaming delivery"| LAW4
+    DIAGSTREAM -->|"Archival delivery"| SA4
+    TELSTREAM -->|"Workspace-based ingestion"| LAW4
+    SECEVT -->|"ARM audit log write"| ACTLOG
+    LCEVT -->|"stdout / pipeline log"| CONSOLE
+
+    classDef producer fill:#F0FDF4,stroke:#166534,color:#14532D
+    classDef stream fill:#EFF6FF,stroke:#1D4ED8,color:#1E3A5F
+    classDef consumer fill:#FEFCE8,stroke:#A16207,color:#713F12
+
+    class APIMGW2,AZDEV,APIMIDENT producer
+    class DIAGSTREAM,TELSTREAM,SECEVT,LCEVT stream
+    class LAW4,SA4,ACTLOG,CONSOLE consumer
+```
+
 ### Summary
 
 The Dependencies & Integration analysis confirms a clean, layered dependency graph with no circular dependencies and a well-defined provisioning order enforced by Bicep module output references. All runtime integrations flow in one direction: observability telemetry is pushed outward from APIM to Application Insights and Log Analytics, while governance data is pulled from APIM by API Center. The Azure Active Directory dependency at runtime is the only external party not provisioned by the landing zone itself.
