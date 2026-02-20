@@ -24,7 +24,9 @@ The accelerator follows a modular, layered architecture that separates shared in
 - [Architecture](#architecture)
 - [Features](#features)
 - [Requirements](#requirements)
-- [Getting Started](#getting-started)
+- [Quick Start](#quick-start)
+- [Deployment](#deployment)
+- [Usage](#usage)
 - [Configuration](#configuration)
 - [Project Structure](#project-structure)
 - [Contributing](#contributing)
@@ -53,6 +55,17 @@ config:
 flowchart TB
     accTitle: APIM Accelerator Landing Zone Architecture
     accDescr: Shows the three-tier deployment architecture with shared monitoring, core APIM platform, and API inventory management layers
+
+    %% ═══════════════════════════════════════════════════════════════════════════
+    %% AZURE / FLUENT ARCHITECTURE PATTERN v1.1
+    %% (Semantic + Structural + Font + Accessibility Governance)
+    %% ═══════════════════════════════════════════════════════════════════════════
+    %% PHASE 1 - STRUCTURAL: Direction explicit, flat topology, nesting ≤ 3
+    %% PHASE 2 - SEMANTIC: Colors justified, max 5 semantic classes, neutral-first
+    %% PHASE 3 - FONT: Dark text on light backgrounds, contrast ≥ 4.5:1
+    %% PHASE 4 - ACCESSIBILITY: accTitle/accDescr present, icons on all nodes
+    %% PHASE 5 - STANDARD: Governance block present, classDefs centralized
+    %% ═══════════════════════════════════════════════════════════════════════════
 
     subgraph subscription["☁️ Azure Subscription"]
         direction TB
@@ -152,11 +165,39 @@ Before deploying the APIM Accelerator, ensure your environment meets the followi
 | 🔗 Azure AD App Registration | Required for Developer Portal authentication — client ID and client secret | [Register an application](https://learn.microsoft.com/entra/identity-platform/quickstart-register-app) |
 | 🌐 Azure Region | Target region must support API Management Premium tier and API Center | [Azure products by region](https://azure.microsoft.com/explore/global-infrastructure/products-by-region/) |
 
-## Getting Started
+## Quick Start
 
 **Overview**
 
-Deploy the complete APIM landing zone in minutes using the Azure Developer CLI. The `azd up` command handles environment configuration, infrastructure provisioning, and dependency resolution automatically.
+Get the APIM Accelerator deployed in minutes with three commands. This section provides the fastest path to a running environment for developers familiar with Azure tooling.
+
+> 💡 **Why This Matters**: A full API Management landing zone typically requires configuring dozens of Azure resources individually. The accelerator reduces this to a single command that provisions the entire stack with production-ready defaults.
+
+```bash
+git clone https://github.com/Evilazaro/APIM-Accelerator.git
+cd APIM-Accelerator
+azd auth login
+azd up
+```
+
+**Expected output:**
+
+```text
+Provisioning Azure resources (azd provision)
+  (✓) Done: Resource group: apim-accelerator-dev-eastus-rg
+
+SUCCESS: Your application was provisioned in Azure.
+```
+
+> 📌 **Note**: When prompted by `azd up`, select your target Azure region and provide an environment name (e.g., `dev`, `staging`, `prod`). See the [Deployment](#deployment) section for the full step-by-step walkthrough.
+
+## Deployment
+
+**Overview**
+
+The deployment process uses the Azure Developer CLI (`azd`) to orchestrate a subscription-level Bicep template. The pipeline creates a resource group, provisions shared monitoring infrastructure, deploys the core APIM platform, and registers APIs in API Center — all in a deterministic, repeatable sequence.
+
+> 💡 **How It Works**: The `azd up` command reads `azure.yaml` for project configuration, loads parameters from `infra/main.parameters.json`, and executes lifecycle hooks (such as purging soft-deleted APIM instances) before provisioning infrastructure defined in `infra/main.bicep`.
 
 ### Step 1: Clone the Repository
 
@@ -194,21 +235,60 @@ When prompted, select your target Azure region. The command executes the followi
 4. Deploys the core APIM platform with workspaces and developer portal
 5. Deploys API Center with APIM integration
 
-**Expected output:**
-
-```text
-Provisioning Azure resources (azd provision)
-  (✓) Done: Resource group: apim-accelerator-dev-eastus-rg
-
-SUCCESS: Your application was provisioned in Azure.
-```
-
-> 💡 **Tip**: To provision infrastructure only without application deployment, use `azd provision`. To tear down all resources, use `azd down`.
-
 ### Step 5: Verify the Deployment
 
 ```bash
 az apim show --name <apim-name> --resource-group <resource-group-name> --query "{name:name, sku:sku.name, state:properties.provisioningState}" --output table
+```
+
+**Expected output:**
+
+```text
+Name                                    Sku       State
+--------------------------------------  --------  ---------
+apim-accelerator-abc123-apim            Premium   Succeeded
+```
+
+> 💡 **Tip**: To provision infrastructure only without application deployment, use `azd provision`. To tear down all resources, use `azd down`.
+
+## Usage
+
+**Overview**
+
+After deployment, the accelerator provides a fully operational API Management platform with a developer portal and centralized API governance. This section covers common post-deployment operations for managing APIs, accessing the portal, and monitoring platform health.
+
+> 💡 **Why This Matters**: Deploying infrastructure is only the first step. Understanding how to interact with the provisioned resources ensures your team can onboard APIs, configure policies, and leverage the full platform effectively.
+
+### Access the Developer Portal
+
+The Developer Portal is deployed with Azure AD authentication enabled. Navigate to the portal URL output by the deployment:
+
+```bash
+az apim show --name <apim-name> --resource-group <resource-group-name> --query "properties.developerPortalUrl" --output tsv
+```
+
+### Query Monitoring Data
+
+Use the Log Analytics workspace to query API Management diagnostic logs:
+
+```bash
+az monitor log-analytics query --workspace <workspace-id> --analytics-query "ApiManagementGatewayLogs | summarize count() by ResultType | order by count_ desc" --output table
+```
+
+### Manage Workspaces
+
+List the configured APIM workspaces for team-based API isolation:
+
+```bash
+az apim workspace list --service-name <apim-name> --resource-group <resource-group-name> --output table
+```
+
+### View API Inventory
+
+Access the API Center to review registered APIs and governance status:
+
+```bash
+az apic api list --service-name <api-center-name> --resource-group <resource-group-name> --output table
 ```
 
 ## Configuration
