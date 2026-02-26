@@ -658,10 +658,12 @@ flowchart TB
     classDef core fill:#DEECF9,stroke:#0078D4,stroke-width:2px,color:#004578
     classDef warning fill:#FFF4CE,stroke:#FFB900,stroke-width:2px,color:#986F0B
     classDef success fill:#DFF6DD,stroke:#107C10,stroke-width:2px,color:#0B6A0B
+    classDef danger fill:#FDE7E9,stroke:#E81123,stroke-width:2px,color:#A4262C
 
     class PreValidate,CreateRG,DeployMonitoring,DeployAPIM,ConfigPortal,CreateWorkspaces,DeployInventory,PurgeAPIM core
     class SoftDeleted,MonitoringOK warning
     class Start,End success
+    class Fail danger
 ```
 
 ### 5.5 Business Services Specifications (4)
@@ -821,17 +823,17 @@ flowchart TB
 
     subgraph coreLayer["⚡ Core Platform"]
         direction TB
-        coreMain["⚡ core/main.bicep"]:::api
-        apim["🔗 apim.bicep"]:::api
-        ws["🏢 workspaces.bicep"]:::api
-        dp["🌐 developer-portal.bicep"]:::api
+        coreMain["⚡ core/main.bicep"]:::success
+        apim["🔗 apim.bicep"]:::success
+        ws["🏢 workspaces.bicep"]:::success
+        dp["🌐 developer-portal.bicep"]:::success
         coreMain --> apim
         coreMain --> ws
         coreMain --> dp
     end
 
     subgraph inventoryLayer["📚 API Inventory"]
-        invMain["📚 inventory/main.bicep"]:::process
+        invMain["📚 inventory/main.bicep"]:::warning
     end
 
     settings -->|"loadYamlContent"| main
@@ -852,16 +854,16 @@ flowchart TB
     apim -->|"sends telemetry"| insMon
     invMain -->|"discovers APIs"| apim
 
-    style config fill:#E8DAEF,stroke:#7B2D8E,stroke-width:2px
+    style config fill:#E1DFDD,stroke:#8378DE,stroke-width:2px
     style orchestration fill:#FAFAFA,stroke:#8A8886,stroke-width:2px
     style sharedLayer fill:#DEECF9,stroke:#0078D4,stroke-width:2px
     style coreLayer fill:#DFF6DD,stroke:#107C10,stroke-width:2px
     style inventoryLayer fill:#FFF4CE,stroke:#FFB900,stroke-width:2px
 
     classDef core fill:#DEECF9,stroke:#0078D4,stroke-width:2px,color:#004578
-    classDef api fill:#DFF6DD,stroke:#107C10,stroke-width:2px,color:#0B6A0B
-    classDef data fill:#E8DAEF,stroke:#7B2D8E,stroke-width:2px,color:#4A1C6A
-    classDef process fill:#FFF4CE,stroke:#FFB900,stroke-width:2px,color:#986F0B
+    classDef success fill:#DFF6DD,stroke:#107C10,stroke-width:2px,color:#0B6A0B
+    classDef data fill:#E1DFDD,stroke:#8378DE,stroke-width:2px,color:#5B5FC7
+    classDef warning fill:#FFF4CE,stroke:#FFB900,stroke-width:2px,color:#986F0B
 ```
 
 #### Capability-Process Matrix
@@ -884,12 +886,13 @@ flowchart TB
 
     %% ═══════════════════════════════════════════════════════════════════════════
     %% AZURE / FLUENT ARCHITECTURE PATTERN v1.1
+    %% (Semantic + Structural + Font + Accessibility Governance)
     %% ═══════════════════════════════════════════════════════════════════════════
 
     subgraph processes["🔄 Business Processes"]
-        p1["📦 Landing Zone<br/>Provisioning"]:::process
-        p2["🔄 API Discovery &<br/>Synchronization"]:::process
-        p3["🔍 Pre-Provision<br/>Validation"]:::process
+        p1["📦 Landing Zone<br/>Provisioning"]:::warning
+        p2["🔄 API Discovery &<br/>Synchronization"]:::warning
+        p3["🔍 Pre-Provision<br/>Validation"]:::warning
     end
 
     subgraph capabilities["⚡ Business Capabilities"]
@@ -911,7 +914,6 @@ flowchart TB
     style processes fill:#FAFAFA,stroke:#8A8886,stroke-width:2px
     style capabilities fill:#DEECF9,stroke:#0078D4,stroke-width:2px
 
-    classDef process fill:#FFF4CE,stroke:#FFB900,stroke-width:2px,color:#986F0B
     classDef success fill:#DFF6DD,stroke:#107C10,stroke-width:2px,color:#0B6A0B
     classDef warning fill:#FFF4CE,stroke:#FFB900,stroke-width:2px,color:#986F0B
     classDef danger fill:#FDE7E9,stroke:#E81123,stroke-width:2px,color:#A4262C
