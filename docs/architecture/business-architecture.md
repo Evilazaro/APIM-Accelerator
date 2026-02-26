@@ -429,15 +429,15 @@ flowchart TB
 
         subgraph coreCap["🔗 Core Platform"]
             direction LR
-            cap1["🔗 API Management"]:::api
-            cap2["🏢 Workspace Isolation"]:::api
-            cap3["🌐 Developer Self-Service"]:::api
+            cap1["🔗 API Management"]:::success
+            cap2["🏢 Workspace Isolation"]:::success
+            cap3["🌐 Developer Self-Service"]:::success
         end
 
         subgraph govCap["📚 Governance"]
             direction LR
-            cap4["📚 API Discovery"]:::process
-            cap5["🔐 RBAC & Identity"]:::security
+            cap4["📚 API Discovery"]:::warning
+            cap5["🔐 RBAC & Identity"]:::danger
         end
 
         subgraph infraCap["🔍 Infrastructure"]
@@ -450,8 +450,8 @@ flowchart TB
     subgraph processes["⚙️ Business Processes"]
         direction LR
         bp1["📦 Provisioning"]:::core
-        bp2["🔄 API Sync"]:::process
-        bp3["✅ Pre-Validation"]:::process
+        bp2["🔄 API Sync"]:::warning
+        bp3["✅ Pre-Validation"]:::warning
     end
 
     bs1 -->|"drives"| coreCap
@@ -465,14 +465,14 @@ flowchart TB
     style capabilities fill:#FAFAFA,stroke:#8A8886,stroke-width:2px
     style coreCap fill:#DFF6DD,stroke:#107C10,stroke-width:2px
     style govCap fill:#FFF4CE,stroke:#FFB900,stroke-width:2px
-    style infraCap fill:#E8DAEF,stroke:#7B2D8E,stroke-width:2px
-    style processes fill:#FCE4EC,stroke:#D13438,stroke-width:2px
+    style infraCap fill:#E1DFDD,stroke:#8378DE,stroke-width:2px
+    style processes fill:#FDE7E9,stroke:#E81123,stroke-width:2px
 
     classDef core fill:#DEECF9,stroke:#0078D4,stroke-width:2px,color:#004578
-    classDef api fill:#DFF6DD,stroke:#107C10,stroke-width:2px,color:#0B6A0B
-    classDef process fill:#FFF4CE,stroke:#FFB900,stroke-width:2px,color:#986F0B
-    classDef data fill:#E8DAEF,stroke:#7B2D8E,stroke-width:2px,color:#4A1C6A
-    classDef security fill:#FDE7E9,stroke:#D13438,stroke-width:2px,color:#A80000
+    classDef success fill:#DFF6DD,stroke:#107C10,stroke-width:2px,color:#0B6A0B
+    classDef warning fill:#FFF4CE,stroke:#FFB900,stroke-width:2px,color:#986F0B
+    classDef data fill:#E1DFDD,stroke:#8378DE,stroke-width:2px,color:#5B5FC7
+    classDef danger fill:#FDE7E9,stroke:#E81123,stroke-width:2px,color:#A4262C
 ```
 
 ### Summary
