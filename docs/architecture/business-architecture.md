@@ -60,6 +60,52 @@ The following subsections catalog all 11 Business component types discovered thr
 | Observability & Monitoring | **Centralized logging**, APM, and diagnostic storage for platform-wide telemetry | src/shared/monitoring/main.bicep:1-60 | 0.70 | 3 - Defined |
 | Multi-Team Workspace Isolation | **Logical workspace isolation** enabling independent API lifecycle management per team or project | src/core/workspaces.bicep:1-11 | 0.71 | 2 - Repeatable |
 
+#### Business Capability Map
+
+```mermaid
+---
+title: "APIM Accelerator — Business Capability Map"
+config:
+  theme: base
+  look: classic
+  layout: dagre
+  themeVariables:
+    fontSize: "16px"
+  flowchart:
+    htmlLabels: true
+---
+flowchart TB
+    accTitle: APIM Accelerator Business Capability Map
+    accDescr: Shows 7 core business capabilities with maturity levels (1-5 scale) and dependency relationships using semantic colors
+
+    %% ═══════════════════════════════════════════════════════════════════════════
+    %% AZURE / FLUENT ARCHITECTURE PATTERN v1.1
+    %% (Semantic + Structural + Font + Accessibility Governance)
+    %% ═══════════════════════════════════════════════════════════════════════════
+
+    cap1["🔗 API Management<br/>Maturity: 4 - Measured"]:::success
+    cap2["📚 API Governance & Discovery<br/>Maturity: 3 - Defined"]:::warning
+    cap3["🌐 Developer Self-Service<br/>Maturity: 3 - Defined"]:::warning
+    cap4["📈 Observability & Monitoring<br/>Maturity: 3 - Defined"]:::warning
+    cap5["🏢 Workspace Isolation<br/>Maturity: 2 - Repeatable"]:::danger
+    cap6["🔐 Identity & Access Mgmt<br/>Maturity: 4 - Measured"]:::success
+    cap7["📋 Governance & Compliance<br/>Maturity: 4 - Measured"]:::success
+
+    cap1 -->|"feeds APIs"| cap2
+    cap1 -->|"hosts"| cap3
+    cap1 -->|"emits telemetry"| cap4
+    cap1 -->|"isolates via"| cap5
+    cap6 -->|"secures"| cap1
+    cap6 -->|"authenticates"| cap3
+    cap7 -->|"governs"| cap1
+    cap7 -->|"enforces tags"| cap4
+    cap2 -->|"discovers from"| cap1
+
+    classDef success fill:#DFF6DD,stroke:#107C10,stroke-width:2px,color:#0B6A0B
+    classDef warning fill:#FFF4CE,stroke:#FFB900,stroke-width:2px,color:#986F0B
+    classDef danger fill:#FDE7E9,stroke:#E81123,stroke-width:2px,color:#A4262C
+```
+
 ### 2.3 Value Streams (2)
 
 | Name | Description | Source | Confidence | Maturity |
@@ -347,7 +393,68 @@ Each component is documented with 10 standard attributes per the BDAT section sc
 |---|---|---|---|---|---|---|---|---|---|
 | Landing Zone Provisioning | Sequential: create RG → deploy monitoring → provision APIM → configure inventory | Operational | Azure Deployment | Platform Engineers | Deployment logs | Event-driven | azd CLI | All Platform Services | infra/main.bicep:86-160 |
 | API Discovery & Synchronization | Automated: APIM APIs → API Source link → API Center workspace → synchronized catalog | Operational | Azure API Center | Cloud Platform Team | Continuous | Near-real-time | APIM Service | API Stakeholders | src/inventory/main.bicep:147-168 |
-| Pre-Provision Validation | Automated: detect region → list soft-deleted APIM → purge conflicts → continue | Operational | Shell Script | Platform Engineers | Session-only | Pre-deployment | Azure CLI | Provisioning Process | infra/azd-hooks/pre-provision.sh:1-1 |
+| Pre-Provision Validation | **Pre-deployment validation** process purging soft-deleted APIM instances to prevent naming conflicts | Operational | Shell Script | Platform Engineers | Session-only | Pre-deployment | Azure CLI | Provisioning Process | infra/azd-hooks/pre-provision.sh:1-1 |
+
+#### Landing Zone Provisioning Process Flow
+
+```mermaid
+---
+title: "APIM Accelerator — Landing Zone Provisioning Process"
+config:
+  theme: base
+  look: classic
+  layout: dagre
+  themeVariables:
+    fontSize: "16px"
+  flowchart:
+    htmlLabels: true
+---
+flowchart TB
+    accTitle: Landing Zone Provisioning Process Flow
+    accDescr: BPMN-style diagram showing the sequential provisioning workflow from pre-validation through shared infrastructure, core APIM, and API inventory deployment
+
+    %% ═══════════════════════════════════════════════════════════════════════════
+    %% AZURE / FLUENT ARCHITECTURE PATTERN v1.1
+    %% (Semantic + Structural + Font + Accessibility Governance)
+    %% ═══════════════════════════════════════════════════════════════════════════
+
+    Start(["🚀 Platform Engineer runs azd up"])
+    PreValidate["🔍 Execute Pre-Provision Hook"]
+    SoftDeleted{"⚡ Soft-Deleted APIM Found?"}
+    PurgeAPIM["🗑️ Purge Soft-Deleted Instances"]
+    CreateRG["📦 Create Resource Group"]
+    DeployMonitoring["📊 Deploy Shared Monitoring"]
+    MonitoringOK{"⚡ Monitoring Healthy?"}
+    DeployAPIM["🔗 Deploy Core APIM Service"]
+    ConfigPortal["🌐 Configure Developer Portal"]
+    CreateWorkspaces["🏢 Create Team Workspaces"]
+    DeployInventory["📚 Deploy API Center & Sync"]
+    End(["✅ Landing Zone Ready"])
+    Fail(["❌ Deployment Failed"])
+
+    Start --> PreValidate
+    PreValidate --> SoftDeleted
+    SoftDeleted -->|"Yes"| PurgeAPIM
+    SoftDeleted -->|"No"| CreateRG
+    PurgeAPIM --> CreateRG
+    CreateRG --> DeployMonitoring
+    DeployMonitoring --> MonitoringOK
+    MonitoringOK -->|"Yes"| DeployAPIM
+    MonitoringOK -->|"No"| Fail
+    DeployAPIM --> ConfigPortal
+    DeployAPIM --> CreateWorkspaces
+    ConfigPortal --> DeployInventory
+    CreateWorkspaces --> DeployInventory
+    DeployInventory --> End
+
+    classDef core fill:#DEECF9,stroke:#0078D4,stroke-width:2px,color:#004578
+    classDef warning fill:#FFF4CE,stroke:#FFB900,stroke-width:2px,color:#986F0B
+    classDef success fill:#DFF6DD,stroke:#107C10,stroke-width:2px,color:#0B6A0B
+
+    class PreValidate,CreateRG,DeployMonitoring,DeployAPIM,ConfigPortal,CreateWorkspaces,DeployInventory,PurgeAPIM core
+    class SoftDeleted,MonitoringOK warning
+    class Start,End success
+```
 
 ### 5.5 Business Services (4)
 
