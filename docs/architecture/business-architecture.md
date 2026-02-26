@@ -51,6 +51,7 @@ flowchart TB
 
     %% ═══════════════════════════════════════════════════════════════════════════
     %% AZURE / FLUENT ARCHITECTURE PATTERN v1.1
+    %% (Semantic + Structural + Font + Accessibility Governance)
     %% ═══════════════════════════════════════════════════════════════════════════
 
     subgraph strategic["🎯 Strategic Objectives"]
@@ -83,7 +84,7 @@ flowchart TB
     bc4 -->|"deployed via"| en3
     bc5 -->|"isolated via"| en3
 
-    style strategic fill:#E8DAEF,stroke:#7B2D8E,stroke-width:2px
+    style strategic fill:#E1DFDD,stroke:#8378DE,stroke-width:2px
     style capabilities fill:#DEECF9,stroke:#0078D4,stroke-width:2px
     style enablers fill:#FAFAFA,stroke:#8A8886,stroke-width:2px
 
@@ -195,15 +196,16 @@ flowchart LR
 
     %% ═══════════════════════════════════════════════════════════════════════════
     %% AZURE / FLUENT ARCHITECTURE PATTERN v1.1
+    %% (Semantic + Structural + Font + Accessibility Governance)
     %% ═══════════════════════════════════════════════════════════════════════════
 
     subgraph vs1["📦 VS1: API Lifecycle Management — Maturity 3"]
         direction LR
         vs1t["🎯 Trigger:<br/>Platform Engineer"]:::core
-        vs1s1["📦 Provision<br/>Infrastructure"]:::process
-        vs1s2["📊 Deploy<br/>Monitoring"]:::process
-        vs1s3["🔗 Configure<br/>APIM"]:::process
-        vs1s4["📚 Enable<br/>Governance"]:::process
+        vs1s1["📦 Provision<br/>Infrastructure"]:::warning
+        vs1s2["📊 Deploy<br/>Monitoring"]:::warning
+        vs1s3["🔗 Configure<br/>APIM"]:::warning
+        vs1s4["📚 Enable<br/>Governance"]:::warning
         vs1o["✅ APIs Published<br/>& Governed"]:::success
         vs1t --> vs1s1 --> vs1s2 --> vs1s3 --> vs1s4 --> vs1o
     end
@@ -211,10 +213,10 @@ flowchart LR
     subgraph vs2["🌐 VS2: Developer Onboarding — Maturity 2"]
         direction LR
         vs2t["🎯 Trigger:<br/>API Consumer"]:::core
-        vs2s1["🔍 Discover<br/>APIs"]:::process
-        vs2s2["🔐 Authenticate<br/>via AAD"]:::process
-        vs2s3["📋 Accept<br/>Terms"]:::process
-        vs2s4["🧪 Test &<br/>Subscribe"]:::process
+        vs2s1["🔍 Discover<br/>APIs"]:::warning
+        vs2s2["🔐 Authenticate<br/>via AAD"]:::warning
+        vs2s3["📋 Accept<br/>Terms"]:::warning
+        vs2s4["🧪 Test &<br/>Subscribe"]:::warning
         vs2o["✅ Developer<br/>Onboarded"]:::success
         vs2t --> vs2s1 --> vs2s2 --> vs2s3 --> vs2s4 --> vs2o
     end
@@ -233,7 +235,7 @@ flowchart LR
     style enablers fill:#FAFAFA,stroke:#8A8886,stroke-width:2px
 
     classDef core fill:#DEECF9,stroke:#0078D4,stroke-width:2px,color:#004578
-    classDef process fill:#FFF4CE,stroke:#FFB900,stroke-width:2px,color:#986F0B
+    classDef warning fill:#FFF4CE,stroke:#FFB900,stroke-width:2px,color:#986F0B
     classDef success fill:#DFF6DD,stroke:#107C10,stroke-width:2px,color:#0B6A0B
 ```
 
