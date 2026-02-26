@@ -45,96 +45,96 @@ The following subsections catalog all 11 Business component types discovered thr
 
 ### 2.1 Business Strategy (2)
 
-| Component | Description | Source | Confidence |
-|---|---|---|---|
-| API Platform Strategy | Enterprise API Management landing zone strategy delivering centralized governance, observability, and self-service | infra/main.bicep:1-42 | 0.72 |
-| Governance & Compliance Strategy | Tag-driven governance model encoding cost allocation, regulatory compliance (GDPR), business unit ownership, and budget tracking | infra/settings.yaml:34-45 | 0.71 |
+| Name | Description | Source | Confidence | Maturity |
+|---|---|---|---|---|
+| API Platform Strategy | Enterprise API Management landing zone strategy delivering **centralized governance**, observability, and self-service | infra/main.bicep:1-42 | 0.72 | 3 - Defined |
+| Governance & Compliance Strategy | **Tag-driven governance** model encoding cost allocation, regulatory compliance (GDPR), business unit ownership, and budget tracking | infra/settings.yaml:34-45 | 0.71 | 4 - Measured |
 
 ### 2.2 Business Capabilities (5)
 
-| Component | Description | Source | Confidence |
-|---|---|---|---|
-| API Management Capability | Full API gateway lifecycle including routing, authentication, rate limiting, and policy enforcement | src/core/apim.bicep:1-60 | 0.75 |
-| API Governance & Discovery | Centralized API catalog with automated discovery from APIM and RBAC-based governance | src/inventory/main.bicep:1-57 | 0.73 |
-| Developer Self-Service | Self-service API portal with Azure AD authentication, sign-in/sign-up flows, and terms of service | src/core/developer-portal.bicep:1-43 | 0.72 |
-| Observability & Monitoring | Centralized logging, APM, and diagnostic storage for platform-wide telemetry | src/shared/monitoring/main.bicep:1-60 | 0.70 |
-| Multi-Team Workspace Isolation | Logical workspace isolation enabling independent API lifecycle management per team or project | src/core/workspaces.bicep:1-11 | 0.71 |
+| Name | Description | Source | Confidence | Maturity |
+|---|---|---|---|---|
+| API Management Capability | Full **API gateway lifecycle** including routing, authentication, rate limiting, and policy enforcement | src/core/apim.bicep:1-60 | 0.75 | 4 - Measured |
+| API Governance & Discovery | **Centralized API catalog** with automated discovery from APIM and RBAC-based governance | src/inventory/main.bicep:1-57 | 0.73 | 3 - Defined |
+| Developer Self-Service | **Self-service API portal** with Azure AD authentication, sign-in/sign-up flows, and terms of service | src/core/developer-portal.bicep:1-43 | 0.72 | 3 - Defined |
+| Observability & Monitoring | **Centralized logging**, APM, and diagnostic storage for platform-wide telemetry | src/shared/monitoring/main.bicep:1-60 | 0.70 | 3 - Defined |
+| Multi-Team Workspace Isolation | **Logical workspace isolation** enabling independent API lifecycle management per team or project | src/core/workspaces.bicep:1-11 | 0.71 | 2 - Repeatable |
 
 ### 2.3 Value Streams (2)
 
-| Component | Description | Source | Confidence |
-|---|---|---|---|
-| API Lifecycle Management | End-to-end value stream from infrastructure provisioning through API publishing, monitoring, and governance | infra/main.bicep:95-160 | 0.72 |
-| Developer Onboarding | Value stream enabling API consumers to discover, authenticate, test, and subscribe to APIs via self-service portal | src/core/developer-portal.bicep:87-131 | 0.70 |
+| Name | Description | Source | Confidence | Maturity |
+|---|---|---|---|---|
+| API Lifecycle Management | **End-to-end value stream** from infrastructure provisioning through API publishing, monitoring, and governance | infra/main.bicep:95-160 | 0.72 | 3 - Defined |
+| Developer Onboarding | Value stream enabling **API consumers** to discover, authenticate, test, and subscribe to APIs via self-service portal | src/core/developer-portal.bicep:87-131 | 0.70 | 2 - Repeatable |
 
 ### 2.4 Business Processes (3)
 
-| Component | Description | Source | Confidence |
-|---|---|---|---|
-| Landing Zone Provisioning | Orchestrated deployment process: resource group → shared monitoring → core APIM → API inventory | infra/main.bicep:86-160 | 0.74 |
-| API Discovery & Synchronization | Automated process linking APIM as API source to API Center for continuous inventory sync | src/inventory/main.bicep:147-168 | 0.72 |
-| Pre-Provision Validation | Pre-deployment validation process purging soft-deleted APIM instances to prevent naming conflicts | infra/azd-hooks/pre-provision.sh:1-1 | 0.70 |
+| Name | Description | Source | Confidence | Maturity |
+|---|---|---|---|---|
+| Landing Zone Provisioning | **Orchestrated deployment** process: resource group → shared monitoring → core APIM → API inventory | infra/main.bicep:86-160 | 0.74 | 3 - Defined |
+| API Discovery & Synchronization | **Automated process** linking APIM as API source to API Center for continuous inventory sync | src/inventory/main.bicep:147-168 | 0.72 | 3 - Defined |
+| Pre-Provision Validation | **Pre-deployment validation** process purging soft-deleted APIM instances to prevent naming conflicts | infra/azd-hooks/pre-provision.sh:1-1 | 0.70 | 2 - Repeatable |
 
 ### 2.5 Business Services (4)
 
-| Component | Description | Source | Confidence |
-|---|---|---|---|
-| API Gateway Service | Core API Management service providing gateway, policy enforcement, caching, and rate limiting | src/core/apim.bicep:175-210 | 0.76 |
-| Developer Portal Service | Self-service developer portal with Azure AD OAuth2 authentication and API documentation | src/core/developer-portal.bicep:100-197 | 0.74 |
-| API Catalog Service | Azure API Center providing centralized API catalog, governance, and automated API discovery | src/inventory/main.bicep:109-136 | 0.73 |
-| Monitoring & Diagnostics Service | Integrated monitoring via Log Analytics, Application Insights, and diagnostic storage | src/shared/monitoring/main.bicep:92-132 | 0.71 |
+| Name | Description | Source | Confidence | Maturity |
+|---|---|---|---|---|
+| API Gateway Service | **Core API Management** service providing gateway, policy enforcement, caching, and rate limiting | src/core/apim.bicep:175-210 | 0.76 | 4 - Measured |
+| Developer Portal Service | **Self-service developer portal** with Azure AD OAuth2 authentication and API documentation | src/core/developer-portal.bicep:100-197 | 0.74 | 3 - Defined |
+| API Catalog Service | Azure API Center providing **centralized API catalog**, governance, and automated API discovery | src/inventory/main.bicep:109-136 | 0.73 | 3 - Defined |
+| Monitoring & Diagnostics Service | **Integrated monitoring** via Log Analytics, Application Insights, and diagnostic storage | src/shared/monitoring/main.bicep:92-132 | 0.71 | 3 - Defined |
 
 ### 2.6 Business Functions (3)
 
-| Component | Description | Source | Confidence |
-|---|---|---|---|
-| API Routing & Policy Enforcement | APIM gateway function providing request routing, CORS enforcement, and policy execution | src/core/apim.bicep:175-210 | 0.72 |
-| Identity & Access Management | Managed identity and Azure AD authentication across all platform services | src/core/developer-portal.bicep:109-129 | 0.73 |
-| Log Aggregation & Analytics | Centralized function collecting metrics, logs, and telemetry from all platform components | src/shared/monitoring/insights/main.bicep:168-199 | 0.70 |
+| Name | Description | Source | Confidence | Maturity |
+|---|---|---|---|---|
+| API Routing & Policy Enforcement | APIM gateway function providing **request routing**, CORS enforcement, and policy execution | src/core/apim.bicep:175-210 | 0.72 | 3 - Defined |
+| Identity & Access Management | **Managed identity** and Azure AD authentication across all platform services | src/core/developer-portal.bicep:109-129 | 0.73 | 4 - Measured |
+| Log Aggregation & Analytics | **Centralized function** collecting metrics, logs, and telemetry from all platform components | src/shared/monitoring/insights/main.bicep:168-199 | 0.70 | 3 - Defined |
 
 ### 2.7 Business Roles & Actors (4)
 
-| Component | Description | Source | Confidence |
-|---|---|---|---|
-| API Publisher | Organization publishing APIs through the platform (publisherEmail, publisherName) | infra/settings.yaml:49-50 | 0.78 |
-| API Consumer / Developer | External or internal developer consuming APIs through the developer portal | src/core/developer-portal.bicep:1-43 | 0.75 |
-| Platform Engineer | Infrastructure operator deploying and managing the landing zone via `azd` CLI | azure.yaml:1-52 | 0.72 |
-| Resource Owner | Business stakeholder assigned ownership responsibility for platform resources | infra/settings.yaml:38 | 0.71 |
+| Name | Description | Source | Confidence | Maturity |
+|---|---|---|---|---|
+| API Publisher | Organization **publishing APIs** through the platform (publisherEmail, publisherName) | infra/settings.yaml:49-50 | 0.78 | 3 - Defined |
+| API Consumer / Developer | External or internal developer **consuming APIs** through the developer portal | src/core/developer-portal.bicep:1-43 | 0.75 | 3 - Defined |
+| Platform Engineer | **Infrastructure operator** deploying and managing the landing zone via azd CLI | azure.yaml:1-52 | 0.72 | 3 - Defined |
+| Resource Owner | **Business stakeholder** assigned ownership responsibility for platform resources | infra/settings.yaml:38 | 0.71 | 2 - Repeatable |
 
 ### 2.8 Business Rules (5)
 
-| Component | Description | Source | Confidence |
-|---|---|---|---|
-| CORS Policy | Cross-origin resource sharing rules restricting developer portal API access to whitelisted origins | src/core/developer-portal.bicep:100-119 | 0.77 |
-| Terms of Service | Mandatory terms acceptance and consent requirement for developer portal sign-up | src/core/developer-portal.bicep:191-197 | 0.75 |
-| RBAC Role Assignments | Role-based access control rules granting Reader, API Center Data Reader, and Compliance Manager roles | src/core/apim.bicep:215-234 | 0.74 |
-| Resource Tagging Requirements | Mandatory governance tags (CostCenter, BusinessUnit, Owner, ServiceClass, RegulatoryCompliance) on all resources | infra/settings.yaml:34-45 | 0.73 |
-| Naming Conventions | Deterministic resource naming pattern: `{solutionName}-{uniqueSuffix}-{resourceType}` | src/shared/constants.bicep:165-172 | 0.72 |
+| Name | Description | Source | Confidence | Maturity |
+|---|---|---|---|---|
+| CORS Policy | **Cross-origin resource sharing** rules restricting developer portal API access to whitelisted origins | src/core/developer-portal.bicep:100-119 | 0.77 | 3 - Defined |
+| Terms of Service | **Mandatory terms acceptance** and consent requirement for developer portal sign-up | src/core/developer-portal.bicep:191-197 | 0.75 | 3 - Defined |
+| RBAC Role Assignments | **Role-based access control** rules granting Reader, API Center Data Reader, and Compliance Manager roles | src/core/apim.bicep:215-234 | 0.74 | 4 - Measured |
+| Resource Tagging Requirements | **Mandatory governance tags** (CostCenter, BusinessUnit, Owner, ServiceClass, RegulatoryCompliance) on all resources | infra/settings.yaml:34-45 | 0.73 | 4 - Measured |
+| Naming Conventions | **Deterministic resource naming** pattern: solutionName-uniqueSuffix-resourceType | src/shared/constants.bicep:165-172 | 0.72 | 3 - Defined |
 
 ### 2.9 Business Events (2)
 
-| Component | Description | Source | Confidence |
-|---|---|---|---|
-| Pre-Provision Hook Trigger | Lifecycle event executing validation script before Azure resource provisioning | azure.yaml:40-52 | 0.71 |
-| API Source Sync Event | Integration event triggered when API Center discovers and synchronizes APIs from APIM | src/inventory/main.bicep:157-168 | 0.70 |
+| Name | Description | Source | Confidence | Maturity |
+|---|---|---|---|---|
+| Pre-Provision Hook Trigger | **Lifecycle event** executing validation script before Azure resource provisioning | azure.yaml:40-52 | 0.71 | 2 - Repeatable |
+| API Source Sync Event | **Integration event** triggered when API Center discovers and synchronizes APIs from APIM | src/inventory/main.bicep:157-168 | 0.70 | 3 - Defined |
 
 ### 2.10 Business Objects / Entities (5)
 
-| Component | Description | Source | Confidence |
-|---|---|---|---|
-| ApiManagement Type | Strongly-typed configuration entity defining APIM service properties (SKU, identity, workspaces) | src/shared/common-types.bicep:82-96 | 0.77 |
-| Inventory Type | Composite entity defining API Center configuration with identity and tagging properties | src/shared/common-types.bicep:105-111 | 0.74 |
-| Monitoring Type | Composite entity defining Log Analytics and Application Insights configuration | src/shared/common-types.bicep:114-120 | 0.73 |
-| Workspace Entity | Business domain entity representing isolated API management workspace for team separation | src/core/workspaces.bicep:53-70 | 0.72 |
-| Identity Configuration | Reusable entity defining SystemAssigned, UserAssigned, and extended identity models | src/shared/common-types.bicep:42-55 | 0.71 |
+| Name | Description | Source | Confidence | Maturity |
+|---|---|---|---|---|
+| ApiManagement Type | **Strongly-typed configuration** entity defining APIM service properties (SKU, identity, workspaces) | src/shared/common-types.bicep:82-96 | 0.77 | 3 - Defined |
+| Inventory Type | **Composite entity** defining API Center configuration with identity and tagging properties | src/shared/common-types.bicep:105-111 | 0.74 | 3 - Defined |
+| Monitoring Type | **Composite entity** defining Log Analytics and Application Insights configuration | src/shared/common-types.bicep:114-120 | 0.73 | 3 - Defined |
+| Workspace Entity | **Business domain entity** representing isolated API management workspace for team separation | src/core/workspaces.bicep:53-70 | 0.72 | 2 - Repeatable |
+| Identity Configuration | **Reusable entity** defining SystemAssigned, UserAssigned, and extended identity models | src/shared/common-types.bicep:42-55 | 0.71 | 3 - Defined |
 
 ### 2.11 KPIs & Metrics (3)
 
-| Component | Description | Source | Confidence |
-|---|---|---|---|
-| AllMetrics Diagnostic Category | Comprehensive metric collection across all APIM service categories | src/core/apim.bicep:275-280 | 0.72 |
-| AllLogs Diagnostic Category | Complete log capture across all APIM service log categories | src/core/apim.bicep:281-286 | 0.72 |
-| Application Insights Telemetry | APM metrics including response times, failure rates, dependency tracking, and distributed tracing | src/shared/monitoring/insights/main.bicep:168-199 | 0.71 |
+| Name | Description | Source | Confidence | Maturity |
+|---|---|---|---|---|
+| AllMetrics Diagnostic Category | **Comprehensive metric collection** across all APIM service categories | src/core/apim.bicep:275-280 | 0.72 | 3 - Defined |
+| AllLogs Diagnostic Category | **Complete log capture** across all APIM service log categories | src/core/apim.bicep:281-286 | 0.72 | 3 - Defined |
+| Application Insights Telemetry | **APM metrics** including response times, failure rates, dependency tracking, and distributed tracing | src/shared/monitoring/insights/main.bicep:168-199 | 0.71 | 3 - Defined |
 
 ### Summary
 
