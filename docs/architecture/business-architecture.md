@@ -363,14 +363,18 @@ The Component Catalog provides detailed specifications for all 38 Business layer
 
 Each component is documented with 10 standard attributes per the BDAT section schema. Where attributes cannot be determined from source file evidence, they are marked as `null` to maintain integrity — no metadata is fabricated.
 
-### 5.1 Business Strategy (2)
+### 5.1 Business Strategy Specifications (2)
+
+This subsection documents the 2 Business Strategy components driving the APIM-Accelerator platform direction. Both strategies are encoded directly in infrastructure configuration with confidence scores ranging from 0.71 to 0.72.
 
 | Component | Description | Classification | Storage | Owner | Retention | Freshness SLA | Source Systems | Consumers | Source File |
 |---|---|---|---|---|---|---|---|---|---|
 | API Platform Strategy | Enterprise API Management landing zone providing centralized governance, monitoring, and self-service capabilities | Strategic | IaC Repository | Cloud Platform Team | Indefinite | Deployment-time | Bicep Templates | Core Platform, Inventory | infra/main.bicep:1-42 |
 | Governance & Compliance Strategy | Comprehensive tagging strategy encoding CostCenter, BusinessUnit, RegulatoryCompliance (GDPR), ServiceClass, and ChargebackModel | Strategic | YAML Config | Cloud Platform Team | Indefinite | Deployment-time | settings.yaml | All Resources | infra/settings.yaml:34-45 |
 
-### 5.2 Business Capabilities (5)
+### 5.2 Business Capabilities Specifications (5)
+
+This subsection provides detailed specifications for the 5 Business Capabilities identified in the APIM-Accelerator. Capabilities range from maturity Level 2 (Workspace Isolation) to Level 4 (API Management), with confidence scores between 0.70 and 0.75.
 
 | Component | Description | Classification | Storage | Owner | Retention | Freshness SLA | Source Systems | Consumers | Source File |
 |---|---|---|---|---|---|---|---|---|---|
@@ -380,20 +384,97 @@ Each component is documented with 10 standard attributes per the BDAT section sc
 | Observability & Monitoring | Centralized logging (Log Analytics), APM (App Insights), and long-term diagnostic storage | Operational | Azure Monitor | Cloud Platform Team | 90–730 days | Real-time | All Platform Services | Platform Engineers | src/shared/monitoring/main.bicep:1-60 |
 | Multi-Team Workspace Isolation | Logical workspace isolation within single APIM instance for independent team API management | Organizational | Azure APIM | Cloud Platform Team | Service Lifetime | Deployment-time | Bicep Templates | API Teams | src/core/workspaces.bicep:1-11 |
 
-### 5.3 Value Streams (2)
+### 5.3 Value Streams Specifications (2)
+
+This subsection documents the 2 end-to-end value streams identified in the platform. The API Lifecycle Management stream covers infrastructure-to-publication flow, while the Developer Onboarding stream covers discovery-to-subscription flow, with confidence scores of 0.70–0.72.
 
 | Component | Description | Classification | Storage | Owner | Retention | Freshness SLA | Source Systems | Consumers | Source File |
 |---|---|---|---|---|---|---|---|---|---|
 | API Lifecycle Management | End-to-end: provision infrastructure → deploy APIM → configure monitoring → enable governance → publish APIs | Value Delivery | IaC Pipeline | Cloud Platform Team | Indefinite | Deployment-time | azd CLI, Bicep | API Publishers | infra/main.bicep:95-160 |
 | Developer Onboarding | Discover APIs → authenticate via AAD → accept terms → test APIs → subscribe | Value Delivery | Azure APIM Portal | Cloud Platform Team | Session-based | Real-time | Developer Portal, AAD | API Consumers | src/core/developer-portal.bicep:87-131 |
 
-### 5.4 Business Processes (3)
+#### Value Stream Map — API Lifecycle Management
+
+```mermaid
+---
+title: "APIM Accelerator — API Lifecycle Value Stream"
+config:
+  theme: base
+  look: classic
+  layout: dagre
+  themeVariables:
+    fontSize: "16px"
+  flowchart:
+    htmlLabels: true
+---
+flowchart LR
+    accTitle: API Lifecycle Management Value Stream Map
+    accDescr: Shows the end-to-end value stream from infrastructure provisioning through API publishing to consumer consumption with stage maturity levels
+
+    %% ═══════════════════════════════════════════════════════════════════════════
+    %% AZURE / FLUENT ARCHITECTURE PATTERN v1.1
+    %% ═══════════════════════════════════════════════════════════════════════════
+
+    subgraph trigger["🎯 Trigger"]
+        t1["👤 Platform Engineer<br/>requests landing zone"]:::core
+    end
+
+    subgraph stage1["📦 Stage 1: Provision"]
+        s1["🔍 Pre-Validate<br/>Maturity: 2"]
+        s2["📦 Create RG<br/>Maturity: 3"]
+        s1 --> s2
+    end
+
+    subgraph stage2["📊 Stage 2: Observe"]
+        s3["📊 Deploy Monitoring<br/>Maturity: 3"]
+        s4["📈 Configure Insights<br/>Maturity: 3"]
+        s3 --> s4
+    end
+
+    subgraph stage3["⚡ Stage 3: Platform"]
+        s5["🔗 Deploy APIM<br/>Maturity: 4"]
+        s6["🌐 Enable Portal<br/>Maturity: 3"]
+        s7["🏢 Create Workspaces<br/>Maturity: 2"]
+        s5 --> s6
+        s5 --> s7
+    end
+
+    subgraph stage4["📚 Stage 4: Govern"]
+        s8["📚 Deploy API Center<br/>Maturity: 3"]
+        s9["🔄 Sync APIs<br/>Maturity: 3"]
+        s8 --> s9
+    end
+
+    subgraph outcome["✅ Value Delivered"]
+        v1["🎉 APIs Published &<br/>Governed"]:::success
+    end
+
+    trigger --> stage1
+    stage1 --> stage2
+    stage2 --> stage3
+    stage3 --> stage4
+    stage4 --> outcome
+
+    style trigger fill:#E8DAEF,stroke:#7B2D8E,stroke-width:2px
+    style stage1 fill:#FDE7E9,stroke:#D13438,stroke-width:2px
+    style stage2 fill:#DEECF9,stroke:#0078D4,stroke-width:2px
+    style stage3 fill:#DFF6DD,stroke:#107C10,stroke-width:2px
+    style stage4 fill:#FFF4CE,stroke:#FFB900,stroke-width:2px
+    style outcome fill:#DFF6DD,stroke:#107C10,stroke-width:2px
+
+    classDef core fill:#DEECF9,stroke:#0078D4,stroke-width:2px,color:#004578
+    classDef success fill:#DFF6DD,stroke:#107C10,stroke-width:2px,color:#0B6A0B
+```
+
+### 5.4 Business Processes Specifications (3)
+
+This subsection provides detailed specifications for the 3 Business Processes orchestrating the APIM-Accelerator platform lifecycle. All processes are operational in nature with maturity levels ranging from 2 (Pre-Provision Validation) to 3 (Landing Zone Provisioning, API Discovery), and confidence scores between 0.70 and 0.74.
 
 | Component | Description | Classification | Storage | Owner | Retention | Freshness SLA | Source Systems | Consumers | Source File |
 |---|---|---|---|---|---|---|---|---|---|
 | Landing Zone Provisioning | Sequential: create RG → deploy monitoring → provision APIM → configure inventory | Operational | Azure Deployment | Platform Engineers | Deployment logs | Event-driven | azd CLI | All Platform Services | infra/main.bicep:86-160 |
 | API Discovery & Synchronization | Automated: APIM APIs → API Source link → API Center workspace → synchronized catalog | Operational | Azure API Center | Cloud Platform Team | Continuous | Near-real-time | APIM Service | API Stakeholders | src/inventory/main.bicep:147-168 |
-| Pre-Provision Validation | **Pre-deployment validation** process purging soft-deleted APIM instances to prevent naming conflicts | Operational | Shell Script | Platform Engineers | Session-only | Pre-deployment | Azure CLI | Provisioning Process | infra/azd-hooks/pre-provision.sh:1-1 |
+| Pre-Provision Validation | Pre-deployment validation process purging soft-deleted APIM instances to prevent naming conflicts | Operational | Shell Script | Platform Engineers | Session-only | Pre-deployment | Azure CLI | Provisioning Process | infra/azd-hooks/pre-provision.sh:1-1 |
 
 #### Landing Zone Provisioning Process Flow
 
@@ -456,7 +537,9 @@ flowchart TB
     class Start,End success
 ```
 
-### 5.5 Business Services (4)
+### 5.5 Business Services Specifications (4)
+
+This subsection documents the 4 Business Services exposed by the APIM-Accelerator platform. Services span core gateway functionality, developer enablement, governance, and operational monitoring, with confidence scores between 0.71 and 0.76.
 
 | Component | Description | Classification | Storage | Owner | Retention | Freshness SLA | Source Systems | Consumers | Source File |
 |---|---|---|---|---|---|---|---|---|---|
@@ -465,7 +548,9 @@ flowchart TB
 | API Catalog Service | Azure API Center with default workspace, APIM source integration, and RBAC role assignments | Governance Service | Azure API Center | Cloud Platform Team | Service Lifetime | Near-real-time | APIM APIs | API Stakeholders | src/inventory/main.bicep:109-136 |
 | Monitoring & Diagnostics Service | Integrated: Log Analytics + Application Insights + Storage Account for comprehensive observability | Operational Service | Azure Monitor | Cloud Platform Team | 90 days+ | Real-time | All Services | Platform Engineers | src/shared/monitoring/main.bicep:92-132 |
 
-### 5.6 Business Functions (3)
+### 5.6 Business Functions Specifications (3)
+
+This subsection documents the 3 organizational functions responsible for Business layer operations. Functions cover API routing, identity management, and log aggregation, with confidence scores from 0.70 to 0.73.
 
 | Component | Description | Classification | Storage | Owner | Retention | Freshness SLA | Source Systems | Consumers | Source File |
 |---|---|---|---|---|---|---|---|---|---|
@@ -473,16 +558,20 @@ flowchart TB
 | Identity & Access Management | Managed identity provisioning, Azure AD integration, and RBAC role assignment across services | Security | Azure AD, APIM | Cloud Platform Team | Service Lifetime | Deployment-time | AAD App Registration | All Services | src/core/developer-portal.bicep:109-129 |
 | Log Aggregation & Analytics | Centralized metric/log collection from all platform components to Log Analytics and App Insights | Operational | Azure Monitor | Cloud Platform Team | 90–730 days | Real-time | All Platform Services | Platform Engineers | src/shared/monitoring/insights/main.bicep:168-199 |
 
-### 5.7 Business Roles & Actors (4)
+### 5.7 Business Roles & Actors Specifications (4)
+
+This subsection documents the 4 Business Roles and Actors interacting with the APIM-Accelerator platform. Roles span API publishing, consuming, platform operations, and resource ownership, with confidence scores between 0.71 and 0.78.
 
 | Component | Description | Classification | Storage | Owner | Retention | Freshness SLA | Source Systems | Consumers | Source File |
 |---|---|---|---|---|---|---|---|---|---|
-| API Publisher | Organization or individual publishing APIs (publisherEmail, publisherName) | Actor | Settings Config | null | Indefinite | Config-time | settings.yaml | APIM Service | infra/settings.yaml:49-50 |
-| API Consumer / Developer | External or internal developer discovering, testing, and subscribing to APIs via portal | Actor | Developer Portal | null | Session-based | Real-time | AAD | API Platform | src/core/developer-portal.bicep:1-43 |
-| Platform Engineer | Infrastructure operator deploying and managing landing zone via `azd` CLI | Role | Deployment Pipeline | null | Deployment logs | Event-driven | azd CLI | All Infrastructure | azure.yaml:1-52 |
-| Resource Owner | Business stakeholder accountable for platform resources (Owner tag) | Role | Tag Metadata | null | Indefinite | Config-time | settings.yaml | Governance Reports | infra/settings.yaml:38 |
+| API Publisher | Organization or individual publishing APIs (publisherEmail, publisherName) | Actor | Settings Config | Not detected | Indefinite | Config-time | settings.yaml | APIM Service | infra/settings.yaml:49-50 |
+| API Consumer / Developer | External or internal developer discovering, testing, and subscribing to APIs via portal | Actor | Developer Portal | Not detected | Session-based | Real-time | AAD | API Platform | src/core/developer-portal.bicep:1-43 |
+| Platform Engineer | Infrastructure operator deploying and managing landing zone via azd CLI | Role | Deployment Pipeline | Not detected | Deployment logs | Event-driven | azd CLI | All Infrastructure | azure.yaml:1-52 |
+| Resource Owner | Business stakeholder accountable for platform resources (Owner tag) | Role | Tag Metadata | Not detected | Indefinite | Config-time | settings.yaml | Governance Reports | infra/settings.yaml:38 |
 
-### 5.8 Business Rules (5)
+### 5.8 Business Rules Specifications (5)
+
+This subsection documents the 5 Business Rules governing platform behavior and compliance. Rules span security (CORS, RBAC), compliance (Terms of Service), governance (tagging), and structural conventions (naming), with confidence scores from 0.72 to 0.77.
 
 | Component | Description | Classification | Storage | Owner | Retention | Freshness SLA | Source Systems | Consumers | Source File |
 |---|---|---|---|---|---|---|---|---|---|
@@ -492,14 +581,18 @@ flowchart TB
 | Resource Tagging Requirements | 10 mandatory tags: CostCenter, BusinessUnit, Owner, ApplicationName, ProjectName, ServiceClass, RegulatoryCompliance, SupportContact, ChargebackModel, BudgetCode | Governance Rule | YAML Config | Cloud Platform Team | Indefinite | Config-time | settings.yaml | All Deployed Resources | infra/settings.yaml:34-45 |
 | Naming Conventions | Pattern: `{solutionName}-{uniqueSuffix}-{resourceType}` using deterministic hash from subscription+RG+solution+location | Structural Rule | Bicep Functions | Cloud Platform Team | Indefinite | Deployment-time | constants.bicep | All Resources | src/shared/constants.bicep:165-172 |
 
-### 5.9 Business Events (2)
+### 5.9 Business Events Specifications (2)
+
+This subsection documents the 2 Business Events that trigger process execution within the platform. Events cover deployment lifecycle hooks and runtime API synchronization, with confidence scores of 0.70–0.71.
 
 | Component | Description | Classification | Storage | Owner | Retention | Freshness SLA | Source Systems | Consumers | Source File |
 |---|---|---|---|---|---|---|---|---|---|
 | Pre-Provision Hook Trigger | Lifecycle event fired before Azure provisioning; executes soft-delete purge script | Deployment Event | azd Pipeline | Platform Engineers | Session-only | Pre-deployment | azd CLI | Provisioning Process | azure.yaml:40-52 |
 | API Source Sync Event | Integration event when API Center discovers/synchronizes APIs from linked APIM service | Integration Event | Azure API Center | Cloud Platform Team | Continuous | Near-real-time | APIM APIs | API Catalog | src/inventory/main.bicep:157-168 |
 
-### 5.10 Business Objects / Entities (5)
+### 5.10 Business Objects / Entities Specifications (5)
+
+This subsection documents the 5 Business Objects and Entities providing the domain model for the APIM-Accelerator. All entities are strongly-typed Bicep definitions or Azure resource representations, with confidence scores from 0.71 to 0.77.
 
 | Component | Description | Classification | Storage | Owner | Retention | Freshness SLA | Source Systems | Consumers | Source File |
 |---|---|---|---|---|---|---|---|---|---|
@@ -509,7 +602,9 @@ flowchart TB
 | Workspace Entity | APIM child resource: name, displayName, description — isolation boundary for API teams | Domain Entity | Azure APIM | Cloud Platform Team | Service Lifetime | Deployment-time | workspaces.bicep | APIM Service | src/core/workspaces.bicep:53-70 |
 | Identity Configuration | Type hierarchy: SystemAssignedIdentity (type, userAssignedIdentities) and ExtendedIdentity (+ None) | Domain Entity | Bicep Types | Cloud Platform Team | Indefinite | Compile-time | common-types.bicep | All Modules | src/shared/common-types.bicep:42-55 |
 
-### 5.11 KPIs & Metrics (3)
+### 5.11 KPIs & Metrics Specifications (3)
+
+This subsection documents the 3 KPIs and Metrics components providing observability for the platform. All detected metrics are infrastructure-focused; no business-level KPIs (API adoption, revenue) were identified in source files. Confidence scores range from 0.71 to 0.72.
 
 | Component | Description | Classification | Storage | Owner | Retention | Freshness SLA | Source Systems | Consumers | Source File |
 |---|---|---|---|---|---|---|---|---|---|
