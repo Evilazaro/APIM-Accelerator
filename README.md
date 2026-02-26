@@ -19,17 +19,6 @@ APIM Accelerator provisions an enterprise-grade API Management landing zone on A
 
 ## Architecture
 
-```yaml
-config:
-  theme: base
-  look: classic
-  layout: dagre
-  themeVariables:
-    fontSize: "16px"
-  flowchart:
-    htmlLabels: true
-```
-
 ```mermaid
 ---
 title: "APIM Accelerator — Landing Zone Architecture"
@@ -79,9 +68,9 @@ flowchart TB
     orchestrator -->|"deploys"| core
     orchestrator -->|"configures"| inventory
 
-    law -->|"receives logs"| apim
-    ai -->|"monitors performance"| apim
-    sa -->|"archives diagnostics"| law
+    apim -->|"sends logs"| law
+    apim -->|"sends telemetry"| ai
+    law -->|"archives to"| sa
 
     apim -->|"hosts"| ws
     apim -->|"serves"| dp
@@ -193,6 +182,7 @@ After a successful deployment, `azd` outputs:
 
 - `APPLICATION_INSIGHTS_RESOURCE_ID` — Application Insights resource ID for monitoring integration
 - `APPLICATION_INSIGHTS_NAME` — Instance name for configuration references
+- `APPLICATION_INSIGHTS_INSTRUMENTATION_KEY` — Instrumentation key for SDK configuration (secure output)
 - `AZURE_STORAGE_ACCOUNT_ID` — Storage account ID for diagnostic log archival
 
 ## Project Structure
@@ -268,6 +258,7 @@ tags:
   ProjectName: "APIMForAll"          # Project initiative
   ServiceClass: "Critical"           # Workload tier
   RegulatoryCompliance: "GDPR"       # Compliance framework
+  SupportContact: "team@domain.com"  # Incident support contact
   ChargebackModel: "Dedicated"       # Billing model
   BudgetCode: "FY25-Q1-InitiativeX"  # Budget code
 ```
