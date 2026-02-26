@@ -35,6 +35,11 @@ flowchart TB
     accTitle: APIM Accelerator Landing Zone Architecture
     accDescr: Shows the three-layer deployment architecture — shared monitoring, core APIM platform, and API inventory — orchestrated by Azure Developer CLI
 
+    %% ═══════════════════════════════════════════════════════════════════════════
+    %% AZURE / FLUENT ARCHITECTURE PATTERN v1.1
+    %% (Semantic + Structural + Font + Accessibility Governance)
+    %% ═══════════════════════════════════════════════════════════════════════════
+
     subgraph azd["☁️ Azure Developer CLI (azd)"]
         direction TB
         orchestrator["📦 Orchestrator<br/>infra/main.bicep"]:::core
@@ -52,15 +57,15 @@ flowchart TB
 
         subgraph core["⚡ Core Platform"]
             direction LR
-            apim["🔗 API Management<br/>Premium SKU"]:::api
-            ws["🏢 Workspaces<br/>Team Isolation"]:::process
-            dp["🌐 Developer Portal<br/>Azure AD Auth"]:::api
+            apim["🔗 API Management<br/>Premium SKU"]:::success
+            ws["🏢 Workspaces<br/>Team Isolation"]:::warning
+            dp["🌐 Developer Portal<br/>Azure AD Auth"]:::success
         end
 
         subgraph inventory["📋 API Inventory"]
             direction LR
-            ac["📚 API Center<br/>Governance"]:::process
-            source["🔄 API Source<br/>APIM Integration"]:::process
+            ac["📚 API Center<br/>Governance"]:::warning
+            source["🔄 API Source<br/>APIM Integration"]:::warning
         end
     end
 
@@ -84,8 +89,9 @@ flowchart TB
     style inventory fill:#FFF4CE,stroke:#FFB900,stroke-width:2px
 
     classDef core fill:#DEECF9,stroke:#0078D4,stroke-width:2px,color:#004578
-    classDef api fill:#DFF6DD,stroke:#107C10,stroke-width:2px,color:#0B6A0B
-    classDef data fill:#E8DAEF,stroke:#7B2D8E,stroke-width:2px,color:#4A1C6A
+    classDef success fill:#DFF6DD,stroke:#107C10,stroke-width:2px,color:#0B6A0B
+    classDef warning fill:#FFF4CE,stroke:#FFB900,stroke-width:2px,color:#986F0B
+    classDef data fill:#E1DFDD,stroke:#8378DE,stroke-width:2px,color:#5B5FC7
     classDef process fill:#FFF4CE,stroke:#FFB900,stroke-width:2px,color:#986F0B
 ```
 
