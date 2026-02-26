@@ -539,6 +539,7 @@ flowchart LR
 
     %% ═══════════════════════════════════════════════════════════════════════════
     %% AZURE / FLUENT ARCHITECTURE PATTERN v1.1
+    %% (Semantic + Structural + Font + Accessibility Governance)
     %% ═══════════════════════════════════════════════════════════════════════════
 
     subgraph trigger["🎯 Trigger"]
@@ -546,28 +547,28 @@ flowchart LR
     end
 
     subgraph stage1["📦 Stage 1: Provision"]
-        s1["🔍 Pre-Validate<br/>Maturity: 2"]
-        s2["📦 Create RG<br/>Maturity: 3"]
+        s1["🔍 Pre-Validate<br/>Maturity: 2"]:::core
+        s2["📦 Create RG<br/>Maturity: 3"]:::core
         s1 --> s2
     end
 
     subgraph stage2["📊 Stage 2: Observe"]
-        s3["📊 Deploy Monitoring<br/>Maturity: 3"]
-        s4["📈 Configure Insights<br/>Maturity: 3"]
+        s3["📊 Deploy Monitoring<br/>Maturity: 3"]:::core
+        s4["📈 Configure Insights<br/>Maturity: 3"]:::core
         s3 --> s4
     end
 
     subgraph stage3["⚡ Stage 3: Platform"]
-        s5["🔗 Deploy APIM<br/>Maturity: 4"]
-        s6["🌐 Enable Portal<br/>Maturity: 3"]
-        s7["🏢 Create Workspaces<br/>Maturity: 2"]
+        s5["🔗 Deploy APIM<br/>Maturity: 4"]:::core
+        s6["🌐 Enable Portal<br/>Maturity: 3"]:::core
+        s7["🏢 Create Workspaces<br/>Maturity: 2"]:::core
         s5 --> s6
         s5 --> s7
     end
 
     subgraph stage4["📚 Stage 4: Govern"]
-        s8["📚 Deploy API Center<br/>Maturity: 3"]
-        s9["🔄 Sync APIs<br/>Maturity: 3"]
+        s8["📚 Deploy API Center<br/>Maturity: 3"]:::core
+        s9["🔄 Sync APIs<br/>Maturity: 3"]:::core
         s8 --> s9
     end
 
@@ -581,8 +582,8 @@ flowchart LR
     stage3 --> stage4
     stage4 --> outcome
 
-    style trigger fill:#E8DAEF,stroke:#7B2D8E,stroke-width:2px
-    style stage1 fill:#FDE7E9,stroke:#D13438,stroke-width:2px
+    style trigger fill:#E1DFDD,stroke:#8378DE,stroke-width:2px
+    style stage1 fill:#FDE7E9,stroke:#E81123,stroke-width:2px
     style stage2 fill:#DEECF9,stroke:#0078D4,stroke-width:2px
     style stage3 fill:#DFF6DD,stroke:#107C10,stroke-width:2px
     style stage4 fill:#FFF4CE,stroke:#FFB900,stroke-width:2px
