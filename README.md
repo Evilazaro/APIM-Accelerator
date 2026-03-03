@@ -41,22 +41,22 @@ APIM Accelerator delivers a comprehensive set of infrastructure capabilities tha
 
 > 💡 **Tip**: Each feature maps directly to a Bicep module in the `src/` directory. Customizations can be made by modifying the corresponding module parameters in `infra/settings.yaml` without altering the infrastructure code itself.
 
-| Feature                               | Description                                                                                                                                              | Source                                                             |
-| ------------------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------ |
-| ☁️ **Subscription-Scoped Deployment** | Orchestrates resource group creation and multi-module deployment at the Azure subscription level with a single entry point                               | `infra/main.bicep:53`                                              |
-| ⚙️ **Configurable APIM Service**      | Deploys Azure API Management with support for all SKU tiers (Developer, Basic, Standard, Premium, Consumption) and configurable scale units              | `src/core/apim.bicep:88-98`, `infra/settings.yaml:49-51`           |
-| 🔑 **Managed Identity Support**       | Provides System-assigned, User-assigned, or combined managed identity configurations for secure, credential-free access to Azure services                | `src/core/apim.bicep:91-95`, `src/shared/common-types.bicep:41-52` |
-| 🖥️ **Developer Portal with Azure AD** | Configures the APIM developer portal with CORS policies, Azure AD identity provider, sign-in/sign-up settings, and terms-of-service enforcement          | `src/core/developer-portal.bicep:1-10`                             |
-| 📂 **Workspace-Based Multi-Tenancy**  | Creates isolated APIM workspaces for team-based or project-based API lifecycle management within a single APIM instance                                  | `src/core/workspaces.bicep:1-10`, `infra/settings.yaml:55-56`      |
-| 📊 **Centralized Monitoring Stack**   | Deploys Log Analytics workspace, Application Insights, and a Storage Account for comprehensive logging, APM, and long-term log archival                  | `src/shared/monitoring/main.bicep:1-20`                            |
-| 🗂️ **API Center for Governance**      | Provisions Azure API Center with automatic API discovery from the APIM service, RBAC role assignments, and a default workspace for API cataloging        | `src/inventory/main.bicep:1-15`                                    |
-| 📁 **YAML-Driven Configuration**      | Externalizes all environment-specific settings (SKU, identity, tags, publisher info) into a single `settings.yaml` file for clean separation of concerns | `infra/settings.yaml:1-5`                                          |
-| 🏷️ **Comprehensive Tagging Strategy** | Applies governance tags (CostCenter, BusinessUnit, Owner, ServiceClass, RegulatoryCompliance, BudgetCode) across all deployed resources                  | `infra/settings.yaml:29-39`                                        |
-| 🔄 **Pre-Provisioning Hooks**         | Includes an `azd` lifecycle hook that automatically purges soft-deleted APIM instances in the target region before provisioning                          | `infra/azd-hooks/pre-provision.sh:1-20`                            |
-| 🧩 **Reusable Type System**           | Defines strongly typed Bicep user-defined types (`ApiManagement`, `Inventory`, `Monitoring`, `Shared`) for type-safe parameter validation                | `src/shared/common-types.bicep:1-15`                               |
-| 🛠️ **Utility Functions**              | Provides shared helper functions for deterministic unique suffix generation, storage account name compliance, and diagnostic settings naming             | `src/shared/constants.bicep:160-175`                               |
-| 🌐 **VNet Integration Ready**         | Supports External, Internal, or no virtual network integration modes for the API Management service                                                      | `src/core/apim.bicep:131-138`                                      |
-| 📈 **Diagnostic Settings**            | Configures diagnostic settings on deployed resources to send all logs and metrics to both Log Analytics and archival storage                             | `src/core/apim.bicep:273-298`                                      |
+| Feature                               | Description                                                                                                                                              |
+| ------------------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| ☁️ **Subscription-Scoped Deployment** | Orchestrates resource group creation and multi-module deployment at the Azure subscription level with a single entry point                               |
+| ⚙️ **Configurable APIM Service**      | Deploys Azure API Management with support for all SKU tiers (Developer, Basic, Standard, Premium, Consumption) and configurable scale units              |
+| 🔑 **Managed Identity Support**       | Provides System-assigned, User-assigned, or combined managed identity configurations for secure, credential-free access to Azure services                |
+| 🖥️ **Developer Portal with Azure AD** | Configures the APIM developer portal with CORS policies, Azure AD identity provider, sign-in/sign-up settings, and terms-of-service enforcement          |
+| 📂 **Workspace-Based Multi-Tenancy**  | Creates isolated APIM workspaces for team-based or project-based API lifecycle management within a single APIM instance                                  |
+| 📊 **Centralized Monitoring Stack**   | Deploys Log Analytics workspace, Application Insights, and a Storage Account for comprehensive logging, APM, and long-term log archival                  |
+| 🗂️ **API Center for Governance**      | Provisions Azure API Center with automatic API discovery from the APIM service, RBAC role assignments, and a default workspace for API cataloging        |
+| 📁 **YAML-Driven Configuration**      | Externalizes all environment-specific settings (SKU, identity, tags, publisher info) into a single `settings.yaml` file for clean separation of concerns |
+| 🏷️ **Comprehensive Tagging Strategy** | Applies governance tags (CostCenter, BusinessUnit, Owner, ServiceClass, RegulatoryCompliance, BudgetCode) across all deployed resources                  |
+| 🔄 **Pre-Provisioning Hooks**         | Includes an `azd` lifecycle hook that automatically purges soft-deleted APIM instances in the target region before provisioning                          |
+| 🧩 **Reusable Type System**           | Defines strongly typed Bicep user-defined types (`ApiManagement`, `Inventory`, `Monitoring`, `Shared`) for type-safe parameter validation                |
+| 🛠️ **Utility Functions**              | Provides shared helper functions for deterministic unique suffix generation, storage account name compliance, and diagnostic settings naming             |
+| 🌐 **VNet Integration Ready**         | Supports External, Internal, or no virtual network integration modes for the API Management service                                                      |
+| 📈 **Diagnostic Settings**            | Configures diagnostic settings on deployed resources to send all logs and metrics to both Log Analytics and archival storage                             |
 
 ## 🏗️ Architecture
 
@@ -286,11 +286,11 @@ az deployment sub create \
 
 After deployment completes, the orchestration template outputs the following values (`infra/main.bicep:121-135`):
 
-| Output                                | Description                            | Source                 |
-| ------------------------------------- | -------------------------------------- | ---------------------- |
-| 📈 `APPLICATION_INSIGHTS_RESOURCE_ID` | Application Insights resource ID       | `infra/main.bicep:125` |
-| 📈 `APPLICATION_INSIGHTS_NAME`        | Application Insights instance name     | `infra/main.bicep:128` |
-| 💾 `AZURE_STORAGE_ACCOUNT_ID`         | Diagnostic storage account resource ID | `infra/main.bicep:135` |
+| Output                                | Description                            |
+| ------------------------------------- | -------------------------------------- |
+| 📈 `APPLICATION_INSIGHTS_RESOURCE_ID` | Application Insights resource ID       |
+| 📈 `APPLICATION_INSIGHTS_NAME`        | Application Insights instance name     |
+| 💾 `AZURE_STORAGE_ACCOUNT_ID`         | Diagnostic storage account resource ID |
 
 ## 📁 Project Structure
 
