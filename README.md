@@ -71,6 +71,13 @@ flowchart TB
     %% PHASE 5 - STANDARD: Governance block present, classDefs centralized
     %% ═══════════════════════════════════════════════════════════════════════════
 
+    %% STANDARD COLOR SCHEME v2.1
+    %% COLOR SCHEME DOCUMENTATION
+    %% Level 1 (Main Groups): fill:#F3F2F1, stroke:#605E5C, stroke-width:3px
+    %% Level 2 (Nested): semantic fill per function, stroke-width:2px
+    %% Semantic: core=#DEECF9, success=#DFF6DD, warning=#FFF4CE, neutral=#FAFAFA
+    %% Palette: danger=#FDE7E9, data=#E1DFDD, external=#F3F2F1
+
     subgraph Orchestration["🚀 Deployment Orchestration"]
         AZD["🛠️ Azure Developer CLI<br/>(azd up)"]:::core
         HOOK["🔄 Pre-Provision Hook<br/>Purge soft-deleted APIM"]:::warning
@@ -106,17 +113,21 @@ flowchart TB
     APIM --> AC
     AC --> RBAC
 
-    style Orchestration fill:#F3F2F1,stroke:#605E5C,stroke-width:2px,color:#323130
-    style RG fill:#F3F2F1,stroke:#605E5C,stroke-width:2px,color:#323130
+    %% Subgraph styling (5 subgraphs = 5 style directives)
+    style Orchestration fill:#F3F2F1,stroke:#605E5C,stroke-width:3px,color:#323130
+    style RG fill:#F3F2F1,stroke:#605E5C,stroke-width:3px,color:#323130
     style Shared fill:#FAFAFA,stroke:#8A8886,stroke-width:2px,color:#323130
     style Core fill:#DEECF9,stroke:#0078D4,stroke-width:2px,color:#004578
     style Inventory fill:#DFF6DD,stroke:#107C10,stroke-width:2px,color:#0B6A0B
 
-    %% Centralized semantic classDefs (Phase 5 compliant)
+    %% Centralized semantic classDefs (Phase 5 compliant — 7 canonical)
     classDef core fill:#DEECF9,stroke:#0078D4,stroke-width:2px,color:#004578
     classDef success fill:#DFF6DD,stroke:#107C10,stroke-width:2px,color:#0B6A0B
     classDef warning fill:#FFF4CE,stroke:#FFB900,stroke-width:2px,color:#986F0B
+    classDef danger fill:#FDE7E9,stroke:#E81123,stroke-width:2px,color:#A4262C
     classDef neutral fill:#FAFAFA,stroke:#8A8886,stroke-width:2px,color:#323130
+    classDef data fill:#E1DFDD,stroke:#8378DE,stroke-width:2px,color:#5B5FC7
+    classDef external fill:#F3F2F1,stroke:#605E5C,stroke-width:2px,color:#323130
 ```
 
 **Component Roles:**
