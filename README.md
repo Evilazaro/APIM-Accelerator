@@ -71,6 +71,8 @@ config:
   theme: base
   look: classic
   layout: dagre
+  themeVariables:
+    fontSize: '16px'
   flowchart:
     htmlLabels: true
 ---
@@ -89,33 +91,27 @@ flowchart TB
     %% PHASE 5 - STANDARD: Governance block present, classDefs centralized
     %% ═══════════════════════════════════════════════════════════════════════════
 
-    classDef orchestrator fill:#DEECF9,stroke:#0078D4,stroke-width:2px,color:#004578
-    classDef monitoring fill:#F3E5F5,stroke:#7B1FA2,stroke-width:2px,color:#4A148C
-    classDef core fill:#FFF3E0,stroke:#E65100,stroke-width:2px,color:#BF360C
-    classDef inventory fill:#E0F7FA,stroke:#00838F,stroke-width:2px,color:#006064
-    classDef neutral fill:#FAFAFA,stroke:#8A8886,stroke-width:2px,color:#323130
-
     subgraph SUB["☁️ Azure Subscription"]
-        ORCH["🎯 Orchestration<br/>infra/main.bicep"]:::orchestrator
+        ORCH["🎯 Orchestration<br/>infra/main.bicep"]:::core
 
         subgraph RG["📦 Resource Group"]
 
             subgraph SHARED["🔧 Shared Infrastructure"]
-                LAW["📊 Log Analytics<br/>Workspace"]:::monitoring
-                AI["📈 Application<br/>Insights"]:::monitoring
-                SA["💾 Storage<br/>Account"]:::monitoring
+                LAW["📊 Log Analytics<br/>Workspace"]:::data
+                AI["📈 Application<br/>Insights"]:::data
+                SA["💾 Storage<br/>Account"]:::data
             end
 
             subgraph CORE["⚙️ Core Platform"]
-                APIM["🌐 API Management<br/>Service"]:::core
-                DP["🖥️ Developer<br/>Portal"]:::core
-                WS["📂 Workspaces"]:::core
+                APIM["🌐 API Management<br/>Service"]:::warning
+                DP["🖥️ Developer<br/>Portal"]:::warning
+                WS["📂 Workspaces"]:::warning
             end
 
             subgraph INV["📋 API Inventory"]
-                AC["🗂️ API Center"]:::inventory
-                ACWS["📁 API Center<br/>Workspace"]:::inventory
-                ACSRC["🔗 API Source<br/>Integration"]:::inventory
+                AC["🗂️ API Center"]:::success
+                ACWS["📁 API Center<br/>Workspace"]:::success
+                ACSRC["🔗 API Source<br/>Integration"]:::success
             end
 
         end
@@ -138,11 +134,18 @@ flowchart TB
     ACSRC -->|"syncs with"| APIM
     ACWS -->|"organizes"| AC
 
-    style SUB fill:#E8F5E9,stroke:#2E7D32,stroke-width:2px
-    style RG fill:#E3F2FD,stroke:#1565C0,stroke-width:2px
-    style SHARED fill:#F3E5F5,stroke:#7B1FA2,stroke-width:2px
-    style CORE fill:#FFF3E0,stroke:#E65100,stroke-width:2px
-    style INV fill:#E0F7FA,stroke:#00838F,stroke-width:2px
+    %% Centralized semantic classDefs (approved AZURE/FLUENT v1.1 palette)
+    classDef core fill:#DEECF9,stroke:#0078D4,stroke-width:2px,color:#004578
+    classDef data fill:#E1DFDD,stroke:#8378DE,stroke-width:2px,color:#5B5FC7
+    classDef warning fill:#FFF4CE,stroke:#FFB900,stroke-width:2px,color:#986F0B
+    classDef success fill:#DFF6DD,stroke:#107C10,stroke-width:2px,color:#0B6A0B
+
+    %% Subgraph styling (structural parents = neutral, functional siblings = semantic)
+    style SUB fill:#F3F2F1,stroke:#605E5C,stroke-width:2px
+    style RG fill:#FAFAFA,stroke:#8A8886,stroke-width:2px
+    style SHARED fill:#E1DFDD,stroke:#8378DE,stroke-width:2px
+    style CORE fill:#FFF4CE,stroke:#FFB900,stroke-width:2px
+    style INV fill:#DFF6DD,stroke:#107C10,stroke-width:2px
 ```
 
 <!-- Source: infra/main.bicep:105-181, src/core/main.bicep:150-280, src/shared/main.bicep:60-70, src/inventory/main.bicep:150-175 -->
