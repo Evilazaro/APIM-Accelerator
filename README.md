@@ -102,16 +102,16 @@ flowchart TB
         end
     end
 
-    AZD --> HOOK --> RG
-    LAW --> AI
-    SA --> AI
-    AI --> APIM
-    LAW --> APIM
-    SA --> APIM
-    APIM --> WS
-    APIM --> DP
-    APIM --> AC
-    AC --> RBAC
+    AZD -->|"runs"| HOOK -->|"provisions"| RG
+    LAW -->|"feeds"| AI
+    SA -->|"stores"| AI
+    AI -->|"monitors"| APIM
+    LAW -->|"logs"| APIM
+    SA -->|"diagnostics"| APIM
+    APIM -->|"isolates"| WS
+    APIM -->|"exposes"| DP
+    APIM -->|"registers"| AC
+    AC -->|"enforces"| RBAC
 
     %% Subgraph styling (5 subgraphs = 5 style directives)
     style Orchestration fill:#F3F2F1,stroke:#605E5C,stroke-width:3px,color:#323130
