@@ -20,20 +20,20 @@ The accelerator orchestrates three deployment phases — shared monitoring infra
 
 Designed for organizations adopting Azure API Management at scale, the accelerator enforces tagging governance, managed identity security, and centralized observability from day one. It integrates with Azure Developer CLI (`azd`) for one-command provisioning and supports Premium-tier features including VNet integration, multi-region deployment, and workspace-based multi-tenancy (`infra/settings.yaml:29-39`, `src/core/apim.bicep:131-138`).
 
-## Table of Contents
+## 📑 Table of Contents
 
-- [Features](#features)
-- [Architecture](#architecture)
-- [Requirements](#requirements)
-- [Getting Started](#getting-started)
-- [Project Structure](#project-structure)
-- [Deployment Sequence](#deployment-sequence)
-- [Configuration](#configuration)
-- [Security](#security)
-- [Contributing](#contributing)
-- [License](#license)
+- [✨ Features](#-features)
+- [🏗️ Architecture](#️-architecture)
+- [📋 Requirements](#-requirements)
+- [🚀 Getting Started](#-getting-started)
+- [📁 Project Structure](#-project-structure)
+- [🔄 Deployment Sequence](#-deployment-sequence)
+- [⚙️ Configuration](#️-configuration)
+- [🔒 Security](#-security)
+- [🤝 Contributing](#-contributing)
+- [📄 License](#-license)
 
-## Features
+## ✨ Features
 
 **Overview**
 
@@ -58,7 +58,7 @@ APIM Accelerator delivers a comprehensive set of infrastructure capabilities tha
 | 🌐 **VNet Integration Ready**         | Supports External, Internal, or no virtual network integration modes for the API Management service                                                      | `src/core/apim.bicep:131-138`                                      |
 | 📈 **Diagnostic Settings**            | Configures diagnostic settings on deployed resources to send all logs and metrics to both Log Analytics and archival storage                             | `src/core/apim.bicep:273-298`                                      |
 
-## Architecture
+## 🏗️ Architecture
 
 **Overview**
 
@@ -147,7 +147,7 @@ flowchart TB
 
 <!-- Source: infra/main.bicep:105-181, src/core/main.bicep:150-280, src/shared/main.bicep:60-70, src/inventory/main.bicep:150-175 -->
 
-## Requirements
+## 📋 Requirements
 
 **Overview**
 
@@ -175,7 +175,7 @@ Organizations deploying the APIM Accelerator need a set of Azure CLI tooling, an
 | 🔑 **Contributor**       | Subscription | Create resource groups, deploy APIM, API Center, monitoring resources                                       |
 | 🔑 **User Access Admin** | Subscription | Assign RBAC roles to managed identities (`src/core/apim.bicep:226-227`, `src/inventory/main.bicep:106-107`) |
 
-## Getting Started
+## 🚀 Getting Started
 
 ### 1. Clone the Repository
 
@@ -292,7 +292,7 @@ After deployment completes, the orchestration template outputs the following val
 | 📈 `APPLICATION_INSIGHTS_NAME`        | Application Insights instance name     | `infra/main.bicep:128` |
 | 💾 `AZURE_STORAGE_ACCOUNT_ID`         | Diagnostic storage account resource ID | `infra/main.bicep:135` |
 
-## Project Structure
+## 📁 Project Structure
 
 ```text
 APIM-Accelerator/
@@ -327,7 +327,7 @@ APIM-Accelerator/
 └── prompts/                            # Documentation generation prompts
 ```
 
-## Deployment Sequence
+## 🔄 Deployment Sequence
 
 **Overview**
 
@@ -339,7 +339,7 @@ The orchestration template (`infra/main.bicep`) deploys resources in a strict th
 | 2️⃣    | `src/core/main.bicep`      | 🌐 API Management Service, 🖥️ Developer Portal, 📂 Workspaces           | Phase 1 outputs (workspace ID, App Insights ID, storage ID) |
 | 3️⃣    | `src/inventory/main.bicep` | 🗂️ API Center, 📁 API Center Workspace, 🔗 API Source Integration       | Phase 2 outputs (APIM name, APIM resource ID)               |
 
-## Configuration
+## ⚙️ Configuration
 
 **Overview**
 
@@ -386,7 +386,7 @@ All resources inherit a comprehensive set of governance tags defined in `infra/s
 | 🏷️ `RegulatoryCompliance` | `GDPR`                | Compliance framework tracking      |
 | 🏷️ `BudgetCode`           | `FY25-Q1-InitiativeX` | Budget association                 |
 
-## Security
+## 🔒 Security
 
 **Overview**
 
@@ -400,7 +400,7 @@ The APIM Accelerator implements defense-in-depth security practices across all d
 
 > ⚠️ **Warning**: For production deployments, set `publicNetworkAccess` to `false` and use `Internal` VNet integration to restrict API Management access to private networks only. The default configuration enables public access for development convenience (`src/core/apim.bicep:123-127`).
 
-## Contributing
+## 🤝 Contributing
 
 **Overview**
 
@@ -414,7 +414,7 @@ Contributions to the APIM Accelerator are welcome. This project uses Bicep infra
 
 > 💡 **Tip**: Use `azd provision` with `envName=dev` to validate infrastructure changes before submitting a pull request. The Developer SKU provisions in approximately 30-45 minutes.
 
-## License
+## 📄 License
 
 This project is licensed under the MIT License. See [LICENSE](LICENSE) for details.
 
