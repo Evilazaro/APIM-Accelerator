@@ -6,7 +6,7 @@
 
 An enterprise-grade Azure API Management Landing Zone accelerator that automates the deployment of a complete API platform using Infrastructure as Code (Bicep) and Azure Developer CLI (`azd`).
 
-**Overview**
+### Overview
 
 This accelerator eliminates weeks of manual Azure infrastructure setup by providing **production-ready Bicep templates** that deploy a fully integrated API Management landing zone in a **single command**. Platform engineering teams, cloud architects, and DevOps engineers use this accelerator to establish a repeatable, governed, and observable API platform that scales across development, staging, and production environments.
 
@@ -96,7 +96,7 @@ flowchart TB
     %% Accessibility: WCAG AA verified (4.5:1 contrast ratio)
 ```
 
-**Component Responsibilities**
+### Component Responsibilities
 
 | Component                    | Purpose                                                                         | Key Capabilities                                                                               |
 | ---------------------------- | ------------------------------------------------------------------------------- | ---------------------------------------------------------------------------------------------- |
@@ -106,7 +106,7 @@ flowchart TB
 
 ## ✨ Features
 
-**Overview**
+### Overview
 
 This accelerator delivers seven production-ready capabilities that address the full API management lifecycle — from infrastructure observability through API governance. Each feature integrates with Azure-native services to minimize operational overhead and maximize consistency across environments.
 
@@ -124,7 +124,7 @@ The features work together as a cohesive platform: monitoring captures telemetry
 
 ## 📋 Requirements
 
-**Overview**
+### Overview
 
 Meeting these prerequisites ensures a successful first deployment and avoids common provisioning failures. Each requirement addresses a specific dependency in the deployment pipeline — the Azure CLI authenticates against your subscription, `azd` orchestrates the Bicep deployment, and a bash-compatible shell executes the pre-provision hook that purges soft-deleted resources.
 
@@ -356,7 +356,7 @@ SUCCESS: Your application was removed from Azure.
 
 ## 🔧 Configuration
 
-**Overview**
+### Overview
 
 All infrastructure settings are centralized in `infra/settings.yaml`, which serves as the **single source of truth** for resource naming, SKU selection, identity configuration, and governance tags. This file-driven approach ensures that every environment deploys identically — only the `azd` environment variables (`AZURE_ENV_NAME`, `AZURE_LOCATION`) differ between development, staging, and production.
 
@@ -528,7 +528,7 @@ Each environment gets its own resource group (`{solutionName}-{envName}-{locatio
 
 ## 🤝 Contributing
 
-**Overview**
+### Overview
 
 Contributions strengthen the accelerator by bringing diverse perspectives from platform engineers, cloud architects, and DevOps practitioners working with API Management across different organizations. Every pull request goes through code review to maintain the modular Bicep architecture and ensure changes integrate cleanly across the three deployment tiers.
 
