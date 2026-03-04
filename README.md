@@ -524,7 +524,7 @@ APIM-Accelerator/
 
 **Overview**
 
-After deployment, interact with the provisioned resources through the Azure portal, Azure CLI, or the developer portal. The following examples demonstrate common operational tasks.
+After deployment, interact with the provisioned resources through the Azure portal, Azure CLI, or the developer portal. The following examples demonstrate common operational tasks across all provisioned components — API Management, developer portal, workspaces, monitoring, API Center, and networking.
 
 ### Access the Developer Portal
 
@@ -534,11 +534,19 @@ After deployment completes, the API Management developer portal is available at:
 https://{apim-name}.developer.azure-api.net
 ```
 
-The developer portal is configured with Azure AD authentication. Users must sign in with an account from the allowed Azure AD tenant.
+The developer portal is configured with Azure AD authentication. Users must sign in with an account from a tenant listed in the `allowedTenants` array in `src/core/developer-portal.bicep`. Update this array with your organization's tenant domain(s) before first use.
 
-### Create a Workspace
+To customize sign-in and sign-up behavior:
 
-Add additional workspaces by updating the `workspaces` array in `infra/settings.yaml`:
+- **Disable self-registration** — set the `enabled` property on the `devPortalSignUpSetting` resource to `false` in `src/core/developer-portal.bicep`
+- **Remove terms of service** — set `termsOfService.enabled` to `false` in the same file
+- **Add CORS origins** — update the `origins` array in the `devPortalConfig` resource to include additional frontend domains
+
+To disable the developer portal entirely, set `enableDeveloperPortal` to `false` in the APIM module parameters.
+
+### Manage Workspaces
+
+Add, remove, or rename workspaces by updating the `workspaces` array in `infra/settings.yaml`:
 
 ```yaml
 core:
@@ -555,6 +563,105 @@ Then redeploy:
 azd provision
 ```
 
+> [!IMPORTANT]
+> Workspaces require the **Premium** SKU tier. If `core.apiManagement.sku.name` is set to a non-Premium SKU, workspace deployment will fail.
+
+### Configure VNet Integration
+
+To deploy APIM behind a virtual network, override the Bicep parameters in `src/core/main.bicep` when calling the APIM module:
+
+```bicep
+// External mode — gateway accessible via public IP, backend services via VNet
+virtualNetworkType: 'External'
+subnetResourceId: '/subscriptions/{sub}/resourceGroups/{rg}/providers/Microsoft.Network/virtualNetworks/{vnet}/subnets/{subnet}'
+publicNetworkAccess: true
+
+// Internal mode — gateway accessible only within the VNet
+virtualNetworkType: 'Internal'
+subnetResourceId: '/subscriptions/{sub}/resourceGroups/{rg}/providers/Microsoft.Network/virtualNetworks/{vnet}/subnets/{subnet}'
+publicNetworkAccess: false
+```
+
+### Change APIM SKU and Scaling
+
+Update the SKU and capacity in `infra/settings.yaml`:
+
+```yaml
+core:
+  apiManagement:
+    sku:
+      name: "Standard" # Developer, Basic, BasicV2, Standard, StandardV2, Premium, Consumption
+      capacity: 2 # Scale units
+```
+
+Then redeploy:
+
+```bash
+azd provision
+```
+
+> [!NOTE]
+> Changing from `Premium` to a lower SKU will remove workspace support and VNet integration capabilities. Plan accordingly.
+
+### Customize the Tagging Strategy
+
+All 10 governance tags under `shared.tags` in `infra/settings.yaml` are applied to every resource. Update them to match your organization's cost management and compliance requirements:
+
+```yaml
+shared:
+  tags:
+    CostCenter: "CC-5678"
+    BusinessUnit: "Engineering"
+    Owner: "platform-team@contoso.com"
+    ApplicationName: "API Gateway"
+    ProjectName: "Digital Transformation"
+    ServiceClass: "Critical"
+    RegulatoryCompliance: "HIPAA"
+    SupportContact: "oncall@contoso.com"
+    ChargebackModel: "Shared"
+    BudgetCode: "FY26-Q2-APIProgram"
+```
+
+Component-level tags (`lz-component-type`, `component`) are automatically added by each module and do not need manual configuration.
+
+### Reuse an Existing Log Analytics Workspace
+
+To connect to a pre-existing Log Analytics workspace instead of creating a new one, set the `workSpaceResourceId` property:
+
+```yaml
+shared:
+  monitoring:
+    logAnalytics:
+      name: ""
+      workSpaceResourceId: "/subscriptions/{sub}/resourceGroups/{rg}/providers/Microsoft.OperationalInsights/workspaces/{name}"
+```
+
+### Tune Application Insights Retention and Access
+
+Override Application Insights Bicep parameters in `src/shared/monitoring/insights/main.bicep` for production hardening:
+
+| Parameter                            | Production Recommendation              |
+| ------------------------------------ | -------------------------------------- |
+| 📅 `retentionInDays`                 | `365` (up from default `90`)           |
+| 🔒 `publicNetworkAccessForIngestion` | `Disabled`                             |
+| 🔍 `publicNetworkAccessForQuery`     | `Disabled`                             |
+| 🔄 `ingestionMode`                   | `LogAnalytics` (default — recommended) |
+
+### Configure API Center Identity
+
+Update the API Center managed identity in `infra/settings.yaml`:
+
+```yaml
+inventory:
+  apiCenter:
+    identity:
+      type: "SystemAssigned" # Options: SystemAssigned, UserAssigned, SystemAssigned+UserAssigned, None
+      userAssignedIdentities:
+        - "/subscriptions/{sub}/resourceGroups/{rg}/providers/Microsoft.ManagedIdentity/userAssignedIdentities/{name}"
+```
+
+The API Center module automatically creates RBAC role assignments (Data Reader and Compliance Manager) for the API Center's managed identity on the connected APIM instance.
+
 ### Query Logs with KQL
 
 Access the Log Analytics workspace to query API Management diagnostic logs:
@@ -566,9 +673,18 @@ ApiManagementGatewayLogs
 | order by count_ desc
 ```
 
+Track request latencies by API:
+
+```kusto
+ApiManagementGatewayLogs
+| where TimeGenerated > ago(24h)
+| summarize avg(TotalTime), percentile(TotalTime, 95), percentile(TotalTime, 99) by ApiId
+| order by avg_TotalTime desc
+```
+
 ### View API Inventory
 
-Browse the centralized API catalog in the Azure portal under the deployed API Center resource. APIs from the connected API Management instance are automatically discovered and synchronized.
+Browse the centralized API catalog in the Azure portal under the deployed API Center resource. APIs from the connected API Management instance are automatically discovered and synchronized through the APIM source integration configured in `src/inventory/main.bicep`.
 
 ## Troubleshooting
 
