@@ -1,4 +1,4 @@
-# Business Architecture Analysis — comprehensive
+# Business Architecture
 
 ## 1. Executive Summary
 
