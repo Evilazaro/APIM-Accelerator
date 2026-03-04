@@ -6,7 +6,7 @@
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
 [![Status: Active](https://img.shields.io/badge/Status-Active-107C10)](https://github.com/Evilazaro/APIM-Accelerator)
 
-## Overview
+## 📖 Overview
 
 The APIM Accelerator is a **production-ready** Azure landing zone accelerator that deploys a complete API Management platform using Bicep Infrastructure-as-Code templates and Azure Developer CLI (`azd`). It provides enterprise teams with a **standardized, repeatable foundation** for governing, publishing, and monitoring APIs at scale on Azure.
 
@@ -15,22 +15,45 @@ The accelerator follows a **modular architecture** organized into **three deploy
 > [!NOTE]
 > This accelerator deploys Azure API Management with the **Premium** SKU by default, which enables features such as multi-region deployments, VNet integration, and workspaces. Review the [Configuration](#configuration) section to adjust the SKU tier for non-production environments.
 
-## Table of Contents
+## 📑 Table of Contents
 
-- [Overview](#overview)
-- [Architecture](#architecture)
-- [Features](#features)
-- [Requirements](#requirements)
-- [Quick Start](#quick-start)
-- [Deployment](#deployment)
-- [Configuration](#configuration)
-- [Project Structure](#project-structure)
-- [Usage](#usage)
-- [Troubleshooting](#troubleshooting)
-- [Contributing](#contributing)
-- [License](#license)
+- [📖 Overview](#overview)
+- [🏗️ Architecture](#architecture)
+- [✨ Features](#features)
+- [📋 Requirements](#requirements)
+- [🚀 Quick Start](#quick-start)
+- [🚢 Deployment](#deployment)
+  - [🔄 Full Deployment](#full-deployment)
+  - [📦 Provision Only](#provision-only)
+  - [🔧 Direct Bicep Deployment](#direct-bicep-deployment)
+  - [🪝 Pre-Provision Hook](#pre-provision-hook)
+- [⚙️ Configuration](#configuration)
+  - [📄 Configuration File](#configuration-file)
+  - [🌍 Environment Parameters](#environment-parameters)
+  - [🌐 API Management Configuration](#api-management-configuration)
+  - [🏢 Workspace Configuration](#workspace-configuration)
+  - [🖥️ Developer Portal & Azure AD Authentication](#developer-portal--azure-ad-authentication)
+  - [📊 Monitoring Configuration](#monitoring-configuration)
+  - [📚 API Center & Inventory Configuration](#api-center--inventory-configuration)
+  - [🏷️ Resource Tagging Strategy](#resource-tagging-strategy)
+  - [📛 Resource Naming Conventions](#resource-naming-conventions)
+- [📁 Project Structure](#project-structure)
+- [💡 Usage](#usage)
+  - [🖥️ Access the Developer Portal](#access-the-developer-portal)
+  - [🏢 Manage Workspaces](#manage-workspaces)
+  - [🛡️ Configure VNet Integration](#configure-vnet-integration)
+  - [📊 Change APIM SKU and Scaling](#change-apim-sku-and-scaling)
+  - [🏷️ Customize the Tagging Strategy](#customize-the-tagging-strategy)
+  - [🔗 Reuse an Existing Log Analytics Workspace](#reuse-an-existing-log-analytics-workspace)
+  - [📈 Tune Application Insights Retention and Access](#tune-application-insights-retention-and-access)
+  - [🔐 Configure API Center Identity](#configure-api-center-identity)
+  - [🔍 Query Logs with KQL](#query-logs-with-kql)
+  - [📋 View API Inventory](#view-api-inventory)
+- [🔧 Troubleshooting](#troubleshooting)
+- [🤝 Contributing](#contributing)
+- [📄 License](#license)
 
-## Architecture
+## 🏗️ Architecture
 
 The solution uses a **layered deployment model** at Azure **subscription scope**. The orchestration template (`infra/main.bicep`) creates a resource group and deploys three module layers in sequence, with each layer building on the outputs of the previous one.
 
@@ -126,7 +149,7 @@ flowchart TB
 | 📋 Inventory | API Center              | Centralized API catalog, governance, and compliance        |
 | 📋 Inventory | API Source Integration  | Automatic API discovery and synchronization from APIM      |
 
-## Features
+## ✨ Features
 
 The accelerator provides a comprehensive API Management landing zone with **enterprise-grade capabilities** spanning governance, security, monitoring, and developer experience. Each feature is implemented as a **modular Bicep component** that can be customized independently.
 
@@ -147,7 +170,7 @@ These capabilities address the key challenges of API platform management **at sc
 | 🌍 Multi-Environment Support | Environment-based configuration (dev, test, staging, prod, uat) with consistent naming   | ✅ Stable  |
 | 🛡️ VNet Integration          | Optional virtual network integration for private API gateway deployments (Premium SKU)   | 🔄 Planned |
 
-## Requirements
+## 📋 Requirements
 
 Before deploying the APIM Accelerator, ensure your environment meets the prerequisites below. The accelerator requires an **active Azure subscription** with **sufficient permissions** to create resources at the **subscription scope**, along with local tooling for infrastructure deployment.
 
@@ -166,7 +189,7 @@ These requirements are the minimum needed for a successful deployment. The Azure
 > [!TIP]
 > On Windows, you can use [Git Bash](https://git-scm.com/) or [Windows Subsystem for Linux (WSL)](https://learn.microsoft.com/windows/wsl/) to run the pre-provision shell scripts included in this accelerator.
 
-## Quick Start
+## 🚀 Quick Start
 
 Get the APIM Accelerator deployed in your Azure subscription with **three commands**. This minimal workflow provisions all infrastructure components including API Management, monitoring, and API Center governance.
 
@@ -197,11 +220,11 @@ Get the APIM Accelerator deployed in your Azure subscription with **three comman
 > [!IMPORTANT]
 > API Management Premium SKU provisioning can take 30-45 minutes. The `azd up` command will wait for all resources to be fully deployed before completing.
 
-## Deployment
+## 🚢 Deployment
 
 The accelerator supports **multiple deployment workflows** depending on your needs. Use `azd up` for a **full end-to-end deployment**, or use individual commands for more granular control over the provisioning process.
 
-### Full Deployment
+### 🔄 Full Deployment
 
 ```bash
 azd up
@@ -216,7 +239,7 @@ This single command executes the following sequence:
 5. Deploys core API Management platform with workspaces and developer portal
 6. Deploys API Center with APIM integration for API inventory governance
 
-### Provision Only
+### 📦 Provision Only
 
 ```bash
 azd provision
@@ -224,7 +247,7 @@ azd provision
 
 Provisions Azure infrastructure without deploying application code.
 
-### Direct Bicep Deployment
+### 🔧 Direct Bicep Deployment
 
 ```bash
 az deployment sub create \
@@ -233,7 +256,7 @@ az deployment sub create \
   --parameters envName=<dev|test|staging|prod|uat> location=<azure-region>
 ```
 
-### Pre-Provision Hook
+### 🪝 Pre-Provision Hook
 
 The pre-provision script automatically purges soft-deleted APIM instances to prevent naming conflicts during redeployment:
 
@@ -241,13 +264,13 @@ The pre-provision script automatically purges soft-deleted APIM instances to pre
 ./infra/azd-hooks/pre-provision.sh <location>
 ```
 
-## Configuration
+## ⚙️ Configuration
 
 All environment-specific configuration is **centralized** in `infra/settings.yaml`, which controls resource naming, SKU tiers, identity settings, tagging strategies, monitoring parameters, and component-level tuning. The orchestration template loads this file at deploy time and distributes settings to each module. Empty name fields trigger **automatic name generation** using the solution name and a deterministic unique suffix derived from the subscription and resource group.
 
 The configuration is organized into four sections — global settings, shared infrastructure, core platform, and inventory services — each mapping directly to the corresponding deployment module. Additional parameters for networking, developer portal authentication, and Application Insights tuning are available as Bicep parameters in their respective modules.
 
-### Configuration File
+### 📄 Configuration File
 
 The primary configuration file is `infra/settings.yaml`:
 
@@ -312,7 +335,7 @@ inventory:
     component: "inventory"
 ```
 
-### Environment Parameters
+### 🌍 Environment Parameters
 
 The deployment accepts two parameters via `infra/main.parameters.json`:
 
@@ -321,7 +344,7 @@ The deployment accepts two parameters via `infra/main.parameters.json`:
 | ⚙️ `envName`  | Environment identifier used in resource naming and tagging | `dev`, `test`, `staging`, `prod`, `uat`             |
 | 🌍 `location` | Azure region for all resource deployments                  | Any region supporting API Management and API Center |
 
-### API Management Configuration
+### 🌐 API Management Configuration
 
 Settings under `core.apiManagement` control the APIM service deployment. The APIM module (`src/core/apim.bicep`) also exposes additional parameters for networking and portal behavior.
 
@@ -342,7 +365,7 @@ Settings under `core.apiManagement` control the APIM service deployment. The API
 > [!NOTE]
 > The `publicNetworkAccess`, `virtualNetworkType`, `subnetResourceId`, and `enableDeveloperPortal` parameters are Bicep-level parameters in `src/core/apim.bicep`. To customize them, pass values through the module call in `src/core/main.bicep` or override via a parameters file.
 
-### Workspace Configuration
+### 🏢 Workspace Configuration
 
 Workspaces provide **logical isolation** for APIs within a single APIM instance. Each workspace entry in the settings creates a separate `Microsoft.ApiManagement/service/workspaces` resource.
 
@@ -362,7 +385,7 @@ core:
 > [!IMPORTANT]
 > Workspaces require the **Premium** SKU tier. If a non-Premium SKU is configured, workspace deployment will fail. Use the `Developer` SKU only for non-production environments that do not need workspace isolation.
 
-### Developer Portal & Azure AD Authentication
+### 🖥️ Developer Portal & Azure AD Authentication
 
 The developer portal module (`src/core/developer-portal.bicep`) configures **Azure AD** as the identity provider, CORS policies, and sign-in/sign-up settings. Customization requires **editing the Bicep module directly**.
 
@@ -381,11 +404,11 @@ The developer portal module (`src/core/developer-portal.bicep`) configures **Azu
 > [!WARNING]
 > Update the `allowedTenants` array in `src/core/developer-portal.bicep` with your organization's Azure AD tenant domain(s) before deploying. The default value is a sample tenant and will not work for your environment.
 
-### Monitoring Configuration
+### 📊 Monitoring Configuration
 
 Monitoring settings are split between `infra/settings.yaml` (for resource identity and naming) and the Bicep module defaults (for operational parameters).
 
-#### Log Analytics Workspace
+#### 📊 Log Analytics Workspace
 
 | Setting               | Path / Parameter                                                 | Description                                         | Default           |
 | --------------------- | ---------------------------------------------------------------- | --------------------------------------------------- | ----------------- |
@@ -404,7 +427,7 @@ Monitoring settings are split between `infra/settings.yaml` (for resource identi
 | 🆓 `Free`                | Limited to 500 MB/day with 7-day retention — testing only            |
 | 🏢 `LACluster`           | Dedicated cluster for 500+ GB/day scenarios                          |
 
-#### Application Insights
+#### 📈 Application Insights
 
 | Setting             | Path / Parameter                                                        | Description                                  | Default        |
 | ------------------- | ----------------------------------------------------------------------- | -------------------------------------------- | -------------- |
@@ -420,7 +443,7 @@ Monitoring settings are split between `infra/settings.yaml` (for resource identi
 > [!TIP]
 > For production environments with strict security requirements, set both `publicNetworkAccessForIngestion` and `publicNetworkAccessForQuery` to `Disabled` and configure Azure Private Link for Application Insights.
 
-#### Diagnostic Storage Account
+#### 🗄️ Diagnostic Storage Account
 
 A storage account is automatically provisioned for long-term diagnostic log archival. Its name is auto-generated using a centralized naming function to ensure global uniqueness.
 
@@ -430,7 +453,7 @@ A storage account is automatically provisioned for long-term diagnostic log arch
 | 📦 Kind   | `StorageV2`    | Current-generation general-purpose storage                     |
 | 📛 Naming | Auto-generated | Uses `generateStorageAccountName()` with unique hash           |
 
-### API Center & Inventory Configuration
+### 📚 API Center & Inventory Configuration
 
 API Center provides **centralized API governance**, catalog, and compliance management. It **automatically integrates** with the deployed APIM instance for API discovery.
 
@@ -448,7 +471,7 @@ API Center provides **centralized API governance**, catalog, and compliance mana
 | 🔍 API Center Data Reader        | `71522526-b88f-4d52-b57f-d31fc3546d0d` | Read API definitions and metadata         |
 | 📋 API Center Compliance Manager | `6cba8790-29c5-48e5-bab1-c7541b01cb04` | Manage compliance and governance policies |
 
-### Resource Tagging Strategy
+### 🏷️ Resource Tagging Strategy
 
 Tags defined under `shared.tags` are applied to all resources across the landing zone. Additional component-level tags are merged at deploy time.
 
@@ -467,7 +490,7 @@ Tags defined under `shared.tags` are applied to all resources across the landing
 
 Additional component-level tags (`lz-component-type`, `component`) are automatically applied by each module to identify the landing zone layer (shared, core, inventory).
 
-### Resource Naming Conventions
+### 📛 Resource Naming Conventions
 
 All resources follow a **consistent naming pattern**. When a name is left empty in `infra/settings.yaml`, the accelerator generates one **automatically**.
 
@@ -483,7 +506,7 @@ All resources follow a **consistent naming pattern**. When a name is left empty 
 > [!NOTE]
 > The `uniqueSuffix` is a deterministic hash derived from the subscription ID, resource group ID, resource group name, solution name, and location. This ensures names are globally unique but reproducible across repeated deployments to the same environment.
 
-## Project Structure
+## 📁 Project Structure
 
 The repository follows a **modular layout** separating infrastructure orchestration (`infra/`) from source Bicep modules (`src/`). Each module is **self-contained** with explicit parameter contracts and documented dependencies.
 
@@ -519,11 +542,11 @@ APIM-Accelerator/
 │           └── main.bicep              # Virtual network (placeholder)
 ```
 
-## Usage
+## 💡 Usage
 
 After deployment, interact with the provisioned resources through the Azure portal, Azure CLI, or the developer portal. The following examples demonstrate common **operational tasks** across all provisioned components — API Management, developer portal, workspaces, monitoring, API Center, and networking.
 
-### Access the Developer Portal
+### 🖥️ Access the Developer Portal
 
 After deployment completes, the API Management developer portal is available at:
 
@@ -541,7 +564,7 @@ To customize sign-in and sign-up behavior:
 
 To disable the developer portal entirely, set `enableDeveloperPortal` to `false` in the APIM module parameters.
 
-### Manage Workspaces
+### 🏢 Manage Workspaces
 
 Add, remove, or rename workspaces by updating the `workspaces` array in `infra/settings.yaml`:
 
@@ -563,7 +586,7 @@ azd provision
 > [!IMPORTANT]
 > Workspaces require the **Premium** SKU tier. If `core.apiManagement.sku.name` is set to a non-Premium SKU, workspace deployment will fail.
 
-### Configure VNet Integration
+### 🛡️ Configure VNet Integration
 
 To deploy APIM behind a virtual network, override the Bicep parameters in `src/core/main.bicep` when calling the APIM module:
 
@@ -579,7 +602,7 @@ subnetResourceId: '/subscriptions/{sub}/resourceGroups/{rg}/providers/Microsoft.
 publicNetworkAccess: false
 ```
 
-### Change APIM SKU and Scaling
+### 📊 Change APIM SKU and Scaling
 
 Update the SKU and capacity in `infra/settings.yaml`:
 
@@ -600,7 +623,7 @@ azd provision
 > [!NOTE]
 > Changing from `Premium` to a lower SKU will remove workspace support and VNet integration capabilities. Plan accordingly.
 
-### Customize the Tagging Strategy
+### 🏷️ Customize the Tagging Strategy
 
 All 10 governance tags under `shared.tags` in `infra/settings.yaml` are applied to every resource. Update them to match your organization's cost management and compliance requirements:
 
@@ -621,7 +644,7 @@ shared:
 
 Component-level tags (`lz-component-type`, `component`) are automatically added by each module and do not need manual configuration.
 
-### Reuse an Existing Log Analytics Workspace
+### 🔗 Reuse an Existing Log Analytics Workspace
 
 To connect to a pre-existing Log Analytics workspace instead of creating a new one, set the `workSpaceResourceId` property:
 
@@ -633,7 +656,7 @@ shared:
       workSpaceResourceId: "/subscriptions/{sub}/resourceGroups/{rg}/providers/Microsoft.OperationalInsights/workspaces/{name}"
 ```
 
-### Tune Application Insights Retention and Access
+### 📈 Tune Application Insights Retention and Access
 
 Override Application Insights Bicep parameters in `src/shared/monitoring/insights/main.bicep` for production hardening:
 
@@ -644,7 +667,7 @@ Override Application Insights Bicep parameters in `src/shared/monitoring/insight
 | 🔍 `publicNetworkAccessForQuery`     | `Disabled`                             |
 | 🔄 `ingestionMode`                   | `LogAnalytics` (default — recommended) |
 
-### Configure API Center Identity
+### 🔐 Configure API Center Identity
 
 Update the API Center managed identity in `infra/settings.yaml`:
 
@@ -659,7 +682,7 @@ inventory:
 
 The API Center module automatically creates RBAC role assignments (Data Reader and Compliance Manager) for the API Center's managed identity on the connected APIM instance.
 
-### Query Logs with KQL
+### 🔍 Query Logs with KQL
 
 Access the Log Analytics workspace to query API Management diagnostic logs:
 
@@ -679,11 +702,11 @@ ApiManagementGatewayLogs
 | order by avg_TotalTime desc
 ```
 
-### View API Inventory
+### 📋 View API Inventory
 
 Browse the centralized API catalog in the Azure portal under the deployed API Center resource. APIs from the connected API Management instance are automatically discovered and synchronized through the APIM source integration configured in `src/inventory/main.bicep`.
 
-## Troubleshooting
+## 🔧 Troubleshooting
 
 Common issues and their resolutions when deploying or operating the APIM Accelerator.
 
@@ -696,7 +719,7 @@ Common issues and their resolutions when deploying or operating the APIM Acceler
 | ⚠️ Workspace creation fails              | Non-Premium SKU selected                         | Workspaces require the Premium SKU tier — update `core.apiManagement.sku.name`                                        |
 | 🔧 Storage account name conflict         | Globally unique name collision                   | Storage names are auto-generated using `generateStorageAccountName()` — redeploy with a different resource group name |
 
-## Contributing
+## 🤝 Contributing
 
 Contributions to the APIM Accelerator are welcome. Whether you are fixing a bug, improving documentation, or adding a new feature module, your contributions help the community build better API platforms on Azure.
 
@@ -715,7 +738,7 @@ To contribute, follow the **standard GitHub workflow**: fork the repository, cre
 6. Push to the branch (`git push origin feature/my-feature`)
 7. Open a Pull Request
 
-## License
+## 📄 License
 
 This project is licensed under the **MIT License**. See the [LICENSE](LICENSE) file for details.
 
