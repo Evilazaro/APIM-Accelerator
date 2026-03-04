@@ -4,11 +4,13 @@
 
 ### 📖 Overview
 
-This Business Architecture analysis documents the APIM Accelerator repository — a production-ready Azure landing zone accelerator for deploying and governing a complete API Management platform. The accelerator addresses the enterprise business need for standardized, repeatable API platform provisioning with integrated governance, monitoring, and developer self-service capabilities. The solution targets Enterprise Architects, Platform Engineers, and API Program Managers responsible for establishing API-first strategies.
+This Business Architecture analysis documents the APIM Accelerator repository — a **production-ready Azure landing zone accelerator** for deploying and governing a complete API Management platform. The accelerator addresses the enterprise business need for **standardized, repeatable API platform provisioning** with integrated governance, monitoring, and developer self-service capabilities. The solution targets **Enterprise Architects, Platform Engineers, and API Program Managers** responsible for establishing API-first strategies.
 
-The analysis identified **31 Business layer components** across 9 of the Business Architecture types. Business capabilities span three strategic layers: shared observability infrastructure, core API Management platform, and API inventory governance. Components were extracted from infrastructure-as-code templates (Bicep), configuration files (YAML/JSON), deployment automation scripts, and project documentation.
+The analysis identified **31 Business layer components** across 9 of the Business Architecture types. Business capabilities span **three strategic layers**: shared observability infrastructure, core API Management platform, and API inventory governance. Components were extracted from infrastructure-as-code templates (Bicep), configuration files (YAML/JSON), deployment automation scripts, and project documentation.
 
-Key findings include a mature capability model organized around modular deployment layers, well-defined value streams for API lifecycle management, and comprehensive governance tagging that supports cost allocation, compliance tracking, and organizational ownership. The accelerator implements a single-command deployment model (`azd up`) that orchestrates the entire provisioning sequence, demonstrating a streamlined business process for platform delivery. Gap areas include the absence of formal KPI definitions, no business object/entity models, and a placeholder networking layer that constrains the current private deployment story.
+Key findings include a mature capability model organized around modular deployment layers, well-defined value streams for API lifecycle management, and comprehensive governance tagging that supports cost allocation, compliance tracking, and organizational ownership. The accelerator implements a **single-command deployment model** (`azd up`) that orchestrates the entire provisioning sequence, demonstrating a streamlined business process for platform delivery.
+
+> 📌 **Gap Areas**: Gap areas include the absence of formal KPI definitions, no business object/entity models, and a placeholder networking layer that constrains the current private deployment story.
 
 - **Business Strategy**: 2 components (API-first platform strategy, multi-environment deployment strategy)
 - **Business Capabilities**: 6 components (API Gateway Management, Developer Self-Service, API Inventory Governance, Observability & Monitoring, Identity & Access Management, Multi-Team Workspace Isolation)
@@ -26,11 +28,11 @@ Key findings include a mature capability model organized around modular deployme
 
 ## 🌍 2. Architecture Landscape
 
-### 📖 Overview
+### 📖 Landscape Overview
 
 This section provides a structured inventory of all Business layer components identified across the APIM Accelerator repository. Components are organized by the Business Architecture types.
 
-The accelerator's business architecture is fundamentally an infrastructure platform that delivers API Management as a self-service capability. Business components are encoded in infrastructure-as-code (Bicep), deployment configuration (YAML), and automation scripts (Shell), rather than in traditional application code. This architectural pattern is characteristic of platform engineering initiatives where the "product" is a reusable infrastructure template.
+The accelerator's business architecture is fundamentally an **infrastructure platform** that delivers API Management as a **self-service capability**. Business components are encoded in infrastructure-as-code (Bicep), deployment configuration (YAML), and automation scripts (Shell), rather than in traditional application code. This architectural pattern is characteristic of platform engineering initiatives where the "product" is a reusable infrastructure template.
 
 ### 🎯 2.1 Business Strategy (2)
 
@@ -169,21 +171,23 @@ flowchart TB
     classDef warning  fill:#FFF4CE,stroke:#FFB900,stroke-width:2px,color:#986F0B
 ```
 
-### ✅ Summary
+### ✅ Landscape Summary
 
 The APIM Accelerator repository contains **31 identified Business layer components** distributed across 9 of 11 component types. The dominant patterns are business capabilities (6 components) and business services/rules (4 components each), reflecting the accelerator's focus on platform capability delivery and governance enforcement. The strongest components are concentrated in the core API gateway, developer portal, observability, and deployment orchestration areas.
 
-Two component types — Business Objects/Entities and KPIs & Metrics — returned zero components, consistent with the repository's nature as an infrastructure-as-code platform accelerator rather than a business application. Recommended next steps include defining explicit KPI thresholds for API platform adoption (e.g., time-to-first-API-publish, developer portal onboarding rate), formalizing business entity models if the accelerator scope expands, and upgrading the networking layer from placeholder to production-ready.
+Two component types — Business Objects/Entities and KPIs & Metrics — returned zero components, consistent with the repository's nature as an infrastructure-as-code platform accelerator rather than a business application.
+
+> 💡 **Recommended Next Steps**: Recommended next steps include defining explicit KPI thresholds for API platform adoption (e.g., time-to-first-API-publish, developer portal onboarding rate), formalizing business entity models if the accelerator scope expands, and upgrading the networking layer from placeholder to production-ready.
 
 ---
 
 ## 🏛️ 3. Architecture Principles
 
-### 📖 Overview
+### 📖 Principles Overview
 
 The APIM Accelerator exhibits several well-defined architecture principles that guide the design and governance of the platform. These principles are inferred from source code patterns, configuration structures, and documented design decisions rather than explicitly declared in a principles catalog. They align with 10 Architecture Principles and reflect enterprise-grade platform engineering practices.
 
-Each principle below is documented using a structured attribute table format. All principles are active (implemented in code) rather than aspirational.
+Each principle below is documented using a structured attribute table format. All principles are **active (implemented in code)** rather than aspirational.
 
 ### 🧩 3.1 Modularity & Separation of Concerns
 
@@ -191,7 +195,7 @@ Each principle below is documented using a structured attribute table format. Al
 | ----------------------- | ---------------------------------------------------------------------------------------------------------------------- |
 | **Principle Statement** | Decompose the platform into independently deployable, loosely coupled modules with explicit parameter contracts.       |
 | **Rationale**           | Modular boundaries enable independent testing, selective deployment, and isolated failure domains across the platform. |
-| **Implications**        | All inter-module communication must use typed parameters and outputs; implicit dependencies are prohibited.            |
+| **Implications**        | All inter-module communication **must** use typed parameters and outputs; **implicit dependencies are prohibited**.    |
 
 ### ⚙️ 3.2 Configuration Over Code
 
@@ -199,7 +203,7 @@ Each principle below is documented using a structured attribute table format. Al
 | ----------------------- | ---------------------------------------------------------------------------------------------------------------------------- |
 | **Principle Statement** | Externalize all environment-specific settings into a single configuration file, keeping code templates environment-agnostic. |
 | **Rationale**           | A single configuration source prevents environment drift and enables consistent multi-environment deployments.               |
-| **Implications**        | Bicep templates must contain no hardcoded environment values; all tunable parameters flow from settings.yaml.                |
+| **Implications**        | Bicep templates **must contain no hardcoded environment values**; all tunable parameters flow from settings.yaml.            |
 
 ### 🔒 3.3 Type Safety & Contract Enforcement
 
@@ -207,7 +211,7 @@ Each principle below is documented using a structured attribute table format. Al
 | ----------------------- | ------------------------------------------------------------------------------------------------------------------------------- |
 | **Principle Statement** | Define explicit type contracts for all module interfaces to prevent misconfiguration and enable compile-time validation.        |
 | **Rationale**           | Type safety catches invalid configurations at Bicep compilation rather than at Azure deployment time, reducing feedback cycles. |
-| **Implications**        | New modules must import and conform to shared type definitions; ad-hoc parameter typing is prohibited.                          |
+| **Implications**        | New modules **must** import and conform to shared type definitions; **ad-hoc parameter typing is prohibited**.                  |
 
 ### 🛡️ 3.4 Governance by Default
 
@@ -223,7 +227,7 @@ Each principle below is documented using a structured attribute table format. Al
 | ----------------------- | ------------------------------------------------------------------------------------------------------------------------------------ |
 | **Principle Statement** | Deploy monitoring and logging infrastructure before application components, ensuring all resources have observability from creation. |
 | **Rationale**           | Foundation-first monitoring guarantees diagnostic coverage from the first deployment, preventing blind spots.                        |
-| **Implications**        | The shared monitoring layer must always deploy first; core and inventory modules depend on monitoring outputs.                       |
+| **Implications**        | The shared monitoring layer **must always deploy first**; core and inventory modules depend on monitoring outputs.                   |
 
 ### 🔁 3.6 Deterministic & Idempotent Deployments
 
@@ -231,7 +235,7 @@ Each principle below is documented using a structured attribute table format. Al
 | ----------------------- | ------------------------------------------------------------------------------------------------------------------------------ |
 | **Principle Statement** | Ensure deployments are reproducible, collision-free, and safely re-runnable without side effects.                              |
 | **Rationale**           | Deterministic naming and idempotent operations prevent deployment failures from naming conflicts and enable safe redeployment. |
-| **Implications**        | Resource names must use uniqueString hashes; RBAC assignments must use guid-based deterministic names.                         |
+| **Implications**        | Resource names **must** use uniqueString hashes; RBAC assignments **must** use guid-based deterministic names.                 |
 
 ### 🚧 3.7 Self-Service with Guardrails
 
@@ -239,17 +243,17 @@ Each principle below is documented using a structured attribute table format. Al
 | ----------------------- | --------------------------------------------------------------------------------------------------------------------------------------- |
 | **Principle Statement** | Enable self-service consumption through the developer portal while enforcing authentication, terms-of-service, and tenant restrictions. |
 | **Rationale**           | Controlled self-service balances developer autonomy with organizational security and compliance requirements.                           |
-| **Implications**        | Developer portal access requires Azure AD authentication; anonymous access and unrestricted tenant access are prohibited.               |
+| **Implications**        | Developer portal access **requires** Azure AD authentication; **anonymous access and unrestricted tenant access are prohibited**.       |
 
 ---
 
 ## 📍 4. Current State Baseline
 
-### 📖 Overview
+### 📖 Baseline Overview
 
 The current-state baseline represents the as-is architecture of the APIM Accelerator as encoded in the repository's infrastructure-as-code templates, configuration files, and deployment automation. This analysis evaluates the completeness of value stream coverage and the operational readiness of the platform.
 
-The accelerator is in a production-ready state for its core deployment scope (API Management + monitoring + API Center governance). All three deployment layers are fully implemented with typed parameter contracts, diagnostic integration, and governance tagging.
+The accelerator is in a **production-ready state** for its core deployment scope (API Management + monitoring + API Center governance). All **three deployment layers** are fully implemented with typed parameter contracts, diagnostic integration, and governance tagging.
 
 ### 📋 4.1 Capability Assessment
 
@@ -374,21 +378,23 @@ flowchart TB
     classDef data     fill:#E1DFDD,stroke:#8378DE,stroke-width:2px,color:#5B5FC7
 ```
 
-### ✅ Summary
+### ✅ Baseline Summary
 
 The APIM Accelerator presents a well-structured current-state architecture with strong capabilities in core API gateway, developer portal, and observability. Configuration coverage is comprehensive for naming, tagging, identity, and multi-environment deployment. The deployment process is fully automated via azd with a three-layer sequential orchestration and pre-provision cleanup.
 
-Three areas require attention for advancement: the networking layer remains a placeholder blocking private APIM deployment scenarios, the developer portal Azure AD tenant list contains only a sample value requiring parameterization, and API Center is configured with a single default workspace limiting multi-team governance scenarios. Recommended next steps include implementing a production-ready VNet module, parameterizing Azure AD tenant domains through settings.yaml, and extending the API Center workspace model.
+> ⚠️ **Attention Required**: Three areas require attention for advancement: the networking layer remains a placeholder blocking private APIM deployment scenarios, the developer portal Azure AD tenant list contains only a sample value requiring parameterization, and API Center is configured with a single default workspace limiting multi-team governance scenarios.
+
+> 💡 **Recommended Next Steps**: Recommended next steps include implementing a **production-ready VNet module**, parameterizing Azure AD tenant domains through settings.yaml, and extending the API Center workspace model.
 
 ---
 
 ## 📚 5. Component Catalog
 
-### 📖 Overview
+### 📖 Catalog Overview
 
 This section provides detailed specifications for each identified Business layer component. Components are organized by the Business Architecture types with specifications expanding on the inventory tables in Section 2. Each component entry includes attribute tables with relationship mappings.
 
-All components are verified against source files in the repository root. No fabricated components are included — every entry is traceable to specific files and line ranges. A total of 31 components are documented in detail across 9 active component types.
+All components are verified against source files in the repository root. No fabricated components are included — every entry is **traceable to specific files and line ranges**. A total of **31 components** are documented in detail across 9 active component types.
 
 ### 🎯 5.1 Business Strategy Specifications
 
@@ -894,19 +900,21 @@ This subsection documents Business KPIs and performance metrics. Zero instances 
 | ------------ | ------------ |
 | Not detected | Not detected |
 
-### ✅ Summary
+### ✅ Catalog Summary
 
 The Component Catalog documents **31 components** across 9 of 11 Business Architecture types. The strongest components are API Gateway Management, Monitoring & Diagnostics Service, and Landing Zone Deployment process. Four capabilities and three services have achieved production-ready status, demonstrating quantitative management with metrics-capable monitoring infrastructure.
 
-Two component types — Business Objects/Entities and KPIs & Metrics — have zero detected components, consistent with the repository's nature as an infrastructure platform accelerator. Key improvement areas include: defining formal business KPIs for platform adoption and API governance effectiveness, introducing business entity models if the accelerator scope expands to API product management, and upgrading the networking layer from placeholder to production-ready to enable private APIM deployment scenarios.
+Two component types — Business Objects/Entities and KPIs & Metrics — have zero detected components, consistent with the repository's nature as an infrastructure platform accelerator.
+
+> 💡 **Key Improvement Areas**: Key improvement areas include: defining formal business KPIs for platform adoption and API governance effectiveness, introducing business entity models if the accelerator scope expands to API product management, and upgrading the networking layer from placeholder to production-ready to enable private APIM deployment scenarios.
 
 ---
 
 ## 🔗 8. Dependencies & Integration
 
-### 📖 Overview
+### 📖 Dependencies Overview
 
-This section maps cross-layer dependencies, component integration patterns, and module coupling within the APIM Accelerator. The platform follows a strict layered dependency model where each deployment layer depends on outputs from the previous layer. All inter-module communication uses typed Bicep parameters and outputs, ensuring explicit and compile-time-validated contracts with no implicit or runtime-discovered dependencies.
+This section maps cross-layer dependencies, component integration patterns, and module coupling within the APIM Accelerator. The platform follows a **strict layered dependency model** where each deployment layer depends on outputs from the previous layer. All inter-module communication uses typed Bicep parameters and outputs, ensuring **explicit and compile-time-validated contracts** with no implicit or runtime-discovered dependencies.
 
 The integration architecture is organized around three deployment layers (Shared, Core, Inventory) with a clear dependency direction: upstream modules produce outputs consumed by downstream modules. This pattern enables independent module testing, predictable deployment ordering, and isolated failure domains. Cross-cutting concerns (naming, tagging, identity) are centralized in shared utility modules imported by all layers.
 
@@ -1112,8 +1120,10 @@ flowchart TB
     classDef external fill:#F3F2F1,stroke:#605E5C,stroke-width:2px,color:#323130
 ```
 
-### ✅ Summary
+### ✅ Dependencies Summary
 
-The APIM Accelerator follows a strict unidirectional layered dependency model: Configuration to Shared to Core to Inventory. All 11 inter-module data flows use explicitly typed Bicep parameters and outputs, with no implicit dependencies. Shared utilities (common-types.bicep, constants.bicep) provide cross-cutting type safety and naming consistency. The coupling pattern is healthy with high internal cohesion and minimal external coupling through well-defined contracts.
+The APIM Accelerator follows a **strict unidirectional layered dependency model**: Configuration to Shared to Core to Inventory. All **11 inter-module data flows** use explicitly typed Bicep parameters and outputs, with no implicit dependencies. Shared utilities (common-types.bicep, constants.bicep) provide cross-cutting type safety and naming consistency. The coupling pattern is healthy with high internal cohesion and minimal external coupling through well-defined contracts.
 
-Risk areas include: the developer portal clientSecret parameter receiving the AZURE_CLIENT_SECRET_CLIENT_ID output (potential configuration concern in src/core/main.bicep:280), the networking module remaining as a placeholder not integrated into the dependency chain, and seven external tooling dependencies creating a prerequisite burden for new deployers. Recommended next steps include validating the client secret configuration, implementing the networking module to complete the dependency chain, and documenting minimum tooling prerequisites in a pre-flight check script.
+> ⚠️ **Risk Areas**: Risk areas include: the developer portal clientSecret parameter receiving the AZURE_CLIENT_SECRET_CLIENT_ID output (potential configuration concern in src/core/main.bicep:280), the networking module remaining as a placeholder not integrated into the dependency chain, and seven external tooling dependencies creating a prerequisite burden for new deployers.
+
+> 💡 **Recommended Next Steps**: Recommended next steps include validating the client secret configuration, implementing the networking module to complete the dependency chain, and documenting minimum tooling prerequisites in a pre-flight check script.
