@@ -8,11 +8,9 @@
 
 ## Overview
 
-**Overview**
+The APIM Accelerator is a **production-ready** Azure landing zone accelerator that deploys a complete API Management platform using Bicep Infrastructure-as-Code templates and Azure Developer CLI (`azd`). It provides enterprise teams with a **standardized, repeatable foundation** for governing, publishing, and monitoring APIs at scale on Azure.
 
-The APIM Accelerator is a production-ready Azure landing zone accelerator that deploys a complete API Management platform using Bicep Infrastructure-as-Code templates and Azure Developer CLI (`azd`). It provides enterprise teams with a standardized, repeatable foundation for governing, publishing, and monitoring APIs at scale on Azure.
-
-The accelerator follows a modular architecture organized into three deployment layers — shared monitoring infrastructure, core API Management platform, and API inventory governance — each orchestrated through a single subscription-level Bicep template. Deploy the entire solution with a single `azd up` command, receiving a fully configured API Management instance with integrated monitoring, developer portal, workspaces for team isolation, and centralized API governance through Azure API Center.
+The accelerator follows a **modular architecture** organized into **three deployment layers** — shared monitoring infrastructure, core API Management platform, and API inventory governance — each orchestrated through a single **subscription-level** Bicep template. Deploy the entire solution with a single `azd up` command, receiving a fully configured API Management instance with integrated monitoring, developer portal, workspaces for team isolation, and centralized API governance through Azure API Center.
 
 > [!NOTE]
 > This accelerator deploys Azure API Management with the **Premium** SKU by default, which enables features such as multi-region deployments, VNet integration, and workspaces. Review the [Configuration](#configuration) section to adjust the SKU tier for non-production environments.
@@ -34,9 +32,7 @@ The accelerator follows a modular architecture organized into three deployment l
 
 ## Architecture
 
-**Overview**
-
-The solution uses a layered deployment model at Azure subscription scope. The orchestration template (`infra/main.bicep`) creates a resource group and deploys three module layers in sequence, with each layer building on the outputs of the previous one.
+The solution uses a **layered deployment model** at Azure **subscription scope**. The orchestration template (`infra/main.bicep`) creates a resource group and deploys three module layers in sequence, with each layer building on the outputs of the previous one.
 
 ```mermaid
 ---
@@ -117,11 +113,9 @@ flowchart TB
 
 ## Features
 
-**Overview**
+The accelerator provides a comprehensive API Management landing zone with **enterprise-grade capabilities** spanning governance, security, monitoring, and developer experience. Each feature is implemented as a **modular Bicep component** that can be customized independently.
 
-The accelerator provides a comprehensive API Management landing zone with enterprise-grade capabilities spanning governance, security, monitoring, and developer experience. Each feature is implemented as a modular Bicep component that can be customized independently.
-
-These capabilities address the key challenges of API platform management at scale — from consistent infrastructure provisioning and identity management to centralized API discovery and compliance enforcement — enabling platform teams to onboard API producers and consumers efficiently.
+These capabilities address the key challenges of API platform management **at scale** — from consistent infrastructure provisioning and identity management to centralized API discovery and compliance enforcement — enabling platform teams to onboard API producers and consumers efficiently.
 
 | Feature                      | Description                                                                              | Status     |
 | ---------------------------- | ---------------------------------------------------------------------------------------- | ---------- |
@@ -140,9 +134,7 @@ These capabilities address the key challenges of API platform management at scal
 
 ## Requirements
 
-**Overview**
-
-Before deploying the APIM Accelerator, ensure your environment meets the prerequisites below. The accelerator requires an active Azure subscription with sufficient permissions to create resources at the subscription scope, along with local tooling for infrastructure deployment.
+Before deploying the APIM Accelerator, ensure your environment meets the prerequisites below. The accelerator requires an **active Azure subscription** with **sufficient permissions** to create resources at the **subscription scope**, along with local tooling for infrastructure deployment.
 
 These requirements are the minimum needed for a successful deployment. The Azure Developer CLI handles most of the orchestration, while the Bicep templates are compiled and deployed automatically during provisioning.
 
@@ -161,9 +153,7 @@ These requirements are the minimum needed for a successful deployment. The Azure
 
 ## Quick Start
 
-**Overview**
-
-Get the APIM Accelerator deployed in your Azure subscription with three commands. This minimal workflow provisions all infrastructure components including API Management, monitoring, and API Center governance.
+Get the APIM Accelerator deployed in your Azure subscription with **three commands**. This minimal workflow provisions all infrastructure components including API Management, monitoring, and API Center governance.
 
 1. **Clone the repository**
 
@@ -194,9 +184,7 @@ Get the APIM Accelerator deployed in your Azure subscription with three commands
 
 ## Deployment
 
-**Overview**
-
-The accelerator supports multiple deployment workflows depending on your needs. Use `azd up` for a full end-to-end deployment, or use individual commands for more granular control over the provisioning process.
+The accelerator supports **multiple deployment workflows** depending on your needs. Use `azd up` for a **full end-to-end deployment**, or use individual commands for more granular control over the provisioning process.
 
 ### Full Deployment
 
@@ -240,9 +228,7 @@ The pre-provision script automatically purges soft-deleted APIM instances to pre
 
 ## Configuration
 
-**Overview**
-
-All environment-specific configuration is centralized in `infra/settings.yaml`, which controls resource naming, SKU tiers, identity settings, tagging strategies, monitoring parameters, and component-level tuning. The orchestration template loads this file at deploy time and distributes settings to each module. Empty name fields trigger automatic name generation using the solution name and a deterministic unique suffix derived from the subscription and resource group.
+All environment-specific configuration is **centralized** in `infra/settings.yaml`, which controls resource naming, SKU tiers, identity settings, tagging strategies, monitoring parameters, and component-level tuning. The orchestration template loads this file at deploy time and distributes settings to each module. Empty name fields trigger **automatic name generation** using the solution name and a deterministic unique suffix derived from the subscription and resource group.
 
 The configuration is organized into four sections — global settings, shared infrastructure, core platform, and inventory services — each mapping directly to the corresponding deployment module. Additional parameters for networking, developer portal authentication, and Application Insights tuning are available as Bicep parameters in their respective modules.
 
@@ -343,7 +329,7 @@ Settings under `core.apiManagement` control the APIM service deployment. The API
 
 ### Workspace Configuration
 
-Workspaces provide logical isolation for APIs within a single APIM instance. Each workspace entry in the settings creates a separate `Microsoft.ApiManagement/service/workspaces` resource.
+Workspaces provide **logical isolation** for APIs within a single APIM instance. Each workspace entry in the settings creates a separate `Microsoft.ApiManagement/service/workspaces` resource.
 
 ```yaml
 core:
@@ -363,7 +349,7 @@ core:
 
 ### Developer Portal & Azure AD Authentication
 
-The developer portal module (`src/core/developer-portal.bicep`) configures Azure AD as the identity provider, CORS policies, and sign-in/sign-up settings. Customization requires editing the Bicep module directly.
+The developer portal module (`src/core/developer-portal.bicep`) configures **Azure AD** as the identity provider, CORS policies, and sign-in/sign-up settings. Customization requires **editing the Bicep module directly**.
 
 | Setting              | Location                                              | Description                                        | Default                                               |
 | -------------------- | ----------------------------------------------------- | -------------------------------------------------- | ----------------------------------------------------- |
@@ -431,7 +417,7 @@ A storage account is automatically provisioned for long-term diagnostic log arch
 
 ### API Center & Inventory Configuration
 
-API Center provides centralized API governance, catalog, and compliance management. It automatically integrates with the deployed APIM instance for API discovery.
+API Center provides **centralized API governance**, catalog, and compliance management. It **automatically integrates** with the deployed APIM instance for API discovery.
 
 | Setting              | Path                                                  | Description                                                                   | Default          |
 | -------------------- | ----------------------------------------------------- | ----------------------------------------------------------------------------- | ---------------- |
@@ -468,7 +454,7 @@ Additional component-level tags (`lz-component-type`, `component`) are automatic
 
 ### Resource Naming Conventions
 
-All resources follow a consistent naming pattern. When a name is left empty in `infra/settings.yaml`, the accelerator generates one automatically.
+All resources follow a **consistent naming pattern**. When a name is left empty in `infra/settings.yaml`, the accelerator generates one **automatically**.
 
 | Resource                | Naming Pattern                           | Example                               |
 | ----------------------- | ---------------------------------------- | ------------------------------------- |
@@ -484,9 +470,7 @@ All resources follow a consistent naming pattern. When a name is left empty in `
 
 ## Project Structure
 
-**Overview**
-
-The repository follows a modular layout separating infrastructure orchestration (`infra/`) from source Bicep modules (`src/`). Each module is self-contained with explicit parameter contracts and documented dependencies.
+The repository follows a **modular layout** separating infrastructure orchestration (`infra/`) from source Bicep modules (`src/`). Each module is **self-contained** with explicit parameter contracts and documented dependencies.
 
 ```text
 APIM-Accelerator/
@@ -522,9 +506,7 @@ APIM-Accelerator/
 
 ## Usage
 
-**Overview**
-
-After deployment, interact with the provisioned resources through the Azure portal, Azure CLI, or the developer portal. The following examples demonstrate common operational tasks across all provisioned components — API Management, developer portal, workspaces, monitoring, API Center, and networking.
+After deployment, interact with the provisioned resources through the Azure portal, Azure CLI, or the developer portal. The following examples demonstrate common **operational tasks** across all provisioned components — API Management, developer portal, workspaces, monitoring, API Center, and networking.
 
 ### Access the Developer Portal
 
@@ -534,7 +516,7 @@ After deployment completes, the API Management developer portal is available at:
 https://{apim-name}.developer.azure-api.net
 ```
 
-The developer portal is configured with Azure AD authentication. Users must sign in with an account from a tenant listed in the `allowedTenants` array in `src/core/developer-portal.bicep`. Update this array with your organization's tenant domain(s) before first use.
+The developer portal is configured with **Azure AD authentication**. Users **must sign in** with an account from a tenant listed in the `allowedTenants` array in `src/core/developer-portal.bicep`. Update this array with your organization's tenant domain(s) before first use.
 
 To customize sign-in and sign-up behavior:
 
@@ -688,8 +670,6 @@ Browse the centralized API catalog in the Azure portal under the deployed API Ce
 
 ## Troubleshooting
 
-**Overview**
-
 Common issues and their resolutions when deploying or operating the APIM Accelerator.
 
 | Issue                                    | Cause                                            | Resolution                                                                                                            |
@@ -703,11 +683,9 @@ Common issues and their resolutions when deploying or operating the APIM Acceler
 
 ## Contributing
 
-**Overview**
-
 Contributions to the APIM Accelerator are welcome. Whether you are fixing a bug, improving documentation, or adding a new feature module, your contributions help the community build better API platforms on Azure.
 
-To contribute, follow the standard GitHub workflow: fork the repository, create a feature branch, make your changes, and submit a pull request. Ensure all Bicep templates compile without errors using `az bicep build` before submitting.
+To contribute, follow the **standard GitHub workflow**: fork the repository, create a feature branch, make your changes, and submit a pull request. Ensure all Bicep templates **compile without errors** using `az bicep build` before submitting.
 
 1. Fork the repository
 2. Create a feature branch (`git checkout -b feature/my-feature`)
