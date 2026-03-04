@@ -41,12 +41,25 @@ config:
   theme: base
   look: classic
   layout: dagre
+  themeVariables:
+    fontSize: '16px'
   flowchart:
     htmlLabels: true
 ---
 flowchart TB
     accTitle: APIM Accelerator Landing Zone Architecture
     accDescr: Shows the three-layer deployment architecture with shared monitoring, core API Management platform, and API inventory governance components
+
+    %% ═══════════════════════════════════════════════════════════════════════════
+    %% AZURE / FLUENT ARCHITECTURE PATTERN v1.1
+    %% (Semantic + Structural + Font + Accessibility Governance)
+    %% ═══════════════════════════════════════════════════════════════════════════
+    %% PHASE 1 - STRUCTURAL: Direction explicit, flat topology, nesting ≤ 3
+    %% PHASE 2 - SEMANTIC: Colors justified, max 5 semantic classes, neutral-first
+    %% PHASE 3 - FONT: Dark text on light backgrounds, contrast ≥ 4.5:1
+    %% PHASE 4 - ACCESSIBILITY: accTitle/accDescr present, icons on all nodes
+    %% PHASE 5 - STANDARD: Governance block present, classDefs centralized
+    %% ═══════════════════════════════════════════════════════════════════════════
 
     subgraph azure["☁️ Azure Subscription"]
         direction TB
@@ -56,8 +69,8 @@ flowchart TB
 
             subgraph shared["🔍 Shared Infrastructure Layer"]
                 direction LR
-                law["📊 Log Analytics Workspace"]:::core
-                ai["📈 Application Insights"]:::core
+                law["📊 Log Analytics Workspace"]:::monitoring
+                ai["📈 Application Insights"]:::monitoring
                 sa["🗄️ Storage Account"]:::data
             end
 
@@ -86,14 +99,16 @@ flowchart TB
     apim --> ac
     ac --> acsrc
 
-    style azure fill:#F3F2F1,stroke:#605E5C,stroke-width:2px
-    style rg fill:#FAFAFA,stroke:#8A8886,stroke-width:2px
-    style shared fill:#DEECF9,stroke:#0078D4,stroke-width:1px
-    style core fill:#FFF4CE,stroke:#FFB900,stroke-width:1px
-    style inventory fill:#DFF6DD,stroke:#107C10,stroke-width:1px
+    %% Subgraph styling (5 subgraphs = 5 style directives)
+    style azure fill:#F3F2F1,stroke:#605E5C,stroke-width:2px,color:#323130
+    style rg fill:#FAFAFA,stroke:#8A8886,stroke-width:2px,color:#323130
+    style shared fill:#DEECF9,stroke:#0078D4,stroke-width:2px,color:#004578
+    style core fill:#FFF4CE,stroke:#FFB900,stroke-width:2px,color:#986F0B
+    style inventory fill:#DFF6DD,stroke:#107C10,stroke-width:2px,color:#0B6A0B
 
+    %% classDef declarations (centralized at end for pattern compliance)
     classDef primary fill:#FFF4CE,stroke:#FFB900,stroke-width:2px,color:#986F0B
-    classDef core fill:#DEECF9,stroke:#0078D4,stroke-width:2px,color:#004578
+    classDef monitoring fill:#DEECF9,stroke:#0078D4,stroke-width:2px,color:#004578
     classDef data fill:#F3F2F1,stroke:#8A8886,stroke-width:2px,color:#323130
     classDef success fill:#DFF6DD,stroke:#107C10,stroke-width:2px,color:#0B6A0B
 ```
