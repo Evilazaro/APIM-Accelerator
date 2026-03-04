@@ -27,9 +27,11 @@ The solution uses a **modular 3-tier deployment pattern** orchestrated by Azure 
 
 ## 🏗️ Architecture
 
-The APIM Accelerator deploys at the **Azure subscription scope**, creating a single resource group that contains **three deployment tiers**. Each tier builds upon the previous one, ensuring that monitoring infrastructure exists before the API gateway starts emitting telemetry, and that the API platform is operational before the inventory layer attempts API discovery.
+The APIM Accelerator deploys at the **Azure subscription scope** (`targetScope = 'subscription'`), creating a single resource group that contains **three sequentially-deployed Bicep module tiers**. Each tier builds upon the previous one — shared monitoring infrastructure provisions first so diagnostic endpoints exist before the API gateway emits telemetry, and the core platform must be operational before the inventory layer creates its API source link for auto-discovery.
 
-The architecture separates concerns into **independently deployable Bicep modules** — shared infrastructure handles observability across the entire landing zone, the core platform manages the API gateway lifecycle, and the inventory layer provides a centralized API catalog for governance and discoverability.
+The architecture separates concerns into **independently deployable Bicep modules** orchestrated by `infra/main.bicep`. All configuration is centralized in `infra/settings.yaml`, which is loaded at compile time via `loadYamlContent()` and passed as typed parameters to each module. This file-driven approach ensures every environment deploys identically — only `AZURE_ENV_NAME` and `AZURE_LOCATION` (injected by `azd`) differ between development, staging, and production.
+
+### Infrastructure Architecture
 
 ```mermaid
 ---
@@ -43,7 +45,7 @@ config:
 ---
 flowchart TB
     accTitle: APIM Accelerator Landing Zone Architecture
-    accDescr: Shows the 3-tier deployment of shared monitoring, core API Management platform, and API inventory within a single Azure resource group
+    accDescr: Shows subscription-scope deployment with three Bicep module tiers, telemetry flows, RBAC identity assignments, and API governance within a single Azure resource group
 
     %% AZURE / FLUENT v1.1
     %% PHASE 1 - STRUCTURAL: Direction explicit, flat topology, nesting ≤ 3
@@ -53,54 +55,162 @@ flowchart TB
     %% PHASE 5 - STANDARD: Governance block present, classDefs centralized
     %% ═══════════════════════════════════════════════════════════════════════════
 
-    subgraph landingZone["🏢 APIM Accelerator Landing Zone"]
+    subgraph subscription["☁️ Azure Subscription (Deployment Scope)"]
         direction TB
 
-        subgraph sharedInfra["📊 Shared Infrastructure"]
-            law["📋 Log Analytics<br/>Workspace"]:::core
-            storage["📦 Storage Account<br/>(Diagnostics)"]:::core
-            appInsights["📈 Application Insights<br/>(APM)"]:::success
-        end
+        subgraph resourceGroup["📦 Resource Group"]
+            direction TB
 
-        subgraph corePlatform["⚙️ Core Platform"]
-            apim["🌐 API Management<br/>(Premium)"]:::success
-            devPortal["🔑 Developer Portal<br/>(Azure AD)"]:::success
-            workspaces["👥 APIM Workspaces<br/>(Team Isolation)"]:::success
-        end
+            subgraph sharedInfra["📊 Tier 1 — Shared Infrastructure"]
+                direction LR
+                law["📋 Log Analytics Workspace<br/>(PerGB2018 · Self-Monitoring)"]:::core
+                storage["📦 Storage Account<br/>(Standard_LRS · Diagnostic Archive)"]:::core
+                appInsights["📈 Application Insights<br/>(Workspace-Based · 90d Retention)"]:::core
+            end
 
-        subgraph apiInventory["🗄️ API Inventory"]
-            apiCenter["📚 API Center<br/>(Governance)"]:::warning
-        end
+            subgraph corePlatform["⚙️ Tier 2 — Core Platform"]
+                direction LR
+                apim["🌐 API Management<br/>(Configurable SKU · SystemAssigned)"]:::success
+                devPortal["🔑 Developer Portal<br/>(Azure AD · MSAL 2.0)"]:::success
+                workspaces["👥 APIM Workspaces<br/>(Team Isolation · Premium)"]:::success
+            end
 
-        apim -->|"emits logs"| law
-        apim -->|"sends telemetry"| appInsights
-        apim -->|"archives diagnostics"| storage
-        apim -->|"hosts"| devPortal
-        apim -->|"provides"| workspaces
-        apiCenter -->|"discovers APIs from"| apim
+            subgraph apiInventory["🗄️ Tier 3 — API Inventory"]
+                direction LR
+                apiCenter["📚 API Center<br/>(Governance Catalog · SystemAssigned)"]:::warning
+                apiSource["🔗 API Source Link<br/>(APIM Auto-Discovery)"]:::warning
+            end
+
+            subgraph rbac["🛡️ RBAC Role Assignments"]
+                direction LR
+                readerRole["👁️ Reader<br/>(APIM → RG Scope)"]:::neutral
+                dataReaderRole["📖 API Center Data Reader<br/>(API Center → RG Scope)"]:::neutral
+                complianceRole["✅ Compliance Manager<br/>(API Center → RG Scope)"]:::neutral
+            end
+        end
     end
 
-    %% SUBGRAPH STYLING (4 subgraphs = 4 style directives)
-    style landingZone fill:#F3F2F1,stroke:#605E5C,stroke-width:3px
-    style sharedInfra fill:#EDEBE9,stroke:#A19F9D,stroke-width:2px
-    style corePlatform fill:#EDEBE9,stroke:#A19F9D,stroke-width:2px
-    style apiInventory fill:#EDEBE9,stroke:#A19F9D,stroke-width:2px
+    %% Tier dependency chain (deployment order)
+    sharedInfra -->|"provides monitoring outputs"| corePlatform
+    corePlatform -->|"exposes APIM resource"| apiInventory
 
-    %% Centralized semantic classDefs (Phase 5 compliant)
+    %% Telemetry and diagnostic flows
+    apim -->|"emits logs + metrics"| law
+    apim -->|"sends APM telemetry"| appInsights
+    apim -->|"archives diagnostics"| storage
+    appInsights -->|"workspace-based ingestion"| law
+
+    %% Core platform relationships
+    apim -->|"hosts"| devPortal
+    apim -->|"provisions"| workspaces
+
+    %% Inventory relationships
+    apiSource -->|"discovers APIs from"| apim
+    apiCenter -->|"manages"| apiSource
+
+    %% Identity assignments (dashed = identity relationship)
+    apim -.->|"SystemAssigned identity"| readerRole
+    apiCenter -.->|"SystemAssigned identity"| dataReaderRole
+    apiCenter -.->|"SystemAssigned identity"| complianceRole
+
+    %% SUBGRAPH STYLING (6 subgraphs = 6 style directives)
+    style subscription fill:#F3F2F1,stroke:#605E5C,stroke-width:3px
+    style resourceGroup fill:#EDEBE9,stroke:#A19F9D,stroke-width:2px
+    style sharedInfra fill:#E1DFDD,stroke:#A19F9D,stroke-width:2px
+    style corePlatform fill:#E1DFDD,stroke:#A19F9D,stroke-width:2px
+    style apiInventory fill:#E1DFDD,stroke:#A19F9D,stroke-width:2px
+    style rbac fill:#E1DFDD,stroke:#A19F9D,stroke-width:2px
+
+    %% Centralized semantic classDefs (≤5 semantic classes)
     classDef core fill:#DEECF9,stroke:#0078D4,stroke-width:2px,color:#004578
     classDef success fill:#DFF6DD,stroke:#107C10,stroke-width:2px,color:#0B6A0B
     classDef warning fill:#FFF4CE,stroke:#FFB900,stroke-width:2px,color:#986F0B
+    classDef neutral fill:#FAFAFA,stroke:#8A8886,stroke-width:2px,color:#323130
 
     %% Accessibility: WCAG AA verified (4.5:1 contrast ratio)
 ```
 
+### Deployment Orchestration
+
+Azure Developer CLI (`azd`) orchestrates the end-to-end deployment. The `pre-provision.sh` hook runs first to purge soft-deleted APIM instances, then `infra/main.bicep` deploys the three tiers in strict dependency order — each tier receives outputs from its predecessor as input parameters.
+
+```mermaid
+---
+title: Deployment Orchestration Flow
+config:
+  theme: base
+  look: classic
+  layout: dagre
+  flowchart:
+    htmlLabels: true
+---
+flowchart LR
+    accTitle: APIM Accelerator Deployment Orchestration
+    accDescr: Shows the Azure Developer CLI orchestration flow from configuration through pre-provision cleanup to sequential three-tier Bicep module deployment
+
+    subgraph orchestration["🔧 Azure Developer CLI (azd up)"]
+        direction LR
+
+        config["📄 settings.yaml<br/>(Central Config)"]:::neutral
+        params["📋 main.parameters.json<br/>(azd Env Variables)"]:::neutral
+        preHook["🧹 pre-provision.sh<br/>(Soft-Delete Purge)"]:::warning
+
+        subgraph deployment["📦 infra/main.bicep (Subscription Scope)"]
+            direction LR
+            rg["🏗️ Resource Group<br/>Creation"]:::core
+            tier1["📊 Tier 1<br/>src/shared"]:::core
+            tier2["⚙️ Tier 2<br/>src/core"]:::success
+            tier3["🗄️ Tier 3<br/>src/inventory"]:::warning
+        end
+    end
+
+    config -->|"loadYamlContent()"| deployment
+    params -->|"envName + location"| deployment
+    preHook -->|"runs before"| deployment
+    rg -->|"scopes modules"| tier1
+    tier1 -->|"monitoring outputs"| tier2
+    tier2 -->|"APIM resource"| tier3
+
+    %% Subgraph styling (style directive only)
+    style orchestration fill:#F3F2F1,stroke:#605E5C,stroke-width:3px
+    style deployment fill:#EDEBE9,stroke:#A19F9D,stroke-width:2px
+
+    %% Centralized semantic classDefs
+    classDef core fill:#DEECF9,stroke:#0078D4,stroke-width:2px,color:#004578
+    classDef success fill:#DFF6DD,stroke:#107C10,stroke-width:2px,color:#0B6A0B
+    classDef warning fill:#FFF4CE,stroke:#FFB900,stroke-width:2px,color:#986F0B
+    classDef neutral fill:#FAFAFA,stroke:#8A8886,stroke-width:2px,color:#323130
+```
+
 ### Component Responsibilities
 
-| Component                    | Purpose                                                                         | Key Capabilities                                                                               |
-| ---------------------------- | ------------------------------------------------------------------------------- | ---------------------------------------------------------------------------------------------- |
-| 📊 **Shared Infrastructure** | Provides the observability foundation for the entire landing zone               | Log Analytics workspace, Storage Account for diagnostic archival, Application Insights for APM |
-| ⚙️ **Core Platform**         | Delivers the API gateway, developer experience, and team isolation capabilities | API Management (Premium SKU), Developer Portal with Azure AD, APIM Workspaces                  |
-| 🗄️ **API Inventory**         | Enables centralized API governance, discovery, and compliance tracking          | API Center with managed identity, APIM source integration, RBAC role assignments               |
+| Component                    | Module Path                                       | Azure Resources                                                                                                  | Purpose                                                                | Key Capabilities                                                                                                                     |
+| ---------------------------- | ------------------------------------------------- | ---------------------------------------------------------------------------------------------------------------- | ---------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------ |
+| 📊 **Shared Infrastructure** | `src/shared/`                                     | Log Analytics Workspace, Storage Account, Application Insights, 3× Diagnostic Settings                           | Provides the observability foundation for the entire landing zone      | PerGB2018 workspace with self-monitoring, Standard_LRS diagnostic archive, workspace-based APM with 90-day retention                 |
+| ⚙️ **Core Platform**         | `src/core/`                                       | API Management, Developer Portal (4 sub-resources), APIM Workspaces, App Insights Logger, Reader RBAC Assignment | Delivers the API gateway, developer experience, and team isolation     | Configurable SKU (Developer–Premium), Azure AD MSAL 2.0 portal, CORS policies, team workspaces, diagnostic settings to LAW + Storage |
+| 🗄️ **API Inventory**         | `src/inventory/`                                  | API Center, API Center Workspace, API Source (APIM link), 2× RBAC Assignments                                    | Enables centralized API governance, discovery, and compliance tracking | SystemAssigned identity, auto-discovery from APIM, Data Reader + Compliance Manager roles at RG scope                                |
+| 🛡️ **Identity & RBAC**       | `src/core/apim.bicep`, `src/inventory/main.bicep` | 3× Role Assignments                                                                                              | Enforces least-privilege access for managed identities                 | APIM Reader (RG), API Center Data Reader (RG), API Center Compliance Manager (RG)                                                    |
+
+### Module Structure
+
+The Bicep modules follow a hierarchical pattern where `infra/main.bicep` acts as the subscription-scope orchestrator, delegating to three resource-group-scoped module tiers. Shared types (`common-types.bicep`) and utility functions (`constants.bicep`) are consumed across all modules.
+
+```text
+infra/main.bicep                          ← Subscription-scope orchestrator
+├── src/shared/main.bicep                 ← Tier 1: Shared infrastructure
+│   └── monitoring/main.bicep
+│       ├── operational/main.bicep        ← Log Analytics + Storage Account
+│       └── insights/main.bicep           ← Application Insights (depends on operational)
+├── src/core/main.bicep                   ← Tier 2: Core platform (depends on shared)
+│   ├── apim.bicep                        ← API Management + diagnostics + RBAC
+│   ├── developer-portal.bicep            ← Portal config (depends on apim)
+│   └── workspaces.bicep × N              ← APIM Workspaces loop (depends on apim)
+└── src/inventory/main.bicep              ← Tier 3: API inventory (depends on core)
+    └── API Center + API Source + RBAC
+
+src/shared/common-types.bicep             ← Exported type definitions (ApiManagement, Inventory, Shared)
+src/shared/constants.bicep                ← Utility functions + role definitions + naming conventions
+```
 
 ## ✨ Features
 
