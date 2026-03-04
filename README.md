@@ -16,6 +16,10 @@ The solution uses a **modular 3-tier deployment pattern** orchestrated by Azure 
 ## Table of Contents
 
 - [Architecture](#%EF%B8%8F-architecture)
+  - [Infrastructure Architecture](#infrastructure-architecture)
+  - [Deployment Orchestration](#deployment-orchestration)
+  - [Component Responsibilities](#component-responsibilities)
+  - [Module Structure](#module-structure)
 - [Features](#-features)
 - [Requirements](#-requirements)
 - [Quick Start](#-quick-start)
@@ -575,8 +579,8 @@ The accelerator automatically assigns Azure built-in roles to managed identities
 | Role                                 | Assignee                    | Scope          | Purpose                           |
 | ------------------------------------ | --------------------------- | -------------- | --------------------------------- |
 | 🛡️ **Reader**                        | APIM managed identity       | Resource group | Read access to deployed resources |
-| 📚 **API Center Data Reader**        | API Center managed identity | API Center     | Read API metadata for catalog     |
-| 🔍 **API Center Compliance Manager** | API Center managed identity | API Center     | Enforce API compliance policies   |
+| 📚 **API Center Data Reader**        | API Center managed identity | Resource group | Read API metadata for catalog     |
+| 🔍 **API Center Compliance Manager** | API Center managed identity | Resource group | Enforce API compliance policies   |
 
 ### Customization Example
 
