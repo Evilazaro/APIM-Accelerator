@@ -240,68 +240,376 @@ The deployment includes a pre-provision hook (`infra/azd-hooks/pre-provision.sh`
 
 **Overview**
 
-All environment-specific settings are centralized in a single YAML configuration file at `infra/settings.yaml`. This file controls resource naming, SKU selection, identity configuration, tagging strategy, and workspace definitions. Empty name fields trigger automatic name generation using a deterministic unique suffix.
+All environment-specific settings are centralized in `infra/settings.yaml`, while deployment-time parameters are passed through `infra/main.parameters.json`. Together, these two files control every aspect of the landing zone: resource naming, SKU selection, scaling, identity, networking, developer portal, monitoring, API governance, and tagging. Empty name fields trigger automatic name generation using a deterministic unique suffix derived from the subscription, resource group, solution name, and region.
 
-The configuration is structured into three sections matching the deployment tiers: shared infrastructure, core platform, and API inventory. Each section contains its own tags for granular cost tracking and governance.
+The configuration is organized into three tiers matching the deployment architecture — shared infrastructure, core platform, and API inventory — each with dedicated tags for granular cost tracking and governance. The sections below document every configurable property, its allowed values, and common scenarios.
 
 ### Configuration File Structure
 
 ```yaml
-# infra/settings.yaml
+# infra/settings.yaml — Complete reference
 solutionName: "apim-accelerator"
 
 shared:
   monitoring:
     logAnalytics:
       name: "" # Leave empty for auto-generated name
+      workSpaceResourceId: "" # Existing workspace ID (empty = create new)
       identity:
-        type: "SystemAssigned"
+        type: "SystemAssigned" # SystemAssigned | UserAssigned
+        userAssignedIdentities: [] # Resource IDs of user-assigned identities
     applicationInsights:
       name: "" # Leave empty for auto-generated name
+      logAnalyticsWorkspaceResourceId: "" # Auto-linked to deployed workspace if empty
+    tags:
+      lz-component-type: "shared"
+      component: "monitoring"
   tags:
     CostCenter: "CC-1234"
+    BusinessUnit: "IT"
     Owner: "your-email@domain.com"
+    ApplicationName: "APIM Platform"
+    ProjectName: "APIMForAll"
+    ServiceClass: "Critical"
+    RegulatoryCompliance: "GDPR"
+    SupportContact: "your-email@domain.com"
+    ChargebackModel: "Dedicated"
+    BudgetCode: "FY25-Q1-InitiativeX"
 
 core:
   apiManagement:
     name: "" # Leave empty for auto-generated name
-    publisherEmail: "admin@contoso.com"
-    publisherName: "Contoso"
+    publisherEmail: "admin@contoso.com" # Required by Azure — shown in portal
+    publisherName: "Contoso" # Organization name in developer portal
     sku:
-      name: "Premium" # Options: Developer, Basic, Standard, Premium
-      capacity: 1 # Scale units (Premium: 1-10)
+      name: "Premium" # Developer | Basic | BasicV2 | Standard | StandardV2 | Premium | Consumption
+      capacity: 1 # Scale units (Premium: 1-10, Standard: 1-4)
     identity:
-      type: "SystemAssigned"
+      type: "SystemAssigned" # SystemAssigned | UserAssigned
+      userAssignedIdentities: [] # Resource IDs of user-assigned identities
     workspaces:
-      - name: "workspace1"
+      - name: "workspace1" # Premium SKU only — add more entries for additional teams
+  tags:
+    lz-component-type: "core"
+    component: "apiManagement"
 
 inventory:
   apiCenter:
     name: "" # Leave empty for auto-generated name
     identity:
-      type: "SystemAssigned"
+      type: "SystemAssigned" # SystemAssigned | UserAssigned | SystemAssigned, UserAssigned | None
+      userAssignedIdentities: [] # Resource IDs of user-assigned identities
+  tags:
+    lz-component-type: "shared"
+    component: "inventory"
 ```
-
-### Key Configuration Options
-
-| Setting              | Path                                           | Options                             | Default               |
-| -------------------- | ---------------------------------------------- | ----------------------------------- | --------------------- |
-| 🏷️ Solution Name     | `solutionName`                                 | Any string                          | `apim-accelerator`    |
-| ⚙️ APIM SKU          | `core.apiManagement.sku.name`                  | Developer, Basic, Standard, Premium | `Premium`             |
-| 📊 Scale Units       | `core.apiManagement.sku.capacity`              | 1-10 (Premium), 1-4 (Standard)      | `1`                   |
-| 🔒 Identity Type     | `core.apiManagement.identity.type`             | SystemAssigned, UserAssigned        | `SystemAssigned`      |
-| 📧 Publisher Email   | `core.apiManagement.publisherEmail`            | Valid email address                 | `evilazaro@gmail.com` |
-| 📂 Workspaces        | `core.apiManagement.workspaces`                | Array of `{ name: string }`         | 1 workspace           |
-| 📈 Log Analytics SKU | `shared.monitoring.logAnalytics.identity.type` | SystemAssigned, UserAssigned        | `SystemAssigned`      |
 
 ### Environment Parameters
 
 Deployment parameters are passed via `infra/main.parameters.json` and support Azure Developer CLI variable substitution:
 
-| Parameter     | Description                          | Example                                 |
-| ------------- | ------------------------------------ | --------------------------------------- |
-| 🌍 `envName`  | Target environment identifier        | `dev`, `test`, `staging`, `prod`, `uat` |
-| 📍 `location` | Azure region for resource deployment | `eastus`, `westus2`, `westeurope`       |
+| Parameter     | Description                                                               | Allowed Values                          | Example                           |
+| ------------- | ------------------------------------------------------------------------- | --------------------------------------- | --------------------------------- |
+| 🌍 `envName`  | Target environment identifier — controls resource sizing and tagging      | `dev`, `test`, `staging`, `prod`, `uat` | `dev`                             |
+| 📍 `location` | Azure region for all resource deployment — must support APIM Premium tier | Any Azure region                        | `eastus`, `westus2`, `westeurope` |
+
+```bash
+# Set parameters via azd
+azd env set AZURE_ENV_NAME dev
+azd env set AZURE_LOCATION eastus
+```
+
+### API Management Configuration
+
+The core APIM service is configured under `core.apiManagement` in `infra/settings.yaml`.
+
+| Setting            | Path                                                 | Options                                                               | Default               | Notes                                                  |
+| ------------------ | ---------------------------------------------------- | --------------------------------------------------------------------- | --------------------- | ------------------------------------------------------ |
+| 🏷️ Service Name    | `core.apiManagement.name`                            | Any string (or empty for auto)                                        | `""` (auto)           | Auto-generated as `{solutionName}-{uniqueSuffix}-apim` |
+| 📧 Publisher Email | `core.apiManagement.publisherEmail`                  | Valid email address                                                   | `evilazaro@gmail.com` | Required by Azure — used for notifications             |
+| 🏢 Publisher Name  | `core.apiManagement.publisherName`                   | Any string                                                            | `Contoso`             | Displayed in the developer portal header               |
+| ⚙️ SKU Tier        | `core.apiManagement.sku.name`                        | Developer, Basic, BasicV2, Standard, StandardV2, Premium, Consumption | `Premium`             | See [SKU Selection Guide](#sku-selection-guide) below  |
+| 📊 Scale Units     | `core.apiManagement.sku.capacity`                    | 1-10 (Premium), 1-4 (Standard), 0 (Consumption)                       | `1`                   | Each unit adds throughput capacity                     |
+| 🔒 Identity Type   | `core.apiManagement.identity.type`                   | SystemAssigned, UserAssigned                                          | `SystemAssigned`      | Controls how APIM authenticates to Azure services      |
+| 🔑 User Identities | `core.apiManagement.identity.userAssignedIdentities` | Array of resource IDs                                                 | `[]`                  | Required when identity type is UserAssigned            |
+
+#### SKU Selection Guide
+
+| SKU                      | Use Case                                 | SLA          | Key Capabilities                           | Estimated Cost |
+| ------------------------ | ---------------------------------------- | ------------ | ------------------------------------------ | -------------- |
+| 🧪 Developer             | Non-production, testing, prototyping     | No SLA       | Full feature set, no scaling               | 💲 Low         |
+| 📦 Basic / BasicV2       | Small-scale production workloads         | 99.95%       | Limited scale, no VNet                     | 💲💲 Moderate  |
+| ⚙️ Standard / StandardV2 | Medium-scale production workloads        | 99.95%       | 1-4 units, external VNet                   | 💲💲💲 Medium  |
+| 🏢 Premium               | Enterprise production with full features | 99.95-99.99% | Multi-region, VNet, workspaces, 1-10 units | 💲💲💲💲 High  |
+| ⚡ Consumption           | Serverless, pay-per-execution            | 99.95%       | Auto-scale, no fixed cost                  | 💲 Variable    |
+
+> [!WARNING]
+> Changing the SKU tier on an existing deployment may cause service downtime. Plan SKU changes during maintenance windows.
+
+```yaml
+# Example: Switch to Developer SKU for non-production
+core:
+  apiManagement:
+    sku:
+      name: "Developer"
+      capacity: 1
+```
+
+### Workspace Configuration
+
+Workspaces provide logical isolation within a single APIM instance, enabling different teams or projects to manage APIs independently while sharing infrastructure. Workspaces require the **Premium** SKU.
+
+| Setting       | Path                            | Type                        | Notes                            |
+| ------------- | ------------------------------- | --------------------------- | -------------------------------- |
+| 📂 Workspaces | `core.apiManagement.workspaces` | Array of `{ name: string }` | Each entry creates one workspace |
+
+```yaml
+# Example: Configure workspaces for multiple teams
+core:
+  apiManagement:
+    sku:
+      name: "Premium" # Required for workspaces
+      capacity: 1
+    workspaces:
+      - name: "sales-apis"
+      - name: "finance-apis"
+      - name: "partner-apis"
+```
+
+Each workspace acts as a self-contained environment with its own APIs, products, and subscriptions. The workspace name must be unique within the APIM instance and is used both as the resource name and display name.
+
+### Networking Configuration
+
+The APIM Bicep template (`src/core/apim.bicep`) supports three networking modes. These parameters are configurable at deployment time via the Bicep template but are not currently exposed in `infra/settings.yaml` — extend the settings file or pass them as Bicep parameter overrides.
+
+| Setting             | Parameter               | Options                  | Default | Notes                                                             |
+| ------------------- | ----------------------- | ------------------------ | ------- | ----------------------------------------------------------------- |
+| 🌐 Public Access    | `publicNetworkAccess`   | `true`, `false`          | `true`  | Set `false` for private-only deployments                          |
+| 🔗 VNet Type        | `virtualNetworkType`    | None, External, Internal | `None`  | External: gateway public, portal private. Internal: fully private |
+| 🏗️ Subnet ID        | `subnetResourceId`      | ARM resource ID          | `""`    | Required when VNet type is External or Internal                   |
+| 🖥️ Developer Portal | `enableDeveloperPortal` | `true`, `false`          | `true`  | Enables/disables the self-service developer portal                |
+
+```bash
+# Example: Deploy with VNet integration using Azure CLI parameter overrides
+az deployment sub create \
+  --location eastus \
+  --template-file infra/main.bicep \
+  --parameters envName=prod location=eastus \
+  --parameters virtualNetworkType=Internal \
+  --parameters subnetResourceId="/subscriptions/{sub}/resourceGroups/{rg}/providers/Microsoft.Network/virtualNetworks/{vnet}/subnets/{subnet}" \
+  --parameters publicNetworkAccess=false
+```
+
+> [!NOTE]
+> The `src/shared/networking/main.bicep` module is currently a placeholder. For production VNet integration, provision your virtual network and subnet separately, then pass the subnet resource ID to the APIM deployment.
+
+### Developer Portal Configuration
+
+The developer portal is configured through `src/core/developer-portal.bicep` and supports Azure AD authentication, CORS policies, and user registration controls.
+
+| Setting                   | Location                                            | Description                                                    |
+| ------------------------- | --------------------------------------------------- | -------------------------------------------------------------- |
+| 🔑 Azure AD Client ID     | `developer-portal.bicep` → `clientId` param         | App registration client ID from Azure AD                       |
+| 🔒 Azure AD Client Secret | `developer-portal.bicep` → `clientSecret` param     | App registration client secret (secure)                        |
+| 🏢 Allowed Tenants        | `developer-portal.bicep` → `allowedTenants` var     | Array of Azure AD tenant domains authorized to sign in         |
+| ✅ Sign-In Enabled        | `developer-portal.bicep` → `devPortalSignInSetting` | Enables user authentication on the portal                      |
+| 📝 Sign-Up Enabled        | `developer-portal.bicep` → `devPortalSignUpSetting` | Enables new user self-registration                             |
+| 📜 Terms of Service       | `developer-portal.bicep` → `termsOfService`         | Requires consent to terms during sign-up                       |
+| 🌐 CORS Origins           | `developer-portal.bicep` → `devPortalConfig`        | Auto-configured from APIM portal, gateway, and management URLs |
+
+To customize the allowed Azure AD tenants, edit the `allowedTenants` variable in `src/core/developer-portal.bicep`:
+
+```bicep
+// Replace with your organization's tenant domain(s)
+var allowedTenants = [
+  'contoso.onmicrosoft.com'
+  'fabrikam.onmicrosoft.com'
+]
+```
+
+### Monitoring Configuration
+
+Monitoring settings under `shared.monitoring` control the observability infrastructure deployed before all other resources.
+
+#### Log Analytics Workspace
+
+| Setting               | Path                                                             | Default          | Notes                                                                                            |
+| --------------------- | ---------------------------------------------------------------- | ---------------- | ------------------------------------------------------------------------------------------------ |
+| 📊 Name               | `shared.monitoring.logAnalytics.name`                            | `""` (auto)      | Auto-generated as `{solutionName}-{uniqueSuffix}-law`                                            |
+| 🔗 Existing Workspace | `shared.monitoring.logAnalytics.workSpaceResourceId`             | `""`             | Provide to reuse an existing workspace instead of creating one                                   |
+| 🔒 Identity Type      | `shared.monitoring.logAnalytics.identity.type`                   | `SystemAssigned` | SystemAssigned or UserAssigned                                                                   |
+| 🔑 User Identities    | `shared.monitoring.logAnalytics.identity.userAssignedIdentities` | `[]`             | Resource IDs for UserAssigned identity                                                           |
+| 💰 Pricing Tier       | Bicep default in `operational/main.bicep`                        | `PerGB2018`      | Options: Free, PerGB2018, CapacityReservation, PerNode, Premium, Standard, Standalone, LACluster |
+
+#### Application Insights
+
+| Setting                  | Path                                                                    | Default     | Notes                                                |
+| ------------------------ | ----------------------------------------------------------------------- | ----------- | ---------------------------------------------------- |
+| 📈 Name                  | `shared.monitoring.applicationInsights.name`                            | `""` (auto) | Auto-generated as `{solutionName}-{uniqueSuffix}-ai` |
+| 🔗 Linked Workspace      | `shared.monitoring.applicationInsights.logAnalyticsWorkspaceResourceId` | `""`        | Auto-linked to the deployed Log Analytics workspace  |
+| 🌐 Application Type      | Bicep default in `insights/main.bicep`                                  | `web`       | Options: web, ios, other, store, java, phone         |
+| 📅 Retention Days        | Bicep default in `insights/main.bicep`                                  | `90`        | Data retention period in days                        |
+| 🔐 Public Network Access | Bicep default in `insights/main.bicep`                                  | `Enabled`   | Set to Disabled for private-only ingestion           |
+
+#### Storage Account (Diagnostic Logs)
+
+A storage account is automatically provisioned for long-term log retention. Its name is auto-generated using the `generateStorageAccountName()` utility function with a 24-character limit enforced by Azure.
+
+| Setting            | Source                                             | Default         |
+| ------------------ | -------------------------------------------------- | --------------- |
+| 🗄️ Redundancy      | `constants.bicep` → `storageAccount.standardLRS`   | `Standard_LRS`  |
+| 📦 Account Type    | `constants.bicep` → `storageAccount.storageV2`     | `StorageV2`     |
+| 🔤 Max Name Length | `constants.bicep` → `storageAccount.maxNameLength` | `24` characters |
+
+#### Monitoring Tags
+
+```yaml
+shared:
+  monitoring:
+    tags:
+      lz-component-type: "shared"
+      component: "monitoring"
+```
+
+These tags are merged with the shared-level tags and applied to all monitoring resources for cost attribution and resource filtering in the Azure portal.
+
+### API Inventory Configuration
+
+The API inventory layer deploys Azure API Center for centralized API governance and automatic discovery from the APIM service.
+
+| Setting            | Path                                                  | Options                                                           | Default          | Notes                                        |
+| ------------------ | ----------------------------------------------------- | ----------------------------------------------------------------- | ---------------- | -------------------------------------------- |
+| 📑 API Center Name | `inventory.apiCenter.name`                            | Any string (or empty for auto)                                    | `""` (auto)      | Auto-generated as `{solutionName}-apicenter` |
+| 🔒 Identity Type   | `inventory.apiCenter.identity.type`                   | SystemAssigned, UserAssigned, SystemAssigned + UserAssigned, None | `SystemAssigned` | Controls RBAC role assignments               |
+| 🔑 User Identities | `inventory.apiCenter.identity.userAssignedIdentities` | Array of resource IDs                                             | `[]`             | Required for UserAssigned identity           |
+
+The deployment automatically:
+
+- Creates a default workspace inside API Center for organizing APIs
+- Registers the APIM service as an API source for automatic discovery and synchronization
+- Assigns **API Center Data Reader** and **API Center Compliance Manager** RBAC roles to the API Center's managed identity
+
+### Tagging Strategy
+
+Tags are applied at three levels for governance, cost tracking, and compliance. Tags defined at higher levels are inherited by child resources through the `union()` function.
+
+#### Shared Tags (Applied to All Resources)
+
+```yaml
+shared:
+  tags:
+    CostCenter: "CC-1234" # Tracks cost allocation to budget center
+    BusinessUnit: "IT" # Business unit or department
+    Owner: "your-email@domain.com" # Resource/application owner for accountability
+    ApplicationName: "APIM Platform" # Workload or application identifier
+    ProjectName: "APIMForAll" # Project or initiative name
+    ServiceClass: "Critical" # Workload tier: Critical, Standard, Experimental
+    RegulatoryCompliance: "GDPR" # Compliance requirements: GDPR, HIPAA, PCI, None
+    SupportContact: "your-email@domain.com" # Incident support contact
+    ChargebackModel: "Dedicated" # Chargeback/Showback billing model
+    BudgetCode: "FY25-Q1-InitiativeX" # Budget or initiative tracking code
+```
+
+#### Component-Level Tags
+
+Each deployment tier adds component-specific tags:
+
+| Tier          | Tags                                                      | Purpose                             |
+| ------------- | --------------------------------------------------------- | ----------------------------------- |
+| 🔍 Monitoring | `lz-component-type: "shared"`, `component: "monitoring"`  | Identifies monitoring resources     |
+| ⚙️ Core APIM  | `lz-component-type: "core"`, `component: "apiManagement"` | Identifies API Management resources |
+| 📋 Inventory  | `lz-component-type: "shared"`, `component: "inventory"`   | Identifies API Center resources     |
+
+#### Deployment-Injected Tags
+
+The orchestration template automatically adds these tags at deployment time:
+
+| Tag                  | Value                                   | Source                          |
+| -------------------- | --------------------------------------- | ------------------------------- |
+| 🌍 `environment`     | `dev`, `test`, `staging`, `prod`, `uat` | `envName` parameter             |
+| 🔧 `managedBy`       | `bicep`                                 | Hardcoded in `infra/main.bicep` |
+| 📌 `templateVersion` | `2.0.0`                                 | Hardcoded in `infra/main.bicep` |
+
+### Resource Naming Conventions
+
+Resources follow a consistent naming pattern. When a name is left empty in `infra/settings.yaml`, names are auto-generated using a deterministic unique suffix produced by the `generateUniqueSuffix()` function (based on subscription ID, resource group ID, solution name, and region).
+
+| Resource           | Naming Pattern                              | Suffix      | Example                          |
+| ------------------ | ------------------------------------------- | ----------- | -------------------------------- |
+| 📦 Resource Group  | `{solutionName}-{envName}-{location}-rg`    | `rg`        | `apim-accelerator-dev-eastus-rg` |
+| 🌐 API Management  | `{solutionName}-{uniqueSuffix}-apim`        | `apim`      | `apim-accelerator-abc123-apim`   |
+| 📊 Log Analytics   | `{solutionName}-{uniqueSuffix}-law`         | `law`       | `apim-accelerator-abc123-law`    |
+| 📈 App Insights    | `{solutionName}-{uniqueSuffix}-ai`          | `ai`        | `apim-accelerator-abc123-ai`     |
+| 🗄️ Storage Account | `{baseName}sa{uniqueSuffix}` (max 24 chars) | `sa`        | `apimacceleratorsa4f2c`          |
+| 📑 API Center      | `{solutionName}-apicenter`                  | `apicenter` | `apim-accelerator-apicenter`     |
+
+> [!TIP]
+> To use explicit resource names instead of auto-generated ones, set the `name` field in the corresponding `infra/settings.yaml` section. This is useful when your organization enforces specific naming policies.
+
+### Common Configuration Scenarios
+
+#### Non-Production / Cost-Optimized Deployment
+
+```yaml
+solutionName: "apim-accelerator"
+core:
+  apiManagement:
+    sku:
+      name: "Developer" # No SLA, lowest cost
+      capacity: 1
+    workspaces: [] # Workspaces not supported on Developer SKU
+```
+
+#### Multi-Team Production Deployment
+
+```yaml
+solutionName: "enterprise-apis"
+core:
+  apiManagement:
+    publisherEmail: "api-platform@contoso.com"
+    publisherName: "Contoso API Platform"
+    sku:
+      name: "Premium"
+      capacity: 2 # 2 scale units for higher throughput
+    identity:
+      type: "SystemAssigned"
+      userAssignedIdentities: []
+    workspaces:
+      - name: "payments-team"
+      - name: "logistics-team"
+      - name: "mobile-team"
+      - name: "partner-integrations"
+```
+
+#### User-Assigned Managed Identity
+
+```yaml
+core:
+  apiManagement:
+    identity:
+      type: "UserAssigned"
+      userAssignedIdentities:
+        - "/subscriptions/{sub-id}/resourceGroups/{rg}/providers/Microsoft.ManagedIdentity/userAssignedIdentities/{identity-name}"
+
+inventory:
+  apiCenter:
+    identity:
+      type: "UserAssigned"
+      userAssignedIdentities:
+        - "/subscriptions/{sub-id}/resourceGroups/{rg}/providers/Microsoft.ManagedIdentity/userAssignedIdentities/{identity-name}"
+```
+
+#### Reusing an Existing Log Analytics Workspace
+
+```yaml
+shared:
+  monitoring:
+    logAnalytics:
+      name: "existing-workspace-name"
+      workSpaceResourceId: "/subscriptions/{sub}/resourceGroups/{rg}/providers/Microsoft.OperationalInsights/workspaces/{name}"
+    applicationInsights:
+      logAnalyticsWorkspaceResourceId: "/subscriptions/{sub}/resourceGroups/{rg}/providers/Microsoft.OperationalInsights/workspaces/{name}"
+```
 
 ## Project Structure
 
