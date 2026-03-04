@@ -1,8 +1,8 @@
-# Business Architecture
+# 🏢 Business Architecture
 
-## 1. Executive Summary
+## 📋 1. Executive Summary
 
-### Overview
+### 📖 Overview
 
 This Business Architecture analysis documents the APIM Accelerator repository — a production-ready Azure landing zone accelerator for deploying and governing a complete API Management platform. The accelerator addresses the enterprise business need for standardized, repeatable API platform provisioning with integrated governance, monitoring, and developer self-service capabilities. The solution targets Enterprise Architects, Platform Engineers, and API Program Managers responsible for establishing API-first strategies.
 
@@ -24,22 +24,22 @@ Key findings include a mature capability model organized around modular deployme
 
 ---
 
-## 2. Architecture Landscape
+## 🌍 2. Architecture Landscape
 
-### Overview
+### 📖 Overview
 
 This section provides a structured inventory of all Business layer components identified across the APIM Accelerator repository. Components are organized by the Business Architecture types.
 
 The accelerator's business architecture is fundamentally an infrastructure platform that delivers API Management as a self-service capability. Business components are encoded in infrastructure-as-code (Bicep), deployment configuration (YAML), and automation scripts (Shell), rather than in traditional application code. This architectural pattern is characteristic of platform engineering initiatives where the "product" is a reusable infrastructure template.
 
-### 2.1 Business Strategy (2)
+### 🎯 2.1 Business Strategy (2)
 
 | Name                                  | Description                                                                                                          |
 | ------------------------------------- | -------------------------------------------------------------------------------------------------------------------- |
 | API-First Platform Strategy           | **Strategic initiative** to provide a standardized, repeatable API Management landing zone for enterprise teams      |
 | Multi-Environment Deployment Strategy | **Deployment strategy** supporting dev, test, staging, prod, and uat environments with consistent naming and tagging |
 
-### 2.2 Business Capabilities (6)
+### 💪 2.2 Business Capabilities (6)
 
 | Name                           | Description                                                                                                                           |
 | ------------------------------ | ------------------------------------------------------------------------------------------------------------------------------------- |
@@ -50,14 +50,14 @@ The accelerator's business architecture is fundamentally an infrastructure platf
 | Identity & Access Management   | **Security capability** for managed identity provisioning and RBAC role assignment automation across platform components              |
 | Multi-Team Workspace Isolation | **Isolation capability** enabling independent API lifecycle management per workspace within a single APIM instance                    |
 
-### 2.3 Value Streams (2)
+### 🔄 2.3 Value Streams (2)
 
 | Name                      | Description                                                                                                                          |
 | ------------------------- | ------------------------------------------------------------------------------------------------------------------------------------ |
 | API Platform Provisioning | **End-to-end value stream** from repository clone through azd up to fully deployed API Management landing zone                       |
 | API Lifecycle Management  | **Ongoing value stream** covering API registration, discovery via API Center, workspace assignment, and developer portal publication |
 
-### 2.4 Business Processes (3)
+### ⚙️ 2.4 Business Processes (3)
 
 | Name                        | Description                                                                                                                         |
 | --------------------------- | ----------------------------------------------------------------------------------------------------------------------------------- |
@@ -65,7 +65,7 @@ The accelerator's business architecture is fundamentally an infrastructure platf
 | Pre-Provision Cleanup       | **Automated process** to discover and purge soft-deleted APIM instances before provisioning to prevent naming conflicts             |
 | Developer Portal Onboarding | **Configuration process** for Azure AD identity provider, CORS policies, sign-in/sign-up settings, and terms-of-service             |
 
-### 2.5 Business Services (4)
+### 🛠️ 2.5 Business Services (4)
 
 | Name                             | Description                                                                                                                 |
 | -------------------------------- | --------------------------------------------------------------------------------------------------------------------------- |
@@ -74,7 +74,7 @@ The accelerator's business architecture is fundamentally an infrastructure platf
 | API Catalog Service              | **Governance service** providing centralized API inventory, documentation, and automatic APIM-to-catalog synchronization    |
 | Monitoring & Diagnostics Service | **Observability service** integrating Log Analytics, Application Insights, and Storage for centralized logging and APM      |
 
-### 2.6 Business Functions (3)
+### 🔧 2.6 Business Functions (3)
 
 | Name                       | Description                                                                                                                 |
 | -------------------------- | --------------------------------------------------------------------------------------------------------------------------- |
@@ -82,7 +82,7 @@ The accelerator's business architecture is fundamentally an infrastructure platf
 | Configuration Management   | **Centralized function** for YAML-based configuration distributing settings for monitoring, APIM, and inventory modules     |
 | RBAC Assignment Automation | **Security function** granting API Center Data Reader and Compliance Manager roles via deterministic GUID-based assignments |
 
-### 2.7 Business Roles & Actors (4)
+### 👥 2.7 Business Roles & Actors (4)
 
 | Name               | Description                                                                                                      |
 | ------------------ | ---------------------------------------------------------------------------------------------------------------- |
@@ -91,7 +91,7 @@ The accelerator's business architecture is fundamentally an infrastructure platf
 | API Consumer       | **Consuming role** for end-users who discover, test, and subscribe to APIs through the developer portal          |
 | Subscription Owner | **Deployer role** with Owner or Contributor permissions who executes azd up to provision the landing zone        |
 
-### 2.8 Business Rules (4)
+### 📏 2.8 Business Rules (4)
 
 | Name                         | Description                                                                                                                 |
 | ---------------------------- | --------------------------------------------------------------------------------------------------------------------------- |
@@ -100,7 +100,7 @@ The accelerator's business architecture is fundamentally an infrastructure platf
 | Tag Governance Rules         | **Compliance rule** mandating 10-tag taxonomy on all resources including CostCenter, BusinessUnit, and RegulatoryCompliance |
 | Identity Configuration Rules | **Security rule** requiring all components to declare identity type with typed schema enforcement                           |
 
-### 2.9 Business Events (3)
+### ⚡ 2.9 Business Events (3)
 
 | Name                       | Description                                                                                                  |
 | -------------------------- | ------------------------------------------------------------------------------------------------------------ |
@@ -108,7 +108,7 @@ The accelerator's business architecture is fundamentally an infrastructure platf
 | APIM Soft-Delete Detected  | **Discovery event** where pre-provision script finds soft-deleted APIM instances triggering automated purge  |
 | API Source Synchronization | **Integration event** where API Center automatically discovers and imports APIs from connected APIM instance |
 
-### 2.10 Business Objects/Entities (0)
+### 📦 2.10 Business Objects/Entities (0)
 
 This subsection documents Business objects and domain entities. Zero instances were detected in the analyzed source files. The APIM Accelerator models Azure infrastructure resources rather than business domain entities.
 
@@ -116,7 +116,7 @@ This subsection documents Business objects and domain entities. Zero instances w
 | ------------ | ------------ |
 | Not detected | Not detected |
 
-### 2.11 KPIs & Metrics (0)
+### 📊 2.11 KPIs & Metrics (0)
 
 This subsection documents Business KPIs and performance metrics. Zero instances were detected in the analyzed source files. No formal KPI definitions or metric thresholds are codified in the repository.
 
@@ -124,7 +124,7 @@ This subsection documents Business KPIs and performance metrics. Zero instances 
 | ------------ | ------------ |
 | Not detected | Not detected |
 
-### Business Capability Map
+### 🗺️ Business Capability Map
 
 ```mermaid
 ---
@@ -169,7 +169,7 @@ flowchart TB
     classDef warning  fill:#FFF4CE,stroke:#FFB900,stroke-width:2px,color:#986F0B
 ```
 
-### Summary
+### ✅ Summary
 
 The APIM Accelerator repository contains **31 identified Business layer components** distributed across 9 of 11 component types. The dominant patterns are business capabilities (6 components) and business services/rules (4 components each), reflecting the accelerator's focus on platform capability delivery and governance enforcement. The strongest components are concentrated in the core API gateway, developer portal, observability, and deployment orchestration areas.
 
@@ -177,15 +177,15 @@ Two component types — Business Objects/Entities and KPIs & Metrics — returne
 
 ---
 
-## 3. Architecture Principles
+## 🏛️ 3. Architecture Principles
 
-### Overview
+### 📖 Overview
 
 The APIM Accelerator exhibits several well-defined architecture principles that guide the design and governance of the platform. These principles are inferred from source code patterns, configuration structures, and documented design decisions rather than explicitly declared in a principles catalog. They align with 10 Architecture Principles and reflect enterprise-grade platform engineering practices.
 
 Each principle below is documented using a structured attribute table format. All principles are active (implemented in code) rather than aspirational.
 
-### 3.1 Modularity & Separation of Concerns
+### 🧩 3.1 Modularity & Separation of Concerns
 
 | Attribute               | Value                                                                                                                  |
 | ----------------------- | ---------------------------------------------------------------------------------------------------------------------- |
@@ -193,7 +193,7 @@ Each principle below is documented using a structured attribute table format. Al
 | **Rationale**           | Modular boundaries enable independent testing, selective deployment, and isolated failure domains across the platform. |
 | **Implications**        | All inter-module communication must use typed parameters and outputs; implicit dependencies are prohibited.            |
 
-### 3.2 Configuration Over Code
+### ⚙️ 3.2 Configuration Over Code
 
 | Attribute               | Value                                                                                                                        |
 | ----------------------- | ---------------------------------------------------------------------------------------------------------------------------- |
@@ -201,7 +201,7 @@ Each principle below is documented using a structured attribute table format. Al
 | **Rationale**           | A single configuration source prevents environment drift and enables consistent multi-environment deployments.               |
 | **Implications**        | Bicep templates must contain no hardcoded environment values; all tunable parameters flow from settings.yaml.                |
 
-### 3.3 Type Safety & Contract Enforcement
+### 🔒 3.3 Type Safety & Contract Enforcement
 
 | Attribute               | Value                                                                                                                           |
 | ----------------------- | ------------------------------------------------------------------------------------------------------------------------------- |
@@ -209,7 +209,7 @@ Each principle below is documented using a structured attribute table format. Al
 | **Rationale**           | Type safety catches invalid configurations at Bicep compilation rather than at Azure deployment time, reducing feedback cycles. |
 | **Implications**        | New modules must import and conform to shared type definitions; ad-hoc parameter typing is prohibited.                          |
 
-### 3.4 Governance by Default
+### 🛡️ 3.4 Governance by Default
 
 | Attribute               | Value                                                                                                                                                              |
 | ----------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
@@ -217,7 +217,7 @@ Each principle below is documented using a structured attribute table format. Al
 | **Rationale**           | Automated governance eliminates human error in compliance and enables audit-ready deployments from day one.                                                        |
 | **Implications**        | Governance tag taxonomy changes require settings.yaml updates; manual tag application is discouraged.                                                              |
 
-### 3.5 Observability as a Foundation
+### 👁️ 3.5 Observability as a Foundation
 
 | Attribute               | Value                                                                                                                                |
 | ----------------------- | ------------------------------------------------------------------------------------------------------------------------------------ |
@@ -225,7 +225,7 @@ Each principle below is documented using a structured attribute table format. Al
 | **Rationale**           | Foundation-first monitoring guarantees diagnostic coverage from the first deployment, preventing blind spots.                        |
 | **Implications**        | The shared monitoring layer must always deploy first; core and inventory modules depend on monitoring outputs.                       |
 
-### 3.6 Deterministic & Idempotent Deployments
+### 🔁 3.6 Deterministic & Idempotent Deployments
 
 | Attribute               | Value                                                                                                                          |
 | ----------------------- | ------------------------------------------------------------------------------------------------------------------------------ |
@@ -233,7 +233,7 @@ Each principle below is documented using a structured attribute table format. Al
 | **Rationale**           | Deterministic naming and idempotent operations prevent deployment failures from naming conflicts and enable safe redeployment. |
 | **Implications**        | Resource names must use uniqueString hashes; RBAC assignments must use guid-based deterministic names.                         |
 
-### 3.7 Self-Service with Guardrails
+### 🚧 3.7 Self-Service with Guardrails
 
 | Attribute               | Value                                                                                                                                   |
 | ----------------------- | --------------------------------------------------------------------------------------------------------------------------------------- |
@@ -243,15 +243,15 @@ Each principle below is documented using a structured attribute table format. Al
 
 ---
 
-## 4. Current State Baseline
+## 📍 4. Current State Baseline
 
-### Overview
+### 📖 Overview
 
 The current-state baseline represents the as-is architecture of the APIM Accelerator as encoded in the repository's infrastructure-as-code templates, configuration files, and deployment automation. This analysis evaluates the completeness of value stream coverage and the operational readiness of the platform.
 
 The accelerator is in a production-ready state for its core deployment scope (API Management + monitoring + API Center governance). All three deployment layers are fully implemented with typed parameter contracts, diagnostic integration, and governance tagging.
 
-### 4.1 Capability Assessment
+### 📋 4.1 Capability Assessment
 
 | Capability                     | Description                                                                                        |
 | ------------------------------ | -------------------------------------------------------------------------------------------------- |
@@ -263,7 +263,7 @@ The accelerator is in a production-ready state for its core deployment scope (AP
 | Multi-Team Workspace Isolation | Workspace resource creation per config entry, Premium SKU gate documented                          |
 | Networking                     | Placeholder module using SCVMM provider; VNet parameters defined but no network resources deployed |
 
-### 4.2 Configuration Coverage
+### 📊 4.2 Configuration Coverage
 
 | Configuration Area             | Status   |
 | ------------------------------ | -------- |
@@ -277,7 +277,7 @@ The accelerator is in a production-ready state for its core deployment scope (AP
 | Developer portal AAD tenants   | Partial  |
 | API Center workspace model     | Partial  |
 
-### Capability Heatmap
+### 🌡️ Capability Heatmap
 
 ```mermaid
 ---
@@ -321,7 +321,7 @@ flowchart LR
     classDef danger   fill:#FDE7E9,stroke:#E81123,stroke-width:2px,color:#A4262C
 ```
 
-### 4.3 Deployment Process Topology
+### 🚀 4.3 Deployment Process Topology
 
 ```mermaid
 ---
@@ -374,7 +374,7 @@ flowchart TB
     classDef data     fill:#E1DFDD,stroke:#8378DE,stroke-width:2px,color:#5B5FC7
 ```
 
-### Summary
+### ✅ Summary
 
 The APIM Accelerator presents a well-structured current-state architecture with strong capabilities in core API gateway, developer portal, and observability. Configuration coverage is comprehensive for naming, tagging, identity, and multi-environment deployment. The deployment process is fully automated via azd with a three-layer sequential orchestration and pre-provision cleanup.
 
@@ -382,19 +382,19 @@ Three areas require attention for advancement: the networking layer remains a pl
 
 ---
 
-## 5. Component Catalog
+## 📚 5. Component Catalog
 
-### Overview
+### 📖 Overview
 
 This section provides detailed specifications for each identified Business layer component. Components are organized by the Business Architecture types with specifications expanding on the inventory tables in Section 2. Each component entry includes attribute tables with relationship mappings.
 
 All components are verified against source files in the repository root. No fabricated components are included — every entry is traceable to specific files and line ranges. A total of 31 components are documented in detail across 9 active component types.
 
-### 5.1 Business Strategy Specifications
+### 🎯 5.1 Business Strategy Specifications
 
 This subsection documents the strategic initiatives and business direction identified in the APIM Accelerator. Two strategy components were detected, both with documented objectives and implementation patterns.
 
-#### 5.1.1 API-First Platform Strategy
+#### 🌐 5.1.1 API-First Platform Strategy
 
 | Attribute       | Value                                                                                                                                                                                                    |
 | --------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
@@ -404,7 +404,7 @@ This subsection documents the strategic initiatives and business direction ident
 
 **Relationships**: Drives API Gateway Management (Capability), API Platform Provisioning (Value Stream), Landing Zone Deployment (Process).
 
-#### 5.1.2 Multi-Environment Deployment Strategy
+#### 🔀 5.1.2 Multi-Environment Deployment Strategy
 
 | Attribute       | Value                                                                                                                                                                                                                |
 | --------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
@@ -414,11 +414,11 @@ This subsection documents the strategic initiatives and business direction ident
 
 **Relationships**: Supports Landing Zone Deployment (Process), Resource Naming & Tagging (Function), Tag Governance Rules (Business Rule).
 
-### 5.2 Business Capabilities Specifications
+### 💪 5.2 Business Capabilities Specifications
 
 This subsection documents the six core business capabilities that form the APIM Accelerator platform. Three capabilities are production-ready with full feature implementation (API Gateway Management, Developer Self-Service, Observability & Monitoring), and three are implemented with room for expansion (API Inventory Governance, Identity & Access Management, Multi-Team Workspace Isolation).
 
-#### 5.2.1 API Gateway Management
+#### 🚪 5.2.1 API Gateway Management
 
 | Attribute        | Value                                                                                                                                                                                                                                                       |
 | ---------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
@@ -429,7 +429,7 @@ This subsection documents the six core business capabilities that form the APIM 
 
 **Relationships**: Depends on Observability & Monitoring; Enables Developer Self-Service, Multi-Team Workspace Isolation, API Inventory Governance.
 
-#### 5.2.2 Developer Self-Service
+#### 🧑‍💻 5.2.2 Developer Self-Service
 
 | Attribute        | Value                                                                                                                                                                                                                                   |
 | ---------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
@@ -440,7 +440,7 @@ This subsection documents the six core business capabilities that form the APIM 
 
 **Relationships**: Depends on API Gateway Management, Identity & Access Management; Serves API Consumer (Role).
 
-#### 5.2.3 API Inventory Governance
+#### 📋 5.2.3 API Inventory Governance
 
 | Attribute        | Value                                                                                                                                                                                                                                  |
 | ---------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
@@ -451,7 +451,7 @@ This subsection documents the six core business capabilities that form the APIM 
 
 **Relationships**: Depends on API Gateway Management; Enables API Lifecycle Management (Value Stream), API Catalog Service (Business Service).
 
-#### 5.2.4 Observability & Monitoring
+#### 📈 5.2.4 Observability & Monitoring
 
 | Attribute        | Value                                                                                                                                                                                                                                          |
 | ---------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
@@ -462,7 +462,7 @@ This subsection documents the six core business capabilities that form the APIM 
 
 **Relationships**: Required by API Gateway Management; Outputs consumed by Core Platform and Inventory layers.
 
-#### 5.2.5 Identity & Access Management
+#### 🔐 5.2.5 Identity & Access Management
 
 | Attribute        | Value                                                                                                                                                                                                                                                           |
 | ---------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
@@ -473,7 +473,7 @@ This subsection documents the six core business capabilities that form the APIM 
 
 **Relationships**: Enables API Gateway Management, API Inventory Governance, Developer Self-Service.
 
-#### 5.2.6 Multi-Team Workspace Isolation
+#### 🏢 5.2.6 Multi-Team Workspace Isolation
 
 | Attribute        | Value                                                                                                                                                                                                                        |
 | ---------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
@@ -484,11 +484,11 @@ This subsection documents the six core business capabilities that form the APIM 
 
 **Relationships**: Depends on API Gateway Management; Constrained by SKU-Feature Dependency Rules (Business Rule).
 
-### 5.3 Value Streams Specifications
+### 🔄 5.3 Value Streams Specifications
 
 This subsection documents the two value streams identified in the APIM Accelerator. The API Platform Provisioning value stream is the primary delivery mechanism. The API Lifecycle Management value stream covers post-deployment operations.
 
-#### 5.3.1 API Platform Provisioning
+#### 🏗️ 5.3.1 API Platform Provisioning
 
 | Attribute              | Value                                                                                                                                                                                                                                                                                                 |
 | ---------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
@@ -507,7 +507,7 @@ This subsection documents the two value streams identified in the APIM Accelerat
 
 **Relationships**: Orchestrates Landing Zone Deployment (Process), Pre-Provision Cleanup (Process); Realizes API-First Platform Strategy.
 
-#### 5.3.2 API Lifecycle Management
+#### 🔃 5.3.2 API Lifecycle Management
 
 | Attribute              | Value                                                                                                                                                                                                                                                       |
 | ---------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
@@ -518,11 +518,11 @@ This subsection documents the two value streams identified in the APIM Accelerat
 
 **Relationships**: Depends on API Platform Provisioning (Value Stream); Enables API Consumer (Role), API Publisher (Role).
 
-### 5.4 Business Processes Specifications
+### ⚙️ 5.4 Business Processes Specifications
 
 This subsection documents three business processes. The Landing Zone Deployment process has full automation. The Pre-Provision Cleanup and Developer Portal Onboarding processes are fully implemented with documented workflows.
 
-#### 5.4.1 Landing Zone Deployment
+#### 🏯 5.4.1 Landing Zone Deployment
 
 | Attribute       | Value                                                                                                                                                                                                                                                           |
 | --------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
@@ -542,7 +542,7 @@ This subsection documents three business processes. The Landing Zone Deployment 
 
 **Relationships**: Part of API Platform Provisioning (Value Stream); Triggers Deployment Triggered (Event); Preceded by Pre-Provision Cleanup (Process).
 
-#### 5.4.2 Pre-Provision Cleanup
+#### 🧹 5.4.2 Pre-Provision Cleanup
 
 | Attribute       | Value                                                                                                                                                                                                                                                         |
 | --------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
@@ -554,7 +554,7 @@ This subsection documents three business processes. The Landing Zone Deployment 
 
 **Relationships**: Precedes Landing Zone Deployment (Process); Triggers APIM Soft-Delete Detected (Event).
 
-#### 5.4.3 Developer Portal Onboarding
+#### 🚀 5.4.3 Developer Portal Onboarding
 
 | Attribute       | Value                                                                                                                                                                                                                                                                                             |
 | --------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
@@ -566,7 +566,7 @@ This subsection documents three business processes. The Landing Zone Deployment 
 
 **Relationships**: Part of API Lifecycle Management (Value Stream); Serves API Consumer (Role); Depends on API Gateway Management (Capability).
 
-### Landing Zone Deployment Process Flow
+### 🗺️ Landing Zone Deployment Process Flow
 
 ```mermaid
 ---
@@ -627,11 +627,11 @@ flowchart TB
     classDef data     fill:#E1DFDD,stroke:#8378DE,stroke-width:2px,color:#5B5FC7
 ```
 
-### 5.5 Business Services Specifications
+### 🛠️ 5.5 Business Services Specifications
 
 This subsection documents four platform services that constitute the APIM Accelerator's service catalog. The API Gateway Service and Monitoring & Diagnostics Service are the strongest services with full feature implementation.
 
-#### 5.5.1 API Gateway Service
+#### 🚪 5.5.1 API Gateway Service
 
 | Attribute       | Value                                                                                                                                                                                                                                                                                                                        |
 | --------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
@@ -641,7 +641,7 @@ This subsection documents four platform services that constitute the APIM Accele
 
 **Relationships**: Hosts Developer Portal Service, Multi-Team Workspace Isolation; Consumes Monitoring & Diagnostics Service; Produces API Management outputs.
 
-#### 5.5.2 Developer Portal Service
+#### 💻 5.5.2 Developer Portal Service
 
 | Attribute       | Value                                                                                                                                                                                                                                                                                                                         |
 | --------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
@@ -651,7 +651,7 @@ This subsection documents four platform services that constitute the APIM Accele
 
 **Relationships**: Child of API Gateway Service; Consumes Identity & Access Management; Serves API Consumer (Role).
 
-#### 5.5.3 API Catalog Service
+#### 📖 5.5.3 API Catalog Service
 
 | Attribute       | Value                                                                                                                                                                                                                               |
 | --------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
@@ -661,7 +661,7 @@ This subsection documents four platform services that constitute the APIM Accele
 
 **Relationships**: Consumes API Gateway Service outputs; Governed by Tag Governance Rules, RBAC Assignment Automation.
 
-#### 5.5.4 Monitoring & Diagnostics Service
+#### 📊 5.5.4 Monitoring & Diagnostics Service
 
 | Attribute       | Value                                                                                                                                                                                                                                                                                                             |
 | --------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
@@ -671,11 +671,11 @@ This subsection documents four platform services that constitute the APIM Accele
 
 **Relationships**: Required by API Gateway Service, Core Platform Layer; Outputs Log Analytics workspace ID, App Insights resource ID, Storage account ID.
 
-### 5.6 Business Functions Specifications
+### 🔧 5.6 Business Functions Specifications
 
 This subsection documents three organizational functions responsible for cross-cutting Business layer operations. The Resource Naming & Tagging function has fully automated enforcement.
 
-#### 5.6.1 Resource Naming & Tagging
+#### 🏷️ 5.6.1 Resource Naming & Tagging
 
 | Attribute       | Value                                                                                                                                                                                                                                                                                                                                                        |
 | --------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
@@ -685,7 +685,7 @@ This subsection documents three organizational functions responsible for cross-c
 
 **Relationships**: Consumed by all deployment modules; Enforces Naming Convention Rules, Tag Governance Rules.
 
-#### 5.6.2 Configuration Management
+#### 📝 5.6.2 Configuration Management
 
 | Attribute       | Value                                                                                                                                                                                                                                                                                                          |
 | --------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
@@ -695,7 +695,7 @@ This subsection documents three organizational functions responsible for cross-c
 
 **Relationships**: Provides input to Landing Zone Deployment (Process); Supports Multi-Environment Deployment Strategy.
 
-#### 5.6.3 RBAC Assignment Automation
+#### 🔐 5.6.3 RBAC Assignment Automation
 
 | Attribute       | Value                                                                                                                                                                                                                                                                                                                                        |
 | --------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
@@ -705,11 +705,11 @@ This subsection documents three organizational functions responsible for cross-c
 
 **Relationships**: Enables Identity & Access Management (Capability); Applied to API Gateway Service, API Catalog Service.
 
-### 5.7 Business Roles & Actors Specifications
+### 👥 5.7 Business Roles & Actors Specifications
 
 This subsection documents four business roles identified in the APIM Accelerator. Three roles have documented responsibilities. The Subscription Owner role's definition relies on external Azure RBAC documentation.
 
-#### 5.7.1 Platform Team
+#### 🛠️ 5.7.1 Platform Team
 
 | Attribute       | Value                                                                                                                                                                                                                                                                         |
 | --------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
@@ -719,7 +719,7 @@ This subsection documents four business roles identified in the APIM Accelerator
 
 **Relationships**: Owns API-First Platform Strategy, all Bicep modules; Accountable for Landing Zone Deployment, Configuration Management.
 
-#### 5.7.2 API Publisher
+#### 📤 5.7.2 API Publisher
 
 | Attribute       | Value                                                                                                                                                                                                    |
 | --------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
@@ -729,7 +729,7 @@ This subsection documents four business roles identified in the APIM Accelerator
 
 **Relationships**: Uses API Gateway Service, Developer Portal Service; Manages workspace-based API collections.
 
-#### 5.7.3 API Consumer
+#### 📥 5.7.3 API Consumer
 
 | Attribute       | Value                                                                                                                                                                                                                                                                      |
 | --------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
@@ -739,7 +739,7 @@ This subsection documents four business roles identified in the APIM Accelerator
 
 **Relationships**: Consumes Developer Portal Service, API Gateway Service; Subject to Business Rules (terms-of-service, tenant restrictions).
 
-#### 5.7.4 Subscription Owner
+#### 👤 5.7.4 Subscription Owner
 
 | Attribute       | Value                                                                                                                                                                                                                                                                                                |
 | --------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
@@ -749,11 +749,11 @@ This subsection documents four business roles identified in the APIM Accelerator
 
 **Relationships**: Initiates Deployment Triggered (Event); Executes Landing Zone Deployment (Process), Pre-Provision Cleanup (Process).
 
-### 5.8 Business Rules Specifications
+### 📏 5.8 Business Rules Specifications
 
 This subsection documents four business rules governing platform behavior. Rules are enforced at different stages: compile-time (Bicep type system), deploy-time (Bicep template), and runtime (Azure Resource Provider).
 
-#### 5.8.1 Naming Convention Rules
+#### 📛 5.8.1 Naming Convention Rules
 
 | Attribute       | Value                                                                                                                                                                                                                                                                                                                        |
 | --------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
@@ -762,7 +762,7 @@ This subsection documents four business rules governing platform behavior. Rules
 | **Enforcement** | Compile-time (Bicep variable resolution)                                                                                                                                                                                                                                                                                     |
 | **Description** | Enforced naming patterns: Resource Group uses solutionName-envName-location-rg, APIM uses solutionName-uniqueSuffix-apim, API Center uses solutionName-apicenter, Storage truncates to 24 chars, Log Analytics appends -law, App Insights appends -ai. Unique suffixes use uniqueString for deterministic global uniqueness. |
 
-#### 5.8.2 SKU-Feature Dependency Rules
+#### 💠 5.8.2 SKU-Feature Dependency Rules
 
 | Attribute       | Value                                                                                                                                                                                                                                                                                  |
 | --------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
@@ -771,7 +771,7 @@ This subsection documents four business rules governing platform behavior. Rules
 | **Enforcement** | Runtime (Azure Resource Provider)                                                                                                                                                                                                                                                      |
 | **Description** | Feature gating based on APIM SKU selection: Workspaces require Premium SKU tier, multi-region deployment requires Premium SKU, VNet integration requires Premium SKU, and higher SLA guarantees require Premium tier. Violations produce deployment errors at Azure provisioning time. |
 
-#### 5.8.3 Tag Governance Rules
+#### 🏷️ 5.8.3 Tag Governance Rules
 
 | Attribute       | Value                                                                                                                                                                                                                                                                                                                                |
 | --------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
@@ -780,7 +780,7 @@ This subsection documents four business rules governing platform behavior. Rules
 | **Enforcement** | Deploy-time (Bicep template union operation)                                                                                                                                                                                                                                                                                         |
 | **Description** | Mandatory 10-tag taxonomy applied to every deployed resource via union operation: CostCenter, BusinessUnit, Owner, ApplicationName, ProjectName, ServiceClass, RegulatoryCompliance, SupportContact, ChargebackModel, BudgetCode. Additional metadata tags (environment, managedBy, templateVersion) are appended during deployment. |
 
-#### 5.8.4 Identity Configuration Rules
+#### 🔑 5.8.4 Identity Configuration Rules
 
 | Attribute       | Value                                                                                                                                                                                                                                                                                                                                                                               |
 | --------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
@@ -789,11 +789,11 @@ This subsection documents four business rules governing platform behavior. Rules
 | **Enforcement** | Compile-time (Bicep type system)                                                                                                                                                                                                                                                                                                                                                    |
 | **Description** | Two identity type schemas exist: SystemAssignedIdentity restricts to SystemAssigned or UserAssigned, ExtendedIdentity adds None option. User-assigned identities require pre-provisioned resource IDs. Identity type is a required field in all configuration sections. The createIdentityConfig utility function in constants.bicep produces correctly formatted identity objects. |
 
-### 5.9 Business Events Specifications
+### ⚡ 5.9 Business Events Specifications
 
 This subsection documents three business events that trigger or result from Business layer operations. All events are automated but not yet formally measured.
 
-#### 5.9.1 Deployment Triggered
+#### 🚀 5.9.1 Deployment Triggered
 
 | Attribute       | Value                                                                                                                                                                                                                                           |
 | --------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
@@ -804,7 +804,7 @@ This subsection documents three business events that trigger or result from Busi
 | **Consumer**    | azure.yaml lifecycle hooks, infra/main.bicep                                                                                                                                                                                                    |
 | **Description** | Event initiated when an operator executes azd up or azd provision. The azure.yaml lifecycle hook configuration triggers the pre-provision shell script, which then yields to the Bicep orchestration template for the main deployment sequence. |
 
-#### 5.9.2 APIM Soft-Delete Detected
+#### 🗑️ 5.9.2 APIM Soft-Delete Detected
 
 | Attribute       | Value                                                                                                                                                                                                                                                           |
 | --------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
@@ -815,7 +815,7 @@ This subsection documents three business events that trigger or result from Busi
 | **Consumer**    | process_apim_purging function                                                                                                                                                                                                                                   |
 | **Description** | Event raised when the pre-provision script discovers one or more soft-deleted APIM instances via az apim deletedservice list. Triggers the purge_soft_deleted_apim function for each discovered instance to permanently delete it and prevent naming conflicts. |
 
-#### 5.9.3 API Source Synchronization
+#### 🔄 5.9.3 API Source Synchronization
 
 | Attribute       | Value                                                                                                                                                                                                   |
 | --------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
@@ -826,7 +826,7 @@ This subsection documents three business events that trigger or result from Busi
 | **Consumer**    | API Center default workspace                                                                                                                                                                            |
 | **Description** | Ongoing event where the API Center APIM source integration resource automatically discovers and imports APIs from the connected API Management instance after the inventory layer deployment completes. |
 
-### Event-Response Diagram
+### ⚡ Event-Response Diagram
 
 ```mermaid
 ---
@@ -878,7 +878,7 @@ flowchart LR
     classDef external fill:#F3F2F1,stroke:#605E5C,stroke-width:2px,color:#323130
 ```
 
-### 5.10 Business Objects/Entities Specifications
+### 📦 5.10 Business Objects/Entities Specifications
 
 This subsection documents Business objects and domain entities. Zero instances were detected in the analyzed source files. The APIM Accelerator models Azure infrastructure resources rather than business domain entities such as Customer, Order, or Invoice.
 
@@ -886,7 +886,7 @@ This subsection documents Business objects and domain entities. Zero instances w
 | ------------ | ------------ |
 | Not detected | Not detected |
 
-### 5.11 KPIs & Metrics Specifications
+### 📊 5.11 KPIs & Metrics Specifications
 
 This subsection documents Business KPIs and performance metrics. Zero instances were detected in the analyzed source files. While the accelerator deploys monitoring infrastructure capable of tracking operational metrics, no explicit business-level KPI definitions or metric thresholds are codified in the repository.
 
@@ -894,7 +894,7 @@ This subsection documents Business KPIs and performance metrics. Zero instances 
 | ------------ | ------------ |
 | Not detected | Not detected |
 
-### Summary
+### ✅ Summary
 
 The Component Catalog documents **31 components** across 9 of 11 Business Architecture types. The strongest components are API Gateway Management, Monitoring & Diagnostics Service, and Landing Zone Deployment process. Four capabilities and three services have achieved production-ready status, demonstrating quantitative management with metrics-capable monitoring infrastructure.
 
@@ -902,15 +902,15 @@ Two component types — Business Objects/Entities and KPIs & Metrics — have ze
 
 ---
 
-## 8. Dependencies & Integration
+## 🔗 8. Dependencies & Integration
 
-### Overview
+### 📖 Overview
 
 This section maps cross-layer dependencies, component integration patterns, and module coupling within the APIM Accelerator. The platform follows a strict layered dependency model where each deployment layer depends on outputs from the previous layer. All inter-module communication uses typed Bicep parameters and outputs, ensuring explicit and compile-time-validated contracts with no implicit or runtime-discovered dependencies.
 
 The integration architecture is organized around three deployment layers (Shared, Core, Inventory) with a clear dependency direction: upstream modules produce outputs consumed by downstream modules. This pattern enables independent module testing, predictable deployment ordering, and isolated failure domains. Cross-cutting concerns (naming, tagging, identity) are centralized in shared utility modules imported by all layers.
 
-### 8.1 Module Output-to-Input Mapping
+### 📤 8.1 Module Output-to-Input Mapping
 
 | Source Module                                | Output                           | Consuming Module                          | Input Parameter                 |
 | -------------------------------------------- | -------------------------------- | ----------------------------------------- | ------------------------------- |
@@ -926,7 +926,7 @@ The integration architecture is organized around three deployment layers (Shared
 | src/core/apim.bicep                          | AZURE_CLIENT_SECRET_CLIENT_ID    | src/core/developer-portal.bicep           | clientId                        |
 | src/core/apim.bicep                          | AZURE_CLIENT_SECRET_CLIENT_ID    | src/core/developer-portal.bicep           | clientSecret                    |
 
-### 8.2 Shared Utility Dependencies
+### 🧰 8.2 Shared Utility Dependencies
 
 | Utility Module                | Exported Resource                   | Importing Modules                                     |
 | ----------------------------- | ----------------------------------- | ----------------------------------------------------- |
@@ -937,7 +937,7 @@ The integration architecture is organized around three deployment layers (Shared
 | src/shared/constants.bicep    | generateUniqueSuffix function       | src/core/main.bicep, src/shared/monitoring/main.bicep |
 | src/shared/constants.bicep    | generateStorageAccountName function | src/shared/monitoring/operational/main.bicep          |
 
-### 8.3 Cross-Layer Capability Dependencies
+### 🔀 8.3 Cross-Layer Capability Dependencies
 
 | Business Capability            | Depends On                                       | Integration Pattern                                                                                           |
 | ------------------------------ | ------------------------------------------------ | ------------------------------------------------------------------------------------------------------------- |
@@ -947,7 +947,7 @@ The integration architecture is organized around three deployment layers (Shared
 | API Inventory Governance       | API Gateway Management                           | Consumes APIM resource ID and name for API source integration configuration                                   |
 | Identity & Access Management   | API Gateway Management, API Inventory Governance | Assigns RBAC roles to APIM and API Center managed identity principals                                         |
 
-### 8.4 External Dependencies
+### 🌐 8.4 External Dependencies
 
 | Dependency                     | Type           | Required |
 | ------------------------------ | -------------- | -------- |
@@ -959,7 +959,7 @@ The integration architecture is organized around three deployment layers (Shared
 | Azure AD App Registration      | Identity       | Optional |
 | Azure Region with APIM Premium | Infrastructure | Yes      |
 
-### Cross-Layer Dependency Map
+### 🗺️ Cross-Layer Dependency Map
 
 ```mermaid
 ---
@@ -1049,7 +1049,7 @@ flowchart TB
     classDef data     fill:#E1DFDD,stroke:#8378DE,stroke-width:2px,color:#5B5FC7
 ```
 
-### Value Stream Dependency Graph
+### 🔗 Value Stream Dependency Graph
 
 ```mermaid
 ---
@@ -1112,7 +1112,7 @@ flowchart TB
     classDef external fill:#F3F2F1,stroke:#605E5C,stroke-width:2px,color:#323130
 ```
 
-### Summary
+### ✅ Summary
 
 The APIM Accelerator follows a strict unidirectional layered dependency model: Configuration to Shared to Core to Inventory. All 11 inter-module data flows use explicitly typed Bicep parameters and outputs, with no implicit dependencies. Shared utilities (common-types.bicep, constants.bicep) provide cross-cutting type safety and naming consistency. The coupling pattern is healthy with high internal cohesion and minimal external coupling through well-defined contracts.
 
