@@ -165,13 +165,8 @@ flowchart TB
     cap1 -->|"provides workspaces"| cap6
     cap1 -->|"feeds APIs to"| cap3
 
-    classDef neutral  fill:#FAFAFA,stroke:#8A8886,stroke-width:2px,color:#323130
-    classDef core     fill:#DEECF9,stroke:#0078D4,stroke-width:2px,color:#004578
     classDef success  fill:#DFF6DD,stroke:#107C10,stroke-width:2px,color:#0B6A0B
     classDef warning  fill:#FFF4CE,stroke:#FFB900,stroke-width:2px,color:#986F0B
-    classDef danger   fill:#FDE7E9,stroke:#E81123,stroke-width:2px,color:#A4262C
-    classDef data     fill:#E1DFDD,stroke:#8378DE,stroke-width:2px,color:#5B5FC7
-    classDef external fill:#F3F2F1,stroke:#605E5C,stroke-width:2px,color:#323130
 ```
 
 ### Summary
@@ -321,13 +316,9 @@ flowchart LR
     L3 --- ws["🏢 Multi-Team<br/>Workspace Isolation"]:::warning
     L1 --- nw["🌐 Networking"]:::danger
 
-    classDef neutral  fill:#FAFAFA,stroke:#8A8886,stroke-width:2px,color:#323130
-    classDef core     fill:#DEECF9,stroke:#0078D4,stroke-width:2px,color:#004578
     classDef success  fill:#DFF6DD,stroke:#107C10,stroke-width:2px,color:#0B6A0B
     classDef warning  fill:#FFF4CE,stroke:#FFB900,stroke-width:2px,color:#986F0B
     classDef danger   fill:#FDE7E9,stroke:#E81123,stroke-width:2px,color:#A4262C
-    classDef data     fill:#E1DFDD,stroke:#8378DE,stroke-width:2px,color:#5B5FC7
-    classDef external fill:#F3F2F1,stroke:#605E5C,stroke-width:2px,color:#323130
 ```
 
 ### 4.3 Deployment Process Topology
@@ -377,13 +368,10 @@ flowchart TB
     core --> inventory
     inventory --> done
 
-    classDef neutral  fill:#FAFAFA,stroke:#8A8886,stroke-width:2px,color:#323130
     classDef core     fill:#DEECF9,stroke:#0078D4,stroke-width:2px,color:#004578
     classDef success  fill:#DFF6DD,stroke:#107C10,stroke-width:2px,color:#0B6A0B
     classDef warning  fill:#FFF4CE,stroke:#FFB900,stroke-width:2px,color:#986F0B
-    classDef danger   fill:#FDE7E9,stroke:#E81123,stroke-width:2px,color:#A4262C
     classDef data     fill:#E1DFDD,stroke:#8378DE,stroke-width:2px,color:#5B5FC7
-    classDef external fill:#F3F2F1,stroke:#605E5C,stroke-width:2px,color:#323130
 ```
 
 ### Summary
@@ -633,13 +621,10 @@ flowchart TB
     DeployAC --> AssignRBAC
     AssignRBAC --> End
 
-    classDef neutral  fill:#FAFAFA,stroke:#8A8886,stroke-width:2px,color:#323130
     classDef core     fill:#DEECF9,stroke:#0078D4,stroke-width:2px,color:#004578
     classDef success  fill:#DFF6DD,stroke:#107C10,stroke-width:2px,color:#0B6A0B
     classDef warning  fill:#FFF4CE,stroke:#FFB900,stroke-width:2px,color:#986F0B
-    classDef danger   fill:#FDE7E9,stroke:#E81123,stroke-width:2px,color:#A4262C
     classDef data     fill:#E1DFDD,stroke:#8378DE,stroke-width:2px,color:#5B5FC7
-    classDef external fill:#F3F2F1,stroke:#605E5C,stroke-width:2px,color:#323130
 ```
 
 ### 5.5 Business Services Specifications
@@ -887,12 +872,9 @@ flowchart LR
     T3 -->|"triggers"| E3
     E3 -->|"consumed by"| C3
 
-    classDef neutral  fill:#FAFAFA,stroke:#8A8886,stroke-width:2px,color:#323130
     classDef core     fill:#DEECF9,stroke:#0078D4,stroke-width:2px,color:#004578
     classDef success  fill:#DFF6DD,stroke:#107C10,stroke-width:2px,color:#0B6A0B
     classDef warning  fill:#FFF4CE,stroke:#FFB900,stroke-width:2px,color:#986F0B
-    classDef danger   fill:#FDE7E9,stroke:#E81123,stroke-width:2px,color:#A4262C
-    classDef data     fill:#E1DFDD,stroke:#8378DE,stroke-width:2px,color:#5B5FC7
     classDef external fill:#F3F2F1,stroke:#605E5C,stroke-width:2px,color:#323130
 ```
 
@@ -1057,17 +1039,14 @@ flowchart TB
     acws --> acsrc
 
     style config fill:#F3F2F1,stroke:#605E5C,stroke-width:2px,color:#323130
-    style shared fill:#E1DFDD,stroke:#8378DE,stroke-width:2px,color:#5B5FC7
-    style core fill:#DEECF9,stroke:#0078D4,stroke-width:2px,color:#004578
-    style inventory fill:#DFF6DD,stroke:#107C10,stroke-width:2px,color:#0B6A0B
+    style shared fill:#F3F2F1,stroke:#8378DE,stroke-width:2px,color:#323130
+    style core fill:#F3F2F1,stroke:#0078D4,stroke-width:2px,color:#323130
+    style inventory fill:#F3F2F1,stroke:#107C10,stroke-width:2px,color:#323130
 
     classDef neutral  fill:#FAFAFA,stroke:#8A8886,stroke-width:2px,color:#323130
     classDef core     fill:#DEECF9,stroke:#0078D4,stroke-width:2px,color:#004578
     classDef success  fill:#DFF6DD,stroke:#107C10,stroke-width:2px,color:#0B6A0B
-    classDef warning  fill:#FFF4CE,stroke:#FFB900,stroke-width:2px,color:#986F0B
-    classDef danger   fill:#FDE7E9,stroke:#E81123,stroke-width:2px,color:#A4262C
     classDef data     fill:#E1DFDD,stroke:#8378DE,stroke-width:2px,color:#5B5FC7
-    classDef external fill:#F3F2F1,stroke:#605E5C,stroke-width:2px,color:#323130
 ```
 
 ### Value Stream Dependency Graph
@@ -1127,12 +1106,9 @@ flowchart TB
 
     VS1 -->|"enables"| VS2
 
-    classDef neutral  fill:#FAFAFA,stroke:#8A8886,stroke-width:2px,color:#323130
     classDef core     fill:#DEECF9,stroke:#0078D4,stroke-width:2px,color:#004578
     classDef success  fill:#DFF6DD,stroke:#107C10,stroke-width:2px,color:#0B6A0B
     classDef warning  fill:#FFF4CE,stroke:#FFB900,stroke-width:2px,color:#986F0B
-    classDef danger   fill:#FDE7E9,stroke:#E81123,stroke-width:2px,color:#A4262C
-    classDef data     fill:#E1DFDD,stroke:#8378DE,stroke-width:2px,color:#5B5FC7
     classDef external fill:#F3F2F1,stroke:#605E5C,stroke-width:2px,color:#323130
 ```
 
