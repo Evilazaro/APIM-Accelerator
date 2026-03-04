@@ -1,25 +1,12 @@
 # Business Architecture Analysis — comprehensive
 
-| Field                  | Value                |
-| ---------------------- | -------------------- |
-| **Layer**              | Business             |
-| **Quality Level**      | comprehensive        |
-| **Framework**          | TOGAF 10 / BDAT      |
-| **Repository**         | APIM-Accelerator     |
-| **Components Found**   | 31                   |
-| **Diagrams Included**  | 7                    |
-| **Sections Generated** | 1, 2, 3, 4, 5, 8     |
-| **Generated**          | 2026-03-04T00:00:00Z |
-
----
-
 ## 1. Executive Summary
 
 ### Overview
 
 This Business Architecture analysis documents the APIM Accelerator repository — a production-ready Azure landing zone accelerator for deploying and governing a complete API Management platform. The accelerator addresses the enterprise business need for standardized, repeatable API platform provisioning with integrated governance, monitoring, and developer self-service capabilities. The solution targets Enterprise Architects, Platform Engineers, and API Program Managers responsible for establishing API-first strategies.
 
-The analysis identified **31 Business layer components** across 9 of the 11 canonical TOGAF Business Architecture types. Business capabilities span three strategic layers: shared observability infrastructure, core API Management platform, and API inventory governance. Components were extracted from infrastructure-as-code templates (Bicep), configuration files (YAML/JSON), deployment automation scripts, and project documentation.
+The analysis identified **31 Business layer components** across 9 of the Business Architecture types. Business capabilities span three strategic layers: shared observability infrastructure, core API Management platform, and API inventory governance. Components were extracted from infrastructure-as-code templates (Bicep), configuration files (YAML/JSON), deployment automation scripts, and project documentation.
 
 Key findings include a mature capability model organized around modular deployment layers, well-defined value streams for API lifecycle management, and comprehensive governance tagging that supports cost allocation, compliance tracking, and organizational ownership. The accelerator implements a single-command deployment model (`azd up`) that orchestrates the entire provisioning sequence, demonstrating a streamlined business process for platform delivery. Gap areas include the absence of formal KPI definitions, no business object/entity models, and a placeholder networking layer that constrains the current private deployment story.
 
@@ -41,7 +28,7 @@ Key findings include a mature capability model organized around modular deployme
 
 ### Overview
 
-This section provides a structured inventory of all Business layer components identified across the APIM Accelerator repository. Components are organized by the 11 canonical TOGAF Business Architecture types.
+This section provides a structured inventory of all Business layer components identified across the APIM Accelerator repository. Components are organized by the Business Architecture types.
 
 The accelerator's business architecture is fundamentally an infrastructure platform that delivers API Management as a self-service capability. Business components are encoded in infrastructure-as-code (Bicep), deployment configuration (YAML), and automation scripts (Shell), rather than in traditional application code. This architectural pattern is characteristic of platform engineering initiatives where the "product" is a reusable infrastructure template.
 
@@ -199,7 +186,7 @@ Two component types — Business Objects/Entities and KPIs & Metrics — returne
 
 ### Overview
 
-The APIM Accelerator exhibits several well-defined architecture principles that guide the design and governance of the platform. These principles are inferred from source code patterns, configuration structures, and documented design decisions rather than explicitly declared in a principles catalog. They align with TOGAF 10 Architecture Principles and reflect enterprise-grade platform engineering practices.
+The APIM Accelerator exhibits several well-defined architecture principles that guide the design and governance of the platform. These principles are inferred from source code patterns, configuration structures, and documented design decisions rather than explicitly declared in a principles catalog. They align with 10 Architecture Principles and reflect enterprise-grade platform engineering practices.
 
 Each principle below is documented using a structured attribute table format. All principles are active (implemented in code) rather than aspirational.
 
@@ -411,7 +398,7 @@ Three areas require attention for advancement: the networking layer remains a pl
 
 ### Overview
 
-This section provides detailed specifications for each identified Business layer component. Components are organized by the 11 canonical TOGAF Business Architecture types with specifications expanding on the inventory tables in Section 2. Each component entry includes attribute tables with relationship mappings.
+This section provides detailed specifications for each identified Business layer component. Components are organized by the Business Architecture types with specifications expanding on the inventory tables in Section 2. Each component entry includes attribute tables with relationship mappings.
 
 All components are verified against source files in the repository root. No fabricated components are included — every entry is traceable to specific files and line ranges. A total of 31 components are documented in detail across 9 active component types.
 
