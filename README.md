@@ -6,8 +6,6 @@
 
 An enterprise-grade Azure API Management Landing Zone accelerator that automates the deployment of a complete API platform using Infrastructure as Code (Bicep) and Azure Developer CLI (`azd`).
 
-### Overview
-
 This accelerator eliminates weeks of manual Azure infrastructure setup by providing **production-ready Bicep templates** that deploy a fully integrated API Management landing zone in a **single command**. Platform engineering teams, cloud architects, and DevOps engineers use this accelerator to establish a repeatable, governed, and observable API platform that scales across development, staging, and production environments.
 
 The solution uses a **modular 3-tier deployment pattern** orchestrated by Azure Developer CLI (`azd`). Shared monitoring infrastructure provisions first, followed by the core API Management platform with developer portal and workspaces, and finally the API inventory layer for centralized governance. This layered approach ensures **correct dependency resolution**, consistent environments, and independent module updates without impacting the entire stack.
@@ -106,8 +104,6 @@ flowchart TB
 
 ## ✨ Features
 
-### Overview
-
 This accelerator delivers seven production-ready capabilities that address the full API management lifecycle — from infrastructure observability through API governance. Each feature integrates with Azure-native services to minimize operational overhead and maximize consistency across environments.
 
 The features work together as a cohesive platform: monitoring captures telemetry from the API gateway, the developer portal enables self-service API consumption, workspaces provide team-level isolation, and API Center creates a single catalog for governance and discoverability. This integrated approach ensures that every API published through the gateway is automatically monitored, documented, and governed.
@@ -123,8 +119,6 @@ The features work together as a cohesive platform: monitoring captures telemetry
 | 🧹 **Pre-Provision Cleanup**    | Runs an automated `azd` pre-provision hook that detects and purges soft-deleted APIM instances before deployment. Azure retains soft-deleted APIM resources for 48 hours, which causes name-conflict failures when redeploying to the same subscription. The `infra/azd-hooks/pre-provision.sh` script queries for soft-deleted instances matching the solution name and purges them, ensuring clean reprovisioning.                                                                                                 |
 
 ## 📋 Requirements
-
-### Overview
 
 Meeting these prerequisites ensures a successful first deployment and avoids common provisioning failures. Each requirement addresses a specific dependency in the deployment pipeline — the Azure CLI authenticates against your subscription, `azd` orchestrates the Bicep deployment, and a bash-compatible shell executes the pre-provision hook that purges soft-deleted resources.
 
@@ -356,8 +350,6 @@ SUCCESS: Your application was removed from Azure.
 
 ## 🔧 Configuration
 
-### Overview
-
 All infrastructure settings are centralized in `infra/settings.yaml`, which serves as the **single source of truth** for resource naming, SKU selection, identity configuration, and governance tags. This file-driven approach ensures that every environment deploys identically — only the `azd` environment variables (`AZURE_ENV_NAME`, `AZURE_LOCATION`) differ between development, staging, and production.
 
 The configuration follows a hierarchical pattern where shared settings (monitoring, tags) apply across all modules, core settings control the API gateway behavior, and inventory settings manage the API catalog. **Modify `infra/settings.yaml`** to customize the landing zone for your organization's requirements, then **run `azd provision`** to apply changes incrementally.
@@ -527,8 +519,6 @@ Provisioning Azure resources...
 Each environment gets its own resource group (`{solutionName}-{envName}-{location}-rg`) with identical infrastructure but isolated resources.
 
 ## 🤝 Contributing
-
-### Overview
 
 Contributions strengthen the accelerator by bringing diverse perspectives from platform engineers, cloud architects, and DevOps practitioners working with API Management across different organizations. Every pull request goes through code review to maintain the modular Bicep architecture and ensure changes integrate cleanly across the three deployment tiers.
 
