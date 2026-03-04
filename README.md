@@ -126,15 +126,15 @@ The accelerator provides six core capabilities that reduce the time to deploy a 
 
 These capabilities work together as a cohesive platform: monitoring feeds into diagnostics, workspaces enable team isolation, and API Center provides governance across the entire API landscape.
 
-| Feature                   | Description                                                                     | Status    |
-| ------------------------- | ------------------------------------------------------------------------------- | --------- |
-| 🚀 One-Command Deployment | Provision the entire landing zone with `azd up` using Azure Developer CLI       | ✅ Stable |
-| 🔍 Integrated Monitoring  | Log Analytics, Application Insights, and Storage Account deployed automatically | ✅ Stable |
-| 🖥️ Developer Portal       | Azure AD-secured self-service portal for API discovery and testing              | ✅ Stable |
-| 📂 Workspace Isolation    | Logical multi-team separation within a single APIM instance (Premium SKU)       | ✅ Stable |
-| 📑 API Governance         | Centralized API catalog and compliance management via Azure API Center          | ✅ Stable |
-| 🔒 Managed Identity       | System-assigned and user-assigned managed identity support across all resources | ✅ Stable |
-| 🌍 Multi-Environment      | Support for dev, test, staging, prod, and UAT environment configurations        | ✅ Stable |
+| Feature                   | Description                                                                                                                                                                                                                                                                                                                         | Status    |
+| ------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | --------- |
+| 🚀 One-Command Deployment | Full landing zone provisioning via Azure Developer CLI. Eliminates manual multi-step Azure setup so teams can go from zero to a running API platform in minutes. A single `azd up` orchestrates resource group creation, monitoring, APIM, and API Center in the correct dependency order.                                          | ✅ Stable |
+| 🔍 Integrated Monitoring  | End-to-end observability stack combining Log Analytics, Application Insights, and a Storage Account. Ensures every API call, performance metric, and diagnostic log is captured from day one for troubleshooting and compliance. Deploys automatically as the first tier so all downstream resources emit telemetry immediately.    | ✅ Stable |
+| 🖥️ Developer Portal       | Self-service API discovery and testing portal secured with Azure Active Directory. Empowers API consumers to onboard independently, reducing support burden on platform teams. Configures CORS, Azure AD identity provider, sign-in/sign-up flows, and terms of service through Bicep templates.                                    | ✅ Stable |
+| 📂 Workspace Isolation    | Logical multi-team separation within a single APIM instance using Premium-tier workspaces. Avoids the cost and operational overhead of running multiple APIM instances while giving each team independent API lifecycle management. Each workspace is created as a child resource with its own APIs, products, and subscriptions.   | ✅ Stable |
+| 📑 API Governance         | Centralized API catalog and compliance management powered by Azure API Center. Provides organization-wide visibility into all APIs, preventing sprawl and enforcing governance policies. Automatically registers APIM as an API source and assigns Data Reader and Compliance Manager RBAC roles for discovery and synchronization. | ✅ Stable |
+| 🔒 Managed Identity       | Credential-free authentication for all deployed resources using Azure Managed Identities. Eliminates secrets rotation and reduces the attack surface for service-to-service communication. Supports both system-assigned and user-assigned identity types, configured per resource through `infra/settings.yaml`.                   | ✅ Stable |
+| 🌍 Multi-Environment      | Single codebase deployable across dev, test, staging, prod, and UAT environments. Enables consistent infrastructure promotion through the release pipeline without template duplication. Environment name and region are injected at deployment time via `azd` parameters, and all resource names and tags adapt automatically.     | ✅ Stable |
 
 ## Requirements
 
