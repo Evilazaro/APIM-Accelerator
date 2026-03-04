@@ -8,9 +8,9 @@ An enterprise-grade Azure API Management Landing Zone accelerator that automates
 
 **Overview**
 
-This accelerator eliminates weeks of manual Azure infrastructure setup by providing production-ready Bicep templates that deploy a fully integrated API Management landing zone in a single command. Platform engineering teams, cloud architects, and DevOps engineers use this accelerator to establish a repeatable, governed, and observable API platform that scales across development, staging, and production environments.
+This accelerator eliminates weeks of manual Azure infrastructure setup by providing **production-ready Bicep templates** that deploy a fully integrated API Management landing zone in a **single command**. Platform engineering teams, cloud architects, and DevOps engineers use this accelerator to establish a repeatable, governed, and observable API platform that scales across development, staging, and production environments.
 
-The solution uses a modular 3-tier deployment pattern orchestrated by Azure Developer CLI (`azd`). Shared monitoring infrastructure provisions first, followed by the core API Management platform with developer portal and workspaces, and finally the API inventory layer for centralized governance. This layered approach ensures correct dependency resolution, consistent environments, and independent module updates without impacting the entire stack.
+The solution uses a **modular 3-tier deployment pattern** orchestrated by Azure Developer CLI (`azd`). Shared monitoring infrastructure provisions first, followed by the core API Management platform with developer portal and workspaces, and finally the API inventory layer for centralized governance. This layered approach ensures **correct dependency resolution**, consistent environments, and independent module updates without impacting the entire stack.
 
 > [!NOTE]
 > This accelerator follows the [Azure Landing Zone](https://learn.microsoft.com/azure/cloud-adoption-framework/ready/landing-zone/) methodology and targets organizations adopting a platform engineering approach to API management at scale.
@@ -29,9 +29,9 @@ The solution uses a modular 3-tier deployment pattern orchestrated by Azure Deve
 
 ## 🏗️ Architecture
 
-The APIM Accelerator deploys at the Azure subscription scope, creating a single resource group that contains three deployment tiers. Each tier builds upon the previous one, ensuring that monitoring infrastructure exists before the API gateway starts emitting telemetry, and that the API platform is operational before the inventory layer attempts API discovery.
+The APIM Accelerator deploys at the **Azure subscription scope**, creating a single resource group that contains **three deployment tiers**. Each tier builds upon the previous one, ensuring that monitoring infrastructure exists before the API gateway starts emitting telemetry, and that the API platform is operational before the inventory layer attempts API discovery.
 
-The architecture separates concerns into independently deployable Bicep modules — shared infrastructure handles observability across the entire landing zone, the core platform manages the API gateway lifecycle, and the inventory layer provides a centralized API catalog for governance and discoverability.
+The architecture separates concerns into **independently deployable Bicep modules** — shared infrastructure handles observability across the entire landing zone, the core platform manages the API gateway lifecycle, and the inventory layer provides a centralized API catalog for governance and discoverability.
 
 ```mermaid
 ---
@@ -128,7 +128,7 @@ The features work together as a cohesive platform: monitoring captures telemetry
 
 Meeting these prerequisites ensures a successful first deployment and avoids common provisioning failures. Each requirement addresses a specific dependency in the deployment pipeline — the Azure CLI authenticates against your subscription, `azd` orchestrates the Bicep deployment, and a bash-compatible shell executes the pre-provision hook that purges soft-deleted resources.
 
-Verify all requirements before running `azd up` to prevent partial deployments that require manual cleanup. The Premium SKU specifically requires sufficient subscription quota, and the pre-provision hook requires bash, which means Windows users need Git Bash, WSL, or Azure Cloud Shell.
+**Verify all requirements before running `azd up`** to prevent partial deployments that require manual cleanup. The **Premium SKU** specifically requires sufficient subscription quota, and the pre-provision hook requires bash, which means Windows users need Git Bash, WSL, or Azure Cloud Shell.
 
 | Category         | Requirement                        | Details                                                                                    |
 | ---------------- | ---------------------------------- | ------------------------------------------------------------------------------------------ |
@@ -196,7 +196,7 @@ SUCCESS: Your application was provisioned in Azure.
 
 ## 📦 Deployment
 
-The deployment process executes three sequential phases. The `azd` pre-provision hook runs first to purge any soft-deleted APIM instances, then Bicep modules deploy in dependency order: shared infrastructure, core platform, and API inventory.
+The deployment process executes **three sequential phases**. The `azd` pre-provision hook runs first to purge any soft-deleted APIM instances, then Bicep modules deploy in **dependency order**: shared infrastructure, core platform, and API inventory.
 
 ### Step 1: Authenticate and Initialize
 
@@ -358,9 +358,9 @@ SUCCESS: Your application was removed from Azure.
 
 **Overview**
 
-All infrastructure settings are centralized in `infra/settings.yaml`, which serves as the single source of truth for resource naming, SKU selection, identity configuration, and governance tags. This file-driven approach ensures that every environment deploys identically — only the `azd` environment variables (`AZURE_ENV_NAME`, `AZURE_LOCATION`) differ between development, staging, and production.
+All infrastructure settings are centralized in `infra/settings.yaml`, which serves as the **single source of truth** for resource naming, SKU selection, identity configuration, and governance tags. This file-driven approach ensures that every environment deploys identically — only the `azd` environment variables (`AZURE_ENV_NAME`, `AZURE_LOCATION`) differ between development, staging, and production.
 
-The configuration follows a hierarchical pattern where shared settings (monitoring, tags) apply across all modules, core settings control the API gateway behavior, and inventory settings manage the API catalog. Modify `infra/settings.yaml` to customize the landing zone for your organization's requirements, then run `azd provision` to apply changes incrementally.
+The configuration follows a hierarchical pattern where shared settings (monitoring, tags) apply across all modules, core settings control the API gateway behavior, and inventory settings manage the API catalog. **Modify `infra/settings.yaml`** to customize the landing zone for your organization's requirements, then **run `azd provision`** to apply changes incrementally.
 
 ### Configuration Files
 
@@ -532,7 +532,7 @@ Each environment gets its own resource group (`{solutionName}-{envName}-{locatio
 
 Contributions strengthen the accelerator by bringing diverse perspectives from platform engineers, cloud architects, and DevOps practitioners working with API Management across different organizations. Every pull request goes through code review to maintain the modular Bicep architecture and ensure changes integrate cleanly across the three deployment tiers.
 
-The contribution process follows a standard fork-and-branch workflow designed for infrastructure-as-code projects. Open an issue to discuss significant changes before implementation, ensure your Bicep modules compile without errors, and validate deployments in a personal Azure subscription before submitting a pull request.
+The contribution process follows a standard **fork-and-branch workflow** designed for infrastructure-as-code projects. Open an issue to discuss significant changes before implementation, **ensure your Bicep modules compile without errors**, and **validate deployments in a personal Azure subscription** before submitting a pull request.
 
 1. Fork the repository
 2. Create a feature branch (`git checkout -b feature/add-custom-policy`)
