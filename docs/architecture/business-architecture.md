@@ -1,6 +1,57 @@
 # 🏢 Business Architecture
 
-## 📋 1. Executive Summary
+## � Table of Contents
+
+- [📋 1. Executive Summary](#-1-executive-summary)
+- [🌍 2. Architecture Landscape](#-2-architecture-landscape)
+  - [🎯 2.1 Business Strategy](#-21-business-strategy-2)
+  - [💪 2.2 Business Capabilities](#-22-business-capabilities-6)
+  - [🔄 2.3 Value Streams](#-23-value-streams-2)
+  - [⚙️ 2.4 Business Processes](#️-24-business-processes-3)
+  - [🛠️ 2.5 Business Services](#️-25-business-services-4)
+  - [🔧 2.6 Business Functions](#-26-business-functions-3)
+  - [👥 2.7 Business Roles & Actors](#-27-business-roles--actors-4)
+  - [📏 2.8 Business Rules](#-28-business-rules-4)
+  - [⚡ 2.9 Business Events](#-29-business-events-3)
+  - [📦 2.10 Business Objects/Entities](#-210-business-objectsentities-0)
+  - [📊 2.11 KPIs & Metrics](#-211-kpis--metrics-0)
+  - [🗺️ Business Capability Map](#️-business-capability-map)
+- [🏛️ 3. Architecture Principles](#️-3-architecture-principles)
+  - [🧩 3.1 Modularity & Separation of Concerns](#-31-modularity--separation-of-concerns)
+  - [⚙️ 3.2 Configuration Over Code](#️-32-configuration-over-code)
+  - [🔒 3.3 Type Safety & Contract Enforcement](#-33-type-safety--contract-enforcement)
+  - [🛡️ 3.4 Governance by Default](#️-34-governance-by-default)
+  - [👁️ 3.5 Observability as a Foundation](#️-35-observability-as-a-foundation)
+  - [🔁 3.6 Deterministic & Idempotent Deployments](#-36-deterministic--idempotent-deployments)
+  - [🚧 3.7 Self-Service with Guardrails](#-37-self-service-with-guardrails)
+- [📍 4. Current State Baseline](#-4-current-state-baseline)
+  - [📋 4.1 Capability Assessment](#-41-capability-assessment)
+  - [📊 4.2 Configuration Coverage](#-42-configuration-coverage)
+  - [🌡️ Capability Heatmap](#️-capability-heatmap)
+  - [🚀 4.3 Deployment Process Topology](#-43-deployment-process-topology)
+- [📚 5. Component Catalog](#-5-component-catalog)
+  - [🎯 5.1 Business Strategy Specifications](#-51-business-strategy-specifications)
+  - [💪 5.2 Business Capabilities Specifications](#-52-business-capabilities-specifications)
+  - [🔄 5.3 Value Streams Specifications](#-53-value-streams-specifications)
+  - [⚙️ 5.4 Business Processes Specifications](#️-54-business-processes-specifications)
+  - [🛠️ 5.5 Business Services Specifications](#️-55-business-services-specifications)
+  - [🔧 5.6 Business Functions Specifications](#-56-business-functions-specifications)
+  - [👥 5.7 Business Roles & Actors Specifications](#-57-business-roles--actors-specifications)
+  - [📏 5.8 Business Rules Specifications](#-58-business-rules-specifications)
+  - [⚡ 5.9 Business Events Specifications](#-59-business-events-specifications)
+  - [📦 5.10 Business Objects/Entities Specifications](#-510-business-objectsentities-specifications)
+  - [📊 5.11 KPIs & Metrics Specifications](#-511-kpis--metrics-specifications)
+- [🔗 8. Dependencies & Integration](#-8-dependencies--integration)
+  - [📤 8.1 Module Output-to-Input Mapping](#-81-module-output-to-input-mapping)
+  - [🧰 8.2 Shared Utility Dependencies](#-82-shared-utility-dependencies)
+  - [🔀 8.3 Cross-Layer Capability Dependencies](#-83-cross-layer-capability-dependencies)
+  - [🌐 8.4 External Dependencies](#-84-external-dependencies)
+  - [🗺️ Cross-Layer Dependency Map](#️-cross-layer-dependency-map)
+  - [🔗 Value Stream Dependency Graph](#-value-stream-dependency-graph)
+
+---
+
+## �📋 1. Executive Summary
 
 ### 📖 Overview
 
