@@ -188,12 +188,12 @@ flowchart LR
 
 ### Component Responsibilities
 
-| Component                    | Module Path                                       | Azure Resources                                                                                                  | Purpose                                                                | Key Capabilities                                                                                                                     |
-| ---------------------------- | ------------------------------------------------- | ---------------------------------------------------------------------------------------------------------------- | ---------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------ |
-| 📊 **Shared Infrastructure** | `src/shared/`                                     | Log Analytics Workspace, Storage Account, Application Insights, 3× Diagnostic Settings                           | Provides the observability foundation for the entire landing zone      | PerGB2018 workspace with self-monitoring, Standard_LRS diagnostic archive, workspace-based APM with 90-day retention                 |
-| ⚙️ **Core Platform**         | `src/core/`                                       | API Management, Developer Portal (4 sub-resources), APIM Workspaces, App Insights Logger, Reader RBAC Assignment | Delivers the API gateway, developer experience, and team isolation     | Configurable SKU (Developer–Premium), Azure AD MSAL 2.0 portal, CORS policies, team workspaces, diagnostic settings to LAW + Storage |
-| 🗄️ **API Inventory**         | `src/inventory/`                                  | API Center, API Center Workspace, API Source (APIM link), 2× RBAC Assignments                                    | Enables centralized API governance, discovery, and compliance tracking | SystemAssigned identity, auto-discovery from APIM, Data Reader + Compliance Manager roles at RG scope                                |
-| 🛡️ **Identity & RBAC**       | `src/core/apim.bicep`, `src/inventory/main.bicep` | 3× Role Assignments                                                                                              | Enforces least-privilege access for managed identities                 | APIM Reader (RG), API Center Data Reader (RG), API Center Compliance Manager (RG)                                                    |
+| Component                    | Azure Resources                                                                                                  | Purpose                                                                | Key Capabilities                                                                                                                     |
+| ---------------------------- | ---------------------------------------------------------------------------------------------------------------- | ---------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------ |
+| 📊 **Shared Infrastructure** | Log Analytics Workspace, Storage Account, Application Insights, 3× Diagnostic Settings                           | Provides the observability foundation for the entire landing zone      | PerGB2018 workspace with self-monitoring, Standard_LRS diagnostic archive, workspace-based APM with 90-day retention                 |
+| ⚙️ **Core Platform**         | API Management, Developer Portal (4 sub-resources), APIM Workspaces, App Insights Logger, Reader RBAC Assignment | Delivers the API gateway, developer experience, and team isolation     | Configurable SKU (Developer–Premium), Azure AD MSAL 2.0 portal, CORS policies, team workspaces, diagnostic settings to LAW + Storage |
+| 🗄️ **API Inventory**         | API Center, API Center Workspace, API Source (APIM link), 2× RBAC Assignments                                    | Enables centralized API governance, discovery, and compliance tracking | SystemAssigned identity, auto-discovery from APIM, Data Reader + Compliance Manager roles at RG scope                                |
+| 🛡️ **Identity & RBAC**       | 3× Role Assignments                                                                                              | Enforces least-privilege access for managed identities                 | APIM Reader (RG), API Center Data Reader (RG), API Center Compliance Manager (RG)                                                    |
 
 ### Module Structure
 
@@ -238,14 +238,14 @@ Meeting these prerequisites ensures a successful first deployment and avoids com
 
 **Verify all requirements before running `azd up`** to prevent partial deployments that require manual cleanup. The **Premium SKU** specifically requires sufficient subscription quota, and the pre-provision hook requires bash, which means Windows users need Git Bash, WSL, or Azure Cloud Shell.
 
-| Category         | Requirement                        | Details                                                                                    |
-| ---------------- | ---------------------------------- | ------------------------------------------------------------------------------------------ |
-| ☁️ **Azure**     | Active Azure subscription          | [Create a free account](https://azure.microsoft.com/free/)                                 |
-| ☁️ **Azure**     | Subscription-level permissions     | Contributor or Owner role required for resource group creation                             |
-| 🔧 **CLI Tools** | Azure CLI 2.67+                    | [Install Azure CLI](https://learn.microsoft.com/cli/azure/install-azure-cli)               |
-| 🔧 **CLI Tools** | Azure Developer CLI (`azd`)        | [Install azd](https://learn.microsoft.com/azure/developer/azure-developer-cli/install-azd) |
-| 🔧 **CLI Tools** | Bicep CLI (bundled with Azure CLI) | [Bicep overview](https://learn.microsoft.com/azure/azure-resource-manager/bicep/overview)  |
-| 🐚 **Shell**     | Bash-compatible shell              | Required for pre-provision hook (Git Bash, WSL, or Azure Cloud Shell on Windows)           |
+| Category         | Requirement                        | Details                                                                                     |
+| ---------------- | ---------------------------------- | ------------------------------------------------------------------------------------------- |
+| ☁️ **Azure**     | Active Azure subscription          | [Create a free account](https://azure.microsoft.com/free/)                                  |
+| ☁️ **Azure**     | Subscription-level permissions     | [Azure RBAC overview](https://learn.microsoft.com/azure/role-based-access-control/overview) |
+| 🔧 **CLI Tools** | Azure CLI 2.67+                    | [Install Azure CLI](https://learn.microsoft.com/cli/azure/install-azure-cli)                |
+| 🔧 **CLI Tools** | Azure Developer CLI (`azd`)        | [Install azd](https://learn.microsoft.com/azure/developer/azure-developer-cli/install-azd)  |
+| 🔧 **CLI Tools** | Bicep CLI (bundled with Azure CLI) | [Bicep overview](https://learn.microsoft.com/azure/azure-resource-manager/bicep/overview)   |
+| 🐚 **Shell**     | Bash-compatible shell              | [Azure Cloud Shell overview](https://learn.microsoft.com/azure/cloud-shell/overview)        |
 
 > [!IMPORTANT]
 > The default configuration deploys API Management with **Premium SKU** (1 unit), which incurs significant Azure costs. Change `sku.name` in `infra/settings.yaml` to `Developer` for non-production testing.
