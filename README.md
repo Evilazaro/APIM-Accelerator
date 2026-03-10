@@ -29,9 +29,9 @@ An enterprise-grade Infrastructure-as-Code (IaC) accelerator that deploys a comp
 
 **Overview**
 
-This accelerator provides a production-ready Azure API Management Landing Zone that follows Azure Cloud Adoption Framework best practices. It enables platform engineering teams to deploy a fully configured APIM environment with monitoring, security, and governance capabilities in minutes rather than days.
+This accelerator provides a **production-ready Azure API Management Landing Zone** that follows **Azure Cloud Adoption Framework** best practices. It enables platform engineering teams to deploy a fully configured APIM environment with monitoring, security, and governance capabilities in minutes rather than days.
 
-The solution uses a modular Bicep architecture with three deployment tiers — Shared Infrastructure, Core Platform, and API Inventory — orchestrated through Azure Developer CLI (`azd`) for repeatable, environment-aware deployments across dev, test, staging, and production.
+The solution uses a **modular Bicep architecture** with **three deployment tiers** — Shared Infrastructure, Core Platform, and API Inventory — orchestrated through Azure Developer CLI (`azd`) for repeatable, environment-aware deployments across dev, test, staging, and production.
 
 > [!NOTE]
 > The project targets Azure API Management **Premium** SKU by default, which supports multi-region deployments, virtual network integration, and workspaces. Modify `infra/settings.yaml` to select a different SKU tier for non-production environments.
@@ -40,9 +40,9 @@ The solution uses a modular Bicep architecture with three deployment tiers — S
 
 **Overview**
 
-The landing zone follows a layered deployment architecture with clear dependency ordering. Shared monitoring infrastructure is provisioned first, followed by core API Management services, and finally API inventory management through Azure API Center.
+The landing zone follows a **layered deployment architecture** with **clear dependency ordering**. Shared monitoring infrastructure is provisioned first, followed by core API Management services, and finally API inventory management through Azure API Center.
 
-The orchestration template (`infra/main.bicep`) targets subscription scope, creates a resource group, and deploys each layer as a Bicep module with explicit output chaining for cross-module references.
+The orchestration template (`infra/main.bicep`) targets **subscription scope**, creates a resource group, and deploys each layer as a Bicep module with **explicit output chaining** for cross-module references.
 
 ```mermaid
 ---
@@ -134,7 +134,7 @@ flowchart TB
 
 **Overview**
 
-The accelerator delivers a complete API Management platform with enterprise capabilities out of the box. Each feature is implemented as a composable Bicep module, enabling teams to adopt the full solution or individual components based on their needs.
+The accelerator delivers a complete API Management platform with enterprise capabilities out of the box. Each feature is implemented as a **composable Bicep module**, enabling teams to adopt the full solution or individual components based on their needs.
 
 These features address common platform engineering challenges — from multi-team API isolation to centralized governance — reducing the time to establish an enterprise API platform from weeks to hours.
 
@@ -154,7 +154,7 @@ These features address common platform engineering challenges — from multi-tea
 
 **Overview**
 
-Before deploying the APIM Accelerator, ensure your environment meets the following prerequisites. The solution requires an active Azure subscription with sufficient permissions and the Azure Developer CLI for automated provisioning.
+Before deploying the APIM Accelerator, ensure your environment meets the following prerequisites. The solution **requires an active Azure subscription** with sufficient permissions and the **Azure Developer CLI** for automated provisioning.
 
 All infrastructure is defined in Bicep templates and deployed through `azd`, so no additional IaC tooling is needed beyond Azure CLI and Azure Developer CLI.
 
@@ -171,7 +171,7 @@ All infrastructure is defined in Bicep templates and deployed through `azd`, so 
 
 **Overview**
 
-Deploy the complete APIM Landing Zone with a single command using Azure Developer CLI. The deployment provisions all three infrastructure tiers — shared monitoring, core platform, and API inventory — in the correct dependency order.
+Deploy the complete APIM Landing Zone with a **single command** using Azure Developer CLI. The deployment provisions all three infrastructure tiers — shared monitoring, core platform, and API inventory — in the correct dependency order.
 
 The deployment reads configuration from `infra/settings.yaml` and creates all resources in a new resource group following the naming convention `{solutionName}-{envName}-{location}-rg`. Resource names within the group are either explicitly set in `settings.yaml` or auto-generated using a deterministic unique suffix derived from the subscription ID, resource group, solution name, and location.
 
@@ -206,7 +206,7 @@ az login
 
 ### Step 4: Review Configuration
 
-Before deploying, review and customize the settings in `infra/settings.yaml`. At minimum, update the publisher email and organization name:
+Before deploying, review and customize the settings in `infra/settings.yaml`. At minimum, **update the publisher email and organization name**:
 
 ```yaml
 core:
@@ -291,7 +291,7 @@ Access the developer portal at `https://<apim-service-name>.developer.azure-api.
 
 **Overview**
 
-All deployment settings are centralized in `infra/settings.yaml`, which defines the solution name, monitoring configuration, APIM service parameters, API inventory settings, and enterprise tagging strategy. This single configuration file drives the entire landing zone deployment.
+All deployment settings are **centralized in `infra/settings.yaml`**, which defines the solution name, monitoring configuration, APIM service parameters, API inventory settings, and enterprise tagging strategy. This **single configuration file** drives the entire landing zone deployment.
 
 The configuration uses YAML format with four top-level sections — `solutionName`, `shared`, `core`, and `inventory`. Resource names can be explicitly set or left empty for automatic generation using a deterministic unique suffix derived from the subscription ID, resource group ID, resource group name, solution name, and location (computed by the `generateUniqueSuffix` function in `src/shared/constants.bicep`).
 
@@ -389,7 +389,7 @@ When a resource name is left empty in `settings.yaml`, the accelerator generates
 {solutionName}-{uniqueSuffix}-{resourceType}
 ```
 
-The `uniqueSuffix` is computed deterministically from `uniqueString(subscriptionId, resourceGroupId, resourceGroupName, solutionName, location)`, ensuring names are globally unique but reproducible across repeated deployments to the same environment. Resource type suffixes include `apim`, `appinsights`, `loganalytics`, and `apicenter`.
+The `uniqueSuffix` is computed deterministically from `uniqueString(subscriptionId, resourceGroupId, resourceGroupName, solutionName, location)`, ensuring names are **globally unique but reproducible** across repeated deployments to the same environment. Resource type suffixes include `apim`, `appinsights`, `loganalytics`, and `apicenter`.
 
 ### Environment Parameters
 
@@ -589,7 +589,7 @@ Each environment maintains its own set of parameters and deployed resources. The
 
 **Overview**
 
-The deployment uses Azure Developer CLI (`azd`) to orchestrate a subscription-scoped Bicep deployment. The orchestration template (`infra/main.bicep`) targets `subscription` scope, creates a dedicated resource group, and deploys three module layers with explicit output chaining. Each layer depends on outputs from the previous layer, ensuring correct provisioning order.
+The deployment uses Azure Developer CLI (`azd`) to orchestrate a **subscription-scoped Bicep deployment**. The orchestration template (`infra/main.bicep`) targets `subscription` scope, creates a dedicated resource group, and deploys **three module layers** with explicit output chaining. Each layer depends on outputs from the previous layer, ensuring **correct provisioning order**.
 
 ### Deployment Sequence
 
@@ -731,7 +731,7 @@ azd down --purge
 
 **Overview**
 
-Contributions to the APIM Accelerator are welcome. All infrastructure changes should be made through Bicep templates in the `src/` directory, with shared type definitions in `src/shared/common-types.bicep` and constants in `src/shared/constants.bicep`.
+Contributions to the APIM Accelerator are welcome. **All infrastructure changes should be made through Bicep templates** in the `src/` directory, with shared type definitions in `src/shared/common-types.bicep` and constants in `src/shared/constants.bicep`.
 
 Follow the existing modular architecture pattern when adding new components: create a dedicated Bicep module, define types in `common-types.bicep`, and wire the module into the orchestration template at `infra/main.bicep`.
 
