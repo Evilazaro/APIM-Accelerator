@@ -51,8 +51,11 @@ config:
   theme: base
   look: classic
   layout: dagre
+  themeVariables:
+    fontSize: '16px'
   flowchart:
     htmlLabels: true
+    curve: cardinal
 ---
 flowchart TB
     accTitle: APIM Accelerator Landing Zone Architecture
@@ -82,13 +85,13 @@ flowchart TB
             apimService("🔌 API Management Service"):::core
             devPortal("🌐 Developer Portal"):::success
             workspaces("📂 APIM Workspaces"):::core
-            managedId("🔒 Managed Identity"):::warning
+            managedId("🔒 Managed Identity"):::danger
         end
 
         subgraph inventoryLayer["📦 API Inventory"]
             apiCenter("📋 API Center"):::core
             apiSource("🔗 API Source Integration"):::core
-            rbacRoles("🔑 RBAC Assignments"):::warning
+            rbacRoles("🔑 RBAC Assignments"):::danger
         end
     end
 
@@ -111,7 +114,7 @@ flowchart TB
 
     classDef core fill:#EFF6FC,stroke:#0078D4,stroke-width:2px,color:#323130
     classDef success fill:#DFF6DD,stroke:#107C10,stroke-width:2px,color:#323130
-    classDef warning fill:#FFF4CE,stroke:#FFB900,stroke-width:2px,color:#323130
+    classDef danger fill:#FDE7E9,stroke:#D13438,stroke-width:2px,color:#323130
     classDef data fill:#F0E6FA,stroke:#8764B8,stroke-width:2px,color:#323130
 ```
 
