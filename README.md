@@ -19,6 +19,7 @@ An enterprise-grade Infrastructure-as-Code (IaC) accelerator that deploys a comp
 - [Requirements](#requirements)
 - [Getting Started](#getting-started)
 - [Configuration](#configuration)
+- [Usage](#usage)
 - [Project Structure](#project-structure)
 - [Deployment](#deployment)
 - [Contributing](#contributing)
@@ -172,93 +173,384 @@ All infrastructure is defined in Bicep templates and deployed through `azd`, so 
 
 Deploy the complete APIM Landing Zone with a single command using Azure Developer CLI. The deployment provisions all three infrastructure tiers — shared monitoring, core platform, and API inventory — in the correct dependency order.
 
-Clone the repository and use `azd up` to provision the entire solution. The deployment reads configuration from `infra/settings.yaml` and creates all resources in a new resource group following the naming convention `{solutionName}-{envName}-{location}-rg`.
+The deployment reads configuration from `infra/settings.yaml` and creates all resources in a new resource group following the naming convention `{solutionName}-{envName}-{location}-rg`. Resource names within the group are either explicitly set in `settings.yaml` or auto-generated using a deterministic unique suffix derived from the subscription ID, resource group, solution name, and location.
 
-**Quick Start**
-
-1. Clone the repository:
+### Step 1: Clone the Repository
 
 ```bash
 git clone https://github.com/Evilazaro/APIM-Accelerator.git
 cd APIM-Accelerator
 ```
 
-2. Authenticate with Azure:
+### Step 2: Install Prerequisites
+
+Install [Azure CLI](https://learn.microsoft.com/cli/azure/install-azure-cli) and [Azure Developer CLI](https://learn.microsoft.com/azure/developer/azure-developer-cli/install-azd):
 
 ```bash
-azd auth login
+# Verify Azure CLI installation
+az version
+
+# Verify Azure Developer CLI installation
+azd version
 ```
 
-3. Initialize and deploy the landing zone:
+### Step 3: Authenticate with Azure
+
+```bash
+# Login with Azure Developer CLI (opens browser for interactive login)
+azd auth login
+
+# Or login with Azure CLI if you need to run az commands separately
+az login
+```
+
+### Step 4: Review Configuration
+
+Before deploying, review and customize the settings in `infra/settings.yaml`. At minimum, update the publisher email and organization name:
+
+```yaml
+core:
+  apiManagement:
+    publisherEmail: "your-email@your-domain.com" # Required: your contact email
+    publisherName: "Your Organization" # Required: your org name
+    sku:
+      name: "Developer" # Use Developer for testing
+      capacity: 1
+```
+
+> [!TIP]
+> Use `Developer` SKU for initial testing — it has no SLA but deploys faster and costs less. Switch to `Premium` for production deployments that require workspaces, VNet integration, or multi-region support.
+
+### Step 5: Deploy the Landing Zone
+
+Run a single command to provision all infrastructure:
 
 ```bash
 azd up
 ```
 
+`azd up` prompts for:
+
+| Prompt                | Description                          | Example                           |
+| --------------------- | ------------------------------------ | --------------------------------- |
+| 🌐 Environment name   | Logical name for this deployment     | `dev`, `staging`, `prod`          |
+| 📍 Azure location     | Target Azure region                  | `eastus`, `westus2`, `westeurope` |
+| 🔑 Azure subscription | Subscription for resource deployment | Select from list                  |
+
+The command executes the following sequence automatically:
+
+1. **Pre-provision hook** — Runs `infra/azd-hooks/pre-provision.sh` to purge any soft-deleted APIM instances in the target region, preventing naming conflicts
+2. **Resource group creation** — Creates `apim-accelerator-{envName}-{location}-rg`
+3. **Shared infrastructure** — Deploys Log Analytics Workspace, Application Insights, and Storage Account
+4. **Core platform** — Deploys APIM service with managed identity, diagnostic settings, RBAC assignments, workspaces, and developer portal
+5. **API inventory** — Deploys API Center with APIM integration, default workspace, and RBAC role assignments
+
 > [!WARNING]
-> The pre-provision hook script (`infra/azd-hooks/pre-provision.sh`) automatically purges any soft-deleted APIM instances in the target region to prevent naming conflicts. Ensure no soft-deleted instances need to be recovered before running the deployment.
+> The pre-provision hook permanently purges all soft-deleted APIM instances in the target region. If you have soft-deleted instances that need recovery, restore them before running the deployment. The script calls `az apim deletedservice purge` which is irreversible.
 
-**Expected Output**
+### Step 6: Verify the Deployment
 
-When deployment completes, `azd` outputs the following key resource identifiers:
+After deployment completes, `azd` outputs the key resource identifiers:
 
 ```text
 APPLICATION_INSIGHTS_RESOURCE_ID = /subscriptions/.../components/...
-APPLICATION_INSIGHTS_NAME = apim-accelerator-...-appinsights
+APPLICATION_INSIGHTS_NAME = apim-accelerator-abc123-appinsights
 AZURE_STORAGE_ACCOUNT_ID = /subscriptions/.../storageAccounts/...
 ```
+
+Verify the deployed resources through Azure CLI:
+
+```bash
+# List all resources in the deployment resource group
+az resource list \
+  --resource-group apim-accelerator-dev-eastus-rg \
+  --output table
+
+# Verify the APIM service is running
+az apim show \
+  --resource-group apim-accelerator-dev-eastus-rg \
+  --name <apim-service-name> \
+  --query "{name:name, state:properties.provisioningState, sku:sku.name}" \
+  --output table
+```
+
+### Step 7: Developer Portal Setup (Optional)
+
+The developer portal requires an Azure AD app registration for authentication. The template automatically configures the identity provider using the APIM managed identity credentials, but you can customize the allowed tenants by editing `src/core/developer-portal.bicep`:
+
+```bicep
+// Update with your Azure AD tenant domain(s)
+var allowedTenants = [
+  'yourtenant.onmicrosoft.com'
+]
+```
+
+Access the developer portal at `https://<apim-service-name>.developer.azure-api.net` after deployment.
 
 ## Configuration
 
 **Overview**
 
-All deployment settings are centralized in `infra/settings.yaml`, which defines the solution name, monitoring configuration, APIM service parameters, and API inventory settings. This single configuration file drives the entire landing zone deployment.
+All deployment settings are centralized in `infra/settings.yaml`, which defines the solution name, monitoring configuration, APIM service parameters, API inventory settings, and enterprise tagging strategy. This single configuration file drives the entire landing zone deployment.
 
-The configuration uses YAML format with nested sections for each deployment tier. Resource names can be explicitly set or left empty for automatic generation using a deterministic unique suffix derived from the subscription, resource group, and solution name.
+The configuration uses YAML format with four top-level sections — `solutionName`, `shared`, `core`, and `inventory`. Resource names can be explicitly set or left empty for automatic generation using a deterministic unique suffix derived from the subscription ID, resource group ID, resource group name, solution name, and location (computed by the `generateUniqueSuffix` function in `src/shared/constants.bicep`).
 
-**Configuration File:** `infra/settings.yaml`
+### Full Configuration Reference
+
+The complete `infra/settings.yaml` structure with all configurable options:
 
 ```yaml
-# Solution identifier used for naming conventions
-solutionName: "apim-accelerator"
+# ─── Solution Identifier ─────────────────────────────────────────────
+solutionName: "apim-accelerator" # Base name for resource group and resource naming
 
-# Core APIM configuration
+# ─── Shared Infrastructure ───────────────────────────────────────────
+shared:
+  monitoring:
+    logAnalytics:
+      name: "" # Leave empty for auto-generated name
+      workSpaceResourceId: "" # Set to reuse an existing Log Analytics workspace
+      identity:
+        type: "SystemAssigned" # SystemAssigned or UserAssigned
+        userAssignedIdentities: []
+    applicationInsights:
+      name: "" # Leave empty for auto-generated name
+      logAnalyticsWorkspaceResourceId: "" # Auto-linked to deployed workspace
+    tags:
+      lz-component-type: "shared"
+      component: "monitoring"
+
+  # Enterprise tagging strategy — applied to all resources
+  tags:
+    CostCenter: "CC-1234" # Cost allocation tracking
+    BusinessUnit: "IT" # Department or business unit
+    Owner: "your-email@domain.com" # Resource owner contact
+    ApplicationName: "APIM Platform" # Workload or application name
+    ProjectName: "APIMForAll" # Project or initiative name
+    ServiceClass: "Critical" # Critical, Standard, or Experimental
+    RegulatoryCompliance: "GDPR" # GDPR, HIPAA, PCI, or None
+    SupportContact: "your-email@domain.com" # Incident support contact
+    ChargebackModel: "Dedicated" # Chargeback or Showback model
+    BudgetCode: "FY25-Q1-InitiativeX" # Budget or initiative code
+
+# ─── Core Platform ───────────────────────────────────────────────────
 core:
   apiManagement:
     name: "" # Leave empty for auto-generated name
-    publisherEmail: "admin@contoso.com" # Publisher contact email
-    publisherName: "Contoso" # Organization name
+    publisherEmail: "admin@contoso.com" # Required: publisher contact email
+    publisherName: "Contoso" # Required: organization name in portal
     sku:
-      name: "Premium" # SKU: Developer, Basic, Standard, Premium, Consumption
-      capacity: 1 # Scale units (Premium: 1-10)
+      name:
+        "Premium" # Developer, Basic, BasicV2, Standard,
+        # StandardV2, Premium, Consumption, Isolated
+      capacity: 1 # Scale units (Premium: 1-10, Standard: 1-4)
     identity:
-      type: "SystemAssigned" # SystemAssigned or UserAssigned
-      userAssignedIdentities: []
+      type: "SystemAssigned" # SystemAssigned, UserAssigned, or None
+      userAssignedIdentities: [] # Resource IDs of user-assigned identities
     workspaces:
-      - name: "workspace1" # Workspace names (Premium SKU only)
+      - name: "workspace1" # Premium SKU only — add entries for each team
+  tags:
+    lz-component-type: "core"
+    component: "apiManagement"
+
+# ─── API Inventory ───────────────────────────────────────────────────
+inventory:
+  apiCenter:
+    name: "" # Leave empty for auto-generated name
+    identity:
+      type: "SystemAssigned" # SystemAssigned, UserAssigned, or None
+      userAssignedIdentities: []
+  tags:
+    lz-component-type: "shared"
+    component: "inventory"
 ```
 
-**Key Configuration Options:**
+### Key Configuration Options
 
-| Option             | Path                                         | Description                     | Default               |
-| ------------------ | -------------------------------------------- | ------------------------------- | --------------------- |
-| ⚙️ Solution Name   | `solutionName`                               | Base name for all resources     | `apim-accelerator`    |
-| 📧 Publisher Email | `core.apiManagement.publisherEmail`          | Required APIM publisher contact | `evilazaro@gmail.com` |
-| 📦 SKU Tier        | `core.apiManagement.sku.name`                | APIM pricing tier               | `Premium`             |
-| 🔢 Scale Units     | `core.apiManagement.sku.capacity`            | Number of APIM scale units      | `1`                   |
-| 🔒 Identity Type   | `core.apiManagement.identity.type`           | Managed identity configuration  | `SystemAssigned`      |
-| 📂 Workspaces      | `core.apiManagement.workspaces`              | Team isolation workspaces       | `[workspace1]`        |
-| 📊 Log Analytics   | `shared.monitoring.logAnalytics.name`        | Workspace name (empty for auto) | `""`                  |
-| 📈 App Insights    | `shared.monitoring.applicationInsights.name` | Instance name (empty for auto)  | `""`                  |
+| Option             | Path                                         | Description                                           | Default               |
+| ------------------ | -------------------------------------------- | ----------------------------------------------------- | --------------------- |
+| ⚙️ Solution Name   | `solutionName`                               | Base name for resource group and all resources        | `apim-accelerator`    |
+| 📧 Publisher Email | `core.apiManagement.publisherEmail`          | Required APIM publisher contact (Azure requires this) | `evilazaro@gmail.com` |
+| 🏢 Publisher Name  | `core.apiManagement.publisherName`           | Organization name displayed in developer portal       | `Contoso`             |
+| 📦 SKU Tier        | `core.apiManagement.sku.name`                | APIM pricing tier (affects available features)        | `Premium`             |
+| 🔢 Scale Units     | `core.apiManagement.sku.capacity`            | Number of APIM scale units (affects throughput)       | `1`                   |
+| 🔒 Identity Type   | `core.apiManagement.identity.type`           | Managed identity for Azure service authentication     | `SystemAssigned`      |
+| 📂 Workspaces      | `core.apiManagement.workspaces`              | Team isolation workspaces (Premium SKU only)          | `[workspace1]`        |
+| 📊 Log Analytics   | `shared.monitoring.logAnalytics.name`        | Workspace name (empty for auto-generation)            | `""`                  |
+| 📈 App Insights    | `shared.monitoring.applicationInsights.name` | Instance name (empty for auto-generation)             | `""`                  |
+| 📋 API Center      | `inventory.apiCenter.name`                   | API Center name (empty for auto-generation)           | `""`                  |
+| 🏷️ Cost Center     | `shared.tags.CostCenter`                     | Cost allocation tag applied to all resources          | `CC-1234`             |
+| 🛡️ Service Class   | `shared.tags.ServiceClass`                   | Workload criticality tier                             | `Critical`            |
 
-**Environment Parameters:** `infra/main.parameters.json`
+### Resource Naming
 
-The deployment accepts two environment parameters passed via `azd`:
+When a resource name is left empty in `settings.yaml`, the accelerator generates a unique name using this pattern:
 
-| Parameter     | Source           | Description                                                  |
-| ------------- | ---------------- | ------------------------------------------------------------ |
-| ⚙️ `envName`  | `AZURE_ENV_NAME` | Environment name: `dev`, `test`, `staging`, `prod`, or `uat` |
-| 🌐 `location` | `AZURE_LOCATION` | Azure region for deployment                                  |
+```text
+{solutionName}-{uniqueSuffix}-{resourceType}
+```
+
+The `uniqueSuffix` is computed deterministically from `uniqueString(subscriptionId, resourceGroupId, resourceGroupName, solutionName, location)`, ensuring names are globally unique but reproducible across repeated deployments to the same environment. Resource type suffixes include `apim`, `appinsights`, `loganalytics`, and `apicenter`.
+
+### Environment Parameters
+
+The deployment accepts two environment parameters passed via `azd` (defined in `infra/main.parameters.json`):
+
+| Parameter     | Source           | Allowed Values                          | Description                                                             |
+| ------------- | ---------------- | --------------------------------------- | ----------------------------------------------------------------------- |
+| ⚙️ `envName`  | `AZURE_ENV_NAME` | `dev`, `test`, `staging`, `prod`, `uat` | Environment name — determines resource group naming and environment tag |
+| 🌐 `location` | `AZURE_LOCATION` | Any Azure region                        | Target deployment region — must support APIM Premium tier               |
+
+Set these explicitly with `azd env set`:
+
+```bash
+azd env new prod
+azd env set AZURE_LOCATION westeurope
+azd env set AZURE_ENV_NAME prod
+```
+
+### VNet Integration
+
+The APIM service supports optional virtual network integration via the `virtualNetworkType` parameter in `src/core/apim.bicep`. To enable VNet integration, pass the appropriate parameters when customizing the deployment:
+
+| Mode       | Behavior                                                        |
+| ---------- | --------------------------------------------------------------- |
+| `None`     | Public access only (default)                                    |
+| `External` | APIM gateway accessible from internet, management plane on VNet |
+| `Internal` | Both gateway and management plane on VNet (fully private)       |
+
+> [!NOTE]
+> VNet integration requires **Premium** SKU and an existing VNet with a dedicated subnet. The `src/shared/networking/main.bicep` module is a placeholder for future VNet provisioning — currently, the subnet resource ID must be provided externally.
+
+## Usage
+
+**Overview**
+
+After deployment, the landing zone provides a fully operational API Management platform with monitoring, a developer portal, workspace-based isolation, and centralized API governance. This section covers common operational tasks for managing the deployed environment.
+
+### Accessing the APIM Service
+
+View your deployed APIM service in the Azure Portal or via CLI:
+
+```bash
+# Get APIM service details
+az apim show \
+  --resource-group apim-accelerator-dev-eastus-rg \
+  --name <apim-service-name> \
+  --output table
+
+# List all APIs registered in the APIM service
+az apim api list \
+  --resource-group apim-accelerator-dev-eastus-rg \
+  --service-name <apim-service-name> \
+  --output table
+```
+
+The APIM gateway URL follows the pattern: `https://<apim-service-name>.azure-api.net`
+
+### Managing Workspaces
+
+Workspaces provide logical isolation for teams within a single APIM instance. Add or modify workspaces by editing the `core.apiManagement.workspaces` array in `infra/settings.yaml`:
+
+```yaml
+core:
+  apiManagement:
+    workspaces:
+      - name: "sales-apis"
+      - name: "finance-apis"
+      - name: "partner-apis"
+```
+
+Redeploy to apply workspace changes:
+
+```bash
+azd provision
+```
+
+Each workspace entry deploys a `Microsoft.ApiManagement/service/workspaces` resource using the `src/core/workspaces.bicep` module, creating an isolated container where teams can independently manage their APIs, products, and subscriptions.
+
+### Developer Portal
+
+The developer portal is automatically enabled and configured with Azure AD authentication. It provides:
+
+- **API documentation** — Auto-generated interactive API reference
+- **API testing** — Built-in test console for trying APIs directly in the browser
+- **Subscription management** — Self-service API key management for consumers
+- **Azure AD sign-in** — Organizational authentication via MSAL-2 library
+
+Access the portal at: `https://<apim-service-name>.developer.azure-api.net`
+
+CORS is configured at the global level to allow the developer portal to make authenticated cross-origin requests to the APIM gateway. The configuration in `src/core/developer-portal.bicep` sets allowed credentials, HTTP methods, and headers with a 300-second preflight cache.
+
+### Monitoring and Diagnostics
+
+The deployment configures comprehensive observability across all components:
+
+```bash
+# Query Log Analytics for APIM diagnostic logs
+az monitor log-analytics query \
+  --workspace <log-analytics-workspace-id> \
+  --analytics-query "AzureDiagnostics | where ResourceProvider == 'MICROSOFT.APIMANAGEMENT' | take 10" \
+  --output table
+
+# View Application Insights metrics
+az monitor app-insights metrics show \
+  --app <app-insights-name> \
+  --resource-group apim-accelerator-dev-eastus-rg \
+  --metric requests/count \
+  --output table
+```
+
+| Monitoring Component           | Data Collected                                    | Destination                               |
+| ------------------------------ | ------------------------------------------------- | ----------------------------------------- |
+| 📊 Diagnostic Settings         | All metrics and logs (`AllMetrics`, `allLogs`)    | Log Analytics Workspace + Storage Account |
+| 📈 Application Insights Logger | API performance telemetry and distributed tracing | Application Insights                      |
+| 🗄️ Storage Account             | Long-term log archival for compliance and audit   | Azure Blob Storage                        |
+
+Diagnostic settings are deployed by `src/core/apim.bicep` and send both metrics and logs to Log Analytics for real-time querying, while simultaneously archiving to the Storage Account for long-term retention.
+
+### API Center and Governance
+
+Azure API Center provides a centralized catalog for discovering and governing APIs across the organization:
+
+```bash
+# List APIs registered in API Center
+az apic api list \
+  --resource-group apim-accelerator-dev-eastus-rg \
+  --service-name <api-center-name> \
+  --output table
+```
+
+The API Center deployment in `src/inventory/main.bicep` automatically:
+
+1. Creates a default workspace for organizing APIs
+2. Links the APIM service as an API source for automatic API discovery and synchronization
+3. Assigns two RBAC roles to the API Center managed identity:
+   - **API Center Data Reader** — Allows reading API definitions and metadata
+   - **API Center Compliance Manager** — Allows managing compliance and governance policies
+
+### Managing Multiple Environments
+
+Create separate environments for different stages of the deployment lifecycle:
+
+```bash
+# Create and configure a development environment
+azd env new dev
+azd env set AZURE_LOCATION eastus
+azd up
+
+# Switch to a production environment
+azd env new prod
+azd env set AZURE_LOCATION westeurope
+azd up
+
+# List all configured environments
+azd env list
+
+# Select an existing environment
+azd env select dev
+```
+
+Each environment maintains its own set of parameters and deployed resources. The resource group name includes the environment name, so multiple environments can coexist in the same subscription: `apim-accelerator-dev-eastus-rg`, `apim-accelerator-prod-westeurope-rg`.
 
 ## Project Structure
 
@@ -297,16 +589,32 @@ The deployment accepts two environment parameters passed via `azd`:
 
 **Overview**
 
-The deployment uses Azure Developer CLI (`azd`) to orchestrate a subscription-scoped Bicep deployment. Resources are provisioned in three sequential phases with explicit dependency chaining to ensure correct ordering.
+The deployment uses Azure Developer CLI (`azd`) to orchestrate a subscription-scoped Bicep deployment. The orchestration template (`infra/main.bicep`) targets `subscription` scope, creates a dedicated resource group, and deploys three module layers with explicit output chaining. Each layer depends on outputs from the previous layer, ensuring correct provisioning order.
 
-**Deployment Sequence:**
+### Deployment Sequence
 
-1. **Resource Group** — Creates `{solutionName}-{envName}-{location}-rg`
-2. **Shared Infrastructure** — Log Analytics, Application Insights, Storage Account
-3. **Core Platform** — APIM service, developer portal, workspaces, managed identity
-4. **API Inventory** — API Center, API source integration, RBAC assignments
+The `infra/main.bicep` template executes these phases sequentially:
 
-**Deploy to a specific environment:**
+| Phase                    | Module                             | Resources Created                                                                                      | Depends On     |
+| ------------------------ | ---------------------------------- | ------------------------------------------------------------------------------------------------------ | -------------- |
+| 0️⃣ Pre-provision         | `infra/azd-hooks/pre-provision.sh` | None — purges soft-deleted APIM instances                                                              | Azure CLI auth |
+| 1️⃣ Resource Group        | `infra/main.bicep`                 | `{solutionName}-{envName}-{location}-rg`                                                               | Pre-provision  |
+| 2️⃣ Shared Infrastructure | `src/shared/main.bicep`            | Log Analytics Workspace, Application Insights, Storage Account                                         | Resource Group |
+| 3️⃣ Core Platform         | `src/core/main.bicep`              | APIM service, RBAC assignments, diagnostic settings, App Insights logger, workspaces, developer portal | Shared outputs |
+| 4️⃣ API Inventory         | `src/inventory/main.bicep`         | API Center, default workspace, API source integration, RBAC roles                                      | Core outputs   |
+
+The deployment applies consolidated tags from `shared.tags` in `settings.yaml` merged with deployment metadata (`environment`, `managedBy: bicep`, `templateVersion: 2.0.0`) to all resources.
+
+### Deploy with Azure Developer CLI
+
+**Full deployment (recommended):**
+
+```bash
+# Creates environment, prompts for location and subscription, then provisions
+azd up
+```
+
+**Deploy to a named environment:**
 
 ```bash
 azd env new dev
@@ -314,13 +622,22 @@ azd env set AZURE_LOCATION eastus
 azd up
 ```
 
-**Provision infrastructure only (without app deployment):**
+**Provision infrastructure only (skip app deployment):**
 
 ```bash
 azd provision
 ```
 
-**Deploy using Azure CLI directly:**
+**Re-provision after configuration changes:**
+
+```bash
+# After editing infra/settings.yaml
+azd provision
+```
+
+### Deploy with Azure CLI
+
+You can bypass `azd` and deploy the Bicep templates directly:
 
 ```bash
 az deployment sub create \
@@ -329,18 +646,86 @@ az deployment sub create \
   --parameters envName=dev location=eastus
 ```
 
-**SKU Recommendations:**
+> [!WARNING]
+> When deploying with `az deployment sub create`, the pre-provision hook does **not** run automatically. Manually purge soft-deleted APIM instances before deploying to avoid name conflicts:
+>
+> ```bash
+> # List soft-deleted APIM instances
+> az apim deletedservice list --query "[].name" -o tsv
+>
+> # Purge a specific soft-deleted instance
+> az apim deletedservice purge --service-name <name> --location <location>
+> ```
 
-| SKU                      | Use Case                 | SLA       | Multi-Region | VNet |
-| ------------------------ | ------------------------ | --------- | ------------ | ---- |
-| 🧪 Developer             | Non-production, testing  | ❌ No SLA | ❌           | ❌   |
-| 📦 Basic / BasicV2       | Small-scale production   | ✅ 99.95% | ❌           | ❌   |
-| ⚙️ Standard / StandardV2 | Medium-scale production  | ✅ 99.95% | ❌           | ❌   |
-| 🏢 Premium               | Enterprise production    | ✅ 99.99% | ✅           | ✅   |
-| ⚡ Consumption           | Serverless, pay-per-call | ✅ 99.95% | ❌           | ❌   |
+### Pre-Provision Hook
+
+The `infra/azd-hooks/pre-provision.sh` script runs automatically before each `azd up` or `azd provision` execution. It:
+
+1. Calls `az apim deletedservice list` to discover all soft-deleted APIM instances
+2. Iterates through each discovered instance
+3. Calls `az apim deletedservice purge` for each instance in the target region
+4. Logs all operations with timestamps for audit trail
+
+This prevents the common deployment error where Azure rejects a new APIM service name that matches a soft-deleted instance in the same region.
+
+### Deployment Outputs
+
+After successful deployment, the following outputs are available:
+
+| Output                                        | Source Module | Description                                           |
+| --------------------------------------------- | ------------- | ----------------------------------------------------- |
+| 📈 `APPLICATION_INSIGHTS_RESOURCE_ID`         | `shared`      | Full ARM resource ID of Application Insights          |
+| 📈 `APPLICATION_INSIGHTS_NAME`                | `shared`      | Application Insights instance name                    |
+| 🔑 `APPLICATION_INSIGHTS_INSTRUMENTATION_KEY` | `shared`      | Instrumentation key for SDK configuration (sensitive) |
+| 🗄️ `AZURE_STORAGE_ACCOUNT_ID`                 | `shared`      | ARM resource ID of the diagnostic Storage Account     |
+| 🔌 `API_MANAGEMENT_RESOURCE_ID`               | `core`        | ARM resource ID of the APIM service                   |
+| 🔌 `API_MANAGEMENT_NAME`                      | `core`        | APIM service name for CLI and SDK operations          |
+
+Access outputs after deployment:
+
+```bash
+# View all deployment outputs
+azd env get-values
+```
+
+### Teardown
+
+Remove all deployed resources:
+
+```bash
+# Delete all resources and the resource group
+azd down
+
+# Force delete without confirmation prompt
+azd down --force
+
+# Purge soft-deleted resources after teardown
+azd down --purge
+```
+
+### SKU Recommendations
+
+| SKU                      | Use Case                 | SLA       | Multi-Region | VNet | Workspaces |
+| ------------------------ | ------------------------ | --------- | ------------ | ---- | ---------- |
+| 🧪 Developer             | Non-production, testing  | ❌ No SLA | ❌           | ❌   | ❌         |
+| 📦 Basic / BasicV2       | Small-scale production   | ✅ 99.95% | ❌           | ❌   | ❌         |
+| ⚙️ Standard / StandardV2 | Medium-scale production  | ✅ 99.95% | ❌           | ❌   | ❌         |
+| 🏢 Premium               | Enterprise production    | ✅ 99.99% | ✅           | ✅   | ✅         |
+| ⚡ Consumption           | Serverless, pay-per-call | ✅ 99.95% | ❌           | ❌   | ❌         |
 
 > [!TIP]
 > Use `Developer` SKU for local development and testing. Workspace support requires **Premium** SKU. Switch SKU tiers by updating `core.apiManagement.sku.name` in `infra/settings.yaml`.
+
+### Troubleshooting
+
+| Issue                               | Cause                                            | Resolution                                                                     |
+| ----------------------------------- | ------------------------------------------------ | ------------------------------------------------------------------------------ |
+| ❌ Name conflict on APIM deployment | Soft-deleted APIM instance exists with same name | Run `az apim deletedservice purge --service-name <name> --location <location>` |
+| ❌ Identity errors on APIM          | Managed identity not yet propagated              | Wait and retry — identity propagation can take 1-2 minutes                     |
+| ❌ Developer portal auth failure    | Azure AD app registration misconfigured          | Verify `clientId` and allowed tenants in `src/core/developer-portal.bicep`     |
+| ❌ Workspace creation fails         | Non-Premium SKU selected                         | Set `core.apiManagement.sku.name` to `Premium` in `infra/settings.yaml`        |
+| ❌ API Center role assignment fails | API Center identity set to `None`                | Set `inventory.apiCenter.identity.type` to `SystemAssigned`                    |
+| ❌ Pre-provision hook fails         | Missing bash or Azure CLI not authenticated      | Ensure `az login` and bash shell are available                                 |
 
 ## Contributing
 
