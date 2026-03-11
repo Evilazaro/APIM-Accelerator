@@ -164,30 +164,34 @@ All infrastructure is defined as Bicep templates with no additional runtime depe
 
 **Overview**
 
-Getting started with the APIM Accelerator requires three steps: cloning the repository, authenticating with Azure, and running `azd up`. The accelerator handles all infrastructure provisioning, monitoring setup, and service configuration automatically.
+Getting started with the APIM Accelerator uses the Azure Developer CLI (`azd`) template workflow. The accelerator handles all infrastructure provisioning, monitoring setup, and service configuration automatically.
 
 The deployment operates at the subscription scope, creating a resource group named `{solutionName}-{envName}-{location}-rg` and deploying all resources within it. A pre-provision hook automatically purges soft-deleted APIM instances to prevent naming conflicts.
 
 ### Quick Start
 
-1. **Clone the repository**
+1. **Initialize the project from the template**
 
 ```bash
-git clone https://github.com/Evilazaro/APIM-Accelerator.git
-cd APIM-Accelerator
+azd init --template Evilazaro/APIM-Accelerator
 ```
 
-2. **Initialize and deploy the landing zone**
+2. **Authenticate with Azure**
 
 ```bash
 azd auth login
-azd up
+```
+
+3. **Provision the landing zone**
+
+```bash
+azd provision
 ```
 
 > [!NOTE]
-> When prompted, provide an environment name (e.g., `dev`, `test`, `prod`) and an Azure region. The environment name determines resource sizing and is applied as a tag to all resources.
+> `azd init` prompts for an environment name (e.g., `dev`, `test`, `prod`). `azd provision` prompts for an Azure subscription and region. The environment name determines resource naming and is applied as a tag to all resources.
 
-The `azd up` command executes the following sequence:
+The `azd provision` command executes the following sequence:
 
 ```text
 Pre-provision hook (purge soft-deleted APIM instances)
@@ -199,11 +203,10 @@ Pre-provision hook (purge soft-deleted APIM instances)
 
 ### Deployment Commands
 
-| Command            | Purpose                                       |
-| ------------------ | --------------------------------------------- |
-| 🚀 `azd up`        | Provision all Azure infrastructure end-to-end |
-| 📦 `azd provision` | Provision Azure resources only                |
-| 🗑️ `azd down`      | Remove all provisioned Azure resources        |
+| Command           | Purpose                                |
+| ----------------- | -------------------------------------- |
+| � `azd provision` | Provision all Azure infrastructure     |
+| 🗑️ `azd down`     | Remove all provisioned Azure resources |
 
 ### Pre-Provision Hook
 
