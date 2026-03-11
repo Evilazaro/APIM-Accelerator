@@ -26,7 +26,6 @@ The solution uses a modular Bicep architecture with three deployment layers — 
 - [Quick Start](#quick-start)
 - [Configuration](#configuration)
 - [Project Structure](#project-structure)
-- [Deployment](#deployment)
 - [Contributing](#contributing)
 - [License](#license)
 
@@ -157,25 +156,40 @@ All prerequisites listed below are validated during the pre-provision hook befor
 
 **Overview**
 
-Get the full API Management landing zone running in your Azure subscription with three commands. The `azd` CLI handles resource group creation, monitoring infrastructure, APIM deployment, and API Center setup automatically.
+The Azure Developer CLI (`azd`) manages the full deployment lifecycle — authentication, provisioning, monitoring, and teardown. The workflow below gets the complete API Management landing zone running in your Azure subscription.
 
-**1. Clone the repository**
+### Prerequisites
+
+Verify the required tools are installed:
+
+```bash
+az version    # Azure CLI 2.50+
+azd version   # Azure Developer CLI
+```
+
+> [!TIP]
+> Install `azd` from the [official guide](https://learn.microsoft.com/azure/developer/azure-developer-cli/install-azd) if not already available.
+
+### Clone and Initialize
 
 ```bash
 git clone https://github.com/Evilazaro/APIM-Accelerator.git
 cd APIM-Accelerator
 ```
 
-**2. Initialize the environment**
+Authenticate with Azure and initialize the environment:
 
 ```bash
+azd auth login
 azd init
 ```
 
-> [!NOTE]
-> When prompted, provide an environment name (e.g., `dev`, `staging`, `prod`) and select your target Azure region. The environment name maps directly to the `envName` parameter used for resource naming and configuration.
+When prompted by `azd init`, provide:
 
-**3. Deploy the landing zone**
+- **Environment name** — maps to the `envName` parameter (e.g., `dev`, `staging`, `prod`, `uat`)
+- **Azure region** — target region for all resources (must support API Management Premium)
+
+### Deploy
 
 ```bash
 azd up
@@ -184,59 +198,111 @@ azd up
 This single command executes the full deployment sequence:
 
 1. **Pre-provision hook** — purges soft-deleted APIM instances to prevent naming conflicts
-2. **Resource group creation** — follows the pattern `apim-accelerator-{env}-{region}-rg`
-3. **Shared infrastructure** — deploys Log Analytics, Application Insights, and Storage
-4. **Core platform** — deploys API Management (Premium), Developer Portal, and Workspaces
-5. **API inventory** — deploys API Center with automated APIM discovery
+2. **Resource group creation** — `{solutionName}-{env}-{region}-rg`
+3. **Shared infrastructure** — Log Analytics, Application Insights, and diagnostic Storage
+4. **Core platform** — API Management (Premium), Developer Portal, and Workspaces
+5. **API inventory** — API Center with automated APIM discovery
 
 > [!WARNING]
-> Azure API Management Premium tier deployment can take 30-45 minutes to complete. The `azd up` command will wait for all resources to be provisioned before returning.
+> API Management Premium tier provisioning takes 30–45 minutes. The command blocks until all resources are fully deployed.
+
+### Lifecycle Commands
+
+| Command                 | Description                                                          |
+| ----------------------- | -------------------------------------------------------------------- |
+| `azd up`                | Provision infrastructure and deploy the full landing zone            |
+| `azd provision`         | Provision infrastructure only (skip application deployment)          |
+| `azd down`              | Tear down all deployed resources and the resource group              |
+| `azd monitor`           | Open the Application Insights dashboard for the deployed environment |
+| `azd env list`          | List all configured environments                                     |
+| `azd env select <name>` | Switch between environments (e.g., `dev`, `prod`)                    |
+
+### Manual Deployment (Alternative)
+
+Deploy directly with the Azure CLI without `azd`:
+
+```bash
+az deployment sub create \
+  --location eastus \
+  --template-file infra/main.bicep \
+  --parameters envName=dev location=eastus
+```
 
 ## Configuration
 
 **Overview**
 
-All deployment settings are centralized in a single YAML configuration file at `infra/settings.yaml`. This file controls resource naming, SKU selection, identity configuration, workspace definitions, and tagging strategy — eliminating the need to modify Bicep templates directly.
+All deployment settings are centralized in [`infra/settings.yaml`](infra/settings.yaml). This file controls resource naming, SKU selection, identity configuration, workspace definitions, and tagging — eliminating the need to modify Bicep templates directly. Resource names left blank trigger automatic generation using a deterministic pattern based on solution name, subscription, and resource group.
 
-Resource names left blank in the settings file trigger automatic name generation using a deterministic pattern based on the solution name, subscription, and resource group, ensuring reproducible deployments across environments.
+Environment-level parameters (`envName`, `location`) are managed by `azd` through [`infra/main.parameters.json`](infra/main.parameters.json) and do not require manual editing.
 
-### Core Settings
+### Settings Reference
 
 ```yaml
-# infra/settings.yaml — Key configuration options
+# infra/settings.yaml
 
 solutionName: "apim-accelerator" # Base name for all resources
 
+# ── Shared Infrastructure ────────────────────────────────────────────────────
+shared:
+  monitoring:
+    logAnalytics:
+      name: "" # Leave blank for auto-generation
+      workSpaceResourceId: "" # Set to reuse an existing workspace
+      identity:
+        type: "SystemAssigned" # SystemAssigned | UserAssigned
+        userAssignedIdentities: []
+    applicationInsights:
+      name: "" # Leave blank for auto-generation
+      logAnalyticsWorkspaceResourceId: "" # Auto-linked when both deploy together
+    tags:
+      lz-component-type: "shared"
+      component: "monitoring"
+  tags:
+    CostCenter: "CC-1234"
+    BusinessUnit: "IT"
+    Owner: "admin@example.com"
+    ApplicationName: "APIM Platform"
+    ProjectName: "APIMForAll"
+    ServiceClass: "Critical" # Critical | Standard | Experimental
+    RegulatoryCompliance: "GDPR" # GDPR | HIPAA | PCI | None
+    SupportContact: "admin@example.com"
+    ChargebackModel: "Dedicated"
+    BudgetCode: "FY25-Q1-InitiativeX"
+
+# ── Core Platform ────────────────────────────────────────────────────────────
 core:
   apiManagement:
     name: "" # Leave blank for auto-generation
-    publisherEmail: "your@email.com" # Required — publisher contact
-    publisherName: "YourOrg" # Shown in Developer Portal
+    publisherEmail: "admin@example.com" # Required — publisher contact
+    publisherName: "Contoso" # Organization name in Developer Portal
     sku:
       name: "Premium" # Developer | Basic | Standard | Premium | Consumption
       capacity: 1 # Scale units (Premium: 1-10)
     identity:
       type: "SystemAssigned" # SystemAssigned | UserAssigned
+      userAssignedIdentities: []
     workspaces:
       - name: "workspace1" # Logical API isolation (Premium only)
-```
+  tags:
+    lz-component-type: "core"
+    component: "apiManagement"
 
-### Monitoring Settings
-
-```yaml
-shared:
-  monitoring:
-    logAnalytics:
-      name: "" # Leave blank for auto-generation
-      identity:
-        type: "SystemAssigned"
-    applicationInsights:
-      name: "" # Leave blank for auto-generation
+# ── API Inventory ─────────────────────────────────────────────────────────────
+inventory:
+  apiCenter:
+    name: "" # Leave blank for auto-generation
+    identity:
+      type: "SystemAssigned" # SystemAssigned | UserAssigned
+      userAssignedIdentities: []
+  tags:
+    lz-component-type: "shared"
+    component: "inventory"
 ```
 
 ### Tagging Strategy
 
-The solution applies enterprise governance tags to all deployed resources:
+Enterprise governance tags from `shared.tags` are applied to every deployed resource and merged with deployment metadata (`environment`, `managedBy`, `templateVersion`):
 
 | Tag                       | Purpose                  | Example               |
 | ------------------------- | ------------------------ | --------------------- |
@@ -253,7 +319,7 @@ The solution applies enterprise governance tags to all deployed resources:
 
 ### Environment Parameters
 
-Environment-specific values are passed through `infra/main.parameters.json`:
+`azd` injects `AZURE_ENV_NAME` and `AZURE_LOCATION` into [`infra/main.parameters.json`](infra/main.parameters.json) automatically — no manual editing required:
 
 ```json
 {
@@ -264,7 +330,7 @@ Environment-specific values are passed through `infra/main.parameters.json`:
 }
 ```
 
-Supported environment names: `dev`, `test`, `staging`, `prod`, `uat`
+Supported values for `envName`: `dev`, `test`, `staging`, `prod`, `uat`
 
 ## Project Structure
 
@@ -298,51 +364,6 @@ Supported environment names: `dev`, `test`, `staging`, `prod`, `uat`
         └── networking/
             └── main.bicep        # Network infrastructure (extensible)
 ```
-
-## Deployment
-
-**Overview**
-
-The deployment leverages the Azure Developer CLI (`azd`) for end-to-end lifecycle management. Three commands cover the most common deployment scenarios. The pre-provision hook automatically handles cleanup of soft-deleted APIM instances to prevent naming conflicts during redeployment.
-
-### Full Deployment
-
-```bash
-azd up
-```
-
-### Infrastructure Only
-
-```bash
-azd provision
-```
-
-### Tear Down
-
-```bash
-azd down
-```
-
-### Manual Deployment (Alternative)
-
-```bash
-az deployment sub create \
-  --location eastus \
-  --template-file infra/main.bicep \
-  --parameters envName=dev location=eastus
-```
-
-### Deployment Sequence
-
-The orchestration template (`infra/main.bicep`) deploys resources in this order:
-
-1. **Resource Group** — `{solutionName}-{env}-{region}-rg`
-2. **Shared Monitoring** — Log Analytics → Application Insights → Diagnostic Storage
-3. **Core Platform** — API Management → Developer Portal → Workspaces
-4. **API Inventory** — API Center → API Source (linked to APIM)
-
-> [!NOTE]
-> Each layer depends on outputs from the previous layer. The shared monitoring infrastructure must deploy successfully before the core platform can start provisioning.
 
 ## Contributing
 
