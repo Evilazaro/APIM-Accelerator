@@ -1,16 +1,17 @@
 # Business Architecture — APIM Accelerator
 
-| Field                     | Value                |
-| ------------------------- | -------------------- |
-| 🏗️ **Layer**              | Business             |
-| 🎯 **Quality Level**      | comprehensive        |
-| 📐 **Framework**          | TOGAF 10 / BDAT      |
-| 📦 **Repository**         | APIM Accelerator     |
-| 🧩 **Components Found**   | 39                   |
-| 📊 **Component Types**    | 11                   |
-| 📈 **Diagrams Included**  | 9                    |
-| 📄 **Sections Generated** | 1, 2, 3, 4, 5, 8     |
-| 🕐 **Generated**          | 2025-07-18T00:00:00Z |
+| Field                  | Value                |
+| ---------------------- | -------------------- |
+| **Layer**              | Business             |
+| **Quality Level**      | comprehensive        |
+| **Framework**          | TOGAF 10 / BDAT      |
+| **Repository**         | APIM Accelerator     |
+| **Components Found**   | 39                   |
+| **Component Types**    | 11                   |
+| **Average Confidence** | 0.81                 |
+| **Diagrams Included**  | 8                    |
+| **Sections Generated** | 1, 2, 3, 4, 5, 8     |
+| **Generated**          | 2025-07-18T00:00:00Z |
 
 ---
 
@@ -22,7 +23,7 @@ This Business Architecture analysis documents the APIM Accelerator repository �
 
 The repository yields 39 Business layer components distributed across all 11 canonical component types, demonstrating a mature governance-first approach with explicit cost management, regulatory compliance tagging, multi-team isolation, and developer self-service capabilities. Business intent is primarily documented through governance tags in `infra/settings.yaml`, strategic descriptions in `README.md`, and architectural patterns codified in Bicep module structures.
 
-Key findings reveal six core business capabilities (API Gateway Management, Developer Self-Service, API Governance & Compliance, Multi-Team API Isolation, Observability & Monitoring, and Cost Management & Chargeback), four business services aligned to the three-layer deployment architecture, and a comprehensive governance model enforcing GDPR compliance, dedicated chargeback, and critical service-class SLAs.
+Key findings reveal six core business capabilities (API Gateway Management, Developer Self-Service, API Governance & Compliance, Multi-Team API Isolation, Observability & Monitoring, and Cost Management & Chargeback), four business services aligned to the three-layer deployment architecture, and a comprehensive governance model enforcing GDPR compliance, dedicated chargeback, and critical service-class SLAs. The average confidence score of 0.81 reflects strong content-based evidence extracted from an IaC repository where business intent is embedded in configuration rather than dedicated business documentation folders.
 
 - **Business Strategy**: 3 components (APIMForAll Initiative, Enterprise API Platform Vision, API-First Digital Transformation)
 - **Business Capabilities**: 6 components (API Gateway Management, Developer Self-Service, API Governance & Compliance, Multi-Team API Isolation, Observability & Monitoring, Cost Management & Chargeback)
@@ -42,7 +43,7 @@ Key findings reveal six core business capabilities (API Gateway Management, Deve
 
 ### Overview
 
-The Architecture Landscape organizes all detected Business layer components into the 11 canonical TOGAF Business Architecture component types. Each component is cataloged with its description and business context based on observable indicators in the repository.
+The Architecture Landscape organizes all detected Business layer components into the 11 canonical TOGAF Business Architecture component types. Each component is cataloged with its source file evidence, confidence score, and maturity assessment based on observable indicators in the repository.
 
 This repository is an Infrastructure-as-Code solution written in Bicep. Business components are not found in dedicated business folders but are instead embedded in governance metadata (`infra/settings.yaml`), strategic documentation (`README.md`), and architectural patterns in Bicep modules. The Layer Classification Decision Tree was applied to all candidates: Q1=NO for documentation files (README.md, settings.yaml) leading to Q3=YES (documents strategic intent) and Q4=NO (about business, not system implementation). For Bicep files, Q1=YES but business intent is extracted per E-034 (Source Evidence Scope), focusing on business semantics rather than code structure.
 
@@ -50,97 +51,97 @@ The following subsections catalog all 39 components across the 11 types, with co
 
 ### 2.1 Business Strategy (3)
 
-| 🏷️ Name                             | 📝 Description                                                                                                                                       |
-| ----------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------- |
-| 🎯 APIMForAll Initiative            | **Strategic initiative** establishing a unified API platform for all business units, tracked as ProjectName governance tag                           |
-| 🔭 Enterprise API Platform Vision   | **Platform vision** for production-ready API management at enterprise scale, enabling deployment in minutes rather than weeks                        |
-| 🔄 API-First Digital Transformation | **Transformation strategy** automating API gateway services, developer portal, centralized monitoring, and API governance as a cohesive landing zone |
+| Name                             | Description                                                                                                                                          | Source                   | Confidence | Maturity       |
+| -------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------- | ------------------------ | ---------- | -------------- |
+| APIMForAll Initiative            | **Strategic initiative** establishing a unified API platform for all business units, tracked as ProjectName governance tag                           | `infra/settings.yaml:37` | 0.78       | 2 - Repeatable |
+| Enterprise API Platform Vision   | **Platform vision** for production-ready API management at enterprise scale, enabling deployment in minutes rather than weeks                        | `README.md:14-22`        | 0.82       | 3 - Defined    |
+| API-First Digital Transformation | **Transformation strategy** automating API gateway services, developer portal, centralized monitoring, and API governance as a cohesive landing zone | `README.md:8-17`         | 0.75       | 2 - Repeatable |
 
 ### 2.2 Business Capabilities (6)
 
-| 🏷️ Name                         | 📝 Description                                                                                                                                |
-| ------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------- |
-| 🔌 API Gateway Management       | **Core capability** providing API gateway services with policy engine, security, VNet integration, and multi-region support                   |
-| 🌐 Developer Self-Service       | **Enablement capability** providing a self-service portal with Azure AD authentication, CORS policies, and terms of service for API consumers |
-| 🔍 API Governance & Compliance  | **Governance capability** enabling centralized API catalog, automated discovery from APIM, and compliance management through RBAC roles       |
-| 📦 Multi-Team API Isolation     | **Organizational capability** enabling workspace-based logical isolation for independent team management of APIs within a shared platform     |
-| 📊 Observability & Monitoring   | **Operational capability** providing centralized logging, application performance monitoring, and long-term diagnostic retention              |
-| 💰 Cost Management & Chargeback | **Financial capability** enabling cost allocation tracking through CostCenter tagging, dedicated chargeback model, and budget code assignment |
+| Name                         | Description                                                                                                                                   | Source                                  | Confidence | Maturity       |
+| ---------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------- | --------------------------------------- | ---------- | -------------- |
+| API Gateway Management       | **Core capability** providing API gateway services with policy engine, security, VNet integration, and multi-region support                   | `src/core/apim.bicep:1-30`              | 0.88       | 4 - Measured   |
+| Developer Self-Service       | **Enablement capability** providing a self-service portal with Azure AD authentication, CORS policies, and terms of service for API consumers | `src/core/developer-portal.bicep:1-25`  | 0.85       | 3 - Defined    |
+| API Governance & Compliance  | **Governance capability** enabling centralized API catalog, automated discovery from APIM, and compliance management through RBAC roles       | `src/inventory/main.bicep:1-30`         | 0.87       | 4 - Measured   |
+| Multi-Team API Isolation     | **Organizational capability** enabling workspace-based logical isolation for independent team management of APIs within a shared platform     | `src/core/workspaces.bicep:1-20`        | 0.83       | 3 - Defined    |
+| Observability & Monitoring   | **Operational capability** providing centralized logging, application performance monitoring, and long-term diagnostic retention              | `src/shared/monitoring/main.bicep:1-30` | 0.80       | 3 - Defined    |
+| Cost Management & Chargeback | **Financial capability** enabling cost allocation tracking through CostCenter tagging, dedicated chargeback model, and budget code assignment | `infra/settings.yaml:31-40`             | 0.72       | 2 - Repeatable |
 
 ### 2.3 Value Streams (2)
 
-| 🏷️ Name                    | 📝 Description                                                                                                                                 |
-| -------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------- |
-| 🚀 API Consumer Enablement | **End-to-end value stream** from API discovery through Developer Portal to API consumption via gateway, enabling developer productivity        |
-| ⚙️ Platform Provisioning   | **Delivery value stream** from configuration definition through automated deployment to operational landing zone, executed via `azd provision` |
+| Name                    | Description                                                                                                                                    | Source              | Confidence | Maturity       |
+| ----------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------- | ------------------- | ---------- | -------------- |
+| API Consumer Enablement | **End-to-end value stream** from API discovery through Developer Portal to API consumption via gateway, enabling developer productivity        | `README.md:93-108`  | 0.76       | 2 - Repeatable |
+| Platform Provisioning   | **Delivery value stream** from configuration definition through automated deployment to operational landing zone, executed via `azd provision` | `README.md:145-162` | 0.85       | 3 - Defined    |
 
 ### 2.4 Business Processes (4)
 
-| 🏷️ Name                          | 📝 Description                                                                                                                                                    |
-| -------------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| 🏗️ Landing Zone Provisioning     | **Core process** executing the 5-step provisioning sequence: pre-provision hook → resource group creation → shared infrastructure → core platform → API inventory |
-| 🧹 Soft-Delete Resource Recovery | **Operational process** purging soft-deleted APIM instances before provisioning to prevent naming conflicts and enable clean redeployment                         |
-| 📋 API Registration & Discovery  | **Governance process** automatically registering APIs from APIM into API Center for centralized inventory and compliance tracking                                 |
-| 👤 Developer Onboarding          | **Enablement process** onboarding API consumers through Azure AD authentication, sign-in/sign-up delegation, and terms of service acceptance                      |
+| Name                          | Description                                                                                                                                                       | Source                                   | Confidence | Maturity       |
+| ----------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------- | ---------------------------------------- | ---------- | -------------- |
+| Landing Zone Provisioning     | **Core process** executing the 5-step provisioning sequence: pre-provision hook → resource group creation → shared infrastructure → core platform → API inventory | `README.md:152-162`                      | 0.90       | 4 - Measured   |
+| Soft-Delete Resource Recovery | **Operational process** purging soft-deleted APIM instances before provisioning to prevent naming conflicts and enable clean redeployment                         | `infra/azd-hooks/pre-provision.sh:1-30`  | 0.82       | 3 - Defined    |
+| API Registration & Discovery  | **Governance process** automatically registering APIs from APIM into API Center for centralized inventory and compliance tracking                                 | `src/inventory/main.bicep:100-150`       | 0.79       | 3 - Defined    |
+| Developer Onboarding          | **Enablement process** onboarding API consumers through Azure AD authentication, sign-in/sign-up delegation, and terms of service acceptance                      | `src/core/developer-portal.bicep:50-120` | 0.77       | 2 - Repeatable |
 
 ### 2.5 Business Services (4)
 
-| 🏷️ Name                               | 📝 Description                                                                                                                                             |
-| ------------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| ⚙️ API Management Platform Service    | **Core service** providing API gateway, policy engine, and security management as the central integration point for all API consumers and producers        |
-| 🌐 Developer Portal Service           | **Self-service portal** enabling API discovery, interactive testing, and onboarding with Azure AD integrated authentication                                |
-| 📚 API Inventory Service              | **Catalog service** providing centralized API governance, automated APIM discovery, and compliance role assignments through API Center                     |
-| 📊 Monitoring & Observability Service | **Platform service** delivering centralized Log Analytics, Application Insights APM, and diagnostic storage for full observability across the landing zone |
+| Name                               | Description                                                                                                                                                | Source                                  | Confidence | Maturity     |
+| ---------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------- | --------------------------------------- | ---------- | ------------ |
+| API Management Platform Service    | **Core service** providing API gateway, policy engine, and security management as the central integration point for all API consumers and producers        | `src/core/main.bicep:1-40`              | 0.92       | 4 - Measured |
+| Developer Portal Service           | **Self-service portal** enabling API discovery, interactive testing, and onboarding with Azure AD integrated authentication                                | `src/core/developer-portal.bicep:1-25`  | 0.88       | 3 - Defined  |
+| API Inventory Service              | **Catalog service** providing centralized API governance, automated APIM discovery, and compliance role assignments through API Center                     | `src/inventory/main.bicep:1-30`         | 0.85       | 3 - Defined  |
+| Monitoring & Observability Service | **Platform service** delivering centralized Log Analytics, Application Insights APM, and diagnostic storage for full observability across the landing zone | `src/shared/monitoring/main.bicep:1-30` | 0.83       | 3 - Defined  |
 
 ### 2.6 Business Functions (2)
 
-| 🏷️ Name                    | 📝 Description                                                                                                                                 |
-| -------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------- |
-| 🛠️ Platform Engineering    | **Organizational function** responsible for managing the API platform, contributing to the accelerator, and maintaining Bicep module standards |
-| 🔍 API Governance Function | **Organizational function** responsible for API standards, compliance enforcement, and role assignment through API Center RBAC                 |
+| Name                    | Description                                                                                                                                    | Source                             | Confidence | Maturity       |
+| ----------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------- | ---------------------------------- | ---------- | -------------- |
+| Platform Engineering    | **Organizational function** responsible for managing the API platform, contributing to the accelerator, and maintaining Bicep module standards | `README.md:335-345`                | 0.75       | 2 - Repeatable |
+| API Governance Function | **Organizational function** responsible for API standards, compliance enforcement, and role assignment through API Center RBAC                 | `src/inventory/main.bicep:130-170` | 0.73       | 2 - Repeatable |
 
 ### 2.7 Business Roles & Actors (5)
 
-| 🏷️ Name                     | 📝 Description                                                                                                                                   |
-| --------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------ |
-| 👤 Platform Owner           | **Accountable role** owning the APIM platform resources and bearing responsibility for operational decisions, identified by Owner governance tag |
-| 👨‍💻 API Consumer (Developer) | **External actor** using the Developer Portal to discover, test, and consume APIs with Azure AD authenticated access                             |
-| 📖 API Center Data Reader   | **Governance role** with read-only access to the centralized API inventory for discovery and analysis purposes                                   |
-| 🛡️ Compliance Manager       | **Governance role** managing API compliance standards and regulatory adherence through API Center role assignments                               |
-| 🔧 Publisher/Administrator  | **Operational role** managing API Management service configuration, identified by publisherEmail and publisherName in settings                   |
+| Name                     | Description                                                                                                                                      | Source                                  | Confidence | Maturity    |
+| ------------------------ | ------------------------------------------------------------------------------------------------------------------------------------------------ | --------------------------------------- | ---------- | ----------- |
+| Platform Owner           | **Accountable role** owning the APIM platform resources and bearing responsibility for operational decisions, identified by Owner governance tag | `infra/settings.yaml:33`                | 0.80       | 3 - Defined |
+| API Consumer (Developer) | **External actor** using the Developer Portal to discover, test, and consume APIs with Azure AD authenticated access                             | `src/core/developer-portal.bicep:50-80` | 0.82       | 3 - Defined |
+| API Center Data Reader   | **Governance role** with read-only access to the centralized API inventory for discovery and analysis purposes                                   | `src/inventory/main.bicep:130-145`      | 0.85       | 3 - Defined |
+| Compliance Manager       | **Governance role** managing API compliance standards and regulatory adherence through API Center role assignments                               | `src/inventory/main.bicep:145-170`      | 0.85       | 3 - Defined |
+| Publisher/Administrator  | **Operational role** managing API Management service configuration, identified by publisherEmail and publisherName in settings                   | `infra/settings.yaml:44-45`             | 0.78       | 3 - Defined |
 
 ### 2.8 Business Rules (4)
 
-| 🏷️ Name                        | 📝 Description                                                                                                             |
-| ------------------------------ | -------------------------------------------------------------------------------------------------------------------------- |
-| 🛡️ GDPR Regulatory Compliance  | **Compliance rule** mandating all platform resources comply with GDPR regulatory requirements, enforced via governance tag |
-| 💰 Dedicated Chargeback Model  | **Financial rule** requiring dedicated cost allocation for platform resources rather than shared or showback billing       |
-| ⚡ Critical Service Class      | **Operational rule** classifying the platform at Critical SLA tier, implying highest availability and support requirements |
-| 📋 Terms of Service Governance | **Access rule** requiring API consumers to accept terms of service before accessing the Developer Portal                   |
+| Name                        | Description                                                                                                                | Source                                    | Confidence | Maturity       |
+| --------------------------- | -------------------------------------------------------------------------------------------------------------------------- | ----------------------------------------- | ---------- | -------------- |
+| GDPR Regulatory Compliance  | **Compliance rule** mandating all platform resources comply with GDPR regulatory requirements, enforced via governance tag | `infra/settings.yaml:38`                  | 0.88       | 3 - Defined    |
+| Dedicated Chargeback Model  | **Financial rule** requiring dedicated cost allocation for platform resources rather than shared or showback billing       | `infra/settings.yaml:39`                  | 0.80       | 3 - Defined    |
+| Critical Service Class      | **Operational rule** classifying the platform at Critical SLA tier, implying highest availability and support requirements | `infra/settings.yaml:36`                  | 0.82       | 3 - Defined    |
+| Terms of Service Governance | **Access rule** requiring API consumers to accept terms of service before accessing the Developer Portal                   | `src/core/developer-portal.bicep:100-120` | 0.77       | 2 - Repeatable |
 
 ### 2.9 Business Events (2)
 
-| 🏷️ Name                     | 📝 Description                                                                                                                            |
-| --------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------- |
-| ⚡ Pre-Provision Trigger    | **Lifecycle event** triggered before resource provisioning to initiate soft-deleted resource cleanup, configured as azd preprovision hook |
-| 🔗 API Source Linking Event | **Integration event** occurring when API Center establishes a discovery link to the APIM service for automated API registration           |
+| Name                     | Description                                                                                                                               | Source                             | Confidence | Maturity       |
+| ------------------------ | ----------------------------------------------------------------------------------------------------------------------------------------- | ---------------------------------- | ---------- | -------------- |
+| Pre-Provision Trigger    | **Lifecycle event** triggered before resource provisioning to initiate soft-deleted resource cleanup, configured as azd preprovision hook | `azure.yaml:1-10`                  | 0.80       | 3 - Defined    |
+| API Source Linking Event | **Integration event** occurring when API Center establishes a discovery link to the APIM service for automated API registration           | `src/inventory/main.bicep:100-130` | 0.75       | 2 - Repeatable |
 
 ### 2.10 Business Objects/Entities (4)
 
-| 🏷️ Name                    | 📝 Description                                                                                                                               |
-| -------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------- |
-| 🔌 API Management Instance | **Core entity** representing the central API gateway platform with associated SKU, identity, and network configuration                       |
-| 📦 API Workspace           | **Domain entity** representing a logical API isolation boundary enabling independent team management within the shared platform              |
-| 📚 API Center Catalog      | **Governance entity** representing the centralized API inventory with workspace-scoped API registration and compliance tracking              |
-| 🏷️ Governance Tag Set      | **Metadata entity** representing the 10-tag enterprise governance standard applied to all deployed resources for classification and tracking |
+| Name                    | Description                                                                                                                                  | Source                           | Confidence | Maturity     |
+| ----------------------- | -------------------------------------------------------------------------------------------------------------------------------------------- | -------------------------------- | ---------- | ------------ |
+| API Management Instance | **Core entity** representing the central API gateway platform with associated SKU, identity, and network configuration                       | `src/core/apim.bicep:1-30`       | 0.90       | 4 - Measured |
+| API Workspace           | **Domain entity** representing a logical API isolation boundary enabling independent team management within the shared platform              | `src/core/workspaces.bicep:1-30` | 0.85       | 3 - Defined  |
+| API Center Catalog      | **Governance entity** representing the centralized API inventory with workspace-scoped API registration and compliance tracking              | `src/inventory/main.bicep:1-30`  | 0.85       | 3 - Defined  |
+| Governance Tag Set      | **Metadata entity** representing the 10-tag enterprise governance standard applied to all deployed resources for classification and tracking | `infra/settings.yaml:29-40`      | 0.78       | 3 - Defined  |
 
 ### 2.11 KPIs & Metrics (3)
 
-| 🏷️ Name                   | 📝 Description                                                                                                           |
-| ------------------------- | ------------------------------------------------------------------------------------------------------------------------ |
-| 📈 Service Class SLA      | **Availability KPI** derived from Critical service class designation, implying highest tier SLA targets for the platform |
-| 💵 Budget Tracking        | **Financial KPI** tracking expenditure against budget code FY25-Q1-InitiativeX for fiscal accountability                 |
-| 🏦 Cost Center Allocation | **Financial KPI** measuring cost allocation accuracy against cost center CC-1234 for chargeback reporting                |
+| Name                   | Description                                                                                                              | Source                   | Confidence | Maturity       |
+| ---------------------- | ------------------------------------------------------------------------------------------------------------------------ | ------------------------ | ---------- | -------------- |
+| Service Class SLA      | **Availability KPI** derived from Critical service class designation, implying highest tier SLA targets for the platform | `infra/settings.yaml:36` | 0.75       | 2 - Repeatable |
+| Budget Tracking        | **Financial KPI** tracking expenditure against budget code FY25-Q1-InitiativeX for fiscal accountability                 | `infra/settings.yaml:40` | 0.73       | 2 - Repeatable |
+| Cost Center Allocation | **Financial KPI** measuring cost allocation accuracy against cost center CC-1234 for chargeback reporting                | `infra/settings.yaml:31` | 0.72       | 2 - Repeatable |
 
 ```mermaid
 ---
@@ -273,7 +274,7 @@ flowchart LR
 
 ### Summary
 
-The Architecture Landscape identifies 39 Business layer components distributed across all 11 canonical TOGAF component types, satisfying the comprehensive quality threshold of 20+ components across 8+ types. The strongest coverage is in Business Capabilities (6), Business Roles & Actors (5), and Business Services (4), reflecting a mature platform with well-defined governance structures.
+The Architecture Landscape identifies 39 Business layer components distributed across all 11 canonical TOGAF component types, satisfying the comprehensive quality threshold of 20+ components across 8+ types. The strongest coverage is in Business Capabilities (6), Business Roles & Actors (5), and Business Services (4), reflecting a mature platform with well-defined governance structures. Confidence scores range from 0.72 to 0.92 with an average of 0.81, indicating solid evidence-based classification despite the IaC-centric nature of the repository.
 
 Primary gaps include the absence of formalized BPMN process models (business processes are inferred from deployment sequences and hook scripts rather than explicit process definitions), limited KPI granularity (metrics are derived from governance tags rather than dedicated KPI dashboards), and no explicit value stream documentation (value streams are reconstructed from the deployment architecture and developer portal workflow). Recommended next steps include creating dedicated business documentation artifacts for capabilities and processes, formalizing KPI definitions with measurable targets, and documenting the API consumer journey as an explicit value stream model.
 
@@ -289,51 +290,57 @@ Each principle is supported by observable evidence in the repository source file
 
 ### P1: Governance-First Resource Management
 
-| 📌 Attribute        | 📝 Value                                                                                                                                                                                                                                             |
-| ------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| 📣 **Statement**    | All platform resources must be governed through a comprehensive tagging strategy that ensures cost tracking, compliance, and ownership accountability                                                                                                |
-| 💡 **Rationale**    | The 10-tag governance standard in `infra/settings.yaml:29-40` enforces CostCenter, BusinessUnit, Owner, ServiceClass, RegulatoryCompliance, and BudgetCode on every deployed resource, enabling enterprise-grade financial and compliance management |
-| ⚠️ **Implications** | Every new resource or module must inherit tags from the shared configuration; untagged resources violate the governance model                                                                                                                        |
+| Attribute        | Value                                                                                                                                                                                                                                                |
+| ---------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| **Statement**    | All platform resources must be governed through a comprehensive tagging strategy that ensures cost tracking, compliance, and ownership accountability                                                                                                |
+| **Rationale**    | The 10-tag governance standard in `infra/settings.yaml:29-40` enforces CostCenter, BusinessUnit, Owner, ServiceClass, RegulatoryCompliance, and BudgetCode on every deployed resource, enabling enterprise-grade financial and compliance management |
+| **Implications** | Every new resource or module must inherit tags from the shared configuration; untagged resources violate the governance model                                                                                                                        |
+| **Source**       | `infra/settings.yaml:29-40`, `README.md:261-283`                                                                                                                                                                                                     |
 
 ### P2: Single-Command Operational Simplicity
 
-| 📌 Attribute        | 📝 Value                                                                                                                                                                                                                                                   |
-| ------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| 📣 **Statement**    | The entire API platform landing zone must be deployable through a single command with no manual Azure Portal configuration required                                                                                                                        |
-| 💡 **Rationale**    | The `azd provision` workflow automates the full 5-step provisioning sequence (pre-provision cleanup → resource group → shared infrastructure → core platform → API inventory), reducing deployment from weeks to minutes (inferred from `README.md:14-17`) |
-| ⚠️ **Implications** | All configuration must be externalized to `infra/settings.yaml`; manual steps are architectural violations                                                                                                                                                 |
+| Attribute        | Value                                                                                                                                                                                                                                                      |
+| ---------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| **Statement**    | The entire API platform landing zone must be deployable through a single command with no manual Azure Portal configuration required                                                                                                                        |
+| **Rationale**    | The `azd provision` workflow automates the full 5-step provisioning sequence (pre-provision cleanup → resource group → shared infrastructure → core platform → API inventory), reducing deployment from weeks to minutes (inferred from `README.md:14-17`) |
+| **Implications** | All configuration must be externalized to `infra/settings.yaml`; manual steps are architectural violations                                                                                                                                                 |
+| **Source**       | `README.md:10-17`, `azure.yaml:1-10`                                                                                                                                                                                                                       |
 
 ### P3: Layered Dependency Isolation
 
-| 📌 Attribute        | 📝 Value                                                                                                                                                                                                                               |
-| ------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| 📣 **Statement**    | Platform components must be organized in deployment layers with explicit dependency ordering to ensure infrastructure foundations are available before dependent services                                                              |
-| 💡 **Rationale**    | The three-layer architecture (Shared Infrastructure → Core Platform → API Inventory) ensures monitoring is available before APIM deploys, and APIM is available before API Center links to it (inferred from `infra/main.bicep:1-200`) |
-| ⚠️ **Implications** | New modules must declare layer membership and respect deployment sequence; cross-layer circular dependencies are prohibited                                                                                                            |
+| Attribute        | Value                                                                                                                                                                                                                                  |
+| ---------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| **Statement**    | Platform components must be organized in deployment layers with explicit dependency ordering to ensure infrastructure foundations are available before dependent services                                                              |
+| **Rationale**    | The three-layer architecture (Shared Infrastructure → Core Platform → API Inventory) ensures monitoring is available before APIM deploys, and APIM is available before API Center links to it (inferred from `infra/main.bicep:1-200`) |
+| **Implications** | New modules must declare layer membership and respect deployment sequence; cross-layer circular dependencies are prohibited                                                                                                            |
+| **Source**       | `infra/main.bicep:1-200`, `README.md:30-45`                                                                                                                                                                                            |
 
 ### P4: Configuration-Driven Customization
 
-| 📌 Attribute        | 📝 Value                                                                                                                                                                                                                           |
-| ------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| 📣 **Statement**    | All deployment parameters must be controllable through a centralized YAML configuration file, eliminating the need to modify Bicep templates directly                                                                              |
-| 💡 **Rationale**    | `infra/settings.yaml` centralizes resource naming, SKU selection, identity configuration, workspace definitions, and tagging, enabling environment-specific customization without code changes (inferred from `README.md:220-230`) |
-| ⚠️ **Implications** | Bicep modules must parameterize all business-relevant settings; hardcoded values are architectural violations unless they represent fixed platform constraints                                                                     |
+| Attribute        | Value                                                                                                                                                                                                                              |
+| ---------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| **Statement**    | All deployment parameters must be controllable through a centralized YAML configuration file, eliminating the need to modify Bicep templates directly                                                                              |
+| **Rationale**    | `infra/settings.yaml` centralizes resource naming, SKU selection, identity configuration, workspace definitions, and tagging, enabling environment-specific customization without code changes (inferred from `README.md:220-230`) |
+| **Implications** | Bicep modules must parameterize all business-relevant settings; hardcoded values are architectural violations unless they represent fixed platform constraints                                                                     |
+| **Source**       | `infra/settings.yaml:1-70`, `README.md:220-230`                                                                                                                                                                                    |
 
 ### P5: Multi-Environment Consistency
 
-| 📌 Attribute        | 📝 Value                                                                                                                                                                                                                                                    |
-| ------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| 📣 **Statement**    | The platform must support deterministic deployment across multiple environments (dev, test, staging, prod, uat) with reproducible resource naming                                                                                                           |
-| 💡 **Rationale**    | Environment names are injected via `azd` parameters, and resource names use deterministic generation based on subscription, resource group, and solution name, ensuring consistent deployments across environments (inferred from `infra/main.bicep:30-50`) |
-| ⚠️ **Implications** | Resource naming functions must be pure (same inputs produce same outputs); environment-specific overrides must not break naming determinism                                                                                                                 |
+| Attribute        | Value                                                                                                                                                                                                                                                       |
+| ---------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| **Statement**    | The platform must support deterministic deployment across multiple environments (dev, test, staging, prod, uat) with reproducible resource naming                                                                                                           |
+| **Rationale**    | Environment names are injected via `azd` parameters, and resource names use deterministic generation based on subscription, resource group, and solution name, ensuring consistent deployments across environments (inferred from `infra/main.bicep:30-50`) |
+| **Implications** | Resource naming functions must be pure (same inputs produce same outputs); environment-specific overrides must not break naming determinism                                                                                                                 |
+| **Source**       | `infra/main.bicep:30-50`, `src/shared/constants.bicep:1-50`                                                                                                                                                                                                 |
 
 ### P6: Identity-First Security
 
-| 📌 Attribute        | 📝 Value                                                                                                                                                                                                                    |
-| ------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| 📣 **Statement**    | All platform services must use managed identities for inter-service authentication, eliminating credential management overhead                                                                                              |
-| 💡 **Rationale**    | SystemAssigned managed identity is the default for APIM, API Center, and Log Analytics, enabling secure resource access without stored credentials (inferred from `infra/settings.yaml:49-51`, `infra/settings.yaml:63-65`) |
-| ⚠️ **Implications** | New services must support managed identity configuration; shared-secret or key-based authentication between platform services is prohibited                                                                                 |
+| Attribute        | Value                                                                                                                                                                                                                       |
+| ---------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| **Statement**    | All platform services must use managed identities for inter-service authentication, eliminating credential management overhead                                                                                              |
+| **Rationale**    | SystemAssigned managed identity is the default for APIM, API Center, and Log Analytics, enabling secure resource access without stored credentials (inferred from `infra/settings.yaml:49-51`, `infra/settings.yaml:63-65`) |
+| **Implications** | New services must support managed identity configuration; shared-secret or key-based authentication between platform services is prohibited                                                                                 |
+| **Source**       | `infra/settings.yaml:49-51`, `src/core/apim.bicep:1-30`                                                                                                                                                                     |
 
 ---
 
@@ -341,20 +348,20 @@ Each principle is supported by observable evidence in the repository source file
 
 ### Overview
 
-The Current State Baseline captures the as-is architecture of the APIM Accelerator's business capabilities, documenting deployment topology and operational readiness.
+The Current State Baseline captures the as-is architecture of the APIM Accelerator's business capabilities, documenting maturity levels, deployment topology, and operational readiness. This assessment evaluates the platform against the 5-level Business Capability Maturity Scale (Initial → Optimized) based on observable evidence in the repository.
 
-The platform demonstrates a mature infrastructure-as-code foundation with well-established governance structures through comprehensive tagging, RBAC role assignments, and regulatory compliance enforcement.
+The platform demonstrates a mature infrastructure-as-code foundation with Level 3 (Defined) to Level 4 (Measured) maturity across core capabilities. Governance structures are well-established through comprehensive tagging, RBAC role assignments, and regulatory compliance enforcement. The primary maturity gaps are in financial KPI tracking (Level 2) and value stream formalization (Level 2), where business intent is expressed through metadata tags rather than dedicated measurement frameworks.
 
-### Capability Assessment
+### Maturity Assessment
 
-| 🎯 Capability | 📋 Gap |
-| --- | --- |
-| 🔌 API Gateway Management | No automated performance benchmarking |
-| 🌐 Developer Self-Service | No API usage analytics dashboard |
-| 🔍 API Governance & Compliance | No automated compliance scanning pipeline |
-| 📦 Multi-Team API Isolation | No workspace usage metrics or quota management |
-| 📊 Observability & Monitoring | No business-level SLA dashboards |
-| 💰 Cost Management & Chargeback | No automated cost reporting or budget alerts |
+| Capability                   | Maturity Level | Evidence                                                                               | Gap                                            |
+| ---------------------------- | -------------- | -------------------------------------------------------------------------------------- | ---------------------------------------------- |
+| API Gateway Management       | 4 - Measured   | Premium SKU with VNet, RBAC, diagnostics, multi-region support                         | No automated performance benchmarking          |
+| Developer Self-Service       | 3 - Defined    | Azure AD auth, CORS, terms of service, sign-up delegation                              | No API usage analytics dashboard               |
+| API Governance & Compliance  | 4 - Measured   | API Center with RBAC roles (Data Reader, Compliance Manager), automated APIM discovery | No automated compliance scanning pipeline      |
+| Multi-Team API Isolation     | 3 - Defined    | Workspace-based isolation with configurable workspace list                             | No workspace usage metrics or quota management |
+| Observability & Monitoring   | 3 - Defined    | Log Analytics + App Insights + diagnostic storage                                      | No business-level SLA dashboards               |
+| Cost Management & Chargeback | 2 - Repeatable | CostCenter, ChargebackModel, BudgetCode tags applied                                   | No automated cost reporting or budget alerts   |
 
 ### Deployment Topology
 
