@@ -4,11 +4,11 @@
 
 ### Overview
 
-This Business Architecture analysis documents the APIM Accelerator repository — an enterprise-grade Azure Infrastructure-as-Code accelerator that deploys a complete API Management landing zone. The analysis applies the Business Architecture framework to identify strategic, operational, and governance components embedded within the solution's infrastructure definitions, configuration metadata, and documentation artifacts.
+This Business Architecture analysis documents the APIM Accelerator repository — an **enterprise-grade Azure Infrastructure-as-Code accelerator** that deploys a **complete API Management landing zone**. The analysis applies the Business Architecture framework to identify strategic, operational, and governance components embedded within the solution's infrastructure definitions, configuration metadata, and documentation artifacts.
 
-The repository yields 39 Business layer components distributed across all 11 canonical component types, demonstrating a mature governance-first approach with explicit cost management, regulatory compliance tagging, multi-team isolation, and developer self-service capabilities. Business intent is primarily documented through governance tags in `infra/settings.yaml`, strategic descriptions in `README.md`, and architectural patterns codified in Bicep module structures.
+The repository yields **39 Business layer components** distributed across all **11 canonical component types**, demonstrating a mature **governance-first approach** with explicit cost management, regulatory compliance tagging, multi-team isolation, and developer self-service capabilities. Business intent is primarily documented through governance tags in `infra/settings.yaml`, strategic descriptions in `README.md`, and architectural patterns codified in Bicep module structures.
 
-Key findings reveal six core business capabilities (API Gateway Management, Developer Self-Service, API Governance & Compliance, Multi-Team API Isolation, Observability & Monitoring, and Cost Management & Chargeback), four business services aligned to the three-layer deployment architecture, and a comprehensive governance model enforcing GDPR compliance, dedicated chargeback, and critical service-class SLAs.
+Key findings reveal **six core business capabilities** (API Gateway Management, Developer Self-Service, API Governance & Compliance, Multi-Team API Isolation, Observability & Monitoring, and Cost Management & Chargeback), **four business services** aligned to the three-layer deployment architecture, and a **comprehensive governance model** enforcing GDPR compliance, dedicated chargeback, and critical service-class SLAs.
 
 ---
 
@@ -18,7 +18,7 @@ Key findings reveal six core business capabilities (API Gateway Management, Deve
 
 The Architecture Landscape organizes all detected Business layer components into the 11 canonical Business Architecture component types. Each component is cataloged with its description and business context based on observable indicators in the repository.
 
-This repository is an Infrastructure-as-Code solution written in Bicep. Business components are not found in dedicated business folders but are instead embedded in governance metadata (`infra/settings.yaml`), strategic documentation (`README.md`), and architectural patterns in Bicep modules. The Layer Classification Decision Tree was applied to all candidates: Q1=NO for documentation files (README.md, settings.yaml) leading to Q3=YES (documents strategic intent) and Q4=NO (about business, not system implementation). For Bicep files, Q1=YES but business intent is extracted per E-034 (Source Evidence Scope), focusing on business semantics rather than code structure.
+This repository is an Infrastructure-as-Code solution written in Bicep. Business components are not found in dedicated business folders but are instead **embedded in governance metadata** (`infra/settings.yaml`), strategic documentation (`README.md`), and architectural patterns in Bicep modules. The **Layer Classification Decision Tree** was applied to all candidates: Q1=NO for documentation files (README.md, settings.yaml) leading to Q3=YES (documents strategic intent) and Q4=NO (about business, not system implementation). For Bicep files, Q1=YES but business intent is extracted per E-034 (Source Evidence Scope), focusing on business semantics rather than code structure.
 
 The following subsections catalog all 39 components across the 11 types, with components drawn from 12 source files spanning the infrastructure configuration, core platform, shared services, inventory, and documentation layers of the repository.
 
@@ -247,7 +247,7 @@ flowchart LR
 
 ### Summary
 
-The Architecture Landscape identifies 39 Business layer components distributed across all 11 canonical component types, satisfying the comprehensive quality threshold of 20+ components across 8+ types. The strongest coverage is in Business Capabilities (6), Business Roles & Actors (5), and Business Services (4), reflecting a mature platform with well-defined governance structures.
+The Architecture Landscape identifies **39 Business layer components** distributed across all **11 canonical component types**, satisfying the comprehensive quality threshold of **20+ components across 8+ types**. The strongest coverage is in Business Capabilities (6), Business Roles & Actors (5), and Business Services (4), reflecting a mature platform with well-defined governance structures.
 
 Primary gaps include the absence of formalized BPMN process models (business processes are inferred from deployment sequences and hook scripts rather than explicit process definitions), limited KPI granularity (metrics are derived from governance tags rather than dedicated KPI dashboards), and no explicit value stream documentation (value streams are reconstructed from the deployment architecture and developer portal workflow). Recommended next steps include creating dedicated business documentation artifacts for capabilities and processes, formalizing KPI definitions with measurable targets, and documenting the API consumer journey as an explicit value stream model.
 
@@ -257,7 +257,7 @@ Primary gaps include the absence of formalized BPMN process models (business pro
 
 ### Overview
 
-The Architecture Principles section documents the business-level design guidelines and architectural constraints observed in the APIM Accelerator repository. These principles are inferred from consistent patterns across governance metadata, module structures, and deployment orchestration rather than from explicit architecture principle documents.
+The Architecture Principles section documents the **business-level design guidelines and architectural constraints** observed in the APIM Accelerator repository. These principles are inferred from consistent patterns across governance metadata, module structures, and deployment orchestration rather than from explicit architecture principle documents.
 
 Each principle is supported by observable evidence in the repository source files, reflecting deliberate architectural decisions that govern how the platform serves business needs. The principles align with Architecture Principles framework, addressing business value, organizational fit, and governance requirements.
 
@@ -317,7 +317,7 @@ Each principle is supported by observable evidence in the repository source file
 
 The Current State Baseline captures the as-is architecture of the APIM Accelerator's business capabilities, documenting deployment topology and operational readiness.
 
-The platform demonstrates a mature infrastructure-as-code foundation with well-established governance structures through comprehensive tagging, RBAC role assignments, and regulatory compliance enforcement.
+The platform demonstrates a **mature infrastructure-as-code foundation** with well-established governance structures through comprehensive tagging, RBAC role assignments, and regulatory compliance enforcement.
 
 ### Capability Assessment
 
@@ -538,9 +538,9 @@ flowchart TB
 
 ### Summary
 
-The Current State Baseline reveals a platform with strong operational foundations across core API gateway and governance capabilities. The three-layer deployment topology provides clear separation of concerns, and the governance-first approach ensures all resources are tagged for cost, compliance, and ownership tracking from initial deployment.
+The Current State Baseline reveals a platform with **strong operational foundations** across core API gateway and governance capabilities. The **three-layer deployment topology** provides clear separation of concerns, and the **governance-first approach** ensures all resources are tagged for cost, compliance, and ownership tracking from initial deployment.
 
-The primary gaps limiting advancement include: (1) absence of automated business-level KPI dashboards beyond infrastructure metrics, (2) no formal cost reporting automation despite comprehensive chargeback tagging, (3) lack of explicit process documentation (BPMN or equivalent) for operational workflows, and (4) no workspace-level usage analytics for capacity planning. Recommended investments focus on implementing Azure Cost Management integration, building SLA monitoring dashboards, and formalizing the API consumer onboarding journey as a documented business process.
+The primary gaps limiting advancement include: (1) **absence of automated business-level KPI dashboards** beyond infrastructure metrics, (2) **no formal cost reporting automation** despite comprehensive chargeback tagging, (3) **lack of explicit process documentation** (BPMN or equivalent) for operational workflows, and (4) **no workspace-level usage analytics** for capacity planning. Recommended investments focus on implementing Azure Cost Management integration, building SLA monitoring dashboards, and formalizing the API consumer onboarding journey as a documented business process.
 
 ---
 
@@ -1072,7 +1072,7 @@ flowchart LR
 
 ### Summary
 
-The Component Catalog documents 39 components across all 11 Business component types, with the strongest specifications in Business Capabilities (6 components) and Business Services (4 components). The most well-documented components are API Management Platform Service and Landing Zone Provisioning, reflecting quantitatively managed capabilities with clear architectural evidence.
+The Component Catalog documents **39 components across all 11 Business component types**, with the strongest specifications in Business Capabilities (6 components) and Business Services (4 components). The most well-documented components are **API Management Platform Service** and **Landing Zone Provisioning**, reflecting quantitatively managed capabilities with clear architectural evidence.
 
 Gaps include limited KPI granularity (3 KPIs derived from governance tags rather than dedicated measurement frameworks), absence of formalized value stream documentation (2 value streams inferred from architectural patterns), and minimal business function decomposition (2 functions). Recommended improvements include creating dedicated KPI definition files with measurable targets and thresholds, documenting the API consumer journey as an explicit value stream with stage gates, and formalizing organizational function boundaries with RACI matrices.
 
@@ -1286,6 +1286,6 @@ flowchart LR
 
 ### Summary
 
-The dependency analysis reveals a clear top-down flow from Business Strategy → Capabilities → Services → Processes, with Business Rules providing cross-cutting governance constraints. All four business services have direct 1:1 mappings to business capabilities, and three of four services execute at least one documented business process. The governance tag propagation pattern ensures that GDPR compliance, chargeback, and service class rules are uniformly applied across all three deployment layers (Shared, Core, Inventory).
+The dependency analysis reveals a **clear top-down flow** from Business Strategy → Capabilities → Services → Processes, with Business Rules providing **cross-cutting governance constraints**. All four business services have **direct 1:1 mappings** to business capabilities, and three of four services execute at least one documented business process. The governance tag propagation pattern ensures that GDPR compliance, chargeback, and service class rules are **uniformly applied** across all three deployment layers (Shared, Core, Inventory).
 
-The primary integration risk is the tight coupling between API Inventory Service and the Core Platform through the API Source link — if APIM is unavailable, API discovery is blocked. Additionally, the governance tag model relies entirely on deployment-time tag application with no runtime validation, meaning tag drift could occur if resources are modified outside of `azd provision`. Recommended next steps include implementing Azure Policy for runtime governance tag enforcement, adding health check probes between dependent services, and establishing a formal dependency matrix with SLA implications for each integration point.
+The primary integration risk is the **tight coupling between API Inventory Service and the Core Platform** through the API Source link — if APIM is unavailable, API discovery is blocked. Additionally, the governance tag model relies entirely on **deployment-time tag application with no runtime validation**, meaning tag drift could occur if resources are modified outside of `azd provision`. Recommended next steps include implementing Azure Policy for runtime governance tag enforcement, adding health check probes between dependent services, and establishing a formal dependency matrix with SLA implications for each integration point.
