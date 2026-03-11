@@ -177,16 +177,10 @@ git clone https://github.com/Evilazaro/APIM-Accelerator.git
 cd APIM-Accelerator
 ```
 
-2. **Authenticate with Azure**
+2. **Initialize and deploy the landing zone**
 
 ```bash
-az login
 azd auth login
-```
-
-3. **Deploy the landing zone**
-
-```bash
 azd up
 ```
 
@@ -205,23 +199,11 @@ Pre-provision hook (purge soft-deleted APIM instances)
 
 ### Deployment Commands
 
-| Command            | Purpose                                                    |
-| ------------------ | ---------------------------------------------------------- |
-| 🚀 `azd up`        | Provision infrastructure and deploy the complete solution  |
-| 📦 `azd provision` | Provision Azure resources only (no application deployment) |
-| 🔄 `azd deploy`    | Deploy application code only (resources must exist)        |
-| 🗑️ `azd down`      | Remove all provisioned Azure resources                     |
-
-### Manual Deployment (Azure CLI)
-
-To deploy without `azd`, use the Azure CLI directly:
-
-```bash
-az deployment sub create \
-  --location eastus \
-  --template-file infra/main.bicep \
-  --parameters envName=dev location=eastus
-```
+| Command            | Purpose                                       |
+| ------------------ | --------------------------------------------- |
+| 🚀 `azd up`        | Provision all Azure infrastructure end-to-end |
+| 📦 `azd provision` | Provision Azure resources only                |
+| 🗑️ `azd down`      | Remove all provisioned Azure resources        |
 
 ### Pre-Provision Hook
 
