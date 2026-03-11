@@ -77,16 +77,16 @@ flowchart TB
         subgraph corePlatform["⚙️ Core Platform"]
             direction LR
             apim("🔌 API Management"):::core
-            dp("🌐 Developer Portal"):::core
-            ws("📦 Workspaces"):::core
+            dp("🌐 Developer Portal"):::success
+            ws("📦 Workspaces"):::neutral
             apim -->|"hosts"| dp
             apim -->|"isolates"| ws
         end
 
         subgraph inv["📚 API Inventory"]
             direction LR
-            ac("🔍 API Center"):::core
-            apisrc("🔗 API Source"):::core
+            ac("🔍 API Center"):::warning
+            apisrc("🔗 API Source"):::external
             ac -->|"discovers"| apisrc
         end
     end
@@ -96,8 +96,12 @@ flowchart TB
     apisrc -->|"links to"| apim
 
     %% Centralized classDefs (approved AZURE/FLUENT v1.1 palette)
+    classDef neutral fill:#FAFAFA,stroke:#8A8886,stroke-width:2px,color:#323130
     classDef core fill:#EFF6FC,stroke:#0078D4,stroke-width:2px,color:#323130
+    classDef success fill:#DFF6DD,stroke:#107C10,stroke-width:2px,color:#323130
+    classDef warning fill:#FFF4CE,stroke:#FFB900,stroke-width:2px,color:#323130
     classDef data fill:#F0E6FA,stroke:#8764B8,stroke-width:2px,color:#323130
+    classDef external fill:#E0F7F7,stroke:#038387,stroke-width:2px,color:#323130
 
     %% Subgraph styling (4 subgraphs = 4 style directives, all neutral surface)
     style rg fill:#F3F2F1,stroke:#8A8886,stroke-width:2px,color:#323130

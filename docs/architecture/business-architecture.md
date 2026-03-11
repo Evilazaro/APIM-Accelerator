@@ -398,9 +398,9 @@ flowchart TB
     classDef external fill:#E0F7F7,stroke:#038387,stroke-width:2px,color:#323130
 
     %% Subgraph styling (style directives, not class)
-    style level4 fill:#DFF6DD,stroke:#107C10,stroke-width:2px,color:#323130
-    style level3 fill:#FFF4CE,stroke:#FFB900,stroke-width:2px,color:#323130
-    style level2 fill:#FDE7E9,stroke:#D13438,stroke-width:2px,color:#323130
+    style level4 fill:#F3F2F1,stroke:#8A8886,stroke-width:2px,color:#323130
+    style level3 fill:#F3F2F1,stroke:#8A8886,stroke-width:2px,color:#323130
+    style level2 fill:#F3F2F1,stroke:#8A8886,stroke-width:2px,color:#323130
 ```
 
 ```mermaid
@@ -509,9 +509,9 @@ flowchart TB
     subgraph services["⚙️ Business Services"]
         direction LR
         svc1("🔌 API Management<br/>Platform Service"):::core
-        svc2("🌐 Developer Portal<br/>Service"):::core
-        svc3("📚 API Inventory<br/>Service"):::core
-        svc4("📊 Monitoring &<br/>Observability Service"):::core
+        svc2("🌐 Developer Portal<br/>Service"):::success
+        svc3("📚 API Inventory<br/>Service"):::data
+        svc4("📊 Monitoring &<br/>Observability Service"):::warning
     end
 
     owner -->|"owns"| svc1
@@ -1028,9 +1028,9 @@ flowchart LR
     subgraph internal["🏢 Internal Roles"]
         direction TB
         r1("👤 Platform Owner"):::core
-        r2("🔧 Publisher/Admin"):::core
-        r3("🛡️ Compliance Manager"):::core
-        r4("📊 Data Reader"):::core
+        r2("🔧 Publisher/Admin"):::neutral
+        r3("🛡️ Compliance Manager"):::danger
+        r4("📊 Data Reader"):::data
     end
 
     subgraph external["🌍 External Actors"]
@@ -1040,10 +1040,10 @@ flowchart LR
 
     subgraph platform["⚙️ Platform Services"]
         direction TB
-        svc1("🔌 API Management"):::success
+        svc1("🔌 API Management"):::core
         svc2("🌐 Developer Portal"):::success
-        svc3("📚 API Inventory"):::success
-        svc4("📊 Monitoring"):::success
+        svc3("📚 API Inventory"):::data
+        svc4("📊 Monitoring"):::warning
     end
 
     r1 -->|"owns & governs"| svc1
