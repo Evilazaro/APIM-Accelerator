@@ -57,14 +57,14 @@ Key stakeholders include Data Architects responsible for schema governance, Plat
 
 ### Key Findings
 
-| Metric                   | Value | Assessment             |
-| ------------------------ | ----- | ---------------------- |
-| Total Data Assets        | 93    | Comprehensive coverage |
-| Canonical Types Covered  | 11/11 | Full coverage          |
-| Average Confidence Score | 0.84  | High confidence        |
-| Files Analyzed           | 14    | Complete scan          |
-| Source Traceability      | 100%  | All assets traced      |
-| Mermaid Diagrams         | 3     | ERD + 2 flowcharts     |
+| Metric                   | Value | Assessment                                                                                                                       |
+| ------------------------ | ----- | -------------------------------------------------------------------------------------------------------------------------------- |
+| Total Data Assets        | 93    | Comprehensive coverage                                                                                                           |
+| Canonical Types Covered  | 11/11 | Full coverage                                                                                                                    |
+| Average Confidence Score | 0.84  | High confidence                                                                                                                  |
+| Files Analyzed           | 14    | Complete scan                                                                                                                    |
+| Source Traceability      | 100%  | All assets traced                                                                                                                |
+| Mermaid Diagrams         | 16    | Comprehensive: ERD, flowcharts, quadrant, topology, hierarchy, heatmap, timeline, contract maps, ETL/ELT, producer-consumer, CDC |
 
 ### Data Quality Scorecard
 
