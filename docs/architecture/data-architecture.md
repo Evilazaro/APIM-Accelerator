@@ -526,6 +526,136 @@ The principles documented below are directly inferred from source code patterns 
 | PII            | Personally identifiable information                 | Owner email, support contact in governance tags             |
 | Financial      | Financial tracking information                      | CostCenter, BudgetCode, ChargebackModel tags                |
 
+### Data Principle Hierarchy
+
+```mermaid
+---
+title: Data Principle Hierarchy
+config:
+  theme: base
+  look: classic
+  layout: dagre
+  themeVariables:
+    fontSize: "16px"
+---
+flowchart TB
+    accTitle: Data Principle Hierarchy
+    accDescr: Shows the hierarchical relationship between data architecture principles in the APIM Accelerator from foundational type safety through governance-first design
+
+    %% ═══════════════════════════════════════════════════════════════════════════
+    %% AZURE / FLUENT ARCHITECTURE PATTERN v1.1
+    %% (Semantic + Structural + Font + Accessibility Governance)
+    %% ═══════════════════════════════════════════════════════════════════════════
+    %% PHASE 1 - FLUENT UI: All styling uses approved Fluent UI palette only
+    %% PHASE 2 - GROUPS: Every subgraph has semantic color via style directive
+    %% PHASE 3 - COMPONENTS: Every node has semantic classDef + icon prefix
+    %% PHASE 4 - ACCESSIBILITY: accTitle/accDescr present, WCAG AA contrast
+    %% PHASE 5 - STANDARD: Governance block present, classDefs centralized
+    %% ═══════════════════════════════════════════════════════════════════════════
+
+    subgraph foundation["🏗️ Foundation Principles"]
+        typeSafety("🛡️ Type Safety\n10 Bicep type definitions\nEnum constraints"):::core
+        ssot("🎯 Single Source of Truth\nCentralized YAML config\nsettings.yaml"):::core
+    end
+
+    subgraph structural["🏢 Structural Principles"]
+        reusability("🔄 Reusability\n4 exported types\nCross-module import"):::data
+        separation("📦 Separation of Concerns\nModular architecture\nshared/core/inventory"):::data
+        naming("🏷️ Deterministic Naming\n3 utility functions\nReproducible outputs"):::data
+    end
+
+    subgraph security["🔒 Security Principles"]
+        privacy("🔐 Privacy by Design\n@secure() decorators\nKey management"):::danger
+    end
+
+    subgraph governance["🏛️ Governance Principles"]
+        govFirst("📜 Governance First\n10 resource tags\nCost + compliance tracking"):::warning
+    end
+
+    typeSafety -->|"enables"| reusability
+    ssot -->|"feeds"| naming
+    typeSafety -->|"enforces"| separation
+    reusability -->|"supports"| privacy
+    separation -->|"ensures"| privacy
+    naming -->|"standardizes"| govFirst
+    privacy -->|"protects"| govFirst
+
+    classDef core fill:#EFF6FC,stroke:#0078D4,stroke-width:2px,color:#323130
+    classDef data fill:#F0E6FA,stroke:#8764B8,stroke-width:2px,color:#323130
+    classDef danger fill:#FDE7E9,stroke:#D13438,stroke-width:2px,color:#323130
+    classDef warning fill:#FFF4CE,stroke:#FFB900,stroke-width:2px,color:#323130
+
+    style foundation fill:#F3F2F1,stroke:#8A8886,stroke-width:2px,color:#323130
+    style structural fill:#F3F2F1,stroke:#8A8886,stroke-width:2px,color:#323130
+    style security fill:#F3F2F1,stroke:#8A8886,stroke-width:2px,color:#323130
+    style governance fill:#F3F2F1,stroke:#8A8886,stroke-width:2px,color:#323130
+```
+
+### Classification Taxonomy Diagram
+
+```mermaid
+---
+title: Data Classification Taxonomy
+config:
+  theme: base
+  look: classic
+  layout: dagre
+  themeVariables:
+    fontSize: "16px"
+---
+flowchart LR
+    accTitle: Data Classification Taxonomy
+    accDescr: Shows the four data classification levels used in the APIM Accelerator with example assets at each level from Internal through Financial
+
+    %% ═══════════════════════════════════════════════════════════════════════════
+    %% AZURE / FLUENT ARCHITECTURE PATTERN v1.1
+    %% (Semantic + Structural + Font + Accessibility Governance)
+    %% ═══════════════════════════════════════════════════════════════════════════
+    %% PHASE 1 - FLUENT UI: All styling uses approved Fluent UI palette only
+    %% PHASE 2 - GROUPS: Every subgraph has semantic color via style directive
+    %% PHASE 3 - COMPONENTS: Every node has semantic classDef + icon prefix
+    %% PHASE 4 - ACCESSIBILITY: accTitle/accDescr present, WCAG AA contrast
+    %% PHASE 5 - STANDARD: Governance block present, classDefs centralized
+    %% ═══════════════════════════════════════════════════════════════════════════
+
+    subgraph internal["🟢 Internal"]
+        intEx1("📋 Type Definitions"):::success
+        intEx2("⚙️ SKU Settings"):::success
+        intEx3("📦 Diagnostic Constants"):::success
+    end
+
+    subgraph confidential["🟡 Confidential"]
+        confEx1("🔐 Role Definition GUIDs"):::warning
+        confEx2("📄 YAML Configuration"):::warning
+        confEx3("📤 Output Contracts"):::warning
+    end
+
+    subgraph pii["🟠 PII"]
+        piiEx1("📧 Owner Email"):::danger
+        piiEx2("📧 Support Contact"):::danger
+    end
+
+    subgraph financial["🔴 Financial"]
+        finEx1("💰 CostCenter Tag"):::external
+        finEx2("💰 BudgetCode Tag"):::external
+        finEx3("💰 ChargebackModel Tag"):::external
+    end
+
+    internal -->|"may contain"| confidential
+    confidential -->|"may contain"| pii
+    confidential -->|"may contain"| financial
+
+    classDef success fill:#DFF6DD,stroke:#107C10,stroke-width:2px,color:#323130
+    classDef warning fill:#FFF4CE,stroke:#FFB900,stroke-width:2px,color:#323130
+    classDef danger fill:#FDE7E9,stroke:#D13438,stroke-width:2px,color:#323130
+    classDef external fill:#E0F7F7,stroke:#038387,stroke-width:2px,color:#323130
+
+    style internal fill:#F3F2F1,stroke:#8A8886,stroke-width:2px,color:#323130
+    style confidential fill:#F3F2F1,stroke:#8A8886,stroke-width:2px,color:#323130
+    style pii fill:#F3F2F1,stroke:#8A8886,stroke-width:2px,color:#323130
+    style financial fill:#F3F2F1,stroke:#8A8886,stroke-width:2px,color:#323130
+```
+
 ---
 
 ## Section 4: Current State Baseline
@@ -632,6 +762,73 @@ flowchart TB
 | Naming Consistency       | Utility functions    | Automated policy      | Low    |
 | Tagging Compliance       | 10 governance tags   | Automated enforcement | Low    |
 | Secret Management        | @secure() decorators | Key Vault integration | Medium |
+
+### Quality Heatmap
+
+```mermaid
+---
+title: Data Quality Heatmap
+config:
+  theme: base
+  look: classic
+  layout: dagre
+  themeVariables:
+    fontSize: "16px"
+---
+flowchart TB
+    accTitle: Data Quality Heatmap
+    accDescr: Shows the data quality assessment across five dimensions for each data domain in the APIM Accelerator solution with color-coded quality levels
+
+    %% ═══════════════════════════════════════════════════════════════════════════
+    %% AZURE / FLUENT ARCHITECTURE PATTERN v1.1
+    %% (Semantic + Structural + Font + Accessibility Governance)
+    %% ═══════════════════════════════════════════════════════════════════════════
+    %% PHASE 1 - FLUENT UI: All styling uses approved Fluent UI palette only
+    %% PHASE 2 - GROUPS: Every subgraph has semantic color via style directive
+    %% PHASE 3 - COMPONENTS: Every node has semantic classDef + icon prefix
+    %% PHASE 4 - ACCESSIBILITY: accTitle/accDescr present, WCAG AA contrast
+    %% PHASE 5 - STANDARD: Governance block present, classDefs centralized
+    %% ═══════════════════════════════════════════════════════════════════════════
+
+    subgraph sharedQuality["📂 Shared Infrastructure"]
+        shTypeSafety("✅ Type Safety: Strong"):::success
+        shConfigVal("⚠️ Config Validation: Medium"):::warning
+        shNaming("✅ Naming: Consistent"):::success
+        shTagging("✅ Tagging: 10 tags"):::success
+        shSecrets("⚠️ Secrets: @secure only"):::warning
+    end
+
+    subgraph coreQuality["🌐 Core Platform"]
+        coTypeSafety("✅ Type Safety: Strong"):::success
+        coConfigVal("✅ Config Validation: Enum"):::success
+        coNaming("✅ Naming: Functions"):::success
+        coDiagnostics("✅ Diagnostics: Dual-dest"):::success
+        coIdentity("✅ Identity: Managed"):::success
+    end
+
+    subgraph inventoryQuality["📚 Inventory"]
+        invTypeSafety("✅ Type Safety: Strong"):::success
+        invRbac("✅ RBAC: 2 assignments"):::success
+        invSync("⚠️ API Sync: No retry"):::warning
+        invCatalog("❌ Catalog: No Purview"):::danger
+    end
+
+    subgraph configQuality["🔧 Orchestration"]
+        orchYaml("✅ YAML: Structured"):::success
+        orchSchema("❌ Schema: No registry"):::danger
+        orchVersion("❌ Versioning: None"):::danger
+        orchLineage("❌ Lineage: Not tracked"):::danger
+    end
+
+    classDef success fill:#DFF6DD,stroke:#107C10,stroke-width:2px,color:#323130
+    classDef warning fill:#FFF4CE,stroke:#FFB900,stroke-width:2px,color:#323130
+    classDef danger fill:#FDE7E9,stroke:#D13438,stroke-width:2px,color:#323130
+
+    style sharedQuality fill:#F3F2F1,stroke:#8A8886,stroke-width:2px,color:#323130
+    style coreQuality fill:#F3F2F1,stroke:#8A8886,stroke-width:2px,color:#323130
+    style inventoryQuality fill:#F3F2F1,stroke:#8A8886,stroke-width:2px,color:#323130
+    style configQuality fill:#F3F2F1,stroke:#8A8886,stroke-width:2px,color:#323130
+```
 
 ### Governance Maturity
 
