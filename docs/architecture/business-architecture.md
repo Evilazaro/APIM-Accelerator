@@ -584,36 +584,27 @@ This subsection documents strategic initiatives that define the platform's busin
 
 #### 5.1.1 APIMForAll Initiative
 
-| Attribute       | Value                                                                                                                                                                                    |
-| --------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| **Name**        | APIMForAll Initiative                                                                                                                                                                    |
-| **Type**        | Business Strategy                                                                                                                                                                        |
-| **Description** | Strategic initiative to establish a unified API platform accessible to all business units within the organization, promoting API-first adoption and reducing siloed integration patterns |
-| **Maturity**    | 2 - Repeatable                                                                                                                                                                           |
-| **Source**      | `infra/settings.yaml:37`                                                                                                                                                                 |
-| **Confidence**  | 0.78                                                                                                                                                                                     |
+| 📌 Attribute       | 📝 Value                                                                                                                                                                                 |
+| ------------------ | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| 🏷️ **Name**        | APIMForAll Initiative                                                                                                                                                                    |
+| 📦 **Type**        | Business Strategy                                                                                                                                                                        |
+| 📝 **Description** | Strategic initiative to establish a unified API platform accessible to all business units within the organization, promoting API-first adoption and reducing siloed integration patterns |
 
 #### 5.1.2 Enterprise API Platform Vision
 
-| Attribute       | Value                                                                                                                                                                                                   |
-| --------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| **Name**        | Enterprise API Platform Vision                                                                                                                                                                          |
-| **Type**        | Business Strategy                                                                                                                                                                                       |
-| **Description** | Platform vision for delivering a production-ready API management foundation at enterprise scale, enabling platform teams to establish a fully operational API landing zone in minutes rather than weeks |
-| **Maturity**    | 3 - Defined                                                                                                                                                                                             |
-| **Source**      | `README.md:14-22`                                                                                                                                                                                       |
-| **Confidence**  | 0.82                                                                                                                                                                                                    |
+| 📌 Attribute       | 📝 Value                                                                                                                                                                                                |
+| ------------------ | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| 🏷️ **Name**        | Enterprise API Platform Vision                                                                                                                                                                          |
+| 📦 **Type**        | Business Strategy                                                                                                                                                                                       |
+| 📝 **Description** | Platform vision for delivering a production-ready API management foundation at enterprise scale, enabling platform teams to establish a fully operational API landing zone in minutes rather than weeks |
 
 #### 5.1.3 API-First Digital Transformation
 
-| Attribute       | Value                                                                                                                                                                                                       |
-| --------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| **Name**        | API-First Digital Transformation                                                                                                                                                                            |
-| **Type**        | Business Strategy                                                                                                                                                                                           |
-| **Description** | Transformation strategy automating the deployment of API gateway services, developer portal, centralized monitoring, and API governance as a unified landing zone to accelerate organizational API adoption |
-| **Maturity**    | 2 - Repeatable                                                                                                                                                                                              |
-| **Source**      | `README.md:8-17`                                                                                                                                                                                            |
-| **Confidence**  | 0.75                                                                                                                                                                                                        |
+| 📌 Attribute       | 📝 Value                                                                                                                                                                                                    |
+| ------------------ | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| 🏷️ **Name**        | API-First Digital Transformation                                                                                                                                                                            |
+| 📦 **Type**        | Business Strategy                                                                                                                                                                                           |
+| 📝 **Description** | Transformation strategy automating the deployment of API gateway services, developer portal, centralized monitoring, and API governance as a unified landing zone to accelerate organizational API adoption |
 
 ### 5.2 Business Capabilities Specifications
 
@@ -621,69 +612,51 @@ This subsection documents the core business capabilities that the APIM Accelerat
 
 #### 5.2.1 API Gateway Management
 
-| Attribute       | Value                                                                                                                                                                                                 |
-| --------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| **Name**        | API Gateway Management                                                                                                                                                                                |
-| **Type**        | Business Capability                                                                                                                                                                                   |
-| **Description** | Core platform capability providing centralized API gateway services with policy enforcement, security management, VNet integration, and multi-region support through Azure API Management Premium SKU |
-| **Maturity**    | 4 - Measured                                                                                                                                                                                          |
-| **Source**      | `src/core/apim.bicep:1-30`                                                                                                                                                                            |
-| **Confidence**  | 0.88                                                                                                                                                                                                  |
+| 📌 Attribute       | 📝 Value                                                                                                                                                                                              |
+| ------------------ | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| 🏷️ **Name**        | API Gateway Management                                                                                                                                                                                |
+| 📦 **Type**        | Business Capability                                                                                                                                                                                   |
+| 📝 **Description** | Core platform capability providing centralized API gateway services with policy enforcement, security management, VNet integration, and multi-region support through Azure API Management Premium SKU |
 
 #### 5.2.2 Developer Self-Service
 
-| Attribute       | Value                                                                                                                                                                                                                |
-| --------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| **Name**        | Developer Self-Service                                                                                                                                                                                               |
-| **Type**        | Business Capability                                                                                                                                                                                                  |
-| **Description** | Enablement capability providing API consumers with a branded self-service portal featuring Azure AD authentication, interactive API testing, documentation browsing, and onboarding with terms of service acceptance |
-| **Maturity**    | 3 - Defined                                                                                                                                                                                                          |
-| **Source**      | `src/core/developer-portal.bicep:1-25`                                                                                                                                                                               |
-| **Confidence**  | 0.85                                                                                                                                                                                                                 |
+| 📌 Attribute       | 📝 Value                                                                                                                                                                                                             |
+| ------------------ | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| 🏷️ **Name**        | Developer Self-Service                                                                                                                                                                                               |
+| 📦 **Type**        | Business Capability                                                                                                                                                                                                  |
+| 📝 **Description** | Enablement capability providing API consumers with a branded self-service portal featuring Azure AD authentication, interactive API testing, documentation browsing, and onboarding with terms of service acceptance |
 
 #### 5.2.3 API Governance & Compliance
 
-| Attribute       | Value                                                                                                                                                                                              |
-| --------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| **Name**        | API Governance & Compliance                                                                                                                                                                        |
-| **Type**        | Business Capability                                                                                                                                                                                |
-| **Description** | Governance capability enabling centralized API cataloging, automated API discovery from APIM, and compliance enforcement through dedicated RBAC roles (API Center Data Reader, Compliance Manager) |
-| **Maturity**    | 4 - Measured                                                                                                                                                                                       |
-| **Source**      | `src/inventory/main.bicep:1-30`                                                                                                                                                                    |
-| **Confidence**  | 0.87                                                                                                                                                                                               |
+| 📌 Attribute       | 📝 Value                                                                                                                                                                                           |
+| ------------------ | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| 🏷️ **Name**        | API Governance & Compliance                                                                                                                                                                        |
+| 📦 **Type**        | Business Capability                                                                                                                                                                                |
+| 📝 **Description** | Governance capability enabling centralized API cataloging, automated API discovery from APIM, and compliance enforcement through dedicated RBAC roles (API Center Data Reader, Compliance Manager) |
 
 #### 5.2.4 Multi-Team API Isolation
 
-| Attribute       | Value                                                                                                                                                                                            |
-| --------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
-| **Name**        | Multi-Team API Isolation                                                                                                                                                                         |
-| **Type**        | Business Capability                                                                                                                                                                              |
-| **Description** | Organizational capability enabling workspace-based logical isolation within the shared API Management platform, allowing independent teams to manage their APIs with separate lifecycle controls |
-| **Maturity**    | 3 - Defined                                                                                                                                                                                      |
-| **Source**      | `src/core/workspaces.bicep:1-20`                                                                                                                                                                 |
-| **Confidence**  | 0.83                                                                                                                                                                                             |
+| 📌 Attribute       | 📝 Value                                                                                                                                                                                         |
+| ------------------ | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
+| 🏷️ **Name**        | Multi-Team API Isolation                                                                                                                                                                         |
+| 📦 **Type**        | Business Capability                                                                                                                                                                              |
+| 📝 **Description** | Organizational capability enabling workspace-based logical isolation within the shared API Management platform, allowing independent teams to manage their APIs with separate lifecycle controls |
 
 #### 5.2.5 Observability & Monitoring
 
-| Attribute       | Value                                                                                                                                                                                                   |
-| --------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| **Name**        | Observability & Monitoring                                                                                                                                                                              |
-| **Type**        | Business Capability                                                                                                                                                                                     |
-| **Description** | Operational capability providing centralized logging through Log Analytics, application performance monitoring through Application Insights, and long-term diagnostic retention through Storage Account |
-| **Maturity**    | 3 - Defined                                                                                                                                                                                             |
-| **Source**      | `src/shared/monitoring/main.bicep:1-30`                                                                                                                                                                 |
-| **Confidence**  | 0.80                                                                                                                                                                                                    |
+| 📌 Attribute       | 📝 Value                                                                                                                                                                                                |
+| ------------------ | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| 🏷️ **Name**        | Observability & Monitoring                                                                                                                                                                              |
+| 📦 **Type**        | Business Capability                                                                                                                                                                                     |
+| 📝 **Description** | Operational capability providing centralized logging through Log Analytics, application performance monitoring through Application Insights, and long-term diagnostic retention through Storage Account |
 
 #### 5.2.6 Cost Management & Chargeback
 
-| Attribute       | Value                                                                                                                                                                                  |
-| --------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| **Name**        | Cost Management & Chargeback                                                                                                                                                           |
-| **Type**        | Business Capability                                                                                                                                                                    |
-| **Description** | Financial management capability enabling cost allocation tracking through CostCenter tagging, dedicated chargeback billing model, and budget code assignment for fiscal accountability |
-| **Maturity**    | 2 - Repeatable                                                                                                                                                                         |
-| **Source**      | `infra/settings.yaml:31-40`                                                                                                                                                            |
-| **Confidence**  | 0.72                                                                                                                                                                                   |
+| 📌 Attribute       | 📝 Value                                                                                                                                                                               |
+| ------------------ | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| 🏷️ **Name**        | Cost Management & Chargeback                                                                                                                                                           |
+| 📦 **Type**        | Business Capability                                                                                                                                                                    |
+| 📝 **Description** | Financial management capability enabling cost allocation tracking through CostCenter tagging, dedicated chargeback billing model, and budget code assignment for fiscal accountability |
 
 ### 5.3 Value Streams Specifications
 
