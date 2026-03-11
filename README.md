@@ -42,6 +42,8 @@ config:
   theme: base
   look: classic
   layout: dagre
+  themeVariables:
+    fontSize: '16px'
   flowchart:
     htmlLabels: true
 ---
@@ -72,7 +74,7 @@ flowchart TB
             law -->|"archival"| sa
         end
 
-        subgraph core["⚙️ Core Platform"]
+        subgraph corePlatform["⚙️ Core Platform"]
             direction LR
             apim("🔌 API Management"):::core
             dp("🌐 Developer Portal"):::core
@@ -89,17 +91,19 @@ flowchart TB
         end
     end
 
-    shared -->|"provides monitoring"| core
-    core -->|"registers APIs"| inv
+    shared -->|"provides monitoring"| corePlatform
+    corePlatform -->|"registers APIs"| inv
     apisrc -->|"links to"| apim
 
-    style rg fill:#F3F2F1,stroke:#8A8886,stroke-width:2px,color:#323130
-    style shared fill:#F3F2F1,stroke:#8A8886,stroke-width:2px,color:#323130
-    style core fill:#F3F2F1,stroke:#8A8886,stroke-width:2px,color:#323130
-    style inv fill:#F3F2F1,stroke:#8A8886,stroke-width:2px,color:#323130
-
+    %% Centralized classDefs (approved AZURE/FLUENT v1.1 palette)
     classDef core fill:#EFF6FC,stroke:#0078D4,stroke-width:2px,color:#323130
     classDef data fill:#F0E6FA,stroke:#8764B8,stroke-width:2px,color:#323130
+
+    %% Subgraph styling (4 subgraphs = 4 style directives, all neutral surface)
+    style rg fill:#F3F2F1,stroke:#8A8886,stroke-width:2px,color:#323130
+    style shared fill:#F3F2F1,stroke:#8A8886,stroke-width:2px,color:#323130
+    style corePlatform fill:#F3F2F1,stroke:#8A8886,stroke-width:2px,color:#323130
+    style inv fill:#F3F2F1,stroke:#8A8886,stroke-width:2px,color:#323130
 ```
 
 **Component Roles:**
