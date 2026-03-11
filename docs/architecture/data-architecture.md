@@ -10,48 +10,6 @@ The data estate spans 14 source files across four primary domains: shared infras
 
 Key stakeholders include Data Architects responsible for schema governance, Platform Engineers managing infrastructure deployments, and Security Engineers overseeing identity and access control configurations. The solution demonstrates a mature approach to Infrastructure-as-Code data management with centralized type definitions, exported contracts, and deterministic resource naming.
 
-```mermaid
----
-title: Data Quality Scorecard
-config:
-  theme: base
-  look: classic
-  layout: dagre
-  themeVariables:
-    fontSize: "16px"
----
-quadrantChart
-    accTitle: Data Quality Scorecard
-    accDescr: Quadrant chart showing data quality dimensions plotted by implementation strength and business impact across the APIM Accelerator data estate
-
-    %% ═══════════════════════════════════════════════════════════════════════════
-    %% AZURE / FLUENT ARCHITECTURE PATTERN v1.1
-    %% (Semantic + Structural + Font + Accessibility Governance)
-    %% ═══════════════════════════════════════════════════════════════════════════
-    %% PHASE 1 - FLUENT UI: All styling uses approved Fluent UI palette only
-    %% PHASE 2 - GROUPS: Every subgraph has semantic color via style directive
-    %% PHASE 3 - COMPONENTS: Every node has semantic classDef + icon prefix
-    %% PHASE 4 - ACCESSIBILITY: accTitle/accDescr present, WCAG AA contrast
-    %% PHASE 5 - STANDARD: Governance block present, classDefs centralized
-    %% ═══════════════════════════════════════════════════════════════════════════
-
-    x-axis "Low Implementation" --> "Strong Implementation"
-    y-axis "Low Business Impact" --> "High Business Impact"
-    quadrant-1 "Invest"
-    quadrant-2 "Maintain"
-    quadrant-3 "Monitor"
-    quadrant-4 "Improve"
-    "Completeness (0.90)": [0.90, 0.95]
-    "Consistency (0.88)": [0.88, 0.85]
-    "Accuracy (0.85)": [0.85, 0.90]
-    "Timeliness (0.80)": [0.80, 0.70]
-    "Uniqueness (0.82)": [0.82, 0.65]
-```
-
-### Coverage Summary
-
-The solution demonstrates scheduled deployment pipelines, role-based access controls, schema validation through Bicep type definitions, and structured tagging for cost tracking.
-
 ---
 
 ## Section 2: Architecture Landscape
