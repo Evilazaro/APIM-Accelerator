@@ -62,7 +62,7 @@ flowchart TB
     %% PHASE 5 - STANDARD: Governance block present, classDefs centralized
     %% ═══════════════════════════════════════════════════════════════════════════
 
-    subgraph orchestrator("📦 Deployment Orchestrator")
+    subgraph orchestrator["📦 Deployment Orchestrator"]
         direction TB
         azd("🚀 Azure Developer CLI"):::core
         mainBicep("📄 infra/main.bicep"):::core
@@ -72,7 +72,7 @@ flowchart TB
         mainBicep -->|"reads"| settings
     end
 
-    subgraph shared("🔍 Shared Infrastructure")
+    subgraph shared["🔍 Shared Infrastructure"]
         direction TB
         law("📊 Log Analytics Workspace"):::data
         appInsights("📈 Application Insights"):::data
@@ -82,7 +82,7 @@ flowchart TB
         law -->|"archives to"| storage
     end
 
-    subgraph coreLayer("🏢 Core API Platform")
+    subgraph coreLayer["🏢 Core API Platform"]
         direction TB
         apim("🔌 API Management Service"):::core
         devPortal("🌐 Developer Portal"):::core
@@ -92,7 +92,7 @@ flowchart TB
         apim -->|"organizes"| workspaces
     end
 
-    subgraph inventoryLayer("📋 API Inventory")
+    subgraph inventoryLayer["📋 API Inventory"]
         direction TB
         apiCenter("📦 API Center"):::success
         apiSource("🔗 API Source Integration"):::success
