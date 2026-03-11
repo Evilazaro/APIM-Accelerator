@@ -664,25 +664,19 @@ This subsection documents end-to-end value delivery flows that represent how the
 
 #### 5.3.1 API Consumer Enablement
 
-| Attribute       | Value                                                                                                                                                                                                                |
-| --------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| **Name**        | API Consumer Enablement                                                                                                                                                                                              |
-| **Type**        | Value Stream                                                                                                                                                                                                         |
-| **Description** | End-to-end value stream from API discovery through Developer Portal → Azure AD authentication → terms of service acceptance → interactive API testing → API consumption via gateway, enabling developer productivity |
-| **Maturity**    | 2 - Repeatable                                                                                                                                                                                                       |
-| **Source**      | `README.md:93-108`                                                                                                                                                                                                   |
-| **Confidence**  | 0.76                                                                                                                                                                                                                 |
+| 📌 Attribute       | 📝 Value                                                                                                                                                                                                             |
+| ------------------ | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| 🏷️ **Name**        | API Consumer Enablement                                                                                                                                                                                              |
+| 📦 **Type**        | Value Stream                                                                                                                                                                                                         |
+| 📝 **Description** | End-to-end value stream from API discovery through Developer Portal → Azure AD authentication → terms of service acceptance → interactive API testing → API consumption via gateway, enabling developer productivity |
 
 #### 5.3.2 Platform Provisioning
 
-| Attribute       | Value                                                                                                                                                                            |
-| --------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| **Name**        | Platform Provisioning                                                                                                                                                            |
-| **Type**        | Value Stream                                                                                                                                                                     |
-| **Description** | Delivery value stream from YAML configuration definition through `azd provision` command to fully operational landing zone with monitoring, gateway, and governance capabilities |
-| **Maturity**    | 3 - Defined                                                                                                                                                                      |
-| **Source**      | `README.md:145-162`                                                                                                                                                              |
-| **Confidence**  | 0.85                                                                                                                                                                             |
+| 📌 Attribute       | 📝 Value                                                                                                                                                                         |
+| ------------------ | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| 🏷️ **Name**        | Platform Provisioning                                                                                                                                                            |
+| 📦 **Type**        | Value Stream                                                                                                                                                                     |
+| 📝 **Description** | Delivery value stream from YAML configuration definition through `azd provision` command to fully operational landing zone with monitoring, gateway, and governance capabilities |
 
 ### 5.4 Business Processes Specifications
 
@@ -690,14 +684,11 @@ This subsection documents operational workflows and procedures that execute the 
 
 #### 5.4.1 Landing Zone Provisioning
 
-| Attribute       | Value                                                                                                                                                                                                                           |
-| --------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| **Name**        | Landing Zone Provisioning                                                                                                                                                                                                       |
-| **Type**        | Business Process                                                                                                                                                                                                                |
-| **Description** | Core provisioning process executing the 5-step deployment sequence: pre-provision hook (soft-delete cleanup) → resource group creation → shared infrastructure deployment → core platform deployment → API inventory deployment |
-| **Maturity**    | 4 - Measured                                                                                                                                                                                                                    |
-| **Source**      | `README.md:152-162`                                                                                                                                                                                                             |
-| **Confidence**  | 0.90                                                                                                                                                                                                                            |
+| 📌 Attribute       | 📝 Value                                                                                                                                                                                                                        |
+| ------------------ | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| 🏷️ **Name**        | Landing Zone Provisioning                                                                                                                                                                                                       |
+| 📦 **Type**        | Business Process                                                                                                                                                                                                                |
+| 📝 **Description** | Core provisioning process executing the 5-step deployment sequence: pre-provision hook (soft-delete cleanup) → resource group creation → shared infrastructure deployment → core platform deployment → API inventory deployment |
 
 **Process Steps:**
 
@@ -710,36 +701,27 @@ This subsection documents operational workflows and procedures that execute the 
 
 #### 5.4.2 Soft-Delete Resource Recovery
 
-| Attribute       | Value                                                                                                                                                                                             |
-| --------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| **Name**        | Soft-Delete Resource Recovery                                                                                                                                                                     |
-| **Type**        | Business Process                                                                                                                                                                                  |
-| **Description** | Operational cleanup process that discovers and purges all soft-deleted APIM instances in the target Azure region before provisioning, preventing naming conflicts and enabling clean redeployment |
-| **Maturity**    | 3 - Defined                                                                                                                                                                                       |
-| **Source**      | `infra/azd-hooks/pre-provision.sh:1-30`                                                                                                                                                           |
-| **Confidence**  | 0.82                                                                                                                                                                                              |
+| 📌 Attribute       | 📝 Value                                                                                                                                                                                          |
+| ------------------ | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| 🏷️ **Name**        | Soft-Delete Resource Recovery                                                                                                                                                                     |
+| 📦 **Type**        | Business Process                                                                                                                                                                                  |
+| 📝 **Description** | Operational cleanup process that discovers and purges all soft-deleted APIM instances in the target Azure region before provisioning, preventing naming conflicts and enabling clean redeployment |
 
 #### 5.4.3 API Registration & Discovery
 
-| Attribute       | Value                                                                                                                                                                                                                |
-| --------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| **Name**        | API Registration & Discovery                                                                                                                                                                                         |
-| **Type**        | Business Process                                                                                                                                                                                                     |
-| **Description** | Governance process that automatically registers APIs from the APIM service into API Center through an API Source link, enabling centralized inventory visibility and compliance tracking with RBAC-controlled access |
-| **Maturity**    | 3 - Defined                                                                                                                                                                                                          |
-| **Source**      | `src/inventory/main.bicep:100-150`                                                                                                                                                                                   |
-| **Confidence**  | 0.79                                                                                                                                                                                                                 |
+| 📌 Attribute       | 📝 Value                                                                                                                                                                                                             |
+| ------------------ | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| 🏷️ **Name**        | API Registration & Discovery                                                                                                                                                                                         |
+| 📦 **Type**        | Business Process                                                                                                                                                                                                     |
+| 📝 **Description** | Governance process that automatically registers APIs from the APIM service into API Center through an API Source link, enabling centralized inventory visibility and compliance tracking with RBAC-controlled access |
 
 #### 5.4.4 Developer Onboarding
 
-| Attribute       | Value                                                                                                                                                                                                           |
-| --------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| **Name**        | Developer Onboarding                                                                                                                                                                                            |
-| **Type**        | Business Process                                                                                                                                                                                                |
-| **Description** | Enablement process for onboarding API consumers through the Developer Portal featuring Azure AD authentication, self-service sign-up delegation, CORS-enabled access, and mandatory terms of service acceptance |
-| **Maturity**    | 2 - Repeatable                                                                                                                                                                                                  |
-| **Source**      | `src/core/developer-portal.bicep:50-120`                                                                                                                                                                        |
-| **Confidence**  | 0.77                                                                                                                                                                                                            |
+| 📌 Attribute       | 📝 Value                                                                                                                                                                                                        |
+| ------------------ | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| 🏷️ **Name**        | Developer Onboarding                                                                                                                                                                                            |
+| 📦 **Type**        | Business Process                                                                                                                                                                                                |
+| 📝 **Description** | Enablement process for onboarding API consumers through the Developer Portal featuring Azure AD authentication, self-service sign-up delegation, CORS-enabled access, and mandatory terms of service acceptance |
 
 ### 5.5 Business Services Specifications
 
@@ -747,47 +729,35 @@ This subsection documents the services that the platform provides to business st
 
 #### 5.5.1 API Management Platform Service
 
-| Attribute       | Value                                                                                                                                                                                                                |
-| --------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| **Name**        | API Management Platform Service                                                                                                                                                                                      |
-| **Type**        | Business Service                                                                                                                                                                                                     |
-| **Description** | Core platform service providing API gateway capabilities, policy engine enforcement, security management, and centralized API lifecycle control as the primary integration point for all API producers and consumers |
-| **Maturity**    | 4 - Measured                                                                                                                                                                                                         |
-| **Source**      | `src/core/main.bicep:1-40`                                                                                                                                                                                           |
-| **Confidence**  | 0.92                                                                                                                                                                                                                 |
+| 📌 Attribute       | 📝 Value                                                                                                                                                                                                             |
+| ------------------ | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| 🏷️ **Name**        | API Management Platform Service                                                                                                                                                                                      |
+| 📦 **Type**        | Business Service                                                                                                                                                                                                     |
+| 📝 **Description** | Core platform service providing API gateway capabilities, policy engine enforcement, security management, and centralized API lifecycle control as the primary integration point for all API producers and consumers |
 
 #### 5.5.2 Developer Portal Service
 
-| Attribute       | Value                                                                                                                                                                                                      |
-| --------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| **Name**        | Developer Portal Service                                                                                                                                                                                   |
-| **Type**        | Business Service                                                                                                                                                                                           |
-| **Description** | Self-service portal service enabling API consumers to discover available APIs, read documentation, perform interactive testing, and manage their subscriptions through an Azure AD authenticated interface |
-| **Maturity**    | 3 - Defined                                                                                                                                                                                                |
-| **Source**      | `src/core/developer-portal.bicep:1-25`                                                                                                                                                                     |
-| **Confidence**  | 0.88                                                                                                                                                                                                       |
+| 📌 Attribute       | 📝 Value                                                                                                                                                                                                   |
+| ------------------ | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| 🏷️ **Name**        | Developer Portal Service                                                                                                                                                                                   |
+| 📦 **Type**        | Business Service                                                                                                                                                                                           |
+| 📝 **Description** | Self-service portal service enabling API consumers to discover available APIs, read documentation, perform interactive testing, and manage their subscriptions through an Azure AD authenticated interface |
 
 #### 5.5.3 API Inventory Service
 
-| Attribute       | Value                                                                                                                                                                                                                           |
-| --------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| **Name**        | API Inventory Service                                                                                                                                                                                                           |
-| **Type**        | Business Service                                                                                                                                                                                                                |
-| **Description** | Catalog service providing centralized API governance through API Center, featuring automated APIM discovery, workspace-scoped API registration, and compliance role assignments for Data Reader and Compliance Manager personas |
-| **Maturity**    | 3 - Defined                                                                                                                                                                                                                     |
-| **Source**      | `src/inventory/main.bicep:1-30`                                                                                                                                                                                                 |
-| **Confidence**  | 0.85                                                                                                                                                                                                                            |
+| 📌 Attribute       | 📝 Value                                                                                                                                                                                                                        |
+| ------------------ | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| 🏷️ **Name**        | API Inventory Service                                                                                                                                                                                                           |
+| 📦 **Type**        | Business Service                                                                                                                                                                                                                |
+| 📝 **Description** | Catalog service providing centralized API governance through API Center, featuring automated APIM discovery, workspace-scoped API registration, and compliance role assignments for Data Reader and Compliance Manager personas |
 
 #### 5.5.4 Monitoring & Observability Service
 
-| Attribute       | Value                                                                                                                                                                                                                                    |
-| --------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| **Name**        | Monitoring & Observability Service                                                                                                                                                                                                       |
-| **Type**        | Business Service                                                                                                                                                                                                                         |
-| **Description** | Platform observability service delivering centralized Log Analytics workspace for query-based analysis, Application Insights for APM and distributed tracing, and diagnostic storage for long-term log retention and compliance archival |
-| **Maturity**    | 3 - Defined                                                                                                                                                                                                                              |
-| **Source**      | `src/shared/monitoring/main.bicep:1-30`                                                                                                                                                                                                  |
-| **Confidence**  | 0.83                                                                                                                                                                                                                                     |
+| 📌 Attribute       | 📝 Value                                                                                                                                                                                                                                 |
+| ------------------ | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| 🏷️ **Name**        | Monitoring & Observability Service                                                                                                                                                                                                       |
+| 📦 **Type**        | Business Service                                                                                                                                                                                                                         |
+| 📝 **Description** | Platform observability service delivering centralized Log Analytics workspace for query-based analysis, Application Insights for APM and distributed tracing, and diagnostic storage for long-term log retention and compliance archival |
 
 ### 5.6 Business Functions Specifications
 
