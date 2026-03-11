@@ -76,6 +76,44 @@ Key stakeholders include Data Architects responsible for schema governance, Plat
 | Timeliness        | 0.80  | Configuration-driven, deployment-time resolution |
 | Uniqueness        | 0.82  | Deterministic naming prevents duplication        |
 
+```mermaid
+---
+title: Data Quality Scorecard
+config:
+  theme: base
+  look: classic
+  layout: dagre
+  themeVariables:
+    fontSize: "16px"
+---
+quadrantChart
+    accTitle: Data Quality Scorecard
+    accDescr: Quadrant chart showing data quality dimensions plotted by implementation strength and business impact across the APIM Accelerator data estate
+
+    %% ═══════════════════════════════════════════════════════════════════════════
+    %% AZURE / FLUENT ARCHITECTURE PATTERN v1.1
+    %% (Semantic + Structural + Font + Accessibility Governance)
+    %% ═══════════════════════════════════════════════════════════════════════════
+    %% PHASE 1 - FLUENT UI: All styling uses approved Fluent UI palette only
+    %% PHASE 2 - GROUPS: Every subgraph has semantic color via style directive
+    %% PHASE 3 - COMPONENTS: Every node has semantic classDef + icon prefix
+    %% PHASE 4 - ACCESSIBILITY: accTitle/accDescr present, WCAG AA contrast
+    %% PHASE 5 - STANDARD: Governance block present, classDefs centralized
+    %% ═══════════════════════════════════════════════════════════════════════════
+
+    x-axis "Low Implementation" --> "Strong Implementation"
+    y-axis "Low Business Impact" --> "High Business Impact"
+    quadrant-1 "Invest"
+    quadrant-2 "Maintain"
+    quadrant-3 "Monitor"
+    quadrant-4 "Improve"
+    "Completeness (0.90)": [0.90, 0.95]
+    "Consistency (0.88)": [0.88, 0.85]
+    "Accuracy (0.85)": [0.85, 0.90]
+    "Timeliness (0.80)": [0.80, 0.70]
+    "Uniqueness (0.82)": [0.82, 0.65]
+```
+
 ### Coverage Summary
 
 The data governance maturity is assessed at **Level 2 — Managed**. The solution demonstrates scheduled deployment pipelines, role-based access controls, schema validation through Bicep type definitions, and structured tagging for cost tracking. Evidence includes 10 governance tags in `infra/settings.yaml`, 2 RBAC role assignments in `src/inventory/main.bicep`, exported type contracts in `src/shared/common-types.bicep`, and deterministic GUID generation for idempotent deployments. Progression to Level 3 would require a centralized data catalog, automated data quality checks, and schema registry integration.
@@ -239,6 +277,210 @@ The storage architecture comprises six distinct data stores: Log Analytics works
 | API Center Identity           | Configurable managed identity for API Center operations    | src/inventory/main.bicep:113-140                     | 0.90       | Internal       |
 | @secure() Instrumentation Key | Secure output for Application Insights instrumentation key | src/shared/monitoring/insights/main.bicep:235-235    | 0.92       | Confidential   |
 | @secure() Client Secret       | Secure parameter for Azure AD client secret                | src/core/developer-portal.bicep:76-77                | 0.92       | Confidential   |
+
+### Data Domain Map
+
+```mermaid
+---
+title: Data Domain Map
+config:
+  theme: base
+  look: classic
+  layout: dagre
+  themeVariables:
+    fontSize: "16px"
+---
+flowchart TB
+    accTitle: Data Domain Map
+    accDescr: Shows the four primary data domains in the APIM Accelerator with their constituent data assets and cross-domain relationships
+
+    %% ═══════════════════════════════════════════════════════════════════════════
+    %% AZURE / FLUENT ARCHITECTURE PATTERN v1.1
+    %% (Semantic + Structural + Font + Accessibility Governance)
+    %% ═══════════════════════════════════════════════════════════════════════════
+    %% PHASE 1 - FLUENT UI: All styling uses approved Fluent UI palette only
+    %% PHASE 2 - GROUPS: Every subgraph has semantic color via style directive
+    %% PHASE 3 - COMPONENTS: Every node has semantic classDef + icon prefix
+    %% PHASE 4 - ACCESSIBILITY: accTitle/accDescr present, WCAG AA contrast
+    %% PHASE 5 - STANDARD: Governance block present, classDefs centralized
+    %% ═══════════════════════════════════════════════════════════════════════════
+
+    subgraph sharedDomain["📂 Shared Infrastructure Domain"]
+        types("📋 Type Definitions\n10 types"):::data
+        consts("📦 Constants & Functions\n7 master data + 4 transforms"):::data
+        monConfig("📊 Monitoring Config\n2 models"):::data
+    end
+
+    subgraph coreDomain["🌐 Core Platform Domain"]
+        apimConfig("⚙️ APIM Configuration\nSKU, identity, workspaces"):::core
+        portalConfig("👤 Developer Portal\nAAD auth, tenant restriction"):::core
+        diagSettings("📈 Diagnostic Settings\nDual-destination telemetry"):::success
+    end
+
+    subgraph inventoryDomain["📚 Inventory Domain"]
+        apiCatalog("📚 API Center\nCatalog, governance, RBAC"):::core
+        sourceSync("🔄 API Source Sync\nAPIM discovery"):::data
+    end
+
+    subgraph orchestrationDomain["🔧 Orchestration Domain"]
+        yamlConfig("📄 settings.yaml\n85 lines, 10 gov tags"):::warning
+        tagMerge("🏷️ Tag Consolidation\nunion() merging"):::warning
+        paramChain("🔗 Parameter Chains\n3 module deployments"):::warning
+    end
+
+    types -->|"import types"| apimConfig
+    types -->|"import types"| monConfig
+    types -->|"import types"| apiCatalog
+    consts -->|"import functions"| apimConfig
+    consts -->|"import functions"| monConfig
+    yamlConfig -->|"loadYamlContent()"| paramChain
+    paramChain -->|"deploy shared"| monConfig
+    paramChain -->|"deploy core"| apimConfig
+    paramChain -->|"deploy inventory"| apiCatalog
+    tagMerge -->|"tags"| apimConfig
+    tagMerge -->|"tags"| monConfig
+    tagMerge -->|"tags"| apiCatalog
+    apimConfig -->|"diagnostics"| diagSettings
+    apiCatalog -->|"API sync"| sourceSync
+    sourceSync -->|"discover"| apimConfig
+
+    classDef core fill:#EFF6FC,stroke:#0078D4,stroke-width:2px,color:#323130
+    classDef data fill:#F0E6FA,stroke:#8764B8,stroke-width:2px,color:#323130
+    classDef success fill:#DFF6DD,stroke:#107C10,stroke-width:2px,color:#323130
+    classDef warning fill:#FFF4CE,stroke:#FFB900,stroke-width:2px,color:#323130
+
+    style sharedDomain fill:#F3F2F1,stroke:#8A8886,stroke-width:2px,color:#323130
+    style coreDomain fill:#F3F2F1,stroke:#8A8886,stroke-width:2px,color:#323130
+    style inventoryDomain fill:#F3F2F1,stroke:#8A8886,stroke-width:2px,color:#323130
+    style orchestrationDomain fill:#F3F2F1,stroke:#8A8886,stroke-width:2px,color:#323130
+```
+
+### Storage Tier Diagram
+
+```mermaid
+---
+title: Storage Tier Architecture
+config:
+  theme: base
+  look: classic
+  layout: dagre
+  themeVariables:
+    fontSize: "16px"
+---
+flowchart LR
+    accTitle: Storage Tier Architecture
+    accDescr: Shows the three storage tiers in the APIM Accelerator including hot real-time stores, warm analytical stores, and cold archival storage with data flow directions
+
+    %% ═══════════════════════════════════════════════════════════════════════════
+    %% AZURE / FLUENT ARCHITECTURE PATTERN v1.1
+    %% (Semantic + Structural + Font + Accessibility Governance)
+    %% ═══════════════════════════════════════════════════════════════════════════
+    %% PHASE 1 - FLUENT UI: All styling uses approved Fluent UI palette only
+    %% PHASE 2 - GROUPS: Every subgraph has semantic color via style directive
+    %% PHASE 3 - COMPONENTS: Every node has semantic classDef + icon prefix
+    %% PHASE 4 - ACCESSIBILITY: accTitle/accDescr present, WCAG AA contrast
+    %% PHASE 5 - STANDARD: Governance block present, classDefs centralized
+    %% ═══════════════════════════════════════════════════════════════════════════
+
+    subgraph hotTier["🔥 Hot Tier — Real-Time"]
+        apimStore("🌐 APIM Service\nAPIs, policies, subscriptions"):::core
+        portalStore("👤 Developer Portal\nUser sessions, auth tokens"):::core
+        apiCenterStore("📚 API Center\nCatalog, governance metadata"):::core
+    end
+
+    subgraph warmTier["📊 Warm Tier — Analytical"]
+        logAnalytics("📊 Log Analytics\nKQL queries, 30d retention"):::success
+        appInsights("📈 App Insights\nAPM telemetry, 90-730d retention"):::success
+    end
+
+    subgraph coldTier["❄️ Cold Tier — Archival"]
+        storageAcct("💾 Storage Account\nDiagnostic log archival, indefinite"):::data
+        yamlStore("📄 YAML Configuration\nVersion-controlled, Git"):::data
+    end
+
+    apimStore -->|"diagnostics"| logAnalytics
+    apimStore -->|"telemetry"| appInsights
+    logAnalytics -->|"archival"| storageAcct
+    apimStore -->|"API sync"| apiCenterStore
+
+    classDef core fill:#EFF6FC,stroke:#0078D4,stroke-width:2px,color:#323130
+    classDef data fill:#F0E6FA,stroke:#8764B8,stroke-width:2px,color:#323130
+    classDef success fill:#DFF6DD,stroke:#107C10,stroke-width:2px,color:#323130
+
+    style hotTier fill:#F3F2F1,stroke:#8A8886,stroke-width:2px,color:#323130
+    style warmTier fill:#F3F2F1,stroke:#8A8886,stroke-width:2px,color:#323130
+    style coldTier fill:#F3F2F1,stroke:#8A8886,stroke-width:2px,color:#323130
+```
+
+### Data Zone Topology
+
+```mermaid
+---
+title: Data Zone Topology
+config:
+  theme: base
+  look: classic
+  layout: dagre
+  themeVariables:
+    fontSize: "16px"
+---
+flowchart TB
+    accTitle: Data Zone Topology
+    accDescr: Shows the logical data zones in the APIM Accelerator solution organized by trust boundary and data classification including configuration, operational, and governance zones
+
+    %% ═══════════════════════════════════════════════════════════════════════════
+    %% AZURE / FLUENT ARCHITECTURE PATTERN v1.1
+    %% (Semantic + Structural + Font + Accessibility Governance)
+    %% ═══════════════════════════════════════════════════════════════════════════
+    %% PHASE 1 - FLUENT UI: All styling uses approved Fluent UI palette only
+    %% PHASE 2 - GROUPS: Every subgraph has semantic color via style directive
+    %% PHASE 3 - COMPONENTS: Every node has semantic classDef + icon prefix
+    %% PHASE 4 - ACCESSIBILITY: accTitle/accDescr present, WCAG AA contrast
+    %% PHASE 5 - STANDARD: Governance block present, classDefs centralized
+    %% ═══════════════════════════════════════════════════════════════════════════
+
+    subgraph configZone["📂 Configuration Zone — Internal"]
+        yamlSrc("📄 settings.yaml\nDeployment parameters"):::data
+        typesSrc("📋 common-types.bicep\nSchema definitions"):::data
+        constsSrc("📦 constants.bicep\nMaster reference data"):::data
+    end
+
+    subgraph operationalZone["⚙️ Operational Zone — Internal"]
+        apimOps("🌐 APIM Gateway\nAPI routing, policies"):::core
+        portalOps("👤 Developer Portal\nAPI discovery"):::core
+        apiCenterOps("📚 API Center\nInventory management"):::core
+    end
+
+    subgraph observabilityZone["📊 Observability Zone — Internal"]
+        logsObs("📊 Log Analytics\nCentralized logging"):::success
+        apmObs("📈 App Insights\nPerformance monitoring"):::success
+        archiveObs("💾 Storage Account\nLog archival"):::success
+    end
+
+    subgraph governanceZone["🏛️ Governance Zone — Confidential"]
+        rbacGov("🔐 RBAC Assignments\nRole definitions"):::danger
+        identityGov("🔑 Managed Identities\nSystemAssigned"):::danger
+        secretsGov("🔒 Secure Outputs\n@secure() parameters"):::danger
+        tagsGov("🏷️ Resource Tags\n15 governance tags"):::warning
+    end
+
+    configZone -->|"deploys"| operationalZone
+    operationalZone -->|"telemetry"| observabilityZone
+    governanceZone -->|"enforces"| operationalZone
+    governanceZone -->|"secures"| observabilityZone
+    configZone -->|"defines"| governanceZone
+
+    classDef core fill:#EFF6FC,stroke:#0078D4,stroke-width:2px,color:#323130
+    classDef data fill:#F0E6FA,stroke:#8764B8,stroke-width:2px,color:#323130
+    classDef success fill:#DFF6DD,stroke:#107C10,stroke-width:2px,color:#323130
+    classDef danger fill:#FDE7E9,stroke:#D13438,stroke-width:2px,color:#323130
+    classDef warning fill:#FFF4CE,stroke:#FFB900,stroke-width:2px,color:#323130
+
+    style configZone fill:#F3F2F1,stroke:#8A8886,stroke-width:2px,color:#323130
+    style operationalZone fill:#F3F2F1,stroke:#8A8886,stroke-width:2px,color:#323130
+    style observabilityZone fill:#F3F2F1,stroke:#8A8886,stroke-width:2px,color:#323130
+    style governanceZone fill:#F3F2F1,stroke:#8A8886,stroke-width:2px,color:#323130
+```
 
 ### Summary
 
@@ -683,122 +925,6 @@ Key risks include the concentration of security-critical data in output chains (
 
 ---
 
-## Section 6: Architecture Decisions
-
-### Overview
-
-This section documents key architectural decisions (ADRs) inferred from the design patterns and configuration choices observed in the APIM Accelerator source files. While no formal ADR documents were detected in the repository, several significant architectural decisions are evidenced by the implementation patterns, technology selections, and configuration structures present in the codebase.
-
-These inferred ADRs capture the rationale behind storage technology choices (Bicep IaC over Terraform/ARM), monitoring architecture decisions (dual-destination diagnostics), identity management strategies (managed identity over service principals), and data governance approaches (tag-based governance over policy engine). Each decision is traceable to specific source file evidence.
-
-For established projects, ADRs should be stored in `/docs/architecture/decisions/` following the Markdown ADR (MADR) format with sequential numbering (e.g., ADR-001, ADR-002).
-
-### ADR Summary
-
-| ID      | Title                                    | Status   | Date     | Evidence Source                     |
-| ------- | ---------------------------------------- | -------- | -------- | ----------------------------------- |
-| ADR-001 | Bicep IaC with YAML Configuration        | Accepted | Inferred | infra/main.bicep:78-78              |
-| ADR-002 | Centralized Type Definitions             | Accepted | Inferred | src/shared/common-types.bicep:1-170 |
-| ADR-003 | Dual-Destination Diagnostic Logging      | Accepted | Inferred | src/core/apim.bicep:264-296         |
-| ADR-004 | Managed Identity over Service Principals | Accepted | Inferred | src/core/apim.bicep:173-200         |
-| ADR-005 | Tag-Based Data Governance                | Accepted | Inferred | infra/settings.yaml:30-44           |
-
-### 6.1 Detailed ADRs
-
-#### 6.1.1 ADR-001: Bicep IaC with YAML Configuration
-
-**Context**: The solution requires a declarative infrastructure deployment mechanism with environment-specific configuration management.
-
-**Decision**: Use Azure Bicep as the IaC language with `loadYamlContent()` for external YAML configuration, rather than ARM JSON templates, Terraform, or embedded parameters.
-
-**Rationale**: Bicep provides native Azure type safety, compile-time validation, and first-class support for Azure resource types. YAML configuration externalizes environment-specific values, enabling GitOps workflows without template modification. Evidence: `infra/main.bicep:78` uses `loadYamlContent('settings.yaml')`.
-
-**Consequences**: Strong Azure integration but vendor lock-in to Azure Bicep toolchain. YAML lacks schema validation beyond Bicep type constraints at deployment time.
-
-#### 6.1.2 ADR-002: Centralized Type Definitions
-
-**Context**: Multiple modules require consistent configuration schemas for identity, SKU, monitoring, and service configurations.
-
-**Decision**: Define all types in a single `common-types.bicep` file with `@export()` decorators for cross-module import.
-
-**Rationale**: Centralization ensures schema consistency, reduces duplication, and provides a single point of change for type modifications. Evidence: `src/shared/common-types.bicep` defines 10 types with 4 exported.
-
-**Consequences**: Single-file dependency creates a potential bottleneck for concurrent development but ensures absolute consistency across the solution.
-
-#### 6.1.3 ADR-003: Dual-Destination Diagnostic Logging
-
-**Context**: Operational monitoring requires both real-time analysis and long-term archival for compliance.
-
-**Decision**: Route all diagnostic logs to both Log Analytics (real-time) and Storage Account (archival).
-
-**Rationale**: Log Analytics enables KQL queries and real-time alerting while Storage Account provides cost-effective long-term retention for compliance. Evidence: `src/core/apim.bicep:264-285` configures dual-destination diagnostic settings.
-
-**Consequences**: Increased storage costs but comprehensive audit trail. Data duplication between stores requires reconciliation strategy.
-
-#### 6.1.4 ADR-004: Managed Identity over Service Principals
-
-**Context**: Azure services require authentication to access dependent resources (Key Vault, monitoring, RBAC).
-
-**Decision**: Use SystemAssigned managed identity as the default identity type for all services.
-
-**Rationale**: Managed identities eliminate credential management overhead, provide automatic rotation, and integrate natively with Azure RBAC. Evidence: `src/core/apim.bicep:173-200` and `infra/settings.yaml:17-18` default to SystemAssigned.
-
-**Consequences**: Simplified security operations but lifecycle tied to the parent resource. Less portable than service principals for multi-cloud scenarios.
-
-#### 6.1.5 ADR-005: Tag-Based Data Governance
-
-**Context**: The solution requires governance tracking for cost allocation, compliance, ownership, and operational classification.
-
-**Decision**: Implement governance through 10 standardized resource tags defined in YAML configuration with tag consolidation at deployment time.
-
-**Rationale**: Resource tags provide native Azure governance integration with Cost Management, Policy, and Resource Graph. Evidence: `infra/settings.yaml:30-44` defines 10 governance tags; `infra/main.bicep:82-87` consolidates tags via `union()`.
-
-**Consequences**: Lightweight governance mechanism. Lacks enforcement — tags can be omitted or misconfigured without Azure Policy enforcement.
-
----
-
-## Section 7: Architecture Standards
-
-### Overview
-
-This section defines the data architecture standards, naming conventions, schema design guidelines, and quality rules that govern data assets in the APIM Accelerator. Standards are inferred from the consistent patterns observed across the 14 source files and codified through Bicep type constraints, utility functions, and configuration structures.
-
-The primary standards enforcement mechanism is the Bicep type system, which provides compile-time validation for all configuration schemas. Naming conventions are enforced through utility functions in `constants.bicep`, and governance standards are applied through resource tagging patterns defined in `settings.yaml`.
-
-No formal standards documentation files (e.g., `/docs/standards/`) were detected in the source repository. The standards described below are inferred from implementation patterns and represent de facto standards that should be formalized in dedicated documentation for governance maturity advancement.
-
-### Data Naming Conventions
-
-| Convention          | Pattern                           | Example                           | Evidence                           |
-| ------------------- | --------------------------------- | --------------------------------- | ---------------------------------- |
-| Resource Group      | `{solution}-{env}-{location}-rg`  | `apim-accelerator-prod-eastus-rg` | infra/main.bicep:90-90             |
-| General Resource    | `{solution}-{suffix}-{type}`      | `apim-accelerator-abc123-apim`    | src/core/main.bicep:175-177        |
-| Storage Account     | `{base}{sa}{hash}` (max 24 chars) | `apimaccsa7f3k2m`                 | src/shared/constants.bicep:161-167 |
-| Diagnostic Settings | `{resource}-diag`                 | `apim-service-diag`               | src/shared/constants.bicep:170-171 |
-| App Insights Logger | `{apim}-appinsights`              | `apim-service-appinsights`        | src/core/apim.bicep:68-68          |
-
-### Schema Design Standards
-
-| Standard               | Description                                            | Evidence                                          |
-| ---------------------- | ------------------------------------------------------ | ------------------------------------------------- |
-| Type Definitions       | All configuration schemas use named Bicep types        | src/shared/common-types.bicep:1-170               |
-| Export/Import          | Cross-module contracts use @export() and import {}     | src/shared/common-types.bicep:103-162             |
-| Parameter Validation   | All parameters include @allowed, @min/@max constraints | All .bicep files                                  |
-| Description Decorators | All types and parameters include @description()        | All .bicep files                                  |
-| Secure Outputs         | Sensitive outputs use @secure() decorator              | src/shared/monitoring/insights/main.bicep:235-235 |
-
-### Data Quality Standards
-
-| Standard          | Rule                                      | Enforcement     | Evidence                                          |
-| ----------------- | ----------------------------------------- | --------------- | ------------------------------------------------- |
-| Enum Validation   | All enumerated values use @allowed()      | Compile-time    | src/shared/common-types.bicep:70-70               |
-| Range Validation  | Numeric values use @minValue/@maxValue    | Compile-time    | src/shared/monitoring/insights/main.bicep:143-144 |
-| Length Validation | String values use @minLength/@maxLength   | Compile-time    | src/core/developer-portal.bicep:72-73             |
-| Name Uniqueness   | Deterministic naming via uniqueString()   | Deployment-time | src/shared/constants.bicep:152-158                |
-| GUID Idempotency  | Role assignments use deterministic guid() | Deployment-time | src/inventory/main.bicep:155-155                  |
-
----
-
 ## Section 8: Dependencies & Integration
 
 ### Overview
@@ -909,46 +1035,5 @@ flowchart LR
 ### Summary
 
 The integration architecture demonstrates a clean DAG-based dependency model with three deployment tiers: shared infrastructure (monitoring), core platform (APIM), and inventory management (API Center). Data flows are predominantly configuration-driven (batch) with real-time monitoring telemetry providing observability. All cross-module dependencies are managed through strongly-typed output contracts, ensuring compile-time validation of integration points. Key integration risks include the tight coupling between monitoring outputs and core platform parameters, and the absence of retry/resilience patterns for the API Center-to-APIM synchronization flow. Recommendations include implementing health checks for cross-service integrations and documenting data lineage for monitoring telemetry flows.
-
----
-
-## Section 9: Governance & Management
-
-### Overview
-
-The APIM Accelerator implements a tag-based data governance model with managed identity access controls and RBAC role assignments. Governance structures are primarily defined in the YAML configuration file (`settings.yaml`) and enforced through Azure resource tagging, managed identity configurations, and role-based access control assignments in the Bicep templates.
-
-The governance model covers four key areas: resource ownership (Owner, SupportContact tags), cost management (CostCenter, BudgetCode, ChargebackModel tags), compliance tracking (RegulatoryCompliance tag with GDPR value), and operational classification (ServiceClass, Environment tags). Access control is implemented through managed identities with RBAC role assignments for APIM and API Center services.
-
-Data stewardship is implicitly assigned through the Owner and SupportContact tags, though no formal RACI matrix or data stewardship roles are defined in the source files. The tenant restriction configuration in the developer portal (`MngEnvMCAP341438.onmicrosoft.com`) provides organizational boundary enforcement for API consumer access.
-
-### Data Ownership Model
-
-| Resource Domain   | Owner Tag Value          | Support Contact     | Service Class | Source                    |
-| ----------------- | ------------------------ | ------------------- | ------------- | ------------------------- |
-| All Resources     | evilazaro@gmail.com      | evilazaro@gmail.com | Critical      | infra/settings.yaml:35-38 |
-| Shared Monitoring | Platform Team (inferred) | evilazaro@gmail.com | Critical      | infra/settings.yaml:24-27 |
-| Core APIM         | Platform Team (inferred) | evilazaro@gmail.com | Critical      | infra/settings.yaml:63-65 |
-| API Inventory     | Platform Team (inferred) | evilazaro@gmail.com | Critical      | infra/settings.yaml:73-75 |
-
-### Access Control Model
-
-| Service          | Identity Type     | Roles Assigned                  | Scope          | Source                                               |
-| ---------------- | ----------------- | ------------------------------- | -------------- | ---------------------------------------------------- |
-| APIM Service     | SystemAssigned    | Reader                          | Resource Group | src/core/apim.bicep:226-244                          |
-| API Center       | SystemAssigned    | Data Reader, Compliance Manager | Resource Group | src/inventory/main.bicep:147-165                     |
-| Log Analytics    | SystemAssigned    | Not detected                    | Not detected   | src/shared/monitoring/operational/main.bicep:172-205 |
-| Developer Portal | Azure AD (MSAL-2) | Tenant-restricted access        | APIM Portal    | src/core/developer-portal.bicep:150-170              |
-
-### Audit & Compliance
-
-| Control            | Implementation                                           | Evidence                                             | Status |
-| ------------------ | -------------------------------------------------------- | ---------------------------------------------------- | ------ |
-| Diagnostic Logging | Dual-destination (Log Analytics + Storage)               | src/core/apim.bicep:264-296                          | Active |
-| Self-Monitoring    | Log Analytics monitors itself via diagnostic settings    | src/shared/monitoring/operational/main.bicep:225-250 | Active |
-| GDPR Tagging       | RegulatoryCompliance tag set to "GDPR"                   | infra/settings.yaml:39-39                            | Active |
-| Tenant Restriction | Developer portal restricted to specific AAD tenant       | src/core/developer-portal.bicep:62-64                | Active |
-| Secure Outputs     | @secure() decorators on instrumentation keys and secrets | src/shared/monitoring/insights/main.bicep:235-235    | Active |
-| Idempotent RBAC    | Deterministic GUID-based role assignments                | src/inventory/main.bicep:155-155                     | Active |
 
 ---
