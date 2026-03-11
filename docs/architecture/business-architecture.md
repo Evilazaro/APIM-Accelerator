@@ -1,40 +1,14 @@
 # Business Architecture — APIM Accelerator
 
-| Field                     | Value                |
-| ------------------------- | -------------------- |
-| 🏗️ **Layer**              | Business             |
-| 🎯 **Quality Level**      | comprehensive        |
-| 📐 **Framework**          | TOGAF 10 / BDAT      |
-| 📦 **Repository**         | APIM Accelerator     |
-| 🧩 **Components Found**   | 39                   |
-| 📊 **Component Types**    | 11                   |
-| 📈 **Diagrams Included**  | 9                    |
-| 📄 **Sections Generated** | 1, 2, 3, 4, 5, 8     |
-| 🕐 **Generated**          | 2025-07-18T00:00:00Z |
-
----
-
 ## 1. Executive Summary
 
 ### Overview
 
-This Business Architecture analysis documents the APIM Accelerator repository — an enterprise-grade Azure Infrastructure-as-Code accelerator that deploys a complete API Management landing zone. The analysis applies the TOGAF 10 Business Architecture framework to identify strategic, operational, and governance components embedded within the solution's infrastructure definitions, configuration metadata, and documentation artifacts.
+This Business Architecture analysis documents the APIM Accelerator repository — an enterprise-grade Azure Infrastructure-as-Code accelerator that deploys a complete API Management landing zone. The analysis applies the Business Architecture framework to identify strategic, operational, and governance components embedded within the solution's infrastructure definitions, configuration metadata, and documentation artifacts.
 
 The repository yields 39 Business layer components distributed across all 11 canonical component types, demonstrating a mature governance-first approach with explicit cost management, regulatory compliance tagging, multi-team isolation, and developer self-service capabilities. Business intent is primarily documented through governance tags in `infra/settings.yaml`, strategic descriptions in `README.md`, and architectural patterns codified in Bicep module structures.
 
 Key findings reveal six core business capabilities (API Gateway Management, Developer Self-Service, API Governance & Compliance, Multi-Team API Isolation, Observability & Monitoring, and Cost Management & Chargeback), four business services aligned to the three-layer deployment architecture, and a comprehensive governance model enforcing GDPR compliance, dedicated chargeback, and critical service-class SLAs.
-
-- **Business Strategy**: 3 components (APIMForAll Initiative, Enterprise API Platform Vision, API-First Digital Transformation)
-- **Business Capabilities**: 6 components (API Gateway Management, Developer Self-Service, API Governance & Compliance, Multi-Team API Isolation, Observability & Monitoring, Cost Management & Chargeback)
-- **Value Streams**: 2 components (API Consumer Enablement, Platform Provisioning)
-- **Business Processes**: 4 components (Landing Zone Provisioning, Soft-Delete Resource Recovery, API Registration & Discovery, Developer Onboarding)
-- **Business Services**: 4 components (API Management Platform, Developer Portal, API Inventory, Monitoring & Observability)
-- **Business Functions**: 2 components (Platform Engineering, API Governance)
-- **Business Roles & Actors**: 5 components (Platform Owner, API Consumer, API Center Data Reader, Compliance Manager, Publisher/Administrator)
-- **Business Rules**: 4 components (GDPR Regulatory Compliance, Dedicated Chargeback Model, Critical Service Class, Terms of Service Governance)
-- **Business Events**: 2 components (Pre-Provision Trigger, API Source Linking)
-- **Business Objects/Entities**: 4 components (API Management Instance, API Workspace, API Center Catalog, Governance Tag Set)
-- **KPIs & Metrics**: 3 components (Service Class SLA, Budget Tracking, Cost Center Allocation)
 
 ---
 
@@ -42,7 +16,7 @@ Key findings reveal six core business capabilities (API Gateway Management, Deve
 
 ### Overview
 
-The Architecture Landscape organizes all detected Business layer components into the 11 canonical TOGAF Business Architecture component types. Each component is cataloged with its description and business context based on observable indicators in the repository.
+The Architecture Landscape organizes all detected Business layer components into the 11 canonical Business Architecture component types. Each component is cataloged with its description and business context based on observable indicators in the repository.
 
 This repository is an Infrastructure-as-Code solution written in Bicep. Business components are not found in dedicated business folders but are instead embedded in governance metadata (`infra/settings.yaml`), strategic documentation (`README.md`), and architectural patterns in Bicep modules. The Layer Classification Decision Tree was applied to all candidates: Q1=NO for documentation files (README.md, settings.yaml) leading to Q3=YES (documents strategic intent) and Q4=NO (about business, not system implementation). For Bicep files, Q1=YES but business intent is extracted per E-034 (Source Evidence Scope), focusing on business semantics rather than code structure.
 
@@ -273,7 +247,7 @@ flowchart LR
 
 ### Summary
 
-The Architecture Landscape identifies 39 Business layer components distributed across all 11 canonical TOGAF component types, satisfying the comprehensive quality threshold of 20+ components across 8+ types. The strongest coverage is in Business Capabilities (6), Business Roles & Actors (5), and Business Services (4), reflecting a mature platform with well-defined governance structures.
+The Architecture Landscape identifies 39 Business layer components distributed across all 11 canonical component types, satisfying the comprehensive quality threshold of 20+ components across 8+ types. The strongest coverage is in Business Capabilities (6), Business Roles & Actors (5), and Business Services (4), reflecting a mature platform with well-defined governance structures.
 
 Primary gaps include the absence of formalized BPMN process models (business processes are inferred from deployment sequences and hook scripts rather than explicit process definitions), limited KPI granularity (metrics are derived from governance tags rather than dedicated KPI dashboards), and no explicit value stream documentation (value streams are reconstructed from the deployment architecture and developer portal workflow). Recommended next steps include creating dedicated business documentation artifacts for capabilities and processes, formalizing KPI definitions with measurable targets, and documenting the API consumer journey as an explicit value stream model.
 
@@ -285,7 +259,7 @@ Primary gaps include the absence of formalized BPMN process models (business pro
 
 The Architecture Principles section documents the business-level design guidelines and architectural constraints observed in the APIM Accelerator repository. These principles are inferred from consistent patterns across governance metadata, module structures, and deployment orchestration rather than from explicit architecture principle documents.
 
-Each principle is supported by observable evidence in the repository source files, reflecting deliberate architectural decisions that govern how the platform serves business needs. The principles align with TOGAF 10 Architecture Principles framework, addressing business value, organizational fit, and governance requirements.
+Each principle is supported by observable evidence in the repository source files, reflecting deliberate architectural decisions that govern how the platform serves business needs. The principles align with Architecture Principles framework, addressing business value, organizational fit, and governance requirements.
 
 ### P1: Governance-First Resource Management
 
@@ -574,7 +548,7 @@ The primary gaps limiting advancement include: (1) absence of automated business
 
 ### Overview
 
-The Component Catalog provides detailed specifications for each of the 39 Business layer components identified in the APIM Accelerator repository. Components are organized by the 11 canonical TOGAF Business Architecture types, with each entry documenting the component's purpose, maturity, source evidence, and business context.
+The Component Catalog provides detailed specifications for each of the 39 Business layer components identified in the APIM Accelerator repository. Components are organized by the 11 canonical Business Architecture types, with each entry documenting the component's purpose, maturity, source evidence, and business context.
 
 Each specification includes three mandatory attributes: Name, Type, and Description. All specifications focus on business intent rather than technical implementation details, per the E-034 Source Evidence Scope gate.
 
