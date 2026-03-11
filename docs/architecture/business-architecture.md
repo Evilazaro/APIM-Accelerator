@@ -739,25 +739,19 @@ This subsection documents organizational functions responsible for managing and 
 
 #### 5.6.1 Platform Engineering
 
-| Attribute       | Value                                                                                                                                                                                                  |
-| --------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
-| **Name**        | Platform Engineering                                                                                                                                                                                   |
-| **Type**        | Business Function                                                                                                                                                                                      |
-| **Description** | Organizational function responsible for maintaining the API platform, contributing Bicep module enhancements, managing deployment pipelines, and upholding type safety and naming convention standards |
-| **Maturity**    | 2 - Repeatable                                                                                                                                                                                         |
-| **Source**      | `README.md:335-345`                                                                                                                                                                                    |
-| **Confidence**  | 0.75                                                                                                                                                                                                   |
+| 📌 Attribute       | 📝 Value                                                                                                                                                                                               |
+| ------------------ | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
+| 🏷️ **Name**        | Platform Engineering                                                                                                                                                                                   |
+| 📦 **Type**        | Business Function                                                                                                                                                                                      |
+| 📝 **Description** | Organizational function responsible for maintaining the API platform, contributing Bicep module enhancements, managing deployment pipelines, and upholding type safety and naming convention standards |
 
 #### 5.6.2 API Governance Function
 
-| Attribute       | Value                                                                                                                                                                                                           |
-| --------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| **Name**        | API Governance Function                                                                                                                                                                                         |
-| **Type**        | Business Function                                                                                                                                                                                               |
-| **Description** | Organizational function responsible for establishing API standards, enforcing compliance requirements, managing RBAC role assignments in API Center, and ensuring regulatory adherence across the API portfolio |
-| **Maturity**    | 2 - Repeatable                                                                                                                                                                                                  |
-| **Source**      | `src/inventory/main.bicep:130-170`                                                                                                                                                                              |
-| **Confidence**  | 0.73                                                                                                                                                                                                            |
+| 📌 Attribute       | 📝 Value                                                                                                                                                                                                        |
+| ------------------ | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| 🏷️ **Name**        | API Governance Function                                                                                                                                                                                         |
+| 📦 **Type**        | Business Function                                                                                                                                                                                               |
+| 📝 **Description** | Organizational function responsible for establishing API standards, enforcing compliance requirements, managing RBAC role assignments in API Center, and ensuring regulatory adherence across the API portfolio |
 
 ### 5.7 Business Roles & Actors Specifications
 
@@ -765,58 +759,43 @@ This subsection documents the roles and actors that interact with the platform's
 
 #### 5.7.1 Platform Owner
 
-| Attribute       | Value                                                                                                                                                                                              |
-| --------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| **Name**        | Platform Owner                                                                                                                                                                                     |
-| **Type**        | Business Role                                                                                                                                                                                      |
-| **Description** | Accountable role owning the APIM platform resources and bearing primary responsibility for operational decisions, cost management, and strategic direction; identified by the Owner governance tag |
-| **Maturity**    | 3 - Defined                                                                                                                                                                                        |
-| **Source**      | `infra/settings.yaml:33`                                                                                                                                                                           |
-| **Confidence**  | 0.80                                                                                                                                                                                               |
+| 📌 Attribute       | 📝 Value                                                                                                                                                                                           |
+| ------------------ | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| 🏷️ **Name**        | Platform Owner                                                                                                                                                                                     |
+| 📦 **Type**        | Business Role                                                                                                                                                                                      |
+| 📝 **Description** | Accountable role owning the APIM platform resources and bearing primary responsibility for operational decisions, cost management, and strategic direction; identified by the Owner governance tag |
 
 #### 5.7.2 API Consumer (Developer)
 
-| Attribute       | Value                                                                                                                                                                                                |
-| --------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| **Name**        | API Consumer (Developer)                                                                                                                                                                             |
-| **Type**        | Business Actor                                                                                                                                                                                       |
-| **Description** | External actor using the Developer Portal to discover available APIs, authenticate via Azure AD, accept terms of service, perform interactive testing, and consume APIs through the gateway endpoint |
-| **Maturity**    | 3 - Defined                                                                                                                                                                                          |
-| **Source**      | `src/core/developer-portal.bicep:50-80`                                                                                                                                                              |
-| **Confidence**  | 0.82                                                                                                                                                                                                 |
+| 📌 Attribute       | 📝 Value                                                                                                                                                                                             |
+| ------------------ | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| 🏷️ **Name**        | API Consumer (Developer)                                                                                                                                                                             |
+| 📦 **Type**        | Business Actor                                                                                                                                                                                       |
+| 📝 **Description** | External actor using the Developer Portal to discover available APIs, authenticate via Azure AD, accept terms of service, perform interactive testing, and consume APIs through the gateway endpoint |
 
 #### 5.7.3 API Center Data Reader
 
-| Attribute       | Value                                                                                                                                                                                        |
-| --------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| **Name**        | API Center Data Reader                                                                                                                                                                       |
-| **Type**        | Business Role                                                                                                                                                                                |
-| **Description** | Governance role with read-only access to the centralized API inventory, enabling API discovery and analysis without modification privileges; assigned via RBAC role definition in API Center |
-| **Maturity**    | 3 - Defined                                                                                                                                                                                  |
-| **Source**      | `src/inventory/main.bicep:130-145`                                                                                                                                                           |
-| **Confidence**  | 0.85                                                                                                                                                                                         |
+| 📌 Attribute       | 📝 Value                                                                                                                                                                                     |
+| ------------------ | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| 🏷️ **Name**        | API Center Data Reader                                                                                                                                                                       |
+| 📦 **Type**        | Business Role                                                                                                                                                                                |
+| 📝 **Description** | Governance role with read-only access to the centralized API inventory, enabling API discovery and analysis without modification privileges; assigned via RBAC role definition in API Center |
 
 #### 5.7.4 Compliance Manager
 
-| Attribute       | Value                                                                                                                                                                                              |
-| --------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| **Name**        | Compliance Manager                                                                                                                                                                                 |
-| **Type**        | Business Role                                                                                                                                                                                      |
-| **Description** | Governance role managing API compliance standards and regulatory adherence through API Center, with permissions to review API inventory, enforce compliance policies, and manage regulatory status |
-| **Maturity**    | 3 - Defined                                                                                                                                                                                        |
-| **Source**      | `src/inventory/main.bicep:145-170`                                                                                                                                                                 |
-| **Confidence**  | 0.85                                                                                                                                                                                               |
+| 📌 Attribute       | 📝 Value                                                                                                                                                                                           |
+| ------------------ | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| 🏷️ **Name**        | Compliance Manager                                                                                                                                                                                 |
+| 📦 **Type**        | Business Role                                                                                                                                                                                      |
+| 📝 **Description** | Governance role managing API compliance standards and regulatory adherence through API Center, with permissions to review API inventory, enforce compliance policies, and manage regulatory status |
 
 #### 5.7.5 Publisher/Administrator
 
-| Attribute       | Value                                                                                                                                                                                         |
-| --------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| **Name**        | Publisher/Administrator                                                                                                                                                                       |
-| **Type**        | Business Role                                                                                                                                                                                 |
-| **Description** | Operational role managing API Management service configuration, API publishing, and developer portal branding; identified by publisherEmail and publisherName in the deployment configuration |
-| **Maturity**    | 3 - Defined                                                                                                                                                                                   |
-| **Source**      | `infra/settings.yaml:44-45`                                                                                                                                                                   |
-| **Confidence**  | 0.78                                                                                                                                                                                          |
+| 📌 Attribute       | 📝 Value                                                                                                                                                                                      |
+| ------------------ | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| 🏷️ **Name**        | Publisher/Administrator                                                                                                                                                                       |
+| 📦 **Type**        | Business Role                                                                                                                                                                                 |
+| 📝 **Description** | Operational role managing API Management service configuration, API publishing, and developer portal branding; identified by publisherEmail and publisherName in the deployment configuration |
 
 ### 5.8 Business Rules Specifications
 
