@@ -177,6 +177,7 @@ git clone https://github.com/Evilazaro/APIM-Accelerator.git
 cd APIM-Accelerator
 azd auth login
 azd provision
+# Expected: SUCCESS: Your application was provisioned in Azure in XX minutes XX seconds.
 ```
 
 When prompted, provide:
@@ -197,13 +198,13 @@ When prompted, provide:
 
 ### Lifecycle Commands
 
-| Command                 | Description                                                          |
-| ----------------------- | -------------------------------------------------------------------- |
-| `azd provision`         | Provision the full landing zone infrastructure                       |
-| `azd down`              | Tear down all deployed resources and the resource group              |
-| `azd monitor`           | Open the Application Insights dashboard for the deployed environment |
-| `azd env list`          | List all configured environments                                     |
-| `azd env select <name>` | Switch between environments (e.g., `dev`, `prod`)                    |
+| Command                    | Description                                                          |
+| -------------------------- | -------------------------------------------------------------------- |
+| 🚀 `azd provision`         | Provision the full landing zone infrastructure                       |
+| 🗑️ `azd down`              | Tear down all deployed resources and the resource group              |
+| 📊 `azd monitor`           | Open the Application Insights dashboard for the deployed environment |
+| 📋 `azd env list`          | List all configured environments                                     |
+| 🔀 `azd env select <name>` | Switch between environments (e.g., `dev`, `prod`)                    |
 
 ## Configuration
 
