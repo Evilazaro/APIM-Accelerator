@@ -347,24 +347,24 @@ The platform demonstrates a mature infrastructure-as-code foundation with well-e
 
 ### Capability Assessment
 
-| 🎯 Capability | 📋 Gap |
-| --- | --- |
-| 🔌 API Gateway Management | No automated performance benchmarking |
-| 🌐 Developer Self-Service | No API usage analytics dashboard |
-| 🔍 API Governance & Compliance | No automated compliance scanning pipeline |
-| 📦 Multi-Team API Isolation | No workspace usage metrics or quota management |
-| 📊 Observability & Monitoring | No business-level SLA dashboards |
-| 💰 Cost Management & Chargeback | No automated cost reporting or budget alerts |
+| 🎯 Capability                   | 📋 Gap                                         |
+| ------------------------------- | ---------------------------------------------- |
+| 🔌 API Gateway Management       | No automated performance benchmarking          |
+| 🌐 Developer Self-Service       | No API usage analytics dashboard               |
+| 🔍 API Governance & Compliance  | No automated compliance scanning pipeline      |
+| 📦 Multi-Team API Isolation     | No workspace usage metrics or quota management |
+| 📊 Observability & Monitoring   | No business-level SLA dashboards               |
+| 💰 Cost Management & Chargeback | No automated cost reporting or budget alerts   |
 
 ### Deployment Topology
 
 The current deployment follows a three-layer architecture deployed to a single Azure resource group per environment:
 
-| Layer                 | Components Deployed                                            | Dependencies                                 |
-| --------------------- | -------------------------------------------------------------- | -------------------------------------------- |
-| Shared Infrastructure | Log Analytics Workspace, Application Insights, Storage Account | None (foundation layer)                      |
-| Core Platform         | API Management (Premium), Developer Portal, Workspaces         | Shared Infrastructure (monitoring endpoints) |
-| API Inventory         | API Center, API Source                                         | Core Platform (APIM service link)            |
+| 🏗️ Layer                 | 🧩 Components Deployed                                         | 🔗 Dependencies                              |
+| ------------------------ | -------------------------------------------------------------- | -------------------------------------------- |
+| 📊 Shared Infrastructure | Log Analytics Workspace, Application Insights, Storage Account | None (foundation layer)                      |
+| ⚙️ Core Platform         | API Management (Premium), Developer Portal, Workspaces         | Shared Infrastructure (monitoring endpoints) |
+| 📚 API Inventory         | API Center, API Source                                         | Core Platform (APIM service link)            |
 
 ```mermaid
 ---
