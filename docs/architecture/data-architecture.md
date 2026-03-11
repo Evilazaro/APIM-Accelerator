@@ -1,5 +1,18 @@
 # Data Architecture - APIM Accelerator
 
+## 📑 Table of Contents
+
+- [Section 1: Executive Summary](#section-1-executive-summary)
+- [Section 2: Architecture Landscape](#section-2-architecture-landscape)
+  - [2.1 Data Entities](#21-data-entities) · [2.2 Data Models](#22-data-models) · [2.3 Data Stores](#23-data-stores) · [2.4 Data Flows](#24-data-flows) · [2.5 Data Services](#25-data-services) · [2.6 Data Governance](#26-data-governance) · [2.7 Data Quality Rules](#27-data-quality-rules) · [2.8 Master Data](#28-master-data) · [2.9 Data Transformations](#29-data-transformations) · [2.10 Data Contracts](#210-data-contracts) · [2.11 Data Security](#211-data-security)
+- [Section 3: Architecture Principles](#section-3-architecture-principles)
+- [Section 4: Current State Baseline](#section-4-current-state-baseline)
+- [Section 5: Component Catalog](#section-5-component-catalog)
+  - [5.1 Data Entities](#51-data-entities) · [5.2 Data Models](#52-data-models) · [5.3 Data Stores](#53-data-stores) · [5.4 Data Flows](#54-data-flows) · [5.5 Data Services](#55-data-services) · [5.6 Data Governance](#56-data-governance) · [5.7 Data Quality Rules](#57-data-quality-rules) · [5.8 Master Data](#58-master-data) · [5.9 Data Transformations](#59-data-transformations) · [5.10 Data Contracts](#510-data-contracts) · [5.11 Data Security](#511-data-security)
+- [Section 8: Dependencies & Integration](#section-8-dependencies--integration)
+
+---
+
 ## Section 1: Executive Summary
 
 ### Overview
@@ -24,7 +37,7 @@ The storage architecture comprises six distinct data stores: Log Analytics works
 
 ### 2.1 Data Entities
 
-| Name                   | Description                                               | Classification |
+| 📛 Name                   | 📝 Description                                               | 🏷️ Classification |
 | ---------------------- | --------------------------------------------------------- | -------------- |
 | SystemAssignedIdentity | System or user-assigned managed identity configuration    | Internal       |
 | ExtendedIdentity       | Extended identity supporting multiple configuration types | Internal       |
@@ -39,7 +52,7 @@ The storage architecture comprises six distinct data stores: Log Analytics works
 
 ### 2.2 Data Models
 
-| Name                          | Description                                                    | Classification |
+| 📛 Name                          | 📝 Description                                                    | 🏷️ Classification |
 | ----------------------------- | -------------------------------------------------------------- | -------------- |
 | Type System Model             | 10 Bicep type definitions forming the configuration schema     | Internal       |
 | APIM Configuration Model      | API Management parameter schema with SKU, identity, workspaces | Internal       |
@@ -50,7 +63,7 @@ The storage architecture comprises six distinct data stores: Log Analytics works
 
 ### 2.3 Data Stores
 
-| Name                    | Description                                              | Classification |
+| 📛 Name                    | 📝 Description                                              | 🏷️ Classification |
 | ----------------------- | -------------------------------------------------------- | -------------- |
 | Log Analytics Workspace | Centralized log aggregation, KQL queries, alerting       | Internal       |
 | Azure Storage Account   | Long-term diagnostic log archival and retention          | Internal       |
@@ -61,7 +74,7 @@ The storage architecture comprises six distinct data stores: Log Analytics works
 
 ### 2.4 Data Flows
 
-| Name                   | Description                                                         | Classification |
+| 📛 Name                   | 📝 Description                                                         | 🏷️ Classification |
 | ---------------------- | ------------------------------------------------------------------- | -------------- |
 | Settings Ingestion     | loadYamlContent() reads YAML into Bicep variables                   | Internal       |
 | Tag Consolidation      | union() merges governance tags with deployment metadata             | Internal       |
@@ -75,7 +88,7 @@ The storage architecture comprises six distinct data stores: Log Analytics works
 
 ### 2.5 Data Services
 
-| Name                         | Description                                                      | Classification |
+| 📛 Name                         | 📝 Description                                                      | 🏷️ Classification |
 | ---------------------------- | ---------------------------------------------------------------- | -------------- |
 | APIM Gateway                 | API gateway providing request routing, policies, rate limiting   | Internal       |
 | Application Insights Service | APM service with telemetry collection and distributed tracing    | Internal       |
@@ -85,7 +98,7 @@ The storage architecture comprises six distinct data stores: Log Analytics works
 
 ### 2.6 Data Governance
 
-| Name                     | Description                         | Classification |
+| 📛 Name                     | 📝 Description                         | 🏷️ Classification |
 | ------------------------ | ----------------------------------- | -------------- |
 | CostCenter Tag           | Cost allocation tracking tag        | Internal       |
 | BusinessUnit Tag         | Department ownership tag            | Internal       |
@@ -105,7 +118,7 @@ The storage architecture comprises six distinct data stores: Log Analytics works
 
 ### 2.7 Data Quality Rules
 
-| Name                   | Description                                          | Classification |
+| 📛 Name                   | 📝 Description                                          | 🏷️ Classification |
 | ---------------------- | ---------------------------------------------------- | -------------- |
 | SKU Name Enum          | Restricts APIM SKU to 8 valid values                 | Internal       |
 | Identity Type Enum     | Restricts identity to 4 valid types                  | Internal       |
@@ -120,7 +133,7 @@ The storage architecture comprises six distinct data stores: Log Analytics works
 
 ### 2.8 Master Data
 
-| Name                | Description                                          | Classification |
+| 📛 Name                | 📝 Description                                          | 🏷️ Classification |
 | ------------------- | ---------------------------------------------------- | -------------- |
 | diagnosticSettings  | Standard diagnostic settings configuration constants | Internal       |
 | storageAccount      | Storage account configuration constants              | Internal       |
@@ -132,7 +145,7 @@ The storage architecture comprises six distinct data stores: Log Analytics works
 
 ### 2.9 Data Transformations
 
-| Name                           | Description                                            | Classification |
+| 📛 Name                           | 📝 Description                                            | 🏷️ Classification |
 | ------------------------------ | ------------------------------------------------------ | -------------- |
 | generateUniqueSuffix           | Deterministic unique suffix from deployment context    | Internal       |
 | generateStorageAccountName     | Compliant storage name with length constraints         | Internal       |
@@ -147,7 +160,7 @@ The storage architecture comprises six distinct data stores: Log Analytics works
 
 ### 2.10 Data Contracts
 
-| Name                       | Description                                                       | Classification |
+| 📛 Name                       | 📝 Description                                                       | 🏷️ Classification |
 | -------------------------- | ----------------------------------------------------------------- | -------------- |
 | ApiManagement (exported)   | Exported type defining APIM configuration contract                | Internal       |
 | Inventory (exported)       | Exported type defining inventory configuration contract           | Internal       |
@@ -162,7 +175,7 @@ The storage architecture comprises six distinct data stores: Log Analytics works
 
 ### 2.11 Data Security
 
-| Name                          | Description                                                | Classification |
+| 📛 Name                          | 📝 Description                                                | 🏷️ Classification |
 | ----------------------------- | ---------------------------------------------------------- | -------------- |
 | APIM Managed Identity         | SystemAssigned identity for APIM service authentication    | Internal       |
 | Log Analytics Identity        | Configurable managed identity for workspace access         | Internal       |
@@ -392,7 +405,7 @@ The principles documented below are directly inferred from source code patterns 
 
 ### Core Data Principles
 
-| Principle              | Description                                             | Implementation                                  |
+| 💎 Principle              | 📝 Description                                             | 🔧 Implementation                                  |
 | ---------------------- | ------------------------------------------------------- | ----------------------------------------------- |
 | Type Safety            | All configurations use strongly-typed Bicep definitions | 10 type definitions with enum constraints       |
 | Single Source of Truth | Centralized YAML configuration drives all deployments   | One configuration file for entire solution      |
@@ -411,7 +424,7 @@ The principles documented below are directly inferred from source code patterns 
 
 ### Data Classification Taxonomy
 
-| Classification | Description                                         | Examples in Solution                                        |
+| 🏷️ Classification | 📝 Description                                         | 💡 Examples in Solution                                        |
 | -------------- | --------------------------------------------------- | ----------------------------------------------------------- |
 | Internal       | Non-sensitive infrastructure configuration          | Type definitions, SKU settings, diagnostic constants        |
 | Confidential   | Sensitive operational data requiring access control | Role definition GUIDs, YAML configuration, output contracts |
@@ -636,7 +649,7 @@ flowchart TB
 
 ### Storage Distribution
 
-| Data Store              | Type            | Purpose                                  | Retention            |
+| 🗄️ Data Store              | ⚙️ Type            | 🎯 Purpose                                  | ⏳ Retention            |
 | ----------------------- | --------------- | ---------------------------------------- | -------------------- |
 | Log Analytics Workspace | Managed Service | Centralized logging and KQL queries      | 30d default          |
 | Azure Storage Account   | Object Storage  | Diagnostic log archival                  | Indefinite           |
@@ -647,7 +660,7 @@ flowchart TB
 
 ### Quality Baseline
 
-| Quality Dimension        | Current State        | Target State          | Gap    |
+| 📊 Quality Dimension        | 📍 Current State        | 🎯 Target State          | 🔲 Gap    |
 | ------------------------ | -------------------- | --------------------- | ------ |
 | Type Safety              | Strong (Bicep types) | Strong                | None   |
 | Configuration Validation | Enum constraints     | Schema registry       | Medium |
@@ -724,7 +737,7 @@ flowchart TB
 
 ### Compliance Posture
 
-| Control            | Status      |
+| 🛡️ Control            | ✅ Status      |
 | ------------------ | ----------- |
 | GDPR Tag           | Implemented |
 | RBAC Assignments   | Implemented |
@@ -750,7 +763,7 @@ This catalog serves as the authoritative inventory of data assets in the APIM Ac
 
 ### 5.1 Data Entities
 
-| Component              | Description                                   | Classification | Storage        | Owner         | Retention  | Freshness SLA | Source Systems     | Consumers               |
+| 🧩 Component              | 📝 Description                                   | 🏷️ Classification | 💾 Storage        | 👤 Owner         | ⏳ Retention  | ⚡ Freshness SLA | 📂 Source Systems     | 🔗 Consumers               |
 | ---------------------- | --------------------------------------------- | -------------- | -------------- | ------------- | ---------- | ------------- | ------------------ | ----------------------- |
 | SystemAssignedIdentity | System or user-assigned managed identity type | Internal       | Document Store | Platform Team | indefinite | batch         | common-types.bicep | core, shared, inventory |
 | ExtendedIdentity       | Extended identity with None option            | Internal       | Document Store | Platform Team | indefinite | batch         | common-types.bicep | inventory               |
@@ -865,7 +878,7 @@ erDiagram
 
 ### 5.2 Data Models
 
-| Component                | Description                                   | Classification | Storage        | Owner         | Retention  | Freshness SLA | Source Systems        | Consumers              |
+| 🧩 Component                | 📝 Description                                   | 🏷️ Classification | 💾 Storage        | 👤 Owner         | ⏳ Retention  | ⚡ Freshness SLA | 📂 Source Systems        | 🔗 Consumers              |
 | ------------------------ | --------------------------------------------- | -------------- | -------------- | ------------- | ---------- | ------------- | --------------------- | ---------------------- |
 | Type System Model        | 10 Bicep types forming configuration schema   | Internal       | Document Store | Platform Team | indefinite | batch         | common-types.bicep    | All modules            |
 | APIM Configuration Model | APIM parameter schema with SKU and identity   | Internal       | Document Store | Platform Team | indefinite | batch         | settings.yaml         | core/main.bicep        |
@@ -876,7 +889,7 @@ erDiagram
 
 ### 5.3 Data Stores
 
-| Component               | Description                                 | Classification | Storage        | Owner         | Retention  | Freshness SLA | Source Systems              | Consumers         |
+| 🧩 Component               | 📝 Description                                 | 🏷️ Classification | 💾 Storage        | 👤 Owner         | ⏳ Retention  | ⚡ Freshness SLA | 📂 Source Systems              | 🔗 Consumers         |
 | ----------------------- | ------------------------------------------- | -------------- | -------------- | ------------- | ---------- | ------------- | --------------------------- | ----------------- |
 | Log Analytics Workspace | Centralized log aggregation and KQL queries | Internal       | Data Warehouse | Platform Team | 30d        | real-time     | APIM, Storage, App Insights | Operators, Alerts |
 | Azure Storage Account   | Long-term diagnostic log archival           | Internal       | Object Storage | Platform Team | indefinite | batch         | Log Analytics               | Compliance, Audit |
@@ -887,7 +900,7 @@ erDiagram
 
 ### 5.4 Data Flows
 
-| Component              | Description                                       | Classification | Storage        | Owner         | Retention    | Freshness SLA | Source Systems            | Consumers              |
+| 🧩 Component              | 📝 Description                                       | 🏷️ Classification | 💾 Storage        | 👤 Owner         | ⏳ Retention    | ⚡ Freshness SLA | 📂 Source Systems            | 🔗 Consumers              |
 | ---------------------- | ------------------------------------------------- | -------------- | -------------- | ------------- | ------------ | ------------- | ------------------------- | ---------------------- |
 | Settings Ingestion     | loadYamlContent() reads YAML into variables       | Internal       | Document Store | Platform Team | Not detected | batch         | settings.yaml             | infra/main.bicep       |
 | Tag Consolidation      | union() merges governance and deployment tags     | Internal       | Document Store | Platform Team | Not detected | batch         | settings.yaml, main.bicep | All resources          |
@@ -901,7 +914,7 @@ erDiagram
 
 ### 5.5 Data Services
 
-| Component                    | Description                                       | Classification | Storage        | Owner         | Retention  | Freshness SLA | Source Systems      | Consumers       |
+| 🧩 Component                    | 📝 Description                                       | 🏷️ Classification | 💾 Storage        | 👤 Owner         | ⏳ Retention  | ⚡ Freshness SLA | 📂 Source Systems      | 🔗 Consumers       |
 | ---------------------------- | ------------------------------------------------- | -------------- | -------------- | ------------- | ---------- | ------------- | ------------------- | --------------- |
 | APIM Gateway                 | API gateway with routing, policies, rate limiting | Internal       | Document Store | Platform Team | indefinite | real-time     | API Definitions     | API Consumers   |
 | Application Insights Service | APM with telemetry collection and tracing         | Internal       | Data Warehouse | Platform Team | 90d        | real-time     | APIM Logger         | Developers, Ops |
@@ -911,7 +924,7 @@ erDiagram
 
 ### 5.6 Data Governance
 
-| Component                | Description                             | Classification | Storage        | Owner         | Retention  | Freshness SLA | Source Systems   | Consumers           |
+| 🧩 Component                | 📝 Description                             | 🏷️ Classification | 💾 Storage        | 👤 Owner         | ⏳ Retention  | ⚡ Freshness SLA | 📂 Source Systems   | 🔗 Consumers           |
 | ------------------------ | --------------------------------------- | -------------- | -------------- | ------------- | ---------- | ------------- | ---------------- | ------------------- |
 | CostCenter Tag           | Cost allocation tracking (CC-1234)      | Financial      | Document Store | Platform Team | indefinite | batch         | settings.yaml    | Azure Cost Mgmt     |
 | BusinessUnit Tag         | Department ownership (IT)               | Internal       | Document Store | Platform Team | indefinite | batch         | settings.yaml    | Resource Governance |
@@ -931,7 +944,7 @@ erDiagram
 
 ### 5.7 Data Quality Rules
 
-| Component              | Description                                    | Classification | Storage        | Owner         | Retention  | Freshness SLA | Source Systems         | Consumers              |
+| 🧩 Component              | 📝 Description                                    | 🏷️ Classification | 💾 Storage        | 👤 Owner         | ⏳ Retention  | ⚡ Freshness SLA | 📂 Source Systems         | 🔗 Consumers              |
 | ---------------------- | ---------------------------------------------- | -------------- | -------------- | ------------- | ---------- | ------------- | ---------------------- | ---------------------- |
 | SKU Name Enum          | Restricts APIM SKU to 8 valid values           | Internal       | Document Store | Platform Team | indefinite | batch         | common-types.bicep     | core/apim.bicep        |
 | Identity Type Enum     | Restricts identity to 4 valid types            | Internal       | Document Store | Platform Team | indefinite | batch         | common-types.bicep     | All identity configs   |
@@ -946,7 +959,7 @@ erDiagram
 
 ### 5.8 Master Data
 
-| Component           | Description                                       | Classification | Storage        | Owner         | Retention  | Freshness SLA | Source Systems  | Consumers              |
+| 🧩 Component           | 📝 Description                                       | 🏷️ Classification | 💾 Storage        | 👤 Owner         | ⏳ Retention  | ⚡ Freshness SLA | 📂 Source Systems  | 🔗 Consumers              |
 | ------------------- | ------------------------------------------------- | -------------- | -------------- | ------------- | ---------- | ------------- | --------------- | ---------------------- |
 | diagnosticSettings  | Diagnostic settings suffix and category constants | Internal       | Document Store | Platform Team | indefinite | batch         | constants.bicep | All diagnostic configs |
 | storageAccount      | Storage SKU, kind, suffix, and max name length    | Internal       | Document Store | Platform Team | indefinite | batch         | constants.bicep | operational/main.bicep |
@@ -958,7 +971,7 @@ erDiagram
 
 ### 5.9 Data Transformations
 
-| Component                      | Description                                    | Classification | Storage        | Owner         | Retention    | Freshness SLA | Source Systems        | Consumers                 |
+| 🧩 Component                      | 📝 Description                                    | 🏷️ Classification | 💾 Storage        | 👤 Owner         | ⏳ Retention    | ⚡ Freshness SLA | 📂 Source Systems        | 🔗 Consumers                 |
 | ------------------------------ | ---------------------------------------------- | -------------- | -------------- | ------------- | ------------ | ------------- | --------------------- | ------------------------- |
 | generateUniqueSuffix           | Deterministic suffix from subscription context | Internal       | Document Store | Platform Team | Not detected | batch         | Deployment context    | All naming                |
 | generateStorageAccountName     | Storage name with length and char constraints  | Internal       | Document Store | Platform Team | Not detected | batch         | Base name, suffix     | operational/main.bicep    |
@@ -973,7 +986,7 @@ erDiagram
 
 ### 5.10 Data Contracts
 
-| Component                  | Description                                               | Classification | Storage        | Owner         | Retention    | Freshness SLA | Source Systems         | Consumers             |
+| 🧩 Component                  | 📝 Description                                               | 🏷️ Classification | 💾 Storage        | 👤 Owner         | ⏳ Retention    | ⚡ Freshness SLA | 📂 Source Systems         | 🔗 Consumers             |
 | -------------------------- | --------------------------------------------------------- | -------------- | -------------- | ------------- | ------------ | ------------- | ---------------------- | --------------------- |
 | ApiManagement (exported)   | APIM config contract with name, email, SKU, identity      | Internal       | Document Store | Platform Team | indefinite   | batch         | common-types.bicep     | core/main.bicep       |
 | Inventory (exported)       | Inventory config contract with apiCenter and tags         | Internal       | Document Store | Platform Team | indefinite   | batch         | common-types.bicep     | inventory/main.bicep  |
@@ -988,7 +1001,7 @@ erDiagram
 
 ### 5.11 Data Security
 
-| Component                     | Description                                        | Classification | Storage        | Owner         | Retention    | Freshness SLA | Source Systems         | Consumers     |
+| 🧩 Component                     | 📝 Description                                        | 🏷️ Classification | 💾 Storage        | 👤 Owner         | ⏳ Retention    | ⚡ Freshness SLA | 📂 Source Systems         | 🔗 Consumers     |
 | ----------------------------- | -------------------------------------------------- | -------------- | -------------- | ------------- | ------------ | ------------- | ---------------------- | ------------- |
 | APIM Managed Identity         | SystemAssigned identity for APIM service auth      | Confidential   | Document Store | Security Team | indefinite   | real-time     | apim.bicep             | Azure RBAC    |
 | Log Analytics Identity        | Configurable managed identity for workspace        | Internal       | Document Store | Security Team | indefinite   | batch         | operational/main.bicep | Log Analytics |
@@ -1299,7 +1312,7 @@ flowchart LR
 
 ### Producer-Consumer Relationships
 
-| Producer          | Consumer             | Data                          | Flow Type | Contract            |
+| 📤 Producer          | 📥 Consumer             | 📦 Data                          | 🔄 Flow Type | 📜 Contract            |
 | ----------------- | -------------------- | ----------------------------- | --------- | ------------------- |
 | settings.yaml     | infra/main.bicep     | Solution config               | Batch     | YAML schema         |
 | infra/main.bicep  | shared/main.bicep    | Shared settings, tags         | Batch     | Shared type         |
