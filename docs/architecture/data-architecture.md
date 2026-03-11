@@ -306,26 +306,26 @@ flowchart TB
     %% ═══════════════════════════════════════════════════════════════════════════
 
     subgraph sharedDomain["📂 Shared Infrastructure Domain"]
-        types("📋 Type Definitions\n10 types"):::data
-        consts("📦 Constants & Functions\n7 master data + 4 transforms"):::data
-        monConfig("📊 Monitoring Config\n2 models"):::data
+        types("📋 Type Definitions<br>10 types"):::data
+        consts("📦 Constants & Functions<br>7 master data + 4 transforms"):::data
+        monConfig("📊 Monitoring Config<br>2 models"):::data
     end
 
     subgraph coreDomain["🌐 Core Platform Domain"]
-        apimConfig("⚙️ APIM Configuration\nSKU, identity, workspaces"):::core
-        portalConfig("👤 Developer Portal\nAAD auth, tenant restriction"):::core
-        diagSettings("📈 Diagnostic Settings\nDual-destination telemetry"):::success
+        apimConfig("⚙️ APIM Configuration<br>SKU, identity, workspaces"):::core
+        portalConfig("👤 Developer Portal<br>AAD auth, tenant restriction"):::core
+        diagSettings("📈 Diagnostic Settings<br>Dual-destination telemetry"):::success
     end
 
     subgraph inventoryDomain["📚 Inventory Domain"]
-        apiCatalog("📚 API Center\nCatalog, governance, RBAC"):::core
-        sourceSync("🔄 API Source Sync\nAPIM discovery"):::data
+        apiCatalog("📚 API Center<br>Catalog, governance, RBAC"):::core
+        sourceSync("🔄 API Source Sync<br>APIM discovery"):::data
     end
 
     subgraph orchestrationDomain["🔧 Orchestration Domain"]
-        yamlConfig("📄 settings.yaml\n85 lines, 10 gov tags"):::warning
-        tagMerge("🏷️ Tag Consolidation\nunion() merging"):::warning
-        paramChain("🔗 Parameter Chains\n3 module deployments"):::warning
+        yamlConfig("📄 settings.yaml<br>85 lines, 10 gov tags"):::warning
+        tagMerge("🏷️ Tag Consolidation<br>union() merging"):::warning
+        paramChain("🔗 Parameter Chains<br>3 module deployments"):::warning
     end
 
     types -->|"import types"| apimConfig
@@ -383,19 +383,19 @@ flowchart LR
     %% ═══════════════════════════════════════════════════════════════════════════
 
     subgraph hotTier["🔥 Hot Tier — Real-Time"]
-        apimStore("🌐 APIM Service\nAPIs, policies, subscriptions"):::core
-        portalStore("👤 Developer Portal\nUser sessions, auth tokens"):::core
-        apiCenterStore("📚 API Center\nCatalog, governance metadata"):::core
+        apimStore("🌐 APIM Service<br>APIs, policies, subscriptions"):::core
+        portalStore("👤 Developer Portal<br>User sessions, auth tokens"):::core
+        apiCenterStore("📚 API Center<br>Catalog, governance metadata"):::core
     end
 
     subgraph warmTier["📊 Warm Tier — Analytical"]
-        logAnalytics("📊 Log Analytics\nKQL queries, 30d retention"):::success
-        appInsights("📈 App Insights\nAPM telemetry, 90-730d retention"):::success
+        logAnalytics("📊 Log Analytics<br>KQL queries, 30d retention"):::success
+        appInsights("📈 App Insights<br>APM telemetry, 90-730d retention"):::success
     end
 
     subgraph coldTier["❄️ Cold Tier — Archival"]
-        storageAcct("💾 Storage Account\nDiagnostic log archival, indefinite"):::data
-        yamlStore("📄 YAML Configuration\nVersion-controlled, Git"):::data
+        storageAcct("💾 Storage Account<br>Diagnostic log archival, indefinite"):::data
+        yamlStore("📄 YAML Configuration<br>Version-controlled, Git"):::data
     end
 
     apimStore -->|"diagnostics"| logAnalytics
@@ -440,28 +440,28 @@ flowchart TB
     %% ═══════════════════════════════════════════════════════════════════════════
 
     subgraph configZone["📂 Configuration Zone — Internal"]
-        yamlSrc("📄 settings.yaml\nDeployment parameters"):::data
-        typesSrc("📋 common-types.bicep\nSchema definitions"):::data
-        constsSrc("📦 constants.bicep\nMaster reference data"):::data
+        yamlSrc("📄 settings.yaml<br>Deployment parameters"):::data
+        typesSrc("📋 common-types.bicep<br>Schema definitions"):::data
+        constsSrc("📦 constants.bicep<br>Master reference data"):::data
     end
 
     subgraph operationalZone["⚙️ Operational Zone — Internal"]
-        apimOps("🌐 APIM Gateway\nAPI routing, policies"):::core
-        portalOps("👤 Developer Portal\nAPI discovery"):::core
-        apiCenterOps("📚 API Center\nInventory management"):::core
+        apimOps("🌐 APIM Gateway<br>API routing, policies"):::core
+        portalOps("👤 Developer Portal<br>API discovery"):::core
+        apiCenterOps("📚 API Center<br>Inventory management"):::core
     end
 
     subgraph observabilityZone["📊 Observability Zone — Internal"]
-        logsObs("📊 Log Analytics\nCentralized logging"):::success
-        apmObs("📈 App Insights\nPerformance monitoring"):::success
-        archiveObs("💾 Storage Account\nLog archival"):::success
+        logsObs("📊 Log Analytics<br>Centralized logging"):::success
+        apmObs("📈 App Insights<br>Performance monitoring"):::success
+        archiveObs("💾 Storage Account<br>Log archival"):::success
     end
 
     subgraph governanceZone["🏛️ Governance Zone — Confidential"]
-        rbacGov("🔐 RBAC Assignments\nRole definitions"):::danger
-        identityGov("🔑 Managed Identities\nSystemAssigned"):::danger
-        secretsGov("🔒 Secure Outputs\n@secure() parameters"):::danger
-        tagsGov("🏷️ Resource Tags\n15 governance tags"):::warning
+        rbacGov("🔐 RBAC Assignments<br>Role definitions"):::danger
+        identityGov("🔑 Managed Identities<br>SystemAssigned"):::danger
+        secretsGov("🔒 Secure Outputs<br>@secure() parameters"):::danger
+        tagsGov("🏷️ Resource Tags<br>15 governance tags"):::warning
     end
 
     configZone -->|"deploys"| operationalZone
@@ -554,22 +554,22 @@ flowchart TB
     %% ═══════════════════════════════════════════════════════════════════════════
 
     subgraph foundation["🏗️ Foundation Principles"]
-        typeSafety("🛡️ Type Safety\n10 Bicep type definitions\nEnum constraints"):::core
-        ssot("🎯 Single Source of Truth\nCentralized YAML config\nsettings.yaml"):::core
+        typeSafety("🛡️ Type Safety<br>10 Bicep type definitions<br>Enum constraints"):::core
+        ssot("🎯 Single Source of Truth<br>Centralized YAML config<br>settings.yaml"):::core
     end
 
     subgraph structural["🏢 Structural Principles"]
-        reusability("🔄 Reusability\n4 exported types\nCross-module import"):::data
-        separation("📦 Separation of Concerns\nModular architecture\nshared/core/inventory"):::data
-        naming("🏷️ Deterministic Naming\n3 utility functions\nReproducible outputs"):::data
+        reusability("🔄 Reusability<br>4 exported types<br>Cross-module import"):::data
+        separation("📦 Separation of Concerns<br>Modular architecture<br>shared/core/inventory"):::data
+        naming("🏷️ Deterministic Naming<br>3 utility functions<br>Reproducible outputs"):::data
     end
 
     subgraph security["🔒 Security Principles"]
-        privacy("🔐 Privacy by Design\n@secure() decorators\nKey management"):::danger
+        privacy("🔐 Privacy by Design<br>@secure() decorators<br>Key management"):::danger
     end
 
     subgraph governance["🏛️ Governance Principles"]
-        govFirst("📜 Governance First\n10 resource tags\nCost + compliance tracking"):::warning
+        govFirst("📜 Governance First<br>10 resource tags<br>Cost + compliance tracking"):::warning
     end
 
     typeSafety -->|"enables"| reusability
@@ -1114,6 +1114,207 @@ erDiagram
 | @secure() Instrumentation Key | Secure output for App Insights instrumentation key | Confidential   | Document Store | Security Team | Not detected | real-time     | insights/main.bicep    | APIM Logger   | src/shared/monitoring/insights/main.bicep:235-235    |
 | @secure() Client Secret       | Secure parameter for Azure AD authentication       | Confidential   | Document Store | Security Team | Not detected | real-time     | developer-portal.bicep | Azure AD      | src/core/developer-portal.bicep:76-77                |
 
+### Type Hierarchy Model
+
+```mermaid
+---
+title: Bicep Type Hierarchy Model
+config:
+  theme: base
+  look: classic
+  layout: dagre
+  themeVariables:
+    fontSize: "16px"
+---
+flowchart TB
+    accTitle: Bicep Type Hierarchy Model
+    accDescr: Shows the hierarchical relationships between the 10 Bicep type definitions and 4 exported composite types with their composition patterns
+
+    %% ═══════════════════════════════════════════════════════════════════════════
+    %% AZURE / FLUENT ARCHITECTURE PATTERN v1.1
+    %% (Semantic + Structural + Font + Accessibility Governance)
+    %% ═══════════════════════════════════════════════════════════════════════════
+    %% PHASE 1 - FLUENT UI: All styling uses approved Fluent UI palette only
+    %% PHASE 2 - GROUPS: Every subgraph has semantic color via style directive
+    %% PHASE 3 - COMPONENTS: Every node has semantic classDef + icon prefix
+    %% PHASE 4 - ACCESSIBILITY: accTitle/accDescr present, WCAG AA contrast
+    %% PHASE 5 - STANDARD: Governance block present, classDefs centralized
+    %% ═══════════════════════════════════════════════════════════════════════════
+
+    subgraph primitiveTypes["📋 Primitive Types"]
+        sysId("🔑 SystemAssignedIdentity<br>type, userAssignedIdentities"):::data
+        extId("🔑 ExtendedIdentity<br>type + None option"):::data
+        apimSku("⚙️ ApimSku<br>name, capacity"):::data
+        logAn("📊 LogAnalytics<br>name, workspaceId, identity"):::data
+        appIns("📈 ApplicationInsights<br>name, workspaceId"):::data
+        apiCtr("📚 ApiCenter<br>name, identity"):::data
+        corePlat("🌐 CorePlatform<br>placeholder"):::data
+    end
+
+    subgraph compositeTypes["📦 Exported Composite Types"]
+        apimType("⚙️ ApiManagement<br>name, email, sku, identity, workspaces"):::core
+        invType("📚 Inventory<br>apiCenter, tags"):::core
+        monType("📊 Monitoring<br>logAnalytics, appInsights, tags"):::core
+        sharedType("🔧 Shared<br>monitoring, tags"):::core
+    end
+
+    apimSku -->|"composes"| apimType
+    sysId -->|"composes"| apimType
+    logAn -->|"composes"| monType
+    appIns -->|"composes"| monType
+    sysId -->|"composes"| logAn
+    extId -->|"composes"| apiCtr
+    apiCtr -->|"composes"| invType
+    monType -->|"composes"| sharedType
+
+    classDef core fill:#EFF6FC,stroke:#0078D4,stroke-width:2px,color:#323130
+    classDef data fill:#F0E6FA,stroke:#8764B8,stroke-width:2px,color:#323130
+
+    style primitiveTypes fill:#F3F2F1,stroke:#8A8886,stroke-width:2px,color:#323130
+    style compositeTypes fill:#F3F2F1,stroke:#8A8886,stroke-width:2px,color:#323130
+```
+
+### Schema Evolution Timeline
+
+```mermaid
+---
+title: Schema Evolution Timeline
+config:
+  theme: base
+  look: classic
+  layout: dagre
+  themeVariables:
+    fontSize: "16px"
+---
+flowchart LR
+    accTitle: Schema Evolution Timeline
+    accDescr: Shows the schema evolution stages from initial type definitions through export pattern adoption to current state with version tracking via TemplateVersion tag
+
+    %% ═══════════════════════════════════════════════════════════════════════════
+    %% AZURE / FLUENT ARCHITECTURE PATTERN v1.1
+    %% (Semantic + Structural + Font + Accessibility Governance)
+    %% ═══════════════════════════════════════════════════════════════════════════
+    %% PHASE 1 - FLUENT UI: All styling uses approved Fluent UI palette only
+    %% PHASE 2 - GROUPS: Every subgraph has semantic color via style directive
+    %% PHASE 3 - COMPONENTS: Every node has semantic classDef + icon prefix
+    %% PHASE 4 - ACCESSIBILITY: accTitle/accDescr present, WCAG AA contrast
+    %% PHASE 5 - STANDARD: Governance block present, classDefs centralized
+    %% ═══════════════════════════════════════════════════════════════════════════
+
+    subgraph phase1["🛠️ Phase 1 — Foundation"]
+        p1a("📋 Define 10 primitive types<br>common-types.bicep"):::data
+        p1b("📦 Create constants<br>constants.bicep"):::data
+    end
+
+    subgraph phase2["📤 Phase 2 — Export Pattern"]
+        p2a("📤 Export 4 composite types<br>@export() decorators"):::core
+        p2b("🔄 Import across modules<br>import {} syntax"):::core
+    end
+
+    subgraph phase3["⚙️ Phase 3 — Current State"]
+        p3a("🏷️ Version tracking<br>TemplateVersion: 2.0.0"):::success
+        p3b("⚠️ Gap: No schema registry<br>No formal versioning"):::warning
+    end
+
+    subgraph phase4["🚀 Phase 4 — Target State"]
+        p4a("📚 Schema registry<br>Centralized schema management"):::neutral
+        p4b("🔄 Automated validation<br>CI/CD schema checks"):::neutral
+    end
+
+    p1a -->|"evolves to"| p2a
+    p1b -->|"supports"| p2b
+    p2a -->|"tracked by"| p3a
+    p2b -->|"reveals"| p3b
+    p3a -->|"target"| p4a
+    p3b -->|"requires"| p4b
+
+    classDef core fill:#EFF6FC,stroke:#0078D4,stroke-width:2px,color:#323130
+    classDef data fill:#F0E6FA,stroke:#8764B8,stroke-width:2px,color:#323130
+    classDef success fill:#DFF6DD,stroke:#107C10,stroke-width:2px,color:#323130
+    classDef warning fill:#FFF4CE,stroke:#FFB900,stroke-width:2px,color:#323130
+    classDef neutral fill:#FAFAFA,stroke:#8A8886,stroke-width:2px,color:#323130
+
+    style phase1 fill:#F3F2F1,stroke:#8A8886,stroke-width:2px,color:#323130
+    style phase2 fill:#F3F2F1,stroke:#8A8886,stroke-width:2px,color:#323130
+    style phase3 fill:#F3F2F1,stroke:#8A8886,stroke-width:2px,color:#323130
+    style phase4 fill:#F3F2F1,stroke:#8A8886,stroke-width:2px,color:#323130
+```
+
+### Data Contract Maps
+
+```mermaid
+---
+title: Data Contract Maps
+config:
+  theme: base
+  look: classic
+  layout: dagre
+  themeVariables:
+    fontSize: "16px"
+---
+flowchart LR
+    accTitle: Data Contract Maps
+    accDescr: Shows the module output contract relationships between shared, core, inventory, and orchestrator modules with their typed output specifications
+
+    %% ═══════════════════════════════════════════════════════════════════════════
+    %% AZURE / FLUENT ARCHITECTURE PATTERN v1.1
+    %% (Semantic + Structural + Font + Accessibility Governance)
+    %% ═══════════════════════════════════════════════════════════════════════════
+    %% PHASE 1 - FLUENT UI: All styling uses approved Fluent UI palette only
+    %% PHASE 2 - GROUPS: Every subgraph has semantic color via style directive
+    %% PHASE 3 - COMPONENTS: Every node has semantic classDef + icon prefix
+    %% PHASE 4 - ACCESSIBILITY: accTitle/accDescr present, WCAG AA contrast
+    %% PHASE 5 - STANDARD: Governance block present, classDefs centralized
+    %% ═══════════════════════════════════════════════════════════════════════════
+
+    subgraph sharedContract["🔧 Shared Module<br>5 Outputs"]
+        shOut1("📊 workspaceId"):::data
+        shOut2("📈 insightsId"):::data
+        shOut3("📈 insightsName"):::data
+        shOut4("🔒 insightsKey @secure"):::danger
+        shOut5("💾 storageAccountId"):::data
+    end
+
+    subgraph coreContract["⚙️ Core Module<br>2 Outputs"]
+        coOut1("🌐 apimResourceId"):::core
+        coOut2("🌐 apimName"):::core
+    end
+
+    subgraph apimContract["🌐 APIM Module<br>7 Outputs"]
+        apimOut1("🌐 resourceId"):::core
+        apimOut2("🌐 name"):::core
+        apimOut3("🔑 principalId"):::core
+        apimOut4("🌐 gatewayUrl"):::core
+        apimOut5("🔒 clientSecretRef @secure"):::danger
+    end
+
+    subgraph orchContract["📤 Orchestrator<br>4 Outputs"]
+        orchOut1("📈 insightsId"):::success
+        orchOut2("📈 insightsName"):::success
+        orchOut3("🔒 insightsKey @secure"):::danger
+        orchOut4("💾 storageAccountId"):::success
+    end
+
+    shOut1 -->|"consumed by"| orchOut1
+    shOut2 -->|"consumed by"| orchOut2
+    shOut4 -->|"consumed by"| orchOut3
+    shOut5 -->|"consumed by"| orchOut4
+    shOut1 -->|"feeds"| coreContract
+    shOut2 -->|"feeds"| coreContract
+    apimOut1 -->|"consumed by"| coOut1
+    apimOut2 -->|"consumed by"| coOut2
+
+    classDef core fill:#EFF6FC,stroke:#0078D4,stroke-width:2px,color:#323130
+    classDef data fill:#F0E6FA,stroke:#8764B8,stroke-width:2px,color:#323130
+    classDef success fill:#DFF6DD,stroke:#107C10,stroke-width:2px,color:#323130
+    classDef danger fill:#FDE7E9,stroke:#D13438,stroke-width:2px,color:#323130
+
+    style sharedContract fill:#F3F2F1,stroke:#8A8886,stroke-width:2px,color:#323130
+    style coreContract fill:#F3F2F1,stroke:#8A8886,stroke-width:2px,color:#323130
+    style apimContract fill:#F3F2F1,stroke:#8A8886,stroke-width:2px,color:#323130
+    style orchContract fill:#F3F2F1,stroke:#8A8886,stroke-width:2px,color:#323130
+```
+
 ### Summary
 
 The Component Catalog documents 93 data assets across all 11 canonical data component types. The distribution reveals strong coverage in Data Governance (15 components), Data Entities (10), Data Quality Rules (10), Data Transformations (10), and Data Contracts (10). All components have source traceability with confidence scores ranging from 0.70 to 0.95 (average: 0.84). The dominant storage pattern is Document Store (Bicep/YAML configuration files), with Data Warehouse patterns for monitoring services (Log Analytics, App Insights). Classification shows predominantly Internal data with Confidential markings for security-sensitive outputs and PII for contact information in governance tags.
@@ -1228,6 +1429,217 @@ flowchart LR
 | APIM Service      | App Insights         | Performance telemetry         | Real-time | Logger integration  | src/core/apim.bicep:287-296             |
 | APIM Service      | API Center           | API definitions               | Batch     | API source sync     | src/inventory/main.bicep:172-185        |
 | Azure AD          | Developer Portal     | Auth tokens                   | Real-time | OAuth2/MSAL-2       | src/core/developer-portal.bicep:150-170 |
+
+### ETL/ELT Flow Diagram
+
+```mermaid
+---
+title: Configuration ETL Flow
+config:
+  theme: base
+  look: classic
+  layout: dagre
+  themeVariables:
+    fontSize: "16px"
+---
+flowchart LR
+    accTitle: Configuration ETL Flow
+    accDescr: Shows the extract-transform-load pattern for configuration data flowing from YAML source through Bicep processing functions to Azure resource deployment targets
+
+    %% ═══════════════════════════════════════════════════════════════════════════
+    %% AZURE / FLUENT ARCHITECTURE PATTERN v1.1
+    %% (Semantic + Structural + Font + Accessibility Governance)
+    %% ═══════════════════════════════════════════════════════════════════════════
+    %% PHASE 1 - FLUENT UI: All styling uses approved Fluent UI palette only
+    %% PHASE 2 - GROUPS: Every subgraph has semantic color via style directive
+    %% PHASE 3 - COMPONENTS: Every node has semantic classDef + icon prefix
+    %% PHASE 4 - ACCESSIBILITY: accTitle/accDescr present, WCAG AA contrast
+    %% PHASE 5 - STANDARD: Governance block present, classDefs centralized
+    %% ═══════════════════════════════════════════════════════════════════════════
+
+    subgraph extract["📥 Extract"]
+        yamlSrc("📄 settings.yaml<br>85 lines config"):::data
+        typesSrc("📋 common-types.bicep<br>10 type definitions"):::data
+        constsSrc("📦 constants.bicep<br>7 master data objects"):::data
+    end
+
+    subgraph transform["⚙️ Transform"]
+        loadYaml("🔄 loadYamlContent()<br>YAML deserialization"):::core
+        tagUnion("🏷️ union()<br>Tag consolidation"):::core
+        genSuffix("🔢 generateUniqueSuffix()<br>Deterministic naming"):::core
+        genStorage("💾 generateStorageAccountName()<br>24-char compliance"):::core
+        identityXform("🔑 createIdentityConfig()<br>Array-to-object"):::core
+    end
+
+    subgraph load["📤 Load"]
+        sharedRes("🔧 Shared Resources<br>Log Analytics, Storage, App Insights"):::success
+        coreRes("🌐 Core Resources<br>APIM, Developer Portal"):::success
+        invRes("📚 Inventory Resources<br>API Center, RBAC"):::success
+    end
+
+    yamlSrc -->|"read"| loadYaml
+    yamlSrc -->|"tags"| tagUnion
+    constsSrc -->|"functions"| genSuffix
+    constsSrc -->|"functions"| genStorage
+    constsSrc -->|"functions"| identityXform
+    typesSrc -->|"schemas"| loadYaml
+    loadYaml -->|"params"| sharedRes
+    tagUnion -->|"metadata"| sharedRes
+    tagUnion -->|"metadata"| coreRes
+    tagUnion -->|"metadata"| invRes
+    genSuffix -->|"names"| coreRes
+    genStorage -->|"names"| sharedRes
+    identityXform -->|"identity"| sharedRes
+    identityXform -->|"identity"| invRes
+
+    classDef core fill:#EFF6FC,stroke:#0078D4,stroke-width:2px,color:#323130
+    classDef data fill:#F0E6FA,stroke:#8764B8,stroke-width:2px,color:#323130
+    classDef success fill:#DFF6DD,stroke:#107C10,stroke-width:2px,color:#323130
+
+    style extract fill:#F3F2F1,stroke:#8A8886,stroke-width:2px,color:#323130
+    style transform fill:#F3F2F1,stroke:#8A8886,stroke-width:2px,color:#323130
+    style load fill:#F3F2F1,stroke:#8A8886,stroke-width:2px,color:#323130
+```
+
+### Producer-Consumer Matrix
+
+```mermaid
+---
+title: Producer-Consumer Matrix
+config:
+  theme: base
+  look: classic
+  layout: dagre
+  themeVariables:
+    fontSize: "16px"
+---
+flowchart TB
+    accTitle: Producer-Consumer Matrix
+    accDescr: Shows the producer-consumer relationships between all data-producing and data-consuming components in the APIM Accelerator deployment pipeline
+
+    %% ═══════════════════════════════════════════════════════════════════════════
+    %% AZURE / FLUENT ARCHITECTURE PATTERN v1.1
+    %% (Semantic + Structural + Font + Accessibility Governance)
+    %% ═══════════════════════════════════════════════════════════════════════════
+    %% PHASE 1 - FLUENT UI: All styling uses approved Fluent UI palette only
+    %% PHASE 2 - GROUPS: Every subgraph has semantic color via style directive
+    %% PHASE 3 - COMPONENTS: Every node has semantic classDef + icon prefix
+    %% PHASE 4 - ACCESSIBILITY: accTitle/accDescr present, WCAG AA contrast
+    %% PHASE 5 - STANDARD: Governance block present, classDefs centralized
+    %% ═══════════════════════════════════════════════════════════════════════════
+
+    subgraph producers["📤 Producers"]
+        pYaml("📄 settings.yaml"):::data
+        pTypes("📋 common-types.bicep"):::data
+        pConsts("📦 constants.bicep"):::data
+        pApim("🌐 APIM Service"):::core
+        pAad("🔐 Azure AD"):::danger
+    end
+
+    subgraph consumers["📥 Consumers"]
+        cOrch("🔧 infra/main.bicep"):::core
+        cShared("🔧 shared/main.bicep"):::core
+        cCore("🔧 core/main.bicep"):::core
+        cInv("🔧 inventory/main.bicep"):::core
+        cLogAn("📊 Log Analytics"):::success
+        cAppIns("📈 App Insights"):::success
+        cApiCtr("📚 API Center"):::core
+        cPortal("👤 Developer Portal"):::core
+    end
+
+    pYaml -->|"config"| cOrch
+    pTypes -->|"types"| cShared
+    pTypes -->|"types"| cCore
+    pTypes -->|"types"| cInv
+    pConsts -->|"functions"| cShared
+    pConsts -->|"functions"| cCore
+    pApim -->|"diagnostics"| cLogAn
+    pApim -->|"telemetry"| cAppIns
+    pApim -->|"API defs"| cApiCtr
+    pAad -->|"auth tokens"| cPortal
+
+    classDef core fill:#EFF6FC,stroke:#0078D4,stroke-width:2px,color:#323130
+    classDef data fill:#F0E6FA,stroke:#8764B8,stroke-width:2px,color:#323130
+    classDef success fill:#DFF6DD,stroke:#107C10,stroke-width:2px,color:#323130
+    classDef danger fill:#FDE7E9,stroke:#D13438,stroke-width:2px,color:#323130
+
+    style producers fill:#F3F2F1,stroke:#8A8886,stroke-width:2px,color:#323130
+    style consumers fill:#F3F2F1,stroke:#8A8886,stroke-width:2px,color:#323130
+```
+
+### Configuration Change Propagation
+
+```mermaid
+---
+title: Configuration Change Propagation Topology
+config:
+  theme: base
+  look: classic
+  layout: dagre
+  themeVariables:
+    fontSize: "16px"
+---
+flowchart TB
+    accTitle: Configuration Change Propagation Topology
+    accDescr: Shows how configuration changes in settings.yaml and type definitions propagate through the deployment chain to all downstream Azure resources and monitoring systems
+
+    %% ═══════════════════════════════════════════════════════════════════════════
+    %% AZURE / FLUENT ARCHITECTURE PATTERN v1.1
+    %% (Semantic + Structural + Font + Accessibility Governance)
+    %% ═══════════════════════════════════════════════════════════════════════════
+    %% PHASE 1 - FLUENT UI: All styling uses approved Fluent UI palette only
+    %% PHASE 2 - GROUPS: Every subgraph has semantic color via style directive
+    %% PHASE 3 - COMPONENTS: Every node has semantic classDef + icon prefix
+    %% PHASE 4 - ACCESSIBILITY: accTitle/accDescr present, WCAG AA contrast
+    %% PHASE 5 - STANDARD: Governance block present, classDefs centralized
+    %% ═══════════════════════════════════════════════════════════════════════════
+
+    subgraph changeOrigin["📝 Change Origin"]
+        yamlChange("📄 settings.yaml change<br>SKU, tags, identity"):::warning
+        typeChange("📋 common-types.bicep change<br>Type definition update"):::warning
+        constChange("📦 constants.bicep change<br>Naming function update"):::warning
+    end
+
+    subgraph propagation["🔄 Propagation Layer"]
+        orchProp("🔧 infra/main.bicep<br>Re-reads YAML, re-computes"):::core
+    end
+
+    subgraph impactZone["💥 Impact Zone"]
+        sharedImpact("🔧 Shared Module<br>Monitoring re-provisioned"):::core
+        coreImpact("⚙️ Core Module<br>APIM re-configured"):::core
+        invImpact("📚 Inventory Module<br>API Center re-configured"):::core
+    end
+
+    subgraph downstream["🌐 Downstream Effects"]
+        logAnEffect("📊 Log Analytics<br>Config updated"):::success
+        storageEffect("💾 Storage Account<br>Config updated"):::success
+        appInsEffect("📈 App Insights<br>Config updated"):::success
+        apimEffect("🌐 APIM Service<br>APIs, policies updated"):::success
+        apiCtrEffect("📚 API Center<br>Catalog updated"):::success
+    end
+
+    yamlChange -->|"triggers"| orchProp
+    typeChange -->|"triggers"| orchProp
+    constChange -->|"triggers"| orchProp
+    orchProp -->|"re-deploys"| sharedImpact
+    orchProp -->|"re-deploys"| coreImpact
+    orchProp -->|"re-deploys"| invImpact
+    sharedImpact -->|"updates"| logAnEffect
+    sharedImpact -->|"updates"| storageEffect
+    sharedImpact -->|"updates"| appInsEffect
+    coreImpact -->|"updates"| apimEffect
+    invImpact -->|"updates"| apiCtrEffect
+
+    classDef core fill:#EFF6FC,stroke:#0078D4,stroke-width:2px,color:#323130
+    classDef data fill:#F0E6FA,stroke:#8764B8,stroke-width:2px,color:#323130
+    classDef success fill:#DFF6DD,stroke:#107C10,stroke-width:2px,color:#323130
+    classDef warning fill:#FFF4CE,stroke:#FFB900,stroke-width:2px,color:#323130
+
+    style changeOrigin fill:#F3F2F1,stroke:#8A8886,stroke-width:2px,color:#323130
+    style propagation fill:#F3F2F1,stroke:#8A8886,stroke-width:2px,color:#323130
+    style impactZone fill:#F3F2F1,stroke:#8A8886,stroke-width:2px,color:#323130
+    style downstream fill:#F3F2F1,stroke:#8A8886,stroke-width:2px,color:#323130
+```
 
 ### Summary
 
