@@ -803,47 +803,35 @@ This subsection documents the business rules, policies, and decision logic that 
 
 #### 5.8.1 GDPR Regulatory Compliance
 
-| Attribute       | Value                                                                                                                                                                                        |
-| --------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| **Name**        | GDPR Regulatory Compliance                                                                                                                                                                   |
-| **Type**        | Business Rule                                                                                                                                                                                |
-| **Description** | Compliance mandate requiring all platform resources to comply with GDPR regulatory requirements, enforced through the RegulatoryCompliance governance tag applied to every deployed resource |
-| **Maturity**    | 3 - Defined                                                                                                                                                                                  |
-| **Source**      | `infra/settings.yaml:38`                                                                                                                                                                     |
-| **Confidence**  | 0.88                                                                                                                                                                                         |
+| 📌 Attribute       | 📝 Value                                                                                                                                                                                     |
+| ------------------ | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| 🏷️ **Name**        | GDPR Regulatory Compliance                                                                                                                                                                   |
+| 📦 **Type**        | Business Rule                                                                                                                                                                                |
+| 📝 **Description** | Compliance mandate requiring all platform resources to comply with GDPR regulatory requirements, enforced through the RegulatoryCompliance governance tag applied to every deployed resource |
 
 #### 5.8.2 Dedicated Chargeback Model
 
-| Attribute       | Value                                                                                                                                                                              |
-| --------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| **Name**        | Dedicated Chargeback Model                                                                                                                                                         |
-| **Type**        | Business Rule                                                                                                                                                                      |
-| **Description** | Financial policy requiring dedicated cost allocation for all platform resources rather than shared or showback billing models, enforced through the ChargebackModel governance tag |
-| **Maturity**    | 3 - Defined                                                                                                                                                                        |
-| **Source**      | `infra/settings.yaml:39`                                                                                                                                                           |
-| **Confidence**  | 0.80                                                                                                                                                                               |
+| 📌 Attribute       | 📝 Value                                                                                                                                                                           |
+| ------------------ | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| 🏷️ **Name**        | Dedicated Chargeback Model                                                                                                                                                         |
+| 📦 **Type**        | Business Rule                                                                                                                                                                      |
+| 📝 **Description** | Financial policy requiring dedicated cost allocation for all platform resources rather than shared or showback billing models, enforced through the ChargebackModel governance tag |
 
 #### 5.8.3 Critical Service Class
 
-| Attribute       | Value                                                                                                                                                                                                      |
-| --------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| **Name**        | Critical Service Class                                                                                                                                                                                     |
-| **Type**        | Business Rule                                                                                                                                                                                              |
-| **Description** | Operational policy classifying the API platform at the Critical SLA tier, implying highest availability, redundancy, and support requirements among the available tiers (Critical, Standard, Experimental) |
-| **Maturity**    | 3 - Defined                                                                                                                                                                                                |
-| **Source**      | `infra/settings.yaml:36`                                                                                                                                                                                   |
-| **Confidence**  | 0.82                                                                                                                                                                                                       |
+| 📌 Attribute       | 📝 Value                                                                                                                                                                                                   |
+| ------------------ | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| 🏷️ **Name**        | Critical Service Class                                                                                                                                                                                     |
+| 📦 **Type**        | Business Rule                                                                                                                                                                                              |
+| 📝 **Description** | Operational policy classifying the API platform at the Critical SLA tier, implying highest availability, redundancy, and support requirements among the available tiers (Critical, Standard, Experimental) |
 
 #### 5.8.4 Terms of Service Governance
 
-| Attribute       | Value                                                                                                                                                                                                          |
-| --------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| **Name**        | Terms of Service Governance                                                                                                                                                                                    |
-| **Type**        | Business Rule                                                                                                                                                                                                  |
-| **Description** | Access governance rule requiring all API consumers to accept terms of service before accessing the Developer Portal, with configurable consent text and enforcement enabled through portal delegation settings |
-| **Maturity**    | 2 - Repeatable                                                                                                                                                                                                 |
-| **Source**      | `src/core/developer-portal.bicep:100-120`                                                                                                                                                                      |
-| **Confidence**  | 0.77                                                                                                                                                                                                           |
+| 📌 Attribute       | 📝 Value                                                                                                                                                                                                       |
+| ------------------ | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| 🏷️ **Name**        | Terms of Service Governance                                                                                                                                                                                    |
+| 📦 **Type**        | Business Rule                                                                                                                                                                                                  |
+| 📝 **Description** | Access governance rule requiring all API consumers to accept terms of service before accessing the Developer Portal, with configurable consent text and enforcement enabled through portal delegation settings |
 
 ### 5.9 Business Events Specifications
 
@@ -851,25 +839,19 @@ This subsection documents business events that trigger process execution within 
 
 #### 5.9.1 Pre-Provision Trigger
 
-| Attribute       | Value                                                                                                                                                                                                |
-| --------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| **Name**        | Pre-Provision Trigger                                                                                                                                                                                |
-| **Type**        | Business Event                                                                                                                                                                                       |
-| **Description** | Lifecycle event triggered automatically before resource provisioning begins, initiating the soft-deleted resource cleanup process to ensure clean deployment; configured as an azd preprovision hook |
-| **Maturity**    | 3 - Defined                                                                                                                                                                                          |
-| **Source**      | `azure.yaml:1-10`                                                                                                                                                                                    |
-| **Confidence**  | 0.80                                                                                                                                                                                                 |
+| 📌 Attribute       | 📝 Value                                                                                                                                                                                             |
+| ------------------ | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| 🏷️ **Name**        | Pre-Provision Trigger                                                                                                                                                                                |
+| 📦 **Type**        | Business Event                                                                                                                                                                                       |
+| 📝 **Description** | Lifecycle event triggered automatically before resource provisioning begins, initiating the soft-deleted resource cleanup process to ensure clean deployment; configured as an azd preprovision hook |
 
 #### 5.9.2 API Source Linking Event
 
-| Attribute       | Value                                                                                                                                                                                         |
-| --------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| **Name**        | API Source Linking Event                                                                                                                                                                      |
-| **Type**        | Business Event                                                                                                                                                                                |
-| **Description** | Integration event occurring when API Center establishes a discovery link to the APIM service instance, triggering automated API registration and inventory population for governance tracking |
-| **Maturity**    | 2 - Repeatable                                                                                                                                                                                |
-| **Source**      | `src/inventory/main.bicep:100-130`                                                                                                                                                            |
-| **Confidence**  | 0.75                                                                                                                                                                                          |
+| 📌 Attribute       | 📝 Value                                                                                                                                                                                      |
+| ------------------ | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| 🏷️ **Name**        | API Source Linking Event                                                                                                                                                                      |
+| 📦 **Type**        | Business Event                                                                                                                                                                                |
+| 📝 **Description** | Integration event occurring when API Center establishes a discovery link to the APIM service instance, triggering automated API registration and inventory population for governance tracking |
 
 ### 5.10 Business Objects/Entities Specifications
 
@@ -877,47 +859,35 @@ This subsection documents the core business entities that represent key domain c
 
 #### 5.10.1 API Management Instance
 
-| Attribute       | Value                                                                                                                                                                             |
-| --------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| **Name**        | API Management Instance                                                                                                                                                           |
-| **Type**        | Business Entity                                                                                                                                                                   |
-| **Description** | Core domain entity representing the central API gateway platform with associated configuration including SKU tier, managed identity, network integration, and diagnostic settings |
-| **Maturity**    | 4 - Measured                                                                                                                                                                      |
-| **Source**      | `src/core/apim.bicep:1-30`                                                                                                                                                        |
-| **Confidence**  | 0.90                                                                                                                                                                              |
+| 📌 Attribute       | 📝 Value                                                                                                                                                                          |
+| ------------------ | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| 🏷️ **Name**        | API Management Instance                                                                                                                                                           |
+| 📦 **Type**        | Business Entity                                                                                                                                                                   |
+| 📝 **Description** | Core domain entity representing the central API gateway platform with associated configuration including SKU tier, managed identity, network integration, and diagnostic settings |
 
 #### 5.10.2 API Workspace
 
-| Attribute       | Value                                                                                                                                                                         |
-| --------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| **Name**        | API Workspace                                                                                                                                                                 |
-| **Type**        | Business Entity                                                                                                                                                               |
-| **Description** | Domain entity representing a logical API isolation boundary within the shared platform, enabling independent team management with separate API lifecycles and access controls |
-| **Maturity**    | 3 - Defined                                                                                                                                                                   |
-| **Source**      | `src/core/workspaces.bicep:1-30`                                                                                                                                              |
-| **Confidence**  | 0.85                                                                                                                                                                          |
+| 📌 Attribute       | 📝 Value                                                                                                                                                                      |
+| ------------------ | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| 🏷️ **Name**        | API Workspace                                                                                                                                                                 |
+| 📦 **Type**        | Business Entity                                                                                                                                                               |
+| 📝 **Description** | Domain entity representing a logical API isolation boundary within the shared platform, enabling independent team management with separate API lifecycles and access controls |
 
 #### 5.10.3 API Center Catalog
 
-| Attribute       | Value                                                                                                                                                                                                      |
-| --------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| **Name**        | API Center Catalog                                                                                                                                                                                         |
-| **Type**        | Business Entity                                                                                                                                                                                            |
-| **Description** | Governance entity representing the centralized API inventory with workspace-scoped registration, automated APIM discovery integration, and RBAC-controlled access for data readers and compliance managers |
-| **Maturity**    | 3 - Defined                                                                                                                                                                                                |
-| **Source**      | `src/inventory/main.bicep:1-30`                                                                                                                                                                            |
-| **Confidence**  | 0.85                                                                                                                                                                                                       |
+| 📌 Attribute       | 📝 Value                                                                                                                                                                                                   |
+| ------------------ | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| 🏷️ **Name**        | API Center Catalog                                                                                                                                                                                         |
+| 📦 **Type**        | Business Entity                                                                                                                                                                                            |
+| 📝 **Description** | Governance entity representing the centralized API inventory with workspace-scoped registration, automated APIM discovery integration, and RBAC-controlled access for data readers and compliance managers |
 
 #### 5.10.4 Governance Tag Set
 
-| Attribute       | Value                                                                                                                                                                                                                                                     |
-| --------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| **Name**        | Governance Tag Set                                                                                                                                                                                                                                        |
-| **Type**        | Business Entity                                                                                                                                                                                                                                           |
-| **Description** | Metadata entity representing the 10-tag enterprise governance standard (CostCenter, BusinessUnit, Owner, ApplicationName, ProjectName, ServiceClass, RegulatoryCompliance, SupportContact, ChargebackModel, BudgetCode) applied to all deployed resources |
-| **Maturity**    | 3 - Defined                                                                                                                                                                                                                                               |
-| **Source**      | `infra/settings.yaml:29-40`                                                                                                                                                                                                                               |
-| **Confidence**  | 0.78                                                                                                                                                                                                                                                      |
+| 📌 Attribute       | 📝 Value                                                                                                                                                                                                                                                  |
+| ------------------ | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| 🏷️ **Name**        | Governance Tag Set                                                                                                                                                                                                                                        |
+| 📦 **Type**        | Business Entity                                                                                                                                                                                                                                           |
+| 📝 **Description** | Metadata entity representing the 10-tag enterprise governance standard (CostCenter, BusinessUnit, Owner, ApplicationName, ProjectName, ServiceClass, RegulatoryCompliance, SupportContact, ChargebackModel, BudgetCode) applied to all deployed resources |
 
 ### 5.11 KPIs & Metrics Specifications
 
@@ -925,36 +895,27 @@ This subsection documents performance measurements and key performance indicator
 
 #### 5.11.1 Service Class SLA
 
-| Attribute       | Value                                                                                                                                                                                                                        |
-| --------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| **Name**        | Service Class SLA                                                                                                                                                                                                            |
-| **Type**        | KPI                                                                                                                                                                                                                          |
-| **Description** | Availability KPI derived from the Critical service class designation, implying highest-tier SLA targets for platform uptime, response time, and incident resolution among the three tiers (Critical, Standard, Experimental) |
-| **Maturity**    | 2 - Repeatable                                                                                                                                                                                                               |
-| **Source**      | `infra/settings.yaml:36`                                                                                                                                                                                                     |
-| **Confidence**  | 0.75                                                                                                                                                                                                                         |
+| 📌 Attribute       | 📝 Value                                                                                                                                                                                                                     |
+| ------------------ | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| 🏷️ **Name**        | Service Class SLA                                                                                                                                                                                                            |
+| 📦 **Type**        | KPI                                                                                                                                                                                                                          |
+| 📝 **Description** | Availability KPI derived from the Critical service class designation, implying highest-tier SLA targets for platform uptime, response time, and incident resolution among the three tiers (Critical, Standard, Experimental) |
 
 #### 5.11.2 Budget Tracking
 
-| Attribute       | Value                                                                                                                                                                          |
-| --------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
-| **Name**        | Budget Tracking                                                                                                                                                                |
-| **Type**        | KPI                                                                                                                                                                            |
-| **Description** | Financial KPI tracking platform expenditure against budget code FY25-Q1-InitiativeX for fiscal accountability, enabling variance reporting between planned and actual spending |
-| **Maturity**    | 2 - Repeatable                                                                                                                                                                 |
-| **Source**      | `infra/settings.yaml:40`                                                                                                                                                       |
-| **Confidence**  | 0.73                                                                                                                                                                           |
+| 📌 Attribute       | 📝 Value                                                                                                                                                                       |
+| ------------------ | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
+| 🏷️ **Name**        | Budget Tracking                                                                                                                                                                |
+| 📦 **Type**        | KPI                                                                                                                                                                            |
+| 📝 **Description** | Financial KPI tracking platform expenditure against budget code FY25-Q1-InitiativeX for fiscal accountability, enabling variance reporting between planned and actual spending |
 
 #### 5.11.3 Cost Center Allocation
 
-| Attribute       | Value                                                                                                                                                                        |
-| --------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| **Name**        | Cost Center Allocation                                                                                                                                                       |
-| **Type**        | KPI                                                                                                                                                                          |
-| **Description** | Financial KPI measuring cost allocation accuracy against cost center CC-1234, supporting the dedicated chargeback model for inter-departmental billing and cost transparency |
-| **Maturity**    | 2 - Repeatable                                                                                                                                                               |
-| **Source**      | `infra/settings.yaml:31`                                                                                                                                                     |
-| **Confidence**  | 0.72                                                                                                                                                                         |
+| 📌 Attribute       | 📝 Value                                                                                                                                                                     |
+| ------------------ | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| 🏷️ **Name**        | Cost Center Allocation                                                                                                                                                       |
+| 📦 **Type**        | KPI                                                                                                                                                                          |
+| 📝 **Description** | Financial KPI measuring cost allocation accuracy against cost center CC-1234, supporting the dedicated chargeback model for inter-departmental billing and cost transparency |
 
 ```mermaid
 ---
@@ -1111,9 +1072,9 @@ flowchart LR
 
 ### Summary
 
-The Component Catalog documents 39 components across all 11 Business component types, with the strongest specifications in Business Capabilities (6 components, average confidence 0.83) and Business Services (4 components, average confidence 0.87). The highest-maturity components are API Management Platform Service (Level 4, confidence 0.92) and Landing Zone Provisioning (Level 4, confidence 0.90), reflecting well-documented, quantitatively managed capabilities with clear source evidence.
+The Component Catalog documents 39 components across all 11 Business component types, with the strongest specifications in Business Capabilities (6 components) and Business Services (4 components). The most well-documented components are API Management Platform Service and Landing Zone Provisioning, reflecting quantitatively managed capabilities with clear architectural evidence.
 
-Gaps include limited KPI granularity (3 KPIs, all at Level 2 maturity, derived from governance tags rather than dedicated measurement frameworks), absence of formalized value stream documentation (2 value streams inferred from architectural patterns), and minimal business function decomposition (2 functions at Level 2 maturity). Recommended improvements include creating dedicated KPI definition files with measurable targets and thresholds, documenting the API consumer journey as an explicit value stream with stage gates, and formalizing organizational function boundaries with RACI matrices.
+Gaps include limited KPI granularity (3 KPIs derived from governance tags rather than dedicated measurement frameworks), absence of formalized value stream documentation (2 value streams inferred from architectural patterns), and minimal business function decomposition (2 functions). Recommended improvements include creating dedicated KPI definition files with measurable targets and thresholds, documenting the API consumer journey as an explicit value stream with stage gates, and formalizing organizational function boundaries with RACI matrices.
 
 ---
 
@@ -1127,41 +1088,41 @@ The platform follows a three-layer dependency chain (Shared Infrastructure → C
 
 ### Capability-to-Service Mapping
 
-| Business Capability          | Realized By (Business Service)               | Dependency Type     |
-| ---------------------------- | -------------------------------------------- | ------------------- |
-| API Gateway Management       | API Management Platform Service              | Direct realization  |
-| Developer Self-Service       | Developer Portal Service                     | Direct realization  |
-| API Governance & Compliance  | API Inventory Service                        | Direct realization  |
-| Observability & Monitoring   | Monitoring & Observability Service           | Direct realization  |
-| Multi-Team API Isolation     | API Management Platform Service (Workspaces) | Embedded capability |
-| Cost Management & Chargeback | Governance Tag Set (cross-cutting)           | Metadata dependency |
+| 🎯 Business Capability          | ⚙️ Realized By (Business Service)            | 🔗 Dependency Type  |
+| ------------------------------- | -------------------------------------------- | ------------------- |
+| 🔌 API Gateway Management       | API Management Platform Service              | Direct realization  |
+| 🌐 Developer Self-Service       | Developer Portal Service                     | Direct realization  |
+| 🔍 API Governance & Compliance  | API Inventory Service                        | Direct realization  |
+| 📊 Observability & Monitoring   | Monitoring & Observability Service           | Direct realization  |
+| 👥 Multi-Team API Isolation     | API Management Platform Service (Workspaces) | Embedded capability |
+| 💰 Cost Management & Chargeback | Governance Tag Set (cross-cutting)           | Metadata dependency |
 
 ### Service-to-Process Mapping
 
-| Business Service                | Executes (Business Process)   | Trigger                     |
-| ------------------------------- | ----------------------------- | --------------------------- |
-| API Management Platform Service | Landing Zone Provisioning     | `azd provision` command     |
-| API Management Platform Service | Soft-Delete Resource Recovery | Pre-Provision Trigger event |
-| API Inventory Service           | API Registration & Discovery  | API Source Linking Event    |
-| Developer Portal Service        | Developer Onboarding          | API Consumer first access   |
+| ⚙️ Business Service                | 🔄 Executes (Business Process) | ⚡ Trigger                  |
+| ---------------------------------- | ------------------------------ | --------------------------- |
+| 🔌 API Management Platform Service | Landing Zone Provisioning      | `azd provision` command     |
+| 🔌 API Management Platform Service | Soft-Delete Resource Recovery  | Pre-Provision Trigger event |
+| 📚 API Inventory Service           | API Registration & Discovery   | API Source Linking Event    |
+| 🌐 Developer Portal Service        | Developer Onboarding           | API Consumer first access   |
 
 ### Business Rule Dependencies
 
-| Business Rule               | Constrains                                               | Enforcement Mechanism                                    |
-| --------------------------- | -------------------------------------------------------- | -------------------------------------------------------- |
-| GDPR Regulatory Compliance  | All platform services, Landing Zone Provisioning process | RegulatoryCompliance governance tag on all resources     |
-| Dedicated Chargeback Model  | API Management Platform Service, Monitoring Service      | ChargebackModel governance tag with cost center tracking |
-| Critical Service Class      | API Management Platform Service                          | ServiceClass governance tag determining SLA tier         |
-| Terms of Service Governance | Developer Onboarding process                             | Portal delegation settings with consent requirement      |
+| 📋 Business Rule               | 🎯 Constrains                                            | 🔧 Enforcement Mechanism                                 |
+| ------------------------------ | -------------------------------------------------------- | -------------------------------------------------------- |
+| 🛡️ GDPR Regulatory Compliance  | All platform services, Landing Zone Provisioning process | RegulatoryCompliance governance tag on all resources     |
+| 💰 Dedicated Chargeback Model  | API Management Platform Service, Monitoring Service      | ChargebackModel governance tag with cost center tracking |
+| ⚡ Critical Service Class      | API Management Platform Service                          | ServiceClass governance tag determining SLA tier         |
+| 📜 Terms of Service Governance | Developer Onboarding process                             | Portal delegation settings with consent requirement      |
 
 ### Cross-Layer Integration Points
 
-| Integration Point     | Business Component                      | Application/Technology Component       | Integration Type                                     |
-| --------------------- | --------------------------------------- | -------------------------------------- | ---------------------------------------------------- |
-| Monitoring foundation | Observability & Monitoring capability   | Log Analytics + App Insights + Storage | Business capability mapped to technology services    |
-| API Discovery         | API Governance & Compliance capability  | API Center → APIM API Source link      | Business governance mapped to technology integration |
-| Identity & Access     | Developer Self-Service capability       | Azure AD + Developer Portal delegation | Business capability mapped to identity platform      |
-| Governance Tags       | Cost Management & Chargeback capability | Azure Resource Manager tag inheritance | Business rules mapped to infrastructure metadata     |
+| 🔗 Integration Point     | 🏢 Business Component                   | 💻 Application/Technology Component    | 📡 Integration Type                                  |
+| ------------------------ | --------------------------------------- | -------------------------------------- | ---------------------------------------------------- |
+| 📊 Monitoring foundation | Observability & Monitoring capability   | Log Analytics + App Insights + Storage | Business capability mapped to technology services    |
+| 🔍 API Discovery         | API Governance & Compliance capability  | API Center → APIM API Source link      | Business governance mapped to technology integration |
+| 🔐 Identity & Access     | Developer Self-Service capability       | Azure AD + Developer Portal delegation | Business capability mapped to identity platform      |
+| 🏷️ Governance Tags       | Cost Management & Chargeback capability | Azure Resource Manager tag inheritance | Business rules mapped to infrastructure metadata     |
 
 ```mermaid
 ---
