@@ -170,30 +170,19 @@ azd version   # Azure Developer CLI
 > [!TIP]
 > Install `azd` from the [official guide](https://learn.microsoft.com/azure/developer/azure-developer-cli/install-azd) if not already available.
 
-### Clone and Initialize
+### Clone and Deploy
 
 ```bash
 git clone https://github.com/Evilazaro/APIM-Accelerator.git
 cd APIM-Accelerator
-```
-
-Authenticate with Azure and initialize the environment:
-
-```bash
 azd auth login
-azd init
+azd up
 ```
 
-When prompted by `azd init`, provide:
+When prompted by `azd up`, provide:
 
 - **Environment name** — maps to the `envName` parameter (e.g., `dev`, `staging`, `prod`, `uat`)
 - **Azure region** — target region for all resources (must support API Management Premium)
-
-### Deploy
-
-```bash
-azd up
-```
 
 This single command executes the full deployment sequence:
 
@@ -216,17 +205,6 @@ This single command executes the full deployment sequence:
 | `azd monitor`           | Open the Application Insights dashboard for the deployed environment |
 | `azd env list`          | List all configured environments                                     |
 | `azd env select <name>` | Switch between environments (e.g., `dev`, `prod`)                    |
-
-### Manual Deployment (Alternative)
-
-Deploy directly with the Azure CLI without `azd`:
-
-```bash
-az deployment sub create \
-  --location eastus \
-  --template-file infra/main.bicep \
-  --parameters envName=dev location=eastus
-```
 
 ## Configuration
 
