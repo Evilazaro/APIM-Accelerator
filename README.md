@@ -22,7 +22,6 @@ This accelerator reduces the time to deploy a compliant, enterprise-grade API Ma
 - [Requirements](#requirements)
 - [Getting Started](#getting-started)
 - [Configuration](#configuration)
-- [Deployment](#deployment)
 - [Project Structure](#project-structure)
 - [Contributing](#contributing)
 - [License](#license)
@@ -167,7 +166,7 @@ All infrastructure is defined as Bicep templates with no additional runtime depe
 
 Getting started with the APIM Accelerator requires three steps: cloning the repository, authenticating with Azure, and running `azd up`. The accelerator handles all infrastructure provisioning, monitoring setup, and service configuration automatically.
 
-The deployment creates a resource group following the naming pattern `{solutionName}-{environment}-{location}-rg`, provisions shared monitoring infrastructure first, then deploys the core APIM platform, and finally configures API Center for governance.
+The deployment operates at the subscription scope, creating a resource group named `{solutionName}-{envName}-{location}-rg` and deploying all resources within it. A pre-provision hook automatically purges soft-deleted APIM instances to prevent naming conflicts.
 
 ### Quick Start
 
@@ -204,9 +203,39 @@ Pre-provision hook (purge soft-deleted APIM instances)
         → API inventory deployment (API Center, API source integration)
 ```
 
-### Expected Output
+### Deployment Commands
 
-After successful deployment, the following resources are provisioned in your Azure subscription:
+| Command            | Purpose                                                    |
+| ------------------ | ---------------------------------------------------------- |
+| 🚀 `azd up`        | Provision infrastructure and deploy the complete solution  |
+| 📦 `azd provision` | Provision Azure resources only (no application deployment) |
+| 🔄 `azd deploy`    | Deploy application code only (resources must exist)        |
+| 🗑️ `azd down`      | Remove all provisioned Azure resources                     |
+
+### Manual Deployment (Azure CLI)
+
+To deploy without `azd`, use the Azure CLI directly:
+
+```bash
+az deployment sub create \
+  --location eastus \
+  --template-file infra/main.bicep \
+  --parameters envName=dev location=eastus
+```
+
+### Pre-Provision Hook
+
+The `infra/azd-hooks/pre-provision.sh` script runs automatically before provisioning. It purges all soft-deleted APIM instances in the target region to enable clean redeployment:
+
+```bash
+# The hook is triggered automatically by azd
+# Manual execution (if needed):
+./infra/azd-hooks/pre-provision.sh "East US"
+```
+
+### Provisioned Resources
+
+After successful deployment, the following resources are created in your Azure subscription:
 
 | Resource                       | Type                                                 | Purpose                                    |
 | ------------------------------ | ---------------------------------------------------- | ------------------------------------------ |
@@ -229,47 +258,82 @@ The configuration follows a hierarchical structure organized by deployment tier:
 
 ### Configuration File
 
-The primary configuration file is located at `infra/settings.yaml`:
+The primary configuration file is located at `infra/settings.yaml`. All resource names support auto-generation (leave empty) or explicit override:
 
 ```yaml
-# Solution identifier for naming conventions
 solutionName: "apim-accelerator"
 
-# Shared services: monitoring and observability
 shared:
   monitoring:
     logAnalytics:
       name: "" # Leave empty for auto-generation
+      workSpaceResourceId: "" # Existing workspace ID (if reusing)
       identity:
-        type: "SystemAssigned"
+        type: "SystemAssigned" # SystemAssigned or UserAssigned
+        userAssignedIdentities: [] # User-assigned identity resource IDs
     applicationInsights:
       name: "" # Leave empty for auto-generation
+      logAnalyticsWorkspaceResourceId: "" # Linked Log Analytics workspace
+    tags:
+      lz-component-type: "shared"
+      component: "monitoring"
   tags:
-    CostCenter: "CC-1234"
-    BusinessUnit: "IT"
-    Owner: "your-email@example.com"
+    CostCenter: "CC-1234" # Cost allocation tracking
+    BusinessUnit: "IT" # Department or business unit
+    Owner: "evilazaro@gmail.com" # Resource owner contact
+    ApplicationName: "APIM Platform" # Workload name
+    ProjectName: "APIMForAll" # Project or initiative
+    ServiceClass: "Critical" # Critical, Standard, or Experimental
+    RegulatoryCompliance: "GDPR" # GDPR, HIPAA, PCI, or None
+    SupportContact: "evilazaro@gmail.com" # Incident support contact
+    ChargebackModel: "Dedicated" # Chargeback/Showback model
+    BudgetCode: "FY25-Q1-InitiativeX" # Budget or initiative code
 
-# Core platform: API Management service
 core:
   apiManagement:
     name: "" # Leave empty for auto-generation
-    publisherEmail: "admin@contoso.com"
-    publisherName: "Contoso"
+    publisherEmail: "evilazaro@gmail.com" # Required by Azure
+    publisherName: "Contoso" # Shown in developer portal
     sku:
       name: "Premium" # Developer, Basic, Standard, Premium, Consumption
-      capacity: 1 # Scale units (Premium: 1-10)
+      capacity: 1 # Scale units (Premium: 1-10, Standard: 1-4)
     identity:
-      type: "SystemAssigned"
+      type: "SystemAssigned" # SystemAssigned, UserAssigned, or Both
+      userAssignedIdentities: [] # User-assigned identity resource IDs
     workspaces:
-      - name: "workspace1"
+      - name: "workspace1" # Premium SKU only
+  tags:
+    lz-component-type: "core"
+    component: "apiManagement"
 
-# Inventory: API Center for governance
 inventory:
   apiCenter:
     name: "" # Leave empty for auto-generation
     identity:
       type: "SystemAssigned"
+      userAssignedIdentities: []
+  tags:
+    lz-component-type: "shared"
+    component: "inventory"
 ```
+
+### Settings Reference
+
+| Setting                       | Path                                           | Description                                             | Default            |
+| ----------------------------- | ---------------------------------------------- | ------------------------------------------------------- | ------------------ |
+| ⚙️ **Solution Name**          | `solutionName`                                 | Base name for all generated resource names              | `apim-accelerator` |
+| 📊 **Log Analytics Name**     | `shared.monitoring.logAnalytics.name`          | Workspace name; empty for auto-generation               | `""`               |
+| 📊 **Log Analytics Identity** | `shared.monitoring.logAnalytics.identity.type` | Managed identity type for Log Analytics                 | `SystemAssigned`   |
+| 📈 **App Insights Name**      | `shared.monitoring.applicationInsights.name`   | Instance name; empty for auto-generation                | `""`               |
+| 🔌 **APIM Name**              | `core.apiManagement.name`                      | Service name; empty for auto-generation                 | `""`               |
+| 📧 **Publisher Email**        | `core.apiManagement.publisherEmail`            | Contact email displayed in APIM                         | Required           |
+| 🏷️ **Publisher Name**         | `core.apiManagement.publisherName`             | Organization name in developer portal                   | `Contoso`          |
+| 💎 **SKU Name**               | `core.apiManagement.sku.name`                  | Service tier (see SKU Options below)                    | `Premium`          |
+| 📏 **SKU Capacity**           | `core.apiManagement.sku.capacity`              | Number of scale units                                   | `1`                |
+| 🔒 **APIM Identity**          | `core.apiManagement.identity.type`             | Managed identity: SystemAssigned, UserAssigned, or Both | `SystemAssigned`   |
+| 📂 **Workspaces**             | `core.apiManagement.workspaces`                | List of workspace names (Premium only)                  | `[workspace1]`     |
+| 📦 **API Center Name**        | `inventory.apiCenter.name`                     | API Center name; empty for auto-generation              | `""`               |
+| 🏷️ **Tags**                   | `shared.tags`, `core.tags`, `inventory.tags`   | Per-tier governance and cost allocation tags            | See YAML above     |
 
 ### SKU Options
 
@@ -292,42 +356,6 @@ Deployment parameters are passed through `infra/main.parameters.json`:
 
 > [!WARNING]
 > Premium SKU is required for virtual network integration and multi-region deployments. Workspace isolation is only available on Premium tier. Choose the appropriate SKU based on your production requirements before deployment.
-
-## Deployment
-
-**Overview**
-
-Deployment is automated through Azure Developer CLI (`azd`), which orchestrates the Bicep template compilation, resource group creation, and sequential module deployment. A pre-provision hook script automatically purges soft-deleted APIM instances to prevent naming conflicts.
-
-The deployment operates at the subscription scope, creating a resource group named using the pattern `{solutionName}-{envName}-{location}-rg` and deploying all resources within it.
-
-### Commands
-
-| Command            | Purpose                                                    |
-| ------------------ | ---------------------------------------------------------- |
-| 🚀 `azd up`        | Provision infrastructure and deploy the complete solution  |
-| 📦 `azd provision` | Provision Azure resources only (no application deployment) |
-| 🔄 `azd deploy`    | Deploy application code only (resources must exist)        |
-| 🗑️ `azd down`      | Remove all provisioned Azure resources                     |
-
-### Manual Deployment (Azure CLI)
-
-```bash
-az deployment sub create \
-  --location eastus \
-  --template-file infra/main.bicep \
-  --parameters envName=dev location=eastus
-```
-
-### Pre-Provision Hook
-
-The `infra/azd-hooks/pre-provision.sh` script runs automatically before provisioning. It purges all soft-deleted APIM instances in the target region to enable clean redeployment:
-
-```bash
-# The hook is triggered automatically by azd
-# Manual execution (if needed):
-./infra/azd-hooks/pre-provision.sh "East US"
-```
 
 ## Project Structure
 
