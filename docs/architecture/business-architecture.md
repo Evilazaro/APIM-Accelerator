@@ -368,6 +368,69 @@ The current deployment follows a three-layer architecture deployed to a single A
 
 ```mermaid
 ---
+title: "Capability Maturity Heatmap — APIM Accelerator"
+config:
+  theme: base
+  look: classic
+  layout: dagre
+  themeVariables:
+    fontSize: '16px'
+  flowchart:
+    htmlLabels: true
+---
+flowchart TB
+    accTitle: Capability Maturity Heatmap
+    accDescr: Shows the maturity level of each business capability using color-coded indicators from Level 2 Repeatable to Level 4 Measured
+
+    %% ═══════════════════════════════════════════════════════════════════════════
+    %% AZURE / FLUENT ARCHITECTURE PATTERN v1.1
+    %% (Semantic + Structural + Font + Accessibility Governance)
+    %% ═══════════════════════════════════════════════════════════════════════════
+    %% PHASE 1 - FLUENT UI: All styling uses approved Fluent UI palette only
+    %% PHASE 2 - GROUPS: Every subgraph has semantic color via style directive
+    %% PHASE 3 - COMPONENTS: Every node has semantic classDef + icon prefix
+    %% PHASE 4 - ACCESSIBILITY: accTitle/accDescr present, WCAG AA contrast
+    %% PHASE 5 - STANDARD: Governance block present, classDefs centralized
+    %% ═══════════════════════════════════════════════════════════════════════════
+
+    subgraph level4["🟢 Level 4 — Measured"]
+        direction LR
+        m4a("🔌 API Gateway Management"):::success
+        m4b("🔍 API Governance & Compliance"):::success
+    end
+
+    subgraph level3["🟡 Level 3 — Defined"]
+        direction LR
+        m3a("🌐 Developer Self-Service"):::warning
+        m3b("📦 Multi-Team API Isolation"):::warning
+        m3c("📊 Observability & Monitoring"):::warning
+    end
+
+    subgraph level2["🟠 Level 2 — Repeatable"]
+        direction LR
+        m2a("💰 Cost Management & Chargeback"):::danger
+    end
+
+    level4 ~~~ level3
+    level3 ~~~ level2
+
+    %% Centralized classDefs (approved AZURE/FLUENT v1.1 palette)
+    classDef neutral fill:#FAFAFA,stroke:#8A8886,stroke-width:2px,color:#323130
+    classDef core fill:#EFF6FC,stroke:#0078D4,stroke-width:2px,color:#323130
+    classDef success fill:#DFF6DD,stroke:#107C10,stroke-width:2px,color:#323130
+    classDef warning fill:#FFF4CE,stroke:#FFB900,stroke-width:2px,color:#323130
+    classDef danger fill:#FDE7E9,stroke:#D13438,stroke-width:2px,color:#323130
+    classDef data fill:#F0E6FA,stroke:#8764B8,stroke-width:2px,color:#323130
+    classDef external fill:#E0F7F7,stroke:#038387,stroke-width:2px,color:#323130
+
+    %% Subgraph styling (style directives, not class)
+    style level4 fill:#DFF6DD,stroke:#107C10,stroke-width:2px,color:#323130
+    style level3 fill:#FFF4CE,stroke:#FFB900,stroke-width:2px,color:#323130
+    style level2 fill:#FDE7E9,stroke:#D13438,stroke-width:2px,color:#323130
+```
+
+```mermaid
+---
 title: "Business Process Flow — Landing Zone Provisioning"
 config:
   theme: base
@@ -501,9 +564,9 @@ flowchart TB
 
 ### Summary
 
-The Current State Baseline reveals a platform at Level 3 (Defined) overall maturity with pockets of Level 4 (Measured) in core API gateway and governance capabilities. The three-layer deployment topology provides clear separation of concerns, and the governance-first approach ensures all resources are tagged for cost, compliance, and ownership tracking from initial deployment.
+The Current State Baseline reveals a platform with strong operational foundations across core API gateway and governance capabilities. The three-layer deployment topology provides clear separation of concerns, and the governance-first approach ensures all resources are tagged for cost, compliance, and ownership tracking from initial deployment.
 
-The primary gaps limiting advancement to Level 4-5 maturity include: (1) absence of automated business-level KPI dashboards beyond infrastructure metrics, (2) no formal cost reporting automation despite comprehensive chargeback tagging, (3) lack of explicit process documentation (BPMN or equivalent) for operational workflows, and (4) no workspace-level usage analytics for capacity planning. Recommended investments focus on implementing Azure Cost Management integration, building SLA monitoring dashboards, and formalizing the API consumer onboarding journey as a documented business process.
+The primary gaps limiting advancement include: (1) absence of automated business-level KPI dashboards beyond infrastructure metrics, (2) no formal cost reporting automation despite comprehensive chargeback tagging, (3) lack of explicit process documentation (BPMN or equivalent) for operational workflows, and (4) no workspace-level usage analytics for capacity planning. Recommended investments focus on implementing Azure Cost Management integration, building SLA monitoring dashboards, and formalizing the API consumer onboarding journey as a documented business process.
 
 ---
 
@@ -513,7 +576,7 @@ The primary gaps limiting advancement to Level 4-5 maturity include: (1) absence
 
 The Component Catalog provides detailed specifications for each of the 39 Business layer components identified in the APIM Accelerator repository. Components are organized by the 11 canonical TOGAF Business Architecture types, with each entry documenting the component's purpose, maturity, source evidence, and business context.
 
-Each specification includes six mandatory attributes: Name, Type, Description, Source, Confidence, and Maturity. Components are classified using the weighted confidence scoring formula (30% filename + 25% path + 35% content + 10% crossref) and validated against the Business Capability Maturity Scale (1 - Initial through 5 - Optimized). All specifications focus on business intent rather than technical implementation details, per the E-034 Source Evidence Scope gate.
+Each specification includes three mandatory attributes: Name, Type, and Description. All specifications focus on business intent rather than technical implementation details, per the E-034 Source Evidence Scope gate.
 
 ### 5.1 Business Strategy Specifications
 
