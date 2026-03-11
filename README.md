@@ -8,7 +8,7 @@
 An enterprise-grade Azure Infrastructure-as-Code (IaC) accelerator that deploys a complete API Management landing zone with monitoring, governance, and API inventory capabilities using Bicep and the Azure Developer CLI (`azd`).
 
 > [!TIP]
-> Run `azd up` to provision the entire solution in a single command — no manual Azure Portal configuration required.
+> Run `azd provision` to provision the entire landing zone in a single command — no manual Azure Portal configuration required.
 
 ## Overview
 
@@ -133,7 +133,7 @@ Beyond basic APIM deployment, the solution integrates monitoring, governance, an
 | 🔐 Managed Identity         | System-assigned identities for secure, credential-free Azure resource authentication                   | ✅ Stable |
 | 🏷️ Governance Tagging       | Enterprise tagging strategy with cost center, compliance, and ownership metadata                       | ✅ Stable |
 | ⚙️ Deterministic Naming     | Reproducible resource names derived from subscription, resource group, and solution name               | ✅ Stable |
-| 🚀 One-Command Deployment   | Full landing zone provisioned via `azd up` with pre-provision hooks for clean deployments              | ✅ Stable |
+| 🚀 One-Command Deployment   | Full landing zone provisioned via `azd provision` with pre-provision hooks for clean deployments       | ✅ Stable |
 
 ## Requirements
 
@@ -156,7 +156,7 @@ All prerequisites listed below are validated during the pre-provision hook befor
 
 **Overview**
 
-The Azure Developer CLI (`azd`) manages the full deployment lifecycle — authentication, provisioning, monitoring, and teardown. The workflow below gets the complete API Management landing zone running in your Azure subscription.
+The Azure Developer CLI (`azd`) manages the full provisioning lifecycle — authentication, infrastructure deployment, monitoring, and teardown. This is a pure Infrastructure-as-Code solution with no application services; all resources are provisioned via Bicep templates.
 
 ### Prerequisites
 
@@ -170,21 +170,21 @@ azd version   # Azure Developer CLI
 > [!TIP]
 > Install `azd` from the [official guide](https://learn.microsoft.com/azure/developer/azure-developer-cli/install-azd) if not already available.
 
-### Clone and Deploy
+### Clone and Provision
 
 ```bash
 git clone https://github.com/Evilazaro/APIM-Accelerator.git
 cd APIM-Accelerator
 azd auth login
-azd up
+azd provision
 ```
 
-When prompted by `azd up`, provide:
+When prompted, provide:
 
 - **Environment name** — maps to the `envName` parameter (e.g., `dev`, `staging`, `prod`, `uat`)
 - **Azure region** — target region for all resources (must support API Management Premium)
 
-This single command executes the full deployment sequence:
+`azd provision` executes the full provisioning sequence:
 
 1. **Pre-provision hook** — purges soft-deleted APIM instances to prevent naming conflicts
 2. **Resource group creation** — `{solutionName}-{env}-{region}-rg`
@@ -199,8 +199,7 @@ This single command executes the full deployment sequence:
 
 | Command                 | Description                                                          |
 | ----------------------- | -------------------------------------------------------------------- |
-| `azd up`                | Provision infrastructure and deploy the full landing zone            |
-| `azd provision`         | Provision infrastructure only (skip application deployment)          |
+| `azd provision`         | Provision the full landing zone infrastructure                       |
 | `azd down`              | Tear down all deployed resources and the resource group              |
 | `azd monitor`           | Open the Application Insights dashboard for the deployed environment |
 | `azd env list`          | List all configured environments                                     |
