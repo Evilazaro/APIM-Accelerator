@@ -52,11 +52,11 @@ SUCCESS: Your up workflow to provision and deploy to Azure completed in 45 minut
 
 **Overview**
 
-The APIM Accelerator deploys a three-layer landing zone within a single subscription-scoped Azure resource group. `infra/main.bicep` orchestrates the deployment sequence — shared infrastructure provisions first to establish observability outputs, the core APIM platform provisions second consuming those outputs, and API Center provisions last, automatically connecting to the APIM service as an API source for discovery and governance.
+The APIM Accelerator deploys 17 Azure resources across three orchestrated layers inside a single subscription-scoped resource group. `infra/main.bicep` drives the deployment sequence: shared monitoring provisions first (Log Analytics, Application Insights, Storage Account), then the core platform provisions consuming those outputs (API Management with its Diagnostic Settings, App Insights Logger, Reader RBAC assignment, CORS Policy, Azure AD Identity Provider, Portal Configuration, Sign-in Settings, Sign-up Settings, and named Workspaces), and finally the inventory layer provisions (API Center with its Default Workspace, API Source linked to APIM, and two RBAC assignments). All data flows — telemetry, log streaming, log archival, and API synchronization — are shown below.
 
 ```mermaid
 ---
-title: "APIM Accelerator — Landing Zone Architecture"
+title: "APIM Accelerator — Complete Landing Zone Architecture"
 config:
   theme: base
   look: classic
@@ -65,8 +65,8 @@ config:
     htmlLabels: true
 ---
 flowchart TB
-    accTitle: APIM Accelerator Landing Zone Architecture
-    accDescr: Three-layer Azure landing zone showing shared monitoring infrastructure, core API Management platform, and API Center inventory all orchestrated and provisioned via Azure Developer CLI
+    accTitle: APIM Accelerator Complete Landing Zone Architecture
+    accDescr: Full resource view of all 17 Azure services deployed across three layers showing RBAC assignments, diagnostic data flows, telemetry connections, developer portal sub-components, and API synchronization between API Management and API Center
 
     %% ═══════════════════════════════════════════════════════════════════════════
     %% AZURE / FLUENT ARCHITECTURE PATTERN v1.1
@@ -81,64 +81,100 @@ flowchart TB
 
     azdCLI("⚙️ Azure Developer CLI"):::external
 
-    subgraph rg["☁️ Azure Resource Group"]
+    subgraph rgSub["☁️ Azure Resource Group  ·  apim-accelerator-{env}-{region}-rg"]
         direction TB
 
-        subgraph shared["📊 Shared Infrastructure"]
+        subgraph sharedSub["📊 Shared Monitoring Infrastructure  —  src/shared/"]
             direction LR
             law("📋 Log Analytics Workspace"):::data
-            ai("📈 Application Insights"):::data
             sa("🗄️ Storage Account"):::data
+            ai("📈 Application Insights"):::data
             law -->|"linked to"| ai
-            law -->|"ships logs to"| sa
         end
 
-        subgraph core["🔌 Core Platform"]
-            direction LR
-            apim("⚙️ API Management"):::core
-            ws("🏢 Workspaces"):::core
-            dp("🌐 Developer Portal"):::core
+        subgraph coreSub["🔌 Core Platform  —  src/core/"]
+            direction TB
+            apim("⚙️ API Management\n(Premium SKU · System Identity)"):::core
+            ws("🏢 Workspaces  (team isolation)"):::core
+            readerRbac("🔑 Reader RBAC  (resource group scope)"):::warning
+
+            subgraph obsSub["📡 APIM Observability"]
+                direction LR
+                diag("📊 Diagnostic Settings\n(allLogs · AllMetrics)"):::data
+                aiLogger("📈 App Insights Logger"):::data
+            end
+
+            subgraph portalSub["🌐 Developer Portal"]
+                direction LR
+                cors("🔗 Global CORS Policy"):::core
+                aadIdp("🔐 Azure AD Identity Provider\n(MSAL-2)"):::core
+                portalCfg("⚙️ Portal Configuration"):::core
+                signin("✅ Sign-in Settings"):::core
+                signup("📝 Sign-up + Terms of Service"):::core
+            end
+
             apim -->|"contains"| ws
-            apim -->|"hosts"| dp
+            apim -->|"grants managed identity"| readerRbac
+            apim -->|"feeds"| obsSub
+            apim -->|"configures"| portalSub
         end
 
-        subgraph inventory["📦 API Inventory"]
-            direction LR
-            apic("🔍 API Center"):::success
-            apicsrc("🔗 API Source"):::success
-            apic -->|"contains"| apicsrc
+        subgraph invSub["📦 API Inventory  —  src/inventory/"]
+            direction TB
+            apic("🔍 API Center  (System Identity)"):::success
+            apicWs("📁 Default Workspace"):::success
+            apiSrc("🔗 API Source  (APIM sync)"):::success
+            apicRbac("🔑 RBAC: Data Reader + Compliance Mgr"):::warning
+            apic -->|"contains"| apicWs
+            apicWs -->|"contains"| apiSrc
+            apic -->|"grants managed identity"| apicRbac
         end
 
-        shared -->|"observability"| core
-        apim -->|"syncs APIs to"| apicsrc
+        sharedSub -->|"workspace ID · storage ID · app insights ID"| coreSub
+        diag -->|"streams logs + metrics"| law
+        diag -->|"archives logs"| sa
+        aiLogger -->|"sends telemetry"| ai
+        apim -->|"APIM name + resource ID"| apiSrc
     end
 
-    azdCLI -->|"provisions"| rg
+    azdCLI -->|"provisions"| rgSub
 
-    style rg fill:#F3F2F1,stroke:#8A8886,stroke-width:2px,color:#323130
-    style shared fill:#F3F2F1,stroke:#8A8886,stroke-width:2px,color:#323130
-    style core fill:#F3F2F1,stroke:#8A8886,stroke-width:2px,color:#323130
-    style inventory fill:#F3F2F1,stroke:#8A8886,stroke-width:2px,color:#323130
+    style rgSub fill:#F3F2F1,stroke:#8A8886,stroke-width:2px,color:#323130
+    style sharedSub fill:#F3F2F1,stroke:#8A8886,stroke-width:2px,color:#323130
+    style coreSub fill:#F3F2F1,stroke:#8A8886,stroke-width:2px,color:#323130
+    style obsSub fill:#F3F2F1,stroke:#8A8886,stroke-width:2px,color:#323130
+    style portalSub fill:#F3F2F1,stroke:#8A8886,stroke-width:2px,color:#323130
+    style invSub fill:#F3F2F1,stroke:#8A8886,stroke-width:2px,color:#323130
 
     %% Centralized semantic classDefs (Phase 5 compliant)
     classDef external fill:#E0F7F7,stroke:#038387,stroke-width:2px,color:#323130
     classDef data fill:#F0E6FA,stroke:#8764B8,stroke-width:2px,color:#323130
     classDef core fill:#EFF6FC,stroke:#0078D4,stroke-width:2px,color:#323130
     classDef success fill:#DFF6DD,stroke:#107C10,stroke-width:2px,color:#323130
+    classDef warning fill:#FFF4CE,stroke:#FFB900,stroke-width:2px,color:#323130
 ```
 
-**Component Roles**
+**Complete Component Inventory**
 
-| Component               | Module                               | Role                                                           |
-| ----------------------- | ------------------------------------ | -------------------------------------------------------------- |
-| ⚙️ API Management       | `src/core/apim.bicep`                | API gateway, rate limiting, caching, and managed identity      |
-| 🏢 Workspaces           | `src/core/workspaces.bicep`          | Team and project API isolation within a single APIM instance   |
-| 🌐 Developer Portal     | `src/core/developer-portal.bicep`    | Self-service API documentation with Azure AD MSAL-2 auth       |
-| 📋 Log Analytics        | `src/shared/monitoring/operational/` | Centralized diagnostic logs, retention, and query analysis     |
-| 📈 Application Insights | `src/shared/monitoring/insights/`    | Application performance monitoring and request telemetry       |
-| 🗄️ Storage Account      | `src/shared/monitoring/operational/` | Long-term diagnostic log archival for compliance               |
-| 🔍 API Center           | `src/inventory/main.bicep`           | Centralized API catalog, governance, and RBAC assignments      |
-| 🔗 API Source           | `src/inventory/main.bicep`           | Automatic APIM-to-API Center API discovery and synchronization |
+| Component | Azure Resource Type | Source Module | Role |
+| --- | --- | --- | --- |
+| ⚙️ API Management | `Microsoft.ApiManagement/service` | `src/core/apim.bicep` | API gateway — rate limiting, caching, managed identity |
+| 🏢 Workspaces | `Microsoft.ApiManagement/service/workspaces` | `src/core/workspaces.bicep` | Team-scoped API lifecycle isolation within a single APIM instance |
+| 📊 Diagnostic Settings | `Microsoft.Insights/diagnosticSettings` | `src/core/apim.bicep` | Streams `allLogs` + `AllMetrics` from APIM to Log Analytics and Storage |
+| 📈 App Insights Logger | `Microsoft.ApiManagement/service/loggers` | `src/core/apim.bicep` | Sends APIM request/response telemetry to Application Insights |
+| 🔑 Reader RBAC | `Microsoft.Authorization/roleAssignments` | `src/core/apim.bicep` | Grants APIM system-assigned identity Reader role on the resource group |
+| 🔗 Global CORS Policy | `Microsoft.ApiManagement/service/policies` | `src/core/developer-portal.bicep` | Allows cross-origin requests from the developer portal URL |
+| 🔐 Azure AD Identity Provider | `Microsoft.ApiManagement/service/identityProviders` | `src/core/developer-portal.bicep` | Azure AD MSAL-2 authentication for developer portal users |
+| ⚙️ Portal Configuration | `Microsoft.ApiManagement/service/portalconfigs` | `src/core/developer-portal.bicep` | Configures allowed CORS origins (portal URL, gateway URL, mgmt URL) |
+| ✅ Sign-in Settings | `Microsoft.ApiManagement/service/portalsettings` | `src/core/developer-portal.bicep` | Enables user authentication on the developer portal |
+| 📝 Sign-up Settings | `Microsoft.ApiManagement/service/portalsettings` | `src/core/developer-portal.bicep` | Enables user registration with mandatory terms of service consent |
+| 📋 Log Analytics Workspace | `Microsoft.OperationalInsights/workspaces` | `src/shared/monitoring/operational/` | Centralized log ingestion, retention, and Kusto query engine |
+| 🗄️ Storage Account | `Microsoft.Storage/storageAccounts` | `src/shared/monitoring/operational/` | Long-term diagnostic log archival (`Standard_LRS`) |
+| 📈 Application Insights | `Microsoft.Insights/components` | `src/shared/monitoring/insights/` | Application performance monitoring and distributed tracing |
+| 🔍 API Center | `Microsoft.ApiCenter/services` | `src/inventory/main.bicep` | Centralized API catalog with governance and compliance management |
+| 📁 Default Workspace | `Microsoft.ApiCenter/services/workspaces` | `src/inventory/main.bicep` | Default workspace for organizing and collaborating on APIs in API Center |
+| 🔗 API Source | `Microsoft.ApiCenter/services/workspaces/apiSources` | `src/inventory/main.bicep` | Links APIM to API Center for automatic API discovery and synchronization |
+| 🔑 API Center RBAC | `Microsoft.Authorization/roleAssignments` ×2 | `src/inventory/main.bicep` | Grants API Center identity `Data Reader` and `Compliance Manager` roles |
 
 ### Deployment Sequence
 
