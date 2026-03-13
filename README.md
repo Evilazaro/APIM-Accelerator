@@ -89,6 +89,8 @@ config:
   theme: base
   look: classic
   layout: dagre
+  themeVariables:
+    fontSize: '16px'
   flowchart:
     htmlLabels: true
 ---
@@ -215,6 +217,8 @@ config:
   theme: base
   look: classic
   layout: dagre
+  themeVariables:
+    fontSize: '16px'
   flowchart:
     htmlLabels: true
 ---
@@ -242,7 +246,7 @@ flowchart TB
     end
 
     subgraph infra["📄 infra/main.bicep (subscription scope)"]
-        rg("☁️ Create Resource Group<br>apim-accelerator-env-region-rg"):::neutral
+        rg("☁️ Create Resource Group<br>apim-accelerator-env-region-rg"):::core
 
         subgraph s1["📊 Stage 1 — Shared"]
             law("📋 Log Analytics Workspace"):::data
@@ -280,7 +284,6 @@ flowchart TB
     %% Centralized semantic classDefs (Phase 5 compliant)
     classDef external fill:#E0F7F7,stroke:#038387,stroke-width:2px,color:#323130
     classDef warning fill:#FFF4CE,stroke:#FFB900,stroke-width:2px,color:#323130
-    classDef neutral fill:#FAFAFA,stroke:#8A8886,stroke-width:2px,color:#323130
     classDef data fill:#F0E6FA,stroke:#8764B8,stroke-width:2px,color:#323130
     classDef core fill:#EFF6FC,stroke:#0078D4,stroke-width:2px,color:#323130
     classDef success fill:#DFF6DD,stroke:#107C10,stroke-width:2px,color:#323130
@@ -297,6 +300,8 @@ config:
   theme: base
   look: classic
   layout: dagre
+  themeVariables:
+    fontSize: '16px'
   flowchart:
     htmlLabels: true
 ---
