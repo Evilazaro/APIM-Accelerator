@@ -29,18 +29,46 @@ The accelerator orchestrates three modular Bicep layers deployed by `infra/main.
 
 ## Quick Start
 
-Deploy the complete APIM landing zone with three commands:
+Deploy the complete APIM landing zone — 17 Azure resources across three layers — in four steps.
+
+**1. Clone and enter the repository:**
 
 ```bash
 git clone https://github.com/Evilazaro/APIM-Accelerator.git
 cd APIM-Accelerator
+```
+
+**2. Authenticate with Azure:**
+
+```bash
+az login
+azd auth login
+```
+
+**3. Set your publisher details in `infra/settings.yaml`:**
+
+```yaml
+core:
+  apiManagement:
+    publisherEmail: "your-email@contoso.com"   # Required by Azure APIM
+    publisherName: "Your Organization"
+    sku:
+      name: "Developer"  # Use Developer for dev/test; Premium for production
+```
+
+**4. Provision:**
+
+```bash
 azd up
 ```
 
 When prompted, provide an environment name (e.g., `dev`) and an Azure region (e.g., `eastus`). The provisioner creates a resource group named `apim-accelerator-<env>-<location>-rg` containing all landing zone resources.
 
 > [!NOTE]
-> Running `azd up` triggers the pre-provision hook at `infra/azd-hooks/pre-provision.sh`, which automatically purges any soft-deleted APIM instances in the target region. This prevents resource name conflicts when redeploying to the same region after a prior teardown.
+> `azd up` triggers the pre-provision hook at `infra/azd-hooks/pre-provision.sh`, which automatically purges any soft-deleted APIM instances in the target region before provisioning begins. This prevents resource name conflicts when redeploying to the same region after a prior teardown.
+
+> [!TIP]
+> For `dev` and `test` environments, set `sku.name: "Developer"` in `infra/settings.yaml` before running `azd up`. This reduces provisioning time from ~45 minutes (Premium) to under 5 minutes at a fraction of the cost.
 
 Expected output on success:
 
@@ -390,33 +418,42 @@ solutionName: "apim-accelerator" # Base prefix for all resource names
 
 shared:
   monitoring:
+    # Azure Log Analytics Workspace — centralized log store for all APIM diagnostics
     logAnalytics:
-      name: "" # Empty = auto-generated name
+      name: "" # Empty = auto-generated; non-empty overrides the generated name
+      workSpaceResourceId: "" # Provide a resource ID to reuse an existing workspace
       identity:
         type: "SystemAssigned" # SystemAssigned | UserAssigned
         userAssignedIdentities: []
+    # Application Insights — linked to the Log Analytics workspace above
     applicationInsights:
       name: "" # Empty = auto-generated name
+      logAnalyticsWorkspaceResourceId: "" # Provide to override the auto-linked workspace
   tags:
-    CostCenter: "CC-1234"
-    BusinessUnit: "IT"
-    Owner: "admin@contoso.com"
-    ApplicationName: "APIM Platform"
-    RegulatoryCompliance: "GDPR" # GDPR | HIPAA | PCI | None
+    CostCenter: "CC-1234"               # Cost allocation tracking code
+    BusinessUnit: "IT"                  # Business unit or department
+    Owner: "admin@contoso.com"          # Resource owner contact
+    ApplicationName: "APIM Platform"   # Workload / application name
+    ProjectName: "APIMForAll"           # Project or initiative name
+    ServiceClass: "Critical"            # Critical | Standard | Experimental
+    RegulatoryCompliance: "GDPR"        # GDPR | HIPAA | PCI | None
+    SupportContact: "support@contoso.com" # Incident support team or contact
+    ChargebackModel: "Dedicated"        # Dedicated | Shared
+    BudgetCode: "FY25-Q1-InitiativeX"   # Budget or initiative code
 
 core:
   apiManagement:
     name: "" # Empty = auto-generated name
-    publisherEmail: "admin@contoso.com" # Required by Azure APIM service
-    publisherName: "Contoso"
+    publisherEmail: "admin@contoso.com" # Required by Azure APIM — shown in service metadata
+    publisherName: "Contoso"            # Organization name displayed in developer portal
     sku:
       name: "Premium" # Developer | Basic | Standard | Premium | Consumption
-      capacity: 1 # Scale units: 1–10 for Premium SKU
+      capacity: 1     # Scale units: 1–10 for Premium SKU
     identity:
       type: "SystemAssigned" # SystemAssigned | UserAssigned | None
       userAssignedIdentities: []
     workspaces:
-      - name: "workspace1" # Add entries for additional workspaces
+      - name: "workspace1" # Add additional entries for more team workspaces (Premium only)
 
 inventory:
   apiCenter:
@@ -428,14 +465,21 @@ inventory:
 
 **Key configuration parameters:**
 
-| Parameter                             | Default            | Valid Values                                               | Description                                                   |
-| ------------------------------------- | ------------------ | ---------------------------------------------------------- | ------------------------------------------------------------- |
-| 📁 `solutionName`                     | `apim-accelerator` | String ≤24 chars                                           | Base prefix appended to all auto-generated resource names     |
-| ⚙️ `core.apiManagement.sku.name`      | `Premium`          | `Developer`, `Basic`, `Standard`, `Premium`, `Consumption` | APIM pricing tier determining cost, throughput, and SLA       |
-| 🔑 `core.apiManagement.sku.capacity`  | `1`                | `1–10` (Premium)                                           | Number of scale units; increase for higher request throughput |
-| 🔒 `core.apiManagement.identity.type` | `SystemAssigned`   | `SystemAssigned`, `UserAssigned`, `None`                   | Managed identity type assigned to the APIM service            |
-| 🌍 `envName`                          | _(runtime)_        | `dev`, `test`, `staging`, `prod`, `uat`                    | Environment name embedded in resource group naming convention |
-| 📍 `location`                         | _(runtime)_        | Any Azure region                                           | Azure region for all resource deployments                     |
+| Parameter                                               | Default              | Valid Values                                               | Description                                                                  |
+| ------------------------------------------------------- | -------------------- | ---------------------------------------------------------- | ---------------------------------------------------------------------------- |
+| 📁 `solutionName`                                       | `apim-accelerator`   | String ≤24 chars                                           | Base prefix appended to all auto-generated resource names                    |
+| 📧 `core.apiManagement.publisherEmail`                  | _(required)_         | Valid email address                                        | Publisher email required by Azure APIM; displayed in service metadata        |
+| 🏢 `core.apiManagement.publisherName`                   | `Contoso`            | Any string                                                 | Organization name displayed in the developer portal header                   |
+| ⚙️ `core.apiManagement.sku.name`                        | `Premium`            | `Developer`, `Basic`, `Standard`, `Premium`, `Consumption` | APIM pricing tier determining cost, throughput, and SLA                      |
+| 🔢 `core.apiManagement.sku.capacity`                    | `1`                  | `1–10` (Premium)                                           | Number of scale units; increase for higher request throughput                |
+| 🔒 `core.apiManagement.identity.type`                   | `SystemAssigned`     | `SystemAssigned`, `UserAssigned`, `None`                   | Managed identity type assigned to the APIM service                           |
+| 🏗️ `core.apiManagement.workspaces[n].name`              | `workspace1`         | Any valid resource name                                    | Named workspace for team-scoped API lifecycle isolation (Premium SKU only)   |
+| 📋 `shared.monitoring.logAnalytics.name`                | _(auto-generated)_   | Any valid name or empty string                             | Overrides the auto-generated Log Analytics workspace name                    |
+| 📋 `shared.monitoring.logAnalytics.workSpaceResourceId` | _(auto-provisioned)_ | Azure resource ID or empty string                          | Provide an existing workspace resource ID to reuse rather than create new    |
+| 📈 `shared.monitoring.applicationInsights.name`         | _(auto-generated)_   | Any valid name or empty string                             | Overrides the auto-generated Application Insights instance name              |
+| 🔍 `inventory.apiCenter.name`                           | _(auto-generated)_   | Any valid name or empty string                             | Overrides the auto-generated API Center service name                         |
+| 🌍 `envName`                                            | _(runtime)_          | `dev`, `test`, `staging`, `prod`, `uat`                    | Environment name embedded in resource group naming convention                |
+| 📍 `location`                                           | _(runtime)_          | Any Azure region                                           | Azure region for all resource deployments                                    |
 
 ## Deployment
 
@@ -532,6 +576,29 @@ Virtual network integration is configured via the `virtualNetworkType` and `subn
 
 > [!TIP]
 > Use `virtualNetworkType: Internal` for fully private APIM deployments where neither the gateway nor the management endpoint is publicly accessible from the internet. Use `External` when the gateway must remain internet-accessible while the management plane stays private.
+
+### Retrieving Deployment Outputs
+
+After a successful `azd provision` or `azd up`, all resource identifiers and connection details are available as environment outputs. Retrieve them with:
+
+```bash
+azd env get-values
+```
+
+Key outputs written to the `azd` environment:
+
+| Output Variable                              | Description                                                   |
+| -------------------------------------------- | ------------------------------------------------------------- |
+| 🌐 `AZURE_API_MANAGEMENT_GATEWAY_URL`         | APIM gateway base URL for API traffic                         |
+| 🌐 `AZURE_API_MANAGEMENT_DEVELOPER_PORTAL_URL` | Developer portal URL for API documentation and testing       |
+| 🔑 `AZURE_API_MANAGEMENT_IDENTITY_PRINCIPAL_ID` | Object ID of the APIM system-assigned managed identity      |
+| 📈 `APPLICATION_INSIGHTS_NAME`               | Application Insights instance name for telemetry queries      |
+| 📈 `APPLICATION_INSIGHTS_INSTRUMENTATION_KEY`  | Instrumentation key for SDK/agent configuration (sensitive)  |
+| 🗄️ `AZURE_STORAGE_ACCOUNT_ID`               | Resource ID of the diagnostic log archival storage account    |
+| 🔍 `AZURE_API_CENTER_SERVICE_NAME`            | API Center service name for governance portal access          |
+
+> [!NOTE]
+> `APPLICATION_INSIGHTS_INSTRUMENTATION_KEY` is marked as a secure output and is not printed in plain text by `azd env get-values`. Retrieve it directly from Azure Portal or via `az monitor app-insights component show`.
 
 ### Validating Templates Locally
 
