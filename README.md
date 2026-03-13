@@ -140,6 +140,170 @@ flowchart TB
 | 🔍 API Center           | `src/inventory/main.bicep`           | Centralized API catalog, governance, and RBAC assignments      |
 | 🔗 API Source           | `src/inventory/main.bicep`           | Automatic APIM-to-API Center API discovery and synchronization |
 
+### Deployment Sequence
+
+`infra/main.bicep` deploys at subscription scope, enforcing a strict ordering so that each layer consumes the outputs of the previous one. The pre-provision hook runs first to clear any soft-deleted APIM name conflicts before any Bicep resources are provisioned.
+
+```mermaid
+---
+title: "APIM Accelerator — Deployment Sequence"
+config:
+  theme: base
+  look: classic
+  layout: dagre
+  flowchart:
+    htmlLabels: true
+---
+flowchart TB
+    accTitle: APIM Accelerator Deployment Sequence
+    accDescr: Sequential provisioning flow from azd up through pre-provision hook, resource group creation, shared monitoring, core APIM platform, and finally API Center inventory with output dependencies shown between each stage
+
+    %% ═══════════════════════════════════════════════════════════════════════════
+    %% AZURE / FLUENT ARCHITECTURE PATTERN v1.1
+    %% (Semantic + Structural + Font + Accessibility Governance)
+    %% ═══════════════════════════════════════════════════════════════════════════
+    %% PHASE 1 - FLUENT UI: All styling uses approved Fluent UI palette only
+    %% PHASE 2 - GROUPS: Every subgraph has semantic color via style directive
+    %% PHASE 3 - COMPONENTS: Every node has semantic classDef + icon prefix
+    %% PHASE 4 - ACCESSIBILITY: accTitle/accDescr present, WCAG AA contrast
+    %% PHASE 5 - STANDARD: Governance block present, classDefs centralized
+    %% ═══════════════════════════════════════════════════════════════════════════
+
+    subgraph trigger["🚀 Trigger"]
+        azdUp("⚙️ azd up"):::external
+    end
+
+    subgraph hook["🔧 Pre-Provision Hook"]
+        purge("🗑️ Purge soft-deleted APIM\npre-provision.sh"):::warning
+    end
+
+    subgraph infra["📄 infra/main.bicep (subscription scope)"]
+        rg("☁️ Create Resource Group\napim-accelerator-env-region-rg"):::neutral
+
+        subgraph s1["📊 Stage 1 — Shared"]
+            law("📋 Log Analytics Workspace"):::data
+            ai("📈 Application Insights"):::data
+            sa("🗄️ Storage Account"):::data
+        end
+
+        subgraph s2["🔌 Stage 2 — Core Platform"]
+            apim("⚙️ API Management"):::core
+            ws("🏢 Workspaces"):::core
+            dp("🌐 Developer Portal"):::core
+        end
+
+        subgraph s3["📦 Stage 3 — Inventory"]
+            apic("🔍 API Center"):::success
+            apicsrc("🔗 API Source"):::success
+            rbac("🔒 RBAC Assignments"):::success
+        end
+
+        rg -->|"scope"| s1
+        s1 -->|"workspace ID\napp insights ID\nstorage ID"| s2
+        s2 -->|"APIM name\nAPIM resource ID"| s3
+    end
+
+    azdUp -->|"triggers"| purge
+    purge -->|"completes"| infra
+
+    style trigger fill:#F3F2F1,stroke:#8A8886,stroke-width:2px,color:#323130
+    style hook fill:#F3F2F1,stroke:#8A8886,stroke-width:2px,color:#323130
+    style infra fill:#F3F2F1,stroke:#8A8886,stroke-width:2px,color:#323130
+    style s1 fill:#F3F2F1,stroke:#8A8886,stroke-width:2px,color:#323130
+    style s2 fill:#F3F2F1,stroke:#8A8886,stroke-width:2px,color:#323130
+    style s3 fill:#F3F2F1,stroke:#8A8886,stroke-width:2px,color:#323130
+
+    %% Centralized semantic classDefs (Phase 5 compliant)
+    classDef external fill:#E0F7F7,stroke:#038387,stroke-width:2px,color:#323130
+    classDef warning fill:#FFF4CE,stroke:#FFB900,stroke-width:2px,color:#323130
+    classDef neutral fill:#FAFAFA,stroke:#8A8886,stroke-width:2px,color:#323130
+    classDef data fill:#F0E6FA,stroke:#8764B8,stroke-width:2px,color:#323130
+    classDef core fill:#EFF6FC,stroke:#0078D4,stroke-width:2px,color:#323130
+    classDef success fill:#DFF6DD,stroke:#107C10,stroke-width:2px,color:#323130
+```
+
+### Bicep Module Structure
+
+The accelerator is organized into three source layers under `src/`, each corresponding to an orchestration stage in `infra/main.bicep`. Shared type definitions and naming utilities live in `src/shared/` and are imported by all other modules via Bicep's `import` statement.
+
+```mermaid
+---
+title: "APIM Accelerator — Bicep Module Structure"
+config:
+  theme: base
+  look: classic
+  layout: dagre
+  flowchart:
+    htmlLabels: true
+---
+flowchart TB
+    accTitle: APIM Accelerator Bicep Module Structure
+    accDescr: Hierarchical Bicep file dependency tree rooted at infra/main.bicep showing how each orchestration module imports shared types and delegates to leaf resource modules
+
+    %% ═══════════════════════════════════════════════════════════════════════════
+    %% AZURE / FLUENT ARCHITECTURE PATTERN v1.1
+    %% (Semantic + Structural + Font + Accessibility Governance)
+    %% ═══════════════════════════════════════════════════════════════════════════
+    %% PHASE 1 - FLUENT UI: All styling uses approved Fluent UI palette only
+    %% PHASE 2 - GROUPS: Every subgraph has semantic color via style directive
+    %% PHASE 3 - COMPONENTS: Every node has semantic classDef + icon prefix
+    %% PHASE 4 - ACCESSIBILITY: accTitle/accDescr present, WCAG AA contrast
+    %% PHASE 5 - STANDARD: Governance block present, classDefs centralized
+    %% ═══════════════════════════════════════════════════════════════════════════
+
+    entry("📄 infra/main.bicep\n(subscription scope)"):::core
+
+    subgraph sharedLayer["📦 src/shared/"]
+        sharedMain("📄 shared/main.bicep"):::neutral
+        commonTypes("📄 common-types.bicep"):::data
+        constants("📄 constants.bicep"):::data
+
+        subgraph monLayer["📊 monitoring/"]
+            monMain("📄 monitoring/main.bicep"):::neutral
+            opMain("📄 operational/main.bicep\nLog Analytics · Storage"):::neutral
+            insMain("📄 insights/main.bicep\nApplication Insights"):::neutral
+            monMain -->|"deploys"| opMain
+            monMain -->|"deploys"| insMain
+        end
+
+        sharedMain -->|"deploys"| monMain
+        sharedMain -.->|"imports"| commonTypes
+        sharedMain -.->|"imports"| constants
+    end
+
+    subgraph coreLayer["🔌 src/core/"]
+        coreMain("📄 core/main.bicep"):::neutral
+        apimBicep("📄 apim.bicep\nAPI Management service"):::core
+        wsBicep("📄 workspaces.bicep\nWorkspace resources"):::core
+        dpBicep("📄 developer-portal.bicep\nPortal · CORS · Azure AD"):::core
+        coreMain -->|"deploys"| apimBicep
+        coreMain -->|"deploys"| wsBicep
+        coreMain -->|"deploys"| dpBicep
+        coreMain -.->|"imports"| commonTypes
+        coreMain -.->|"imports"| constants
+    end
+
+    subgraph inventoryLayer["📦 src/inventory/"]
+        invMain("📄 inventory/main.bicep\nAPI Center · Workspace\nAPI Source · RBAC"):::success
+        invMain -.->|"imports"| commonTypes
+    end
+
+    entry -->|"module shared"| sharedMain
+    entry -->|"module core"| coreMain
+    entry -->|"module inventory"| invMain
+
+    style sharedLayer fill:#F3F2F1,stroke:#8A8886,stroke-width:2px,color:#323130
+    style monLayer fill:#F3F2F1,stroke:#8A8886,stroke-width:2px,color:#323130
+    style coreLayer fill:#F3F2F1,stroke:#8A8886,stroke-width:2px,color:#323130
+    style inventoryLayer fill:#F3F2F1,stroke:#8A8886,stroke-width:2px,color:#323130
+
+    %% Centralized semantic classDefs (Phase 5 compliant)
+    classDef neutral fill:#FAFAFA,stroke:#8A8886,stroke-width:2px,color:#323130
+    classDef data fill:#F0E6FA,stroke:#8764B8,stroke-width:2px,color:#323130
+    classDef core fill:#EFF6FC,stroke:#0078D4,stroke-width:2px,color:#323130
+    classDef success fill:#DFF6DD,stroke:#107C10,stroke-width:2px,color:#323130
+```
+
 ## Features
 
 **Overview**
