@@ -94,20 +94,20 @@ flowchart TB
 
         subgraph coreSub["🔌 Core Platform  —  src/core/"]
             direction TB
-            apim("⚙️ API Management\n(Premium SKU · System Identity)"):::core
+            apim("⚙️ API Management<br>(Premium SKU · System Identity)"):::core
             ws("🏢 Workspaces  (team isolation)"):::core
             readerRbac("🔑 Reader RBAC  (resource group scope)"):::warning
 
             subgraph obsSub["📡 APIM Observability"]
                 direction LR
-                diag("📊 Diagnostic Settings\n(allLogs · AllMetrics)"):::data
+                diag("📊 Diagnostic Settings<br>(allLogs · AllMetrics)"):::data
                 aiLogger("📈 App Insights Logger"):::data
             end
 
             subgraph portalSub["🌐 Developer Portal"]
                 direction LR
                 cors("🔗 Global CORS Policy"):::core
-                aadIdp("🔐 Azure AD Identity Provider\n(MSAL-2)"):::core
+                aadIdp("🔐 Azure AD Identity Provider<br>(MSAL-2)"):::core
                 portalCfg("⚙️ Portal Configuration"):::core
                 signin("✅ Sign-in Settings"):::core
                 signup("📝 Sign-up + Terms of Service"):::core
@@ -156,25 +156,25 @@ flowchart TB
 
 **Complete Component Inventory**
 
-| Component | Azure Resource Type | Source Module | Role |
-| --- | --- | --- | --- |
-| ⚙️ API Management | `Microsoft.ApiManagement/service` | `src/core/apim.bicep` | API gateway — rate limiting, caching, managed identity |
-| 🏢 Workspaces | `Microsoft.ApiManagement/service/workspaces` | `src/core/workspaces.bicep` | Team-scoped API lifecycle isolation within a single APIM instance |
-| 📊 Diagnostic Settings | `Microsoft.Insights/diagnosticSettings` | `src/core/apim.bicep` | Streams `allLogs` + `AllMetrics` from APIM to Log Analytics and Storage |
-| 📈 App Insights Logger | `Microsoft.ApiManagement/service/loggers` | `src/core/apim.bicep` | Sends APIM request/response telemetry to Application Insights |
-| 🔑 Reader RBAC | `Microsoft.Authorization/roleAssignments` | `src/core/apim.bicep` | Grants APIM system-assigned identity Reader role on the resource group |
-| 🔗 Global CORS Policy | `Microsoft.ApiManagement/service/policies` | `src/core/developer-portal.bicep` | Allows cross-origin requests from the developer portal URL |
-| 🔐 Azure AD Identity Provider | `Microsoft.ApiManagement/service/identityProviders` | `src/core/developer-portal.bicep` | Azure AD MSAL-2 authentication for developer portal users |
-| ⚙️ Portal Configuration | `Microsoft.ApiManagement/service/portalconfigs` | `src/core/developer-portal.bicep` | Configures allowed CORS origins (portal URL, gateway URL, mgmt URL) |
-| ✅ Sign-in Settings | `Microsoft.ApiManagement/service/portalsettings` | `src/core/developer-portal.bicep` | Enables user authentication on the developer portal |
-| 📝 Sign-up Settings | `Microsoft.ApiManagement/service/portalsettings` | `src/core/developer-portal.bicep` | Enables user registration with mandatory terms of service consent |
-| 📋 Log Analytics Workspace | `Microsoft.OperationalInsights/workspaces` | `src/shared/monitoring/operational/` | Centralized log ingestion, retention, and Kusto query engine |
-| 🗄️ Storage Account | `Microsoft.Storage/storageAccounts` | `src/shared/monitoring/operational/` | Long-term diagnostic log archival (`Standard_LRS`) |
-| 📈 Application Insights | `Microsoft.Insights/components` | `src/shared/monitoring/insights/` | Application performance monitoring and distributed tracing |
-| 🔍 API Center | `Microsoft.ApiCenter/services` | `src/inventory/main.bicep` | Centralized API catalog with governance and compliance management |
-| 📁 Default Workspace | `Microsoft.ApiCenter/services/workspaces` | `src/inventory/main.bicep` | Default workspace for organizing and collaborating on APIs in API Center |
-| 🔗 API Source | `Microsoft.ApiCenter/services/workspaces/apiSources` | `src/inventory/main.bicep` | Links APIM to API Center for automatic API discovery and synchronization |
-| 🔑 API Center RBAC | `Microsoft.Authorization/roleAssignments` ×2 | `src/inventory/main.bicep` | Grants API Center identity `Data Reader` and `Compliance Manager` roles |
+| Component                     | Azure Resource Type                                  | Source Module                        | Role                                                                     |
+| ----------------------------- | ---------------------------------------------------- | ------------------------------------ | ------------------------------------------------------------------------ |
+| ⚙️ API Management             | `Microsoft.ApiManagement/service`                    | `src/core/apim.bicep`                | API gateway — rate limiting, caching, managed identity                   |
+| 🏢 Workspaces                 | `Microsoft.ApiManagement/service/workspaces`         | `src/core/workspaces.bicep`          | Team-scoped API lifecycle isolation within a single APIM instance        |
+| 📊 Diagnostic Settings        | `Microsoft.Insights/diagnosticSettings`              | `src/core/apim.bicep`                | Streams `allLogs` + `AllMetrics` from APIM to Log Analytics and Storage  |
+| 📈 App Insights Logger        | `Microsoft.ApiManagement/service/loggers`            | `src/core/apim.bicep`                | Sends APIM request/response telemetry to Application Insights            |
+| 🔑 Reader RBAC                | `Microsoft.Authorization/roleAssignments`            | `src/core/apim.bicep`                | Grants APIM system-assigned identity Reader role on the resource group   |
+| 🔗 Global CORS Policy         | `Microsoft.ApiManagement/service/policies`           | `src/core/developer-portal.bicep`    | Allows cross-origin requests from the developer portal URL               |
+| 🔐 Azure AD Identity Provider | `Microsoft.ApiManagement/service/identityProviders`  | `src/core/developer-portal.bicep`    | Azure AD MSAL-2 authentication for developer portal users                |
+| ⚙️ Portal Configuration       | `Microsoft.ApiManagement/service/portalconfigs`      | `src/core/developer-portal.bicep`    | Configures allowed CORS origins (portal URL, gateway URL, mgmt URL)      |
+| ✅ Sign-in Settings           | `Microsoft.ApiManagement/service/portalsettings`     | `src/core/developer-portal.bicep`    | Enables user authentication on the developer portal                      |
+| 📝 Sign-up Settings           | `Microsoft.ApiManagement/service/portalsettings`     | `src/core/developer-portal.bicep`    | Enables user registration with mandatory terms of service consent        |
+| 📋 Log Analytics Workspace    | `Microsoft.OperationalInsights/workspaces`           | `src/shared/monitoring/operational/` | Centralized log ingestion, retention, and Kusto query engine             |
+| 🗄️ Storage Account            | `Microsoft.Storage/storageAccounts`                  | `src/shared/monitoring/operational/` | Long-term diagnostic log archival (`Standard_LRS`)                       |
+| 📈 Application Insights       | `Microsoft.Insights/components`                      | `src/shared/monitoring/insights/`    | Application performance monitoring and distributed tracing               |
+| 🔍 API Center                 | `Microsoft.ApiCenter/services`                       | `src/inventory/main.bicep`           | Centralized API catalog with governance and compliance management        |
+| 📁 Default Workspace          | `Microsoft.ApiCenter/services/workspaces`            | `src/inventory/main.bicep`           | Default workspace for organizing and collaborating on APIs in API Center |
+| 🔗 API Source                 | `Microsoft.ApiCenter/services/workspaces/apiSources` | `src/inventory/main.bicep`           | Links APIM to API Center for automatic API discovery and synchronization |
+| 🔑 API Center RBAC            | `Microsoft.Authorization/roleAssignments` ×2         | `src/inventory/main.bicep`           | Grants API Center identity `Data Reader` and `Compliance Manager` roles  |
 
 ### Deployment Sequence
 
@@ -210,11 +210,11 @@ flowchart TB
     end
 
     subgraph hook["🔧 Pre-Provision Hook"]
-        purge("🗑️ Purge soft-deleted APIM\npre-provision.sh"):::warning
+        purge("🗑️ Purge soft-deleted APIM<br>pre-provision.sh"):::warning
     end
 
     subgraph infra["📄 infra/main.bicep (subscription scope)"]
-        rg("☁️ Create Resource Group\napim-accelerator-env-region-rg"):::neutral
+        rg("☁️ Create Resource Group<br>apim-accelerator-env-region-rg"):::neutral
 
         subgraph s1["📊 Stage 1 — Shared"]
             law("📋 Log Analytics Workspace"):::data
@@ -235,8 +235,8 @@ flowchart TB
         end
 
         rg -->|"scope"| s1
-        s1 -->|"workspace ID\napp insights ID\nstorage ID"| s2
-        s2 -->|"APIM name\nAPIM resource ID"| s3
+        s1 -->|"workspace ID<br>app insights ID<br>storage ID"| s2
+        s2 -->|"APIM name<br>APIM resource ID"| s3
     end
 
     azdUp -->|"triggers"| purge
@@ -287,7 +287,7 @@ flowchart TB
     %% PHASE 5 - STANDARD: Governance block present, classDefs centralized
     %% ═══════════════════════════════════════════════════════════════════════════
 
-    entry("📄 infra/main.bicep\n(subscription scope)"):::core
+    entry("📄 infra/main.bicep<br>(subscription scope)"):::core
 
     subgraph sharedLayer["📦 src/shared/"]
         sharedMain("📄 shared/main.bicep"):::neutral
@@ -296,8 +296,8 @@ flowchart TB
 
         subgraph monLayer["📊 monitoring/"]
             monMain("📄 monitoring/main.bicep"):::neutral
-            opMain("📄 operational/main.bicep\nLog Analytics · Storage"):::neutral
-            insMain("📄 insights/main.bicep\nApplication Insights"):::neutral
+            opMain("📄 operational/main.bicep<br>Log Analytics · Storage"):::neutral
+            insMain("📄 insights/main.bicep<br>Application Insights"):::neutral
             monMain -->|"deploys"| opMain
             monMain -->|"deploys"| insMain
         end
@@ -309,9 +309,9 @@ flowchart TB
 
     subgraph coreLayer["🔌 src/core/"]
         coreMain("📄 core/main.bicep"):::neutral
-        apimBicep("📄 apim.bicep\nAPI Management service"):::core
-        wsBicep("📄 workspaces.bicep\nWorkspace resources"):::core
-        dpBicep("📄 developer-portal.bicep\nPortal · CORS · Azure AD"):::core
+        apimBicep("📄 apim.bicep<br>API Management service"):::core
+        wsBicep("📄 workspaces.bicep<br>Workspace resources"):::core
+        dpBicep("📄 developer-portal.bicep<br>Portal · CORS · Azure AD"):::core
         coreMain -->|"deploys"| apimBicep
         coreMain -->|"deploys"| wsBicep
         coreMain -->|"deploys"| dpBicep
@@ -320,7 +320,7 @@ flowchart TB
     end
 
     subgraph inventoryLayer["📦 src/inventory/"]
-        invMain("📄 inventory/main.bicep\nAPI Center · Workspace\nAPI Source · RBAC"):::success
+        invMain("📄 inventory/main.bicep<br>API Center · Workspace<br>API Source · RBAC"):::success
         invMain -.->|"imports"| commonTypes
     end
 
