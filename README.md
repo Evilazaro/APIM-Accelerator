@@ -140,13 +140,13 @@ flowchart TB
 
         subgraph inventoryLayer["📋 API Inventory"]
             direction LR
-            apiCenter("🔑 Azure API Center"):::external
-            apiSource("🔗 API Source Integration"):::external
+            apiCenter("🔑 Azure API Center"):::neutral
+            apiSource("🔗 API Source Integration"):::neutral
         end
     end
 
     azdCLI -->|"azd up"| preHook
-    preHook -->|"purges soft-deleted APIMsHook"| bicepOrch
+    preHook -->|"purges soft-deleted APIM"| bicepOrch
     bicepOrch -->|"reads"| settings
     bicepOrch -->|"creates"| rg
     rg -->|"1 - deploys"| sharedLayer
@@ -169,7 +169,6 @@ flowchart TB
     classDef success fill:#DFF6DD,stroke:#107C10,stroke-width:2px,color:#323130
     classDef warning fill:#FFF4CE,stroke:#FFB900,stroke-width:2px,color:#323130
     classDef data fill:#F0E6FA,stroke:#8764B8,stroke-width:2px,color:#323130
-    classDef external fill:#E0F7F7,stroke:#038387,stroke-width:2px,color:#323130
 ```
 
 **Component Roles:**
