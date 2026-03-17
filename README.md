@@ -174,18 +174,18 @@ flowchart TB
 
 **Component Roles:**
 
-| Component               | Role                                                                  | Module                            |
-| ----------------------- | --------------------------------------------------------------------- | --------------------------------- |
-| 🖥️ Azure Developer CLI  | 🚀 Orchestrates `azd up` lifecycle: provision → deploy                | `azure.yaml`                      |
-| 🔧 pre-provision.sh     | 🔧 Purges soft-deleted APIM services before provisioning              | `infra/azd-hooks/`                |
-| 📄 infra/main.bicep     | ⚙️ Subscription-scoped orchestration — creates RG and invokes modules | `infra/main.bicep`                |
-| 📊 Log Analytics        | 📊 Centralized log collection and queries                             | `src/shared/monitoring/`          |
-| 📈 Application Insights | 📈 Application performance monitoring                                 | `src/shared/monitoring/`          |
-| 🗄️ Storage Account      | 🗄️ Long-term diagnostic log archival                                  | `src/shared/monitoring/`          |
-| 🌐 API Management       | 🌐 API gateway, policies, rate-limiting, caching                      | `src/core/apim.bicep`             |
-| 👤 Developer Portal     | 👤 Self-service portal with Azure AD authentication                   | `src/core/developer-portal.bicep` |
-| 🧩 APIM Workspaces      | 🧩 Logical team/project isolation within one APIM instance            | `src/core/workspaces.bicep`       |
-| 🔑 Azure API Center     | 🔑 Centralized API catalog, governance, and discovery                 | `src/inventory/main.bicep`        |
+| Component               | Role                                                                  | Module                               |
+| ----------------------- | --------------------------------------------------------------------- | ------------------------------------ |
+| 🖥️ Azure Developer CLI  | 🚀 Orchestrates `azd up` lifecycle: provision → deploy                | 📄 `azure.yaml`                      |
+| 🔧 pre-provision.sh     | 🔧 Purges soft-deleted APIM services before provisioning              | 📁 `infra/azd-hooks/`                |
+| 📄 infra/main.bicep     | ⚙️ Subscription-scoped orchestration — creates RG and invokes modules | 📄 `infra/main.bicep`                |
+| 📊 Log Analytics        | 📊 Centralized log collection and queries                             | 📁 `src/shared/monitoring/`          |
+| 📈 Application Insights | 📈 Application performance monitoring                                 | 📁 `src/shared/monitoring/`          |
+| 🗄️ Storage Account      | 🗄️ Long-term diagnostic log archival                                  | 📁 `src/shared/monitoring/`          |
+| 🌐 API Management       | 🌐 API gateway, policies, rate-limiting, caching                      | 📄 `src/core/apim.bicep`             |
+| 👤 Developer Portal     | 👤 Self-service portal with Azure AD authentication                   | 📄 `src/core/developer-portal.bicep` |
+| 🧩 APIM Workspaces      | 🧩 Logical team/project isolation within one APIM instance            | 📄 `src/core/workspaces.bicep`       |
+| 🔑 Azure API Center     | 🔑 Centralized API catalog, governance, and discovery                 | 📄 `src/inventory/main.bicep`        |
 
 ## Features
 
@@ -195,18 +195,18 @@ The APIM Accelerator bundles ten enterprise-grade capabilities into a single, re
 
 Every feature is designed to work out of the box while remaining fully customizable through YAML configuration, enabling teams to apply organizational naming, tagging, SKU preferences, and identity settings without modifying Bicep source files.
 
-| Feature                     | Description                                                      | Source                             |
-| --------------------------- | ---------------------------------------------------------------- | ---------------------------------- |
-| 🚀 One-command deployment   | Full APIM landing zone provisioned with `azd up`                 | `azure.yaml`, `infra/main.bicep`   |
-| ⚙️ Configurable APIM SKUs   | Supports Developer, Basic, Standard, Premium, Consumption        | `src/core/apim.bicep`              |
-| 🔒 Managed Identity         | System-assigned and user-assigned identity support               | `src/shared/common-types.bicep`    |
-| 📊 Integrated Observability | Log Analytics + Application Insights + Storage for diagnostics   | `src/shared/monitoring/`           |
-| 👤 Developer Portal         | Azure AD-backed self-service portal with CORS and MSAL 2.0       | `src/core/developer-portal.bicep`  |
-| 🧩 APIM Workspaces          | Team/project isolation without separate APIM instances           | `src/core/workspaces.bicep`        |
-| 🔑 API Governance           | Azure API Center with APIM sync and RBAC role assignments        | `src/inventory/main.bicep`         |
-| 🌍 VNet Integration Ready   | External/Internal/None VNet modes configurable per deployment    | `src/core/apim.bicep`              |
-| 🏷️ Governance Tagging       | Mandatory cost, compliance, and ownership tags via YAML          | `infra/settings.yaml`              |
-| 🔧 Soft-delete Cleanup Hook | Pre-provision script purges soft-deleted APIM to avoid conflicts | `infra/azd-hooks/pre-provision.sh` |
+| Feature                     | Description                                                      | Source                                 |
+| --------------------------- | ---------------------------------------------------------------- | -------------------------------------- |
+| 🚀 One-command deployment   | Full APIM landing zone provisioned with `azd up`                 | 📄 `azure.yaml`, 📄 `infra/main.bicep` |
+| ⚙️ Configurable APIM SKUs   | Supports Developer, Basic, Standard, Premium, Consumption        | 📄 `src/core/apim.bicep`               |
+| 🔒 Managed Identity         | System-assigned and user-assigned identity support               | 📄 `src/shared/common-types.bicep`     |
+| 📊 Integrated Observability | Log Analytics + Application Insights + Storage for diagnostics   | 📁 `src/shared/monitoring/`            |
+| 👤 Developer Portal         | Azure AD-backed self-service portal with CORS and MSAL 2.0       | 📄 `src/core/developer-portal.bicep`   |
+| 🧩 APIM Workspaces          | Team/project isolation without separate APIM instances           | 📄 `src/core/workspaces.bicep`         |
+| 🔑 API Governance           | Azure API Center with APIM sync and RBAC role assignments        | 📄 `src/inventory/main.bicep`          |
+| 🌍 VNet Integration Ready   | External/Internal/None VNet modes configurable per deployment    | 📄 `src/core/apim.bicep`               |
+| 🏷️ Governance Tagging       | Mandatory cost, compliance, and ownership tags via YAML          | 📄 `infra/settings.yaml`               |
+| 🔧 Soft-delete Cleanup Hook | Pre-provision script purges soft-deleted APIM to avoid conflicts | 📄 `infra/azd-hooks/pre-provision.sh`  |
 
 ## Requirements
 
@@ -216,15 +216,15 @@ This accelerator targets Azure subscription-level deployments and requires a set
 
 The APIM Premium SKU (default in `settings.yaml`) requires explicit quota availability in the target region. Validate quota before deploying to a new subscription or region.
 
-| Prerequisite           | Version          | Notes                                                   |
-| ---------------------- | ---------------- | ------------------------------------------------------- |
-| ☁️ Azure Subscription  | Active           | Subscription-level deployment permissions required      |
-| 🔑 Azure CLI           | ≥ 2.60           | `az login` must succeed before running `azd`            |
-| ⚡ Azure Developer CLI | ≥ 1.9            | `azd auth login` required; installs Bicep automatically |
-| 🛠️ Bicep CLI           | ≥ 0.29           | Bundled with azd; standalone install optional           |
-| 🔗 Git                 | ≥ 2.40           | Required to clone the repository                        |
-| 🌐 Azure APIM Quota    | Premium SKU      | Verify quota for `Premium` tier in target region        |
-| 📦 Bash / sh           | POSIX-compatible | Required for `pre-provision.sh` hook (Linux/macOS/WSL)  |
+| Prerequisite           | Version          | Notes                                                      |
+| ---------------------- | ---------------- | ---------------------------------------------------------- |
+| ☁️ Azure Subscription  | Active           | 🔐 Subscription-level deployment permissions required      |
+| 🔑 Azure CLI           | ≥ 2.60           | ✅ `az login` must succeed before running `azd`            |
+| ⚡ Azure Developer CLI | ≥ 1.9            | ⬇️ `azd auth login` required; installs Bicep automatically |
+| 🛠️ Bicep CLI           | ≥ 0.29           | 📦 Bundled with azd; standalone install optional           |
+| 🔗 Git                 | ≥ 2.40           | 📋 Required to clone the repository                        |
+| 🌐 Azure APIM Quota    | Premium SKU      | 🔍 Verify quota for `Premium` tier in target region        |
+| 📦 Bash / sh           | POSIX-compatible | 🖥️ Required for `pre-provision.sh` hook (Linux/macOS/WSL)  |
 
 > [!WARNING]
 > The **Premium** SKU is the default in `infra/settings.yaml` (`core.apiManagement.sku.name`). Premium supports VNet integration, multi-region, and workspaces. For non-production use, change this to `Developer` to reduce cost. The `Developer` SKU carries no SLA.
@@ -285,13 +285,13 @@ inventory:
 
 **APIM SKU reference:**
 
-| SKU           | 🎯 Use Case                    | 💰 SLA    | 🌐 VNet | 🧩 Workspaces |
-| ------------- | ------------------------------ | --------- | ------- | ------------- |
-| `Developer`   | 🧪 Non-production, exploration | ❌ No SLA | ✅      | ❌            |
-| `Basic`       | 📦 Small production workloads  | ✅        | ❌      | ❌            |
-| `Standard`    | 📊 Medium production workloads | ✅        | ❌      | ❌            |
-| `Premium`     | 🏢 Enterprise, multi-region    | ✅        | ✅      | ✅            |
-| `Consumption` | ⚡ Serverless, pay-per-call    | ✅        | ❌      | ❌            |
+| SKU              | 🎯 Use Case                    | 💰 SLA    | 🌐 VNet | 🧩 Workspaces |
+| ---------------- | ------------------------------ | --------- | ------- | ------------- |
+| 🧑‍💻 `Developer`   | 🧪 Non-production, exploration | ❌ No SLA | ✅      | ❌            |
+| 📦 `Basic`       | 📦 Small production workloads  | ✅        | ❌      | ❌            |
+| 📊 `Standard`    | 📊 Medium production workloads | ✅        | ❌      | ❌            |
+| 🏢 `Premium`     | 🏢 Enterprise, multi-region    | ✅        | ✅      | ✅            |
+| ⚡ `Consumption` | ⚡ Serverless, pay-per-call    | ✅        | ❌      | ❌            |
 
 ## Usage
 
