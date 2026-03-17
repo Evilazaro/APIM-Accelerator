@@ -97,7 +97,7 @@ config:
   flowchart:
     htmlLabels: true
 ---
-flowchart TB
+flowchart LR
     accTitle: APIM Accelerator Landing Zone Architecture
     accDescr: End-to-end architecture of the APIM Accelerator showing azd CLI orchestration, Bicep modules, and deployed Azure resources grouped by shared monitoring, core platform, and API inventory layers
 
