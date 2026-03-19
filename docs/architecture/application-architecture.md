@@ -1,4 +1,4 @@
----
+﻿---
 title: "Application Architecture - APIM Accelerator"
 layer: "Application"
 version: "1.0.0"
@@ -163,7 +163,7 @@ flowchart TB
 
 ### 2.1 🔧 Application Services
 
-| Name                           | Description                                                                                                                                | Service Type      |
+| 🏷️ Name                           | 📄 Description                                                                                                                                | 🔧 Service Type      |
 | ------------------------------ | ------------------------------------------------------------------------------------------------------------------------------------------ | ----------------- |
 | APIM Gateway Service           | Azure API Management gateway providing API proxying, rate limiting, policy enforcement, and REST/SOAP protocol mediation for consumers     | Gateway           |
 | API Inventory Service          | Azure API Center service providing centralized API catalog, governance, and automatic APIM-sourced discovery via API source integration    | Catalog           |
@@ -172,7 +172,7 @@ flowchart TB
 
 ### 2.2 📦 Application Components
 
-| Name                         | Description                                                                                                           | Service Type |
+| 🏷️ Name                         | 📄 Description                                                                                                           | 🔧 Service Type |
 | ---------------------------- | --------------------------------------------------------------------------------------------------------------------- | ------------ |
 | Core Platform Module         | Bicep orchestration module (`src/core/main.bicep`) that coordinates APIM service, workspace, and portal deployment    | Module       |
 | Shared Infrastructure Module | Bicep orchestration module (`src/shared/main.bicep`) deploying monitoring foundation required by core platform        | Module       |
@@ -182,7 +182,7 @@ flowchart TB
 
 ### 2.3 🔌 Application Interfaces
 
-| Name                                     | Description                                                                                                                                       | Service Type |
+| 🏷️ Name                                     | 📄 Description                                                                                                                                       | 🔧 Service Type |
 | ---------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------- | ------------ |
 | APIM Management REST API                 | Azure Resource Manager REST API surface `Microsoft.ApiManagement/service@2025-03-01-preview` exposing CRUD operations for APIM service management | REST API     |
 | Developer Portal HTTP Interface          | CORS-enabled HTTP interface for developer portal with allowedOrigins scoped to `developerPortalUrl`, `gatewayUrl`, and `managementApiUrl`         | HTTP REST    |
@@ -191,7 +191,7 @@ flowchart TB
 
 ### 2.4 🤝 Application Collaborations
 
-| Name                                    | Description                                                                                                                                                    | Service Type          |
+| 🏷️ Name                                    | 📄 Description                                                                                                                                                    | 🔧 Service Type          |
 | --------------------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------- | --------------------- |
 | Core–Shared Monitoring Collaboration    | `src/core/main.bicep` consumes `logAnalyticsWorkspaceId`, `storageAccountResourceId`, and `applicationInsIghtsResourceId` outputs from `src/shared/main.bicep` | Service Orchestration |
 | Inventory–Core APIM Collaboration       | `src/inventory/main.bicep` consumes `API_MANAGEMENT_NAME` and `API_MANAGEMENT_RESOURCE_ID` outputs from core module to link API source                         | Service Orchestration |
@@ -199,7 +199,7 @@ flowchart TB
 
 ### 2.5 ⚙️ Application Functions
 
-| Name                             | Description                                                                                                                             | Service Type   |
+| 🏷️ Name                             | 📄 Description                                                                                                                             | 🔧 Service Type   |
 | -------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------- | -------------- |
 | API Gateway Function             | Core API proxying with rate limiting, caching, and policy enforcement via APIM inbound/outbound/backend policy pipeline                 | Microservice   |
 | Azure AD Authentication Function | MSAL 2.0-backed identity provider authentication for developer portal sign-in and sign-up via AAD `login.windows.net` endpoint          | Authentication |
@@ -209,7 +209,7 @@ flowchart TB
 
 ### 2.6 🔄 Application Interactions
 
-| Name                   | Description                                                                                                                         | Service Type     |
+| 🏷️ Name                   | 📄 Description                                                                                                                         | 🔧 Service Type     |
 | ---------------------- | ----------------------------------------------------------------------------------------------------------------------------------- | ---------------- |
 | Diagnostic Log Push    | APIM pushes `allLogs` and `AllMetrics` to Log Analytics workspace via `Microsoft.Insights/diagnosticSettings` resource              | Async Push       |
 | Telemetry Stream       | APIM `appInsightsLogger` pushes API request/response telemetry to Application Insights using credentials-based logger registration  | Async Push       |
@@ -217,35 +217,35 @@ flowchart TB
 
 ### 2.7 📣 Application Events
 
-| Name                     | Description                                                                                                                        | Service Type   |
+| 🏷️ Name                     | 📄 Description                                                                                                                        | 🔧 Service Type   |
 | ------------------------ | ---------------------------------------------------------------------------------------------------------------------------------- | -------------- |
 | Pre-Provision Hook Event | `azd` preprovision lifecycle event triggers `pre-provision.sh` bash script via the `azure.yaml` hooks configuration                | Lifecycle Hook |
 | APIM Deployment Event    | ARM deployment event signaling successful provisioning of the APIM resource, unlocking dependent workspace and portal provisioning | ARM Event      |
 
 ### 2.8 🗃️ Application Data Objects
 
-| Name                        | Description                                                                                                                                                | Service Type |
+| 🏷️ Name                        | 📄 Description                                                                                                                                                | 🔧 Service Type |
 | --------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------- | ------------ |
 | ApiManagement Config Object | Strongly typed Bicep object (`ApiManagement` type) carrying `name`, `publisherEmail`, `publisherName`, `sku`, `identity`, `workspaces`                     | DTO          |
 | Deployment Output Bundle    | Set of output strings (`API_MANAGEMENT_RESOURCE_ID`, `API_MANAGEMENT_NAME`, `AZURE_API_MANAGEMENT_IDENTITY_PRINCIPAL_ID`) emitted by `src/core/apim.bicep` | DTO          |
 
 ### 2.9 🏗️ Integration Patterns
 
-| Name                       | Description                                                                                                                                             | Service Type |
+| 🏷️ Name                       | 📄 Description                                                                                                                                             | 🔧 Service Type |
 | -------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------- | ------------ |
 | API Gateway Pattern        | APIM serves as a centralized API gateway providing a single ingress surface for all backend APIs with policy-based mediation                            | API Gateway  |
 | Diagnostic Fan-Out Pattern | Diagnostic settings route the same telemetry stream simultaneously to Log Analytics (query), Storage Account (archival), and Application Insights (APM) | Fan-Out      |
 
 ### 2.10 📋 Service Contracts
 
-| Name                            | Description                                                                                                                               | Service Type |
+| 🏷️ Name                            | 📄 Description                                                                                                                               | 🔧 Service Type |
 | ------------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------- | ------------ |
 | Bicep Module Interface Contract | Typed `param` and `output` blocks across all Bicep modules define the formal application service contracts for orchestration dependencies | API Contract |
 | APIM ARM API Version Contract   | Pinned API version `2025-03-01-preview` for `Microsoft.ApiManagement/service` constitutes the service contract between Bicep and APIM ARM | API Contract |
 
 ### 2.11 📎 Application Dependencies
 
-| Name                             | Description                                                                                                  | Service Type        |
+| 🏷️ Name                             | 📄 Description                                                                                                  | 🔧 Service Type        |
 | -------------------------------- | ------------------------------------------------------------------------------------------------------------ | ------------------- |
 | Azure Developer CLI (azd)        | External runtime dependency providing lifecycle orchestration (`azd up`, `azd provision`, hooks execution)   | External CLI Tool   |
 | Azure Resource Manager (ARM) API | Platform dependency: all Bicep modules deploy through ARM which governs resource creation, updates, and RBAC | Platform Dependency |
@@ -351,7 +351,7 @@ The deployment model is a three-layer, subscription-scoped orchestration: the `s
 
 #### 🗺️ Service Topology
 
-| Service Name                  | Deployment Target           | Protocol     | Status     | Module                                       |
+| 🖥️ Service Name                  | 🚀 Deployment Target           | 🔌 Protocol     | ✅ Status     | 📁 Module                                       |
 | ----------------------------- | --------------------------- | ------------ | ---------- | -------------------------------------------- |
 | APIM Gateway Service          | Azure API Management        | REST / SOAP  | Configured | src/core/apim.bicep                          |
 | Developer Portal Application  | Azure API Management Portal | HTTPS / CORS | Configured | src/core/developer-portal.bicep              |
@@ -363,7 +363,7 @@ The deployment model is a three-layer, subscription-scoped orchestration: the `s
 
 #### ⚙️ Deployment State Summary
 
-| Attribute             | Value                                           |
+| 🔑 Attribute             | 📋 Value                                           |
 | --------------------- | ----------------------------------------------- |
 | Deployment Scope      | Subscription                                    |
 | Orchestration Tool    | Azure Developer CLI (`azd`) + Bicep             |
@@ -388,7 +388,7 @@ The deployment model is a three-layer, subscription-scoped orchestration: the `s
 
 #### 📌 Versioning Status
 
-| Component               | Pinned API Version | Notes                                                   |
+| 🧩 Component               | 📌 Pinned API Version | 📝 Notes                                                   |
 | ----------------------- | ------------------ | ------------------------------------------------------- |
 | APIM Service            | 2025-03-01-preview | Latest preview, src/core/apim.bicep                     |
 | APIM Workspaces         | 2025-03-01-preview | Latest preview, src/core/workspaces.bicep               |
@@ -463,7 +463,7 @@ sequenceDiagram
 
 #### 5.1.1 APIM Gateway Service
 
-| Attribute          | Value                                                                                                                                       |
+| 🔑 Attribute          | 📋 Value                                                                                                                                       |
 | ------------------ | ------------------------------------------------------------------------------------------------------------------------------------------- |
 | **Component Name** | APIM Gateway Service                                                                                                                        |
 | **Service Type**   | Gateway                                                                                                                                     |
@@ -496,7 +496,7 @@ sequenceDiagram
 
 #### 5.1.2 API Inventory Service
 
-| Attribute          | Value                                                                                                                      |
+| 🔑 Attribute          | 📋 Value                                                                                                                      |
 | ------------------ | -------------------------------------------------------------------------------------------------------------------------- |
 | **Component Name** | API Inventory Service                                                                                                      |
 | **Service Type**   | Catalog                                                                                                                    |
@@ -526,7 +526,7 @@ sequenceDiagram
 
 #### 5.1.3 Developer Portal Application
 
-| Attribute          | Value                                                                                                                                             |
+| 🔑 Attribute          | 📋 Value                                                                                                                                             |
 | ------------------ | ------------------------------------------------------------------------------------------------------------------------------------------------- |
 | **Component Name** | Developer Portal Application                                                                                                                      |
 | **Service Type**   | Portal                                                                                                                                            |
@@ -557,7 +557,7 @@ sequenceDiagram
 
 #### 5.1.4 Monitoring Aggregation Service
 
-| Attribute          | Value                                                                                                                                                     |
+| 🔑 Attribute          | 📋 Value                                                                                                                                                     |
 | ------------------ | --------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | **Component Name** | Monitoring Aggregation Service                                                                                                                            |
 | **Service Type**   | Background Worker                                                                                                                                         |
@@ -589,7 +589,7 @@ sequenceDiagram
 
 #### 5.2.1 Core Platform Module
 
-| Attribute          | Value                |
+| 🔑 Attribute          | 📋 Value                |
 | ------------------ | -------------------- |
 | **Component Name** | Core Platform Module |
 | **Service Type**   | Module               |
@@ -599,7 +599,7 @@ sequenceDiagram
 
 #### 5.2.2 Shared Infrastructure Module
 
-| Attribute          | Value                        |
+| 🔑 Attribute          | 📋 Value                        |
 | ------------------ | ---------------------------- |
 | **Component Name** | Shared Infrastructure Module |
 | **Service Type**   | Module                       |
@@ -609,7 +609,7 @@ sequenceDiagram
 
 #### 5.2.3 Inventory Module
 
-| Attribute          | Value            |
+| 🔑 Attribute          | 📋 Value            |
 | ------------------ | ---------------- |
 | **Component Name** | Inventory Module |
 | **Service Type**   | Module           |
@@ -619,7 +619,7 @@ sequenceDiagram
 
 #### 5.2.4 Common Type System
 
-| Attribute          | Value              |
+| 🔑 Attribute          | 📋 Value              |
 | ------------------ | ------------------ |
 | **Component Name** | Common Type System |
 | **Service Type**   | Module             |
@@ -629,7 +629,7 @@ sequenceDiagram
 
 #### 5.2.5 Constants & Utility Module
 
-| Attribute          | Value                      |
+| 🔑 Attribute          | 📋 Value                      |
 | ------------------ | -------------------------- |
 | **Component Name** | Constants & Utility Module |
 | **Service Type**   | Module                     |
@@ -643,7 +643,7 @@ sequenceDiagram
 
 #### 5.3.1 APIM Management REST API
 
-| Attribute          | Value                    |
+| 🔑 Attribute          | 📋 Value                    |
 | ------------------ | ------------------------ |
 | **Component Name** | APIM Management REST API |
 | **Service Type**   | REST API                 |
@@ -656,7 +656,7 @@ sequenceDiagram
 
 #### 5.3.2 Developer Portal HTTP Interface
 
-| Attribute          | Value                           |
+| 🔑 Attribute          | 📋 Value                           |
 | ------------------ | ------------------------------- |
 | **Component Name** | Developer Portal HTTP Interface |
 | **Service Type**   | HTTP REST                       |
@@ -669,7 +669,7 @@ sequenceDiagram
 
 #### 5.3.3 Log Analytics Query Interface
 
-| Attribute          | Value                         |
+| 🔑 Attribute          | 📋 Value                         |
 | ------------------ | ----------------------------- |
 | **Component Name** | Log Analytics Query Interface |
 | **Service Type**   | REST API                      |
@@ -680,7 +680,7 @@ sequenceDiagram
 
 #### 5.3.4 Application Insights Ingestion Interface
 
-| Attribute          | Value                                    |
+| 🔑 Attribute          | 📋 Value                                    |
 | ------------------ | ---------------------------------------- |
 | **Component Name** | Application Insights Ingestion Interface |
 | **Service Type**   | REST API                                 |
@@ -693,7 +693,7 @@ sequenceDiagram
 
 #### 5.4.1 Core–Shared Monitoring Collaboration
 
-| Attribute          | Value                                |
+| 🔑 Attribute          | 📋 Value                                |
 | ------------------ | ------------------------------------ |
 | **Component Name** | Core–Shared Monitoring Collaboration |
 | **Service Type**   | Service Orchestration                |
@@ -704,7 +704,7 @@ sequenceDiagram
 
 #### 5.4.2 Inventory–Core APIM Collaboration
 
-| Attribute          | Value                             |
+| 🔑 Attribute          | 📋 Value                             |
 | ------------------ | --------------------------------- |
 | **Component Name** | Inventory–Core APIM Collaboration |
 | **Service Type**   | Service Orchestration             |
@@ -715,7 +715,7 @@ sequenceDiagram
 
 #### 5.4.3 APIM–Application Insights Collaboration
 
-| Attribute          | Value                                   |
+| 🔑 Attribute          | 📋 Value                                   |
 | ------------------ | --------------------------------------- |
 | **Component Name** | APIM–Application Insights Collaboration |
 | **Service Type**   | Integration                             |
@@ -728,7 +728,7 @@ sequenceDiagram
 
 #### 5.5.1 API Gateway Function
 
-| Attribute          | Value                |
+| 🔑 Attribute          | 📋 Value                |
 | ------------------ | -------------------- |
 | **Component Name** | API Gateway Function |
 | **Service Type**   | Microservice         |
@@ -741,7 +741,7 @@ sequenceDiagram
 
 #### 5.5.2 Azure AD Authentication Function
 
-| Attribute          | Value                            |
+| 🔑 Attribute          | 📋 Value                            |
 | ------------------ | -------------------------------- |
 | **Component Name** | Azure AD Authentication Function |
 | **Service Type**   | Authentication                   |
@@ -754,7 +754,7 @@ sequenceDiagram
 
 #### 5.5.3 CORS Policy Enforcement Function
 
-| Attribute          | Value                            |
+| 🔑 Attribute          | 📋 Value                            |
 | ------------------ | -------------------------------- |
 | **Component Name** | CORS Policy Enforcement Function |
 | **Service Type**   | Policy                           |
@@ -765,7 +765,7 @@ sequenceDiagram
 
 #### 5.5.4 API Auto-Discovery Function
 
-| Attribute          | Value                       |
+| 🔑 Attribute          | 📋 Value                       |
 | ------------------ | --------------------------- |
 | **Component Name** | API Auto-Discovery Function |
 | **Service Type**   | Integration                 |
@@ -776,7 +776,7 @@ sequenceDiagram
 
 #### 5.5.5 Soft-Delete Purge Function
 
-| Attribute          | Value                      |
+| 🔑 Attribute          | 📋 Value                      |
 | ------------------ | -------------------------- |
 | **Component Name** | Soft-Delete Purge Function |
 | **Service Type**   | Scheduled Job              |
@@ -789,7 +789,7 @@ sequenceDiagram
 
 #### 5.6.1 Diagnostic Log Push
 
-| Attribute          | Value               |
+| 🔑 Attribute          | 📋 Value               |
 | ------------------ | ------------------- |
 | **Component Name** | Diagnostic Log Push |
 | **Service Type**   | Async Push          |
@@ -802,7 +802,7 @@ sequenceDiagram
 
 #### 5.6.2 Telemetry Stream
 
-| Attribute          | Value            |
+| 🔑 Attribute          | 📋 Value            |
 | ------------------ | ---------------- |
 | **Component Name** | Telemetry Stream |
 | **Service Type**   | Async Push       |
@@ -813,7 +813,7 @@ sequenceDiagram
 
 #### 5.6.3 Module Output Chaining
 
-| Attribute          | Value                  |
+| 🔑 Attribute          | 📋 Value                  |
 | ------------------ | ---------------------- |
 | **Component Name** | Module Output Chaining |
 | **Service Type**   | Request/Response       |
@@ -826,7 +826,7 @@ sequenceDiagram
 
 #### 5.7.1 Pre-Provision Hook Event
 
-| Attribute          | Value                    |
+| 🔑 Attribute          | 📋 Value                    |
 | ------------------ | ------------------------ |
 | **Component Name** | Pre-Provision Hook Event |
 | **Service Type**   | Lifecycle Hook           |
@@ -839,7 +839,7 @@ sequenceDiagram
 
 #### 5.7.2 APIM Deployment Event
 
-| Attribute          | Value                 |
+| 🔑 Attribute          | 📋 Value                 |
 | ------------------ | --------------------- |
 | **Component Name** | APIM Deployment Event |
 | **Service Type**   | ARM Event             |
@@ -852,7 +852,7 @@ sequenceDiagram
 
 #### 5.8.1 ApiManagement Config Object
 
-| Attribute          | Value                       |
+| 🔑 Attribute          | 📋 Value                       |
 | ------------------ | --------------------------- |
 | **Component Name** | ApiManagement Config Object |
 | **Service Type**   | DTO                         |
@@ -865,7 +865,7 @@ sequenceDiagram
 
 #### 5.8.2 Deployment Output Bundle
 
-| Attribute          | Value                    |
+| 🔑 Attribute          | 📋 Value                    |
 | ------------------ | ------------------------ |
 | **Component Name** | Deployment Output Bundle |
 | **Service Type**   | DTO                      |
@@ -880,7 +880,7 @@ sequenceDiagram
 
 #### 5.9.1 API Gateway Pattern
 
-| Attribute          | Value               |
+| 🔑 Attribute          | 📋 Value               |
 | ------------------ | ------------------- |
 | **Component Name** | API Gateway Pattern |
 | **Service Type**   | API Gateway         |
@@ -891,7 +891,7 @@ sequenceDiagram
 
 #### 5.9.2 Diagnostic Fan-Out Pattern
 
-| Attribute          | Value                      |
+| 🔑 Attribute          | 📋 Value                      |
 | ------------------ | -------------------------- |
 | **Component Name** | Diagnostic Fan-Out Pattern |
 | **Service Type**   | Fan-Out                    |
@@ -904,7 +904,7 @@ sequenceDiagram
 
 #### 5.10.1 Bicep Module Interface Contract
 
-| Attribute          | Value                           |
+| 🔑 Attribute          | 📋 Value                           |
 | ------------------ | ------------------------------- |
 | **Component Name** | Bicep Module Interface Contract |
 | **Service Type**   | API Contract                    |
@@ -919,7 +919,7 @@ sequenceDiagram
 
 #### 5.10.2 APIM ARM API Version Contract
 
-| Attribute          | Value                         |
+| 🔑 Attribute          | 📋 Value                         |
 | ------------------ | ----------------------------- |
 | **Component Name** | APIM ARM API Version Contract |
 | **Service Type**   | API Contract                  |
@@ -936,7 +936,7 @@ sequenceDiagram
 
 #### 5.11.1 Azure Developer CLI (azd)
 
-| Attribute          | Value                     |
+| 🔑 Attribute          | 📋 Value                     |
 | ------------------ | ------------------------- |
 | **Component Name** | Azure Developer CLI (azd) |
 | **Service Type**   | External CLI Tool         |
@@ -951,7 +951,7 @@ sequenceDiagram
 
 #### 5.11.2 Azure Resource Manager (ARM) API
 
-| Attribute          | Value                            |
+| 🔑 Attribute          | 📋 Value                            |
 | ------------------ | -------------------------------- |
 | **Component Name** | Azure Resource Manager (ARM) API |
 | **Service Type**   | Platform Dependency              |
