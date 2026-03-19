@@ -51,20 +51,20 @@ The architecture follows strict layer separation: the Shared Monitoring layer pr
 
 **📊 Application Component Inventory Summary**:
 
-| 🏷️ Component Type          | 🔢 Count | 📈 Avg Confidence |
-| -------------------------- | -------- | ----------------- |
-| Application Services       | 4        | 0.92              |
-| Application Components     | 5        | 0.89              |
-| Application Interfaces     | 4        | 0.88              |
-| Application Collaborations | 3        | 0.84              |
-| Application Functions      | 5        | 0.85              |
-| Application Interactions   | 3        | 0.82              |
-| Application Events         | 2        | 0.80              |
-| Application Data Objects   | 2        | 0.84              |
-| Integration Patterns       | 2        | 0.87              |
-| Service Contracts          | 2        | 0.88              |
-| Application Dependencies   | 2        | 0.86              |
-| **Total**                  | **34**   | **0.86**          |
+| 🏷️ Component Type             | 🔢 Count |
+| ----------------------------- | -------- |
+| 🔧 Application Services       | 4        |
+| 📦 Application Components     | 5        |
+| 🔌 Application Interfaces     | 4        |
+| 🤝 Application Collaborations | 3        |
+| ⚙️ Application Functions      | 5        |
+| 🔄 Application Interactions   | 3        |
+| 📣 Application Events         | 2        |
+| 🗃️ Application Data Objects   | 2        |
+| 🏗️ Integration Patterns       | 2        |
+| 📋 Service Contracts          | 2        |
+| 📎 Application Dependencies   | 2        |
+| 📊 **Total**                  | **34**   |
 
 ---
 
@@ -377,14 +377,14 @@ The deployment model is a three-layer, subscription-scoped orchestration: the `s
 
 #### Protocol Inventory
 
-| Protocol          | Usage                                                      | Source Reference                                     |
-| ----------------- | ---------------------------------------------------------- | ---------------------------------------------------- |
-| HTTPS / REST      | APIM Gateway, Developer Portal, API Center management      | src/core/apim.bicep:150-175                          |
-| HTTPS / KQL       | Log Analytics workspace query and ingestion                | src/shared/monitoring/operational/main.bicep:120-160 |
-| HTTPS / AI Ingest | Application Insights telemetry push via InstrumentationKey | src/core/apim.bicep:262-275                          |
-| HTTPS / Blob      | Diagnostic log archival to Storage Account                 | src/shared/monitoring/operational/main.bicep:85-115  |
-| HTTPS / ARM       | Azure Resource Manager deployment and management API       | infra/main.bicep:1-170                               |
-| OAuth2 / MSAL 2.0 | Developer portal Azure AD identity provider authentication | src/core/developer-portal.bicep:55-120               |
+| 🔌 Protocol       | 📄 Usage                                                   |
+| ----------------- | ---------------------------------------------------------- |
+| HTTPS / REST      | APIM Gateway, Developer Portal, API Center management      |
+| HTTPS / KQL       | Log Analytics workspace query and ingestion                |
+| HTTPS / AI Ingest | Application Insights telemetry push via InstrumentationKey |
+| HTTPS / Blob      | Diagnostic log archival to Storage Account                 |
+| HTTPS / ARM       | Azure Resource Manager deployment and management API       |
+| OAuth2 / MSAL 2.0 | Developer portal Azure AD identity provider authentication |
 
 #### Versioning Status
 
@@ -467,8 +467,6 @@ sequenceDiagram
 | ------------------ | ------------------------------------------------------------------------------------------------------------------------------------------- |
 | **Component Name** | APIM Gateway Service                                                                                                                        |
 | **Service Type**   | Gateway                                                                                                                                     |
-| **Source**         | src/core/apim.bicep:1-345                                                                                                                   |
-| **Confidence**     | 0.93                                                                                                                                        |
 | **Description**    | Azure API Management service providing API proxying, policy enforcement, rate limiting, developer portal hosting, and telemetry integration |
 
 **API Surface:**
@@ -502,8 +500,6 @@ sequenceDiagram
 | ------------------ | -------------------------------------------------------------------------------------------------------------------------- |
 | **Component Name** | API Inventory Service                                                                                                      |
 | **Service Type**   | Catalog                                                                                                                    |
-| **Source**         | src/inventory/main.bicep:1-200                                                                                             |
-| **Confidence**     | 0.91                                                                                                                       |
 | **Description**    | Azure API Center providing centralized API catalog, governance, and APIM-sourced auto-discovery via API source integration |
 
 **API Surface:**
@@ -534,8 +530,6 @@ sequenceDiagram
 | ------------------ | ------------------------------------------------------------------------------------------------------------------------------------------------- |
 | **Component Name** | Developer Portal Application                                                                                                                      |
 | **Service Type**   | Portal                                                                                                                                            |
-| **Source**         | src/core/developer-portal.bicep:1-200                                                                                                             |
-| **Confidence**     | 0.90                                                                                                                                              |
 | **Description**    | Azure AD-integrated developer portal enabling API discovery, documentation browsing, and interactive API testing for developers and API consumers |
 
 **API Surface:**
@@ -567,8 +561,6 @@ sequenceDiagram
 | ------------------ | --------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | **Component Name** | Monitoring Aggregation Service                                                                                                                            |
 | **Service Type**   | Background Worker                                                                                                                                         |
-| **Source**         | src/shared/monitoring/main.bicep:1-200                                                                                                                    |
-| **Confidence**     | 0.88                                                                                                                                                      |
 | **Description**    | Composite monitoring service comprising Log Analytics workspace, Application Insights, and diagnostic storage — pre-wired to all APIM diagnostic channels |
 
 **API Surface:**
@@ -597,12 +589,10 @@ sequenceDiagram
 
 #### 5.2.1 Core Platform Module
 
-| Attribute          | Value                     |
-| ------------------ | ------------------------- |
-| **Component Name** | Core Platform Module      |
-| **Service Type**   | Module                    |
-| **Source**         | src/core/main.bicep:1-300 |
-| **Confidence**     | 0.91                      |
+| Attribute          | Value                |
+| ------------------ | -------------------- |
+| **Component Name** | Core Platform Module |
+| **Service Type**   | Module               |
 
 **Scaling**: Stateless Bicep module — no runtime scaling. Idempotent via ARM.
 **Health**: Deployment health reflected in ARM deployment operation status.
@@ -613,44 +603,36 @@ sequenceDiagram
 | ------------------ | ---------------------------- |
 | **Component Name** | Shared Infrastructure Module |
 | **Service Type**   | Module                       |
-| **Source**         | src/shared/main.bicep:1-100  |
-| **Confidence**     | 0.89                         |
 
 **Scaling**: Stateless — monitoring resources scale with Azure platform.
 **Health**: ARM deployment operation status; sub-module outputs confirm provisioning.
 
 #### 5.2.3 Inventory Module
 
-| Attribute          | Value                          |
-| ------------------ | ------------------------------ |
-| **Component Name** | Inventory Module               |
-| **Service Type**   | Module                         |
-| **Source**         | src/inventory/main.bicep:1-200 |
-| **Confidence**     | 0.90                           |
+| Attribute          | Value            |
+| ------------------ | ---------------- |
+| **Component Name** | Inventory Module |
+| **Service Type**   | Module           |
 
 **Scaling**: Stateless Bicep module.
 **Health**: ARM deployment status; API source sync confirms APIM–API Center linkage.
 
 #### 5.2.4 Common Type System
 
-| Attribute          | Value                               |
-| ------------------ | ----------------------------------- |
-| **Component Name** | Common Type System                  |
-| **Service Type**   | Module                              |
-| **Source**         | src/shared/common-types.bicep:1-175 |
-| **Confidence**     | 0.88                                |
+| Attribute          | Value              |
+| ------------------ | ------------------ |
+| **Component Name** | Common Type System |
+| **Service Type**   | Module             |
 
 **Scaling**: Compile-time artifact — no runtime presence.
 **Health**: Bicep build validation (`az bicep build`) serves as type correctness gate.
 
 #### 5.2.5 Constants & Utility Module
 
-| Attribute          | Value                            |
-| ------------------ | -------------------------------- |
-| **Component Name** | Constants & Utility Module       |
-| **Service Type**   | Module                           |
-| **Source**         | src/shared/constants.bicep:1-200 |
-| **Confidence**     | 0.87                             |
+| Attribute          | Value                      |
+| ------------------ | -------------------------- |
+| **Component Name** | Constants & Utility Module |
+| **Service Type**   | Module                     |
 
 **Scaling**: Compile-time artifact.
 **Health**: Function correctness validated by Bicep compilation.
@@ -661,12 +643,10 @@ sequenceDiagram
 
 #### 5.3.1 APIM Management REST API
 
-| Attribute          | Value                       |
-| ------------------ | --------------------------- |
-| **Component Name** | APIM Management REST API    |
-| **Service Type**   | REST API                    |
-| **Source**         | src/core/apim.bicep:150-175 |
-| **Confidence**     | 0.93                        |
+| Attribute          | Value                    |
+| ------------------ | ------------------------ |
+| **Component Name** | APIM Management REST API |
+| **Service Type**   | REST API                 |
 
 **Contract Details**: ARM API version `2025-03-01-preview`. Full CRUD surface for APIM service resources. Breaking change policy: API version pinned per module; upgrades require explicit version bump in Bicep declaration.
 
@@ -676,12 +656,10 @@ sequenceDiagram
 
 #### 5.3.2 Developer Portal HTTP Interface
 
-| Attribute          | Value                                   |
-| ------------------ | --------------------------------------- |
-| **Component Name** | Developer Portal HTTP Interface         |
-| **Service Type**   | HTTP REST                               |
-| **Source**         | src/core/developer-portal.bicep:100-180 |
-| **Confidence**     | 0.88                                    |
+| Attribute          | Value                           |
+| ------------------ | ------------------------------- |
+| **Component Name** | Developer Portal HTTP Interface |
+| **Service Type**   | HTTP REST                       |
 
 **Contract Details**: HTTPS with global CORS policy (`allow-credentials: true`, `preflight-result-max-age: 300`). AllowedOrigins: `developerPortalUrl`, `gatewayUrl`, `managementApiUrl`. All HTTP methods and headers permitted.
 
@@ -691,12 +669,10 @@ sequenceDiagram
 
 #### 5.3.3 Log Analytics Query Interface
 
-| Attribute          | Value                                                |
-| ------------------ | ---------------------------------------------------- |
-| **Component Name** | Log Analytics Query Interface                        |
-| **Service Type**   | REST API                                             |
-| **Source**         | src/shared/monitoring/operational/main.bicep:120-160 |
-| **Confidence**     | 0.85                                                 |
+| Attribute          | Value                         |
+| ------------------ | ----------------------------- |
+| **Component Name** | Log Analytics Query Interface |
+| **Service Type**   | REST API                      |
 
 **Contract Details**: Azure Monitor REST API / KQL. Workspace-based mode receives all Application Insights telemetry. Retention: configurable (default platform 30 days, configurable to 730).
 
@@ -704,12 +680,10 @@ sequenceDiagram
 
 #### 5.3.4 Application Insights Ingestion Interface
 
-| Attribute          | Value                                             |
-| ------------------ | ------------------------------------------------- |
-| **Component Name** | Application Insights Ingestion Interface          |
-| **Service Type**   | REST API                                          |
-| **Source**         | src/shared/monitoring/insights/main.bicep:120-145 |
-| **Confidence**     | 0.87                                              |
+| Attribute          | Value                                    |
+| ------------------ | ---------------------------------------- |
+| **Component Name** | Application Insights Ingestion Interface |
+| **Service Type**   | REST API                                 |
 
 **Contract Details**: Telemetry push via InstrumentationKey. `LogAnalytics` ingestion mode routes all data to the linked Log Analytics workspace. Retention: 90 days default (`retentionInDays: 90`).
 
@@ -723,8 +697,6 @@ sequenceDiagram
 | ------------------ | ------------------------------------ |
 | **Component Name** | Core–Shared Monitoring Collaboration |
 | **Service Type**   | Service Orchestration                |
-| **Source**         | infra/main.bicep:100-145             |
-| **Confidence**     | 0.87                                 |
 
 **Orchestration Logic**: `infra/main.bicep` deploys `shared` module first, captures its outputs (`AZURE_LOG_ANALYTICS_WORKSPACE_ID`, `AZURE_STORAGE_ACCOUNT_ID`, `APPLICATION_INSIGHTS_RESOURCE_ID`), and passes them as inputs to the `core` module deployment. ARM deployment enforces sequential execution through `dependsOn` implicit output references.
 
@@ -736,8 +708,6 @@ sequenceDiagram
 | ------------------ | --------------------------------- |
 | **Component Name** | Inventory–Core APIM Collaboration |
 | **Service Type**   | Service Orchestration             |
-| **Source**         | infra/main.bicep:145-170          |
-| **Confidence**     | 0.86                              |
 
 **Orchestration Logic**: `infra/main.bicep` passes `core.outputs.API_MANAGEMENT_NAME` and `core.outputs.API_MANAGEMENT_RESOURCE_ID` to the `inventory` module, establishing the API source linkage in API Center.
 
@@ -749,8 +719,6 @@ sequenceDiagram
 | ------------------ | --------------------------------------- |
 | **Component Name** | APIM–Application Insights Collaboration |
 | **Service Type**   | Integration                             |
-| **Source**         | src/core/apim.bicep:262-280             |
-| **Confidence**     | 0.84                                    |
 
 **Orchestration Logic**: `appInsightsLogger` resource is a child resource of APIM (`parent: apim`) that references the Application Insights instrumentation key via `reference(applicationInsIghtsResourceId, '2020-02-02').InstrumentationKey`. This wires telemetry push at deploy time with no runtime configuration required.
 
@@ -760,12 +728,10 @@ sequenceDiagram
 
 #### 5.5.1 API Gateway Function
 
-| Attribute          | Value                       |
-| ------------------ | --------------------------- |
-| **Component Name** | API Gateway Function        |
-| **Service Type**   | Microservice                |
-| **Source**         | src/core/apim.bicep:175-200 |
-| **Confidence**     | 0.92                        |
+| Attribute          | Value                |
+| ------------------ | -------------------- |
+| **Component Name** | API Gateway Function |
+| **Service Type**   | Microservice         |
 
 **Business Logic**: API proxying with inbound/outbound/backend policy pipeline. Current configuration includes global CORS and forward-request backend policies. Rate limiting, caching, and transformation policies can be applied via APIM policy resources (not present in current IaC but supported by the deployed service).
 
@@ -775,12 +741,10 @@ sequenceDiagram
 
 #### 5.5.2 Azure AD Authentication Function
 
-| Attribute          | Value                                  |
-| ------------------ | -------------------------------------- |
-| **Component Name** | Azure AD Authentication Function       |
-| **Service Type**   | Authentication                         |
-| **Source**         | src/core/developer-portal.bicep:55-130 |
-| **Confidence**     | 0.88                                   |
+| Attribute          | Value                            |
+| ------------------ | -------------------------------- |
+| **Component Name** | Azure AD Authentication Function |
+| **Service Type**   | Authentication                   |
 
 **Business Logic**: AAD identity provider (`type: aad`) wired to `login.windows.net`. MSAL 2.0 (`clientLibrary: MSAL-2`) handles token acquisition. Tenant restriction to `MngEnvMCAP341438.onmicrosoft.com`. Sign-in and sign-up enabled with mandatory terms of service consent.
 
@@ -790,12 +754,10 @@ sequenceDiagram
 
 #### 5.5.3 CORS Policy Enforcement Function
 
-| Attribute          | Value                                   |
-| ------------------ | --------------------------------------- |
-| **Component Name** | CORS Policy Enforcement Function        |
-| **Service Type**   | Policy                                  |
-| **Source**         | src/core/developer-portal.bicep:100-125 |
-| **Confidence**     | 0.87                                    |
+| Attribute          | Value                            |
+| ------------------ | -------------------------------- |
+| **Component Name** | CORS Policy Enforcement Function |
+| **Service Type**   | Policy                           |
 
 **Business Logic**: Global CORS policy appended as XML to the APIM `policy` resource. `allow-credentials: true`, `terminate-unmatched-request: false`. All methods (`*`) and headers (`*`) permitted. Origin restricted to `developerPortalUrl` to prevent unauthorized CORS exploitation.
 
@@ -803,12 +765,10 @@ sequenceDiagram
 
 #### 5.5.4 API Auto-Discovery Function
 
-| Attribute          | Value                            |
-| ------------------ | -------------------------------- |
-| **Component Name** | API Auto-Discovery Function      |
-| **Service Type**   | Integration                      |
-| **Source**         | src/inventory/main.bicep:150-175 |
-| **Confidence**     | 0.86                             |
+| Attribute          | Value                       |
+| ------------------ | --------------------------- |
+| **Component Name** | API Auto-Discovery Function |
+| **Service Type**   | Integration                 |
 
 **Business Logic**: `apiResource` (type `Microsoft.ApiCenter/services/workspaces/apiSources@2024-06-01-preview`) links the APIM resource ID to the default API Center workspace. Azure platform automatically discovers and synchronizes APIs registered in APIM into the API Center catalog.
 
@@ -816,12 +776,10 @@ sequenceDiagram
 
 #### 5.5.5 Soft-Delete Purge Function
 
-| Attribute          | Value                                  |
-| ------------------ | -------------------------------------- |
-| **Component Name** | Soft-Delete Purge Function             |
-| **Service Type**   | Scheduled Job                          |
-| **Source**         | infra/azd-hooks/pre-provision.sh:1-100 |
-| **Confidence**     | 0.83                                   |
+| Attribute          | Value                      |
+| ------------------ | -------------------------- |
+| **Component Name** | Soft-Delete Purge Function |
+| **Service Type**   | Scheduled Job              |
 
 **Business Logic**: Bash script invoked by `azd` `preprovision` hook. Calls `az apim deletedservice list --query "[].name" -o tsv` to enumerate soft-deleted instances, then issues `az apim deletedservice purge` for each. Errors during individual purge are suppressed and logged but do not halt the script. Function exits `0` on success, `1` on invalid arguments.
 
@@ -831,12 +789,10 @@ sequenceDiagram
 
 #### 5.6.1 Diagnostic Log Push
 
-| Attribute          | Value                       |
-| ------------------ | --------------------------- |
-| **Component Name** | Diagnostic Log Push         |
-| **Service Type**   | Async Push                  |
-| **Source**         | src/core/apim.bicep:200-260 |
-| **Confidence**     | 0.90                        |
+| Attribute          | Value               |
+| ------------------ | ------------------- |
+| **Component Name** | Diagnostic Log Push |
+| **Service Type**   | Async Push          |
 
 **Protocol Details**: `Microsoft.Insights/diagnosticSettings@2021-05-01-preview`. Logs category: `allLogs`, Metrics category: `AllMetrics`. Targets: Log Analytics workspace (`workspaceId`) and Storage Account (`storageAccountId`). Push is platform-driven — no custom retry needed.
 
@@ -846,12 +802,10 @@ sequenceDiagram
 
 #### 5.6.2 Telemetry Stream
 
-| Attribute          | Value                       |
-| ------------------ | --------------------------- |
-| **Component Name** | Telemetry Stream            |
-| **Service Type**   | Async Push                  |
-| **Source**         | src/core/apim.bicep:262-280 |
-| **Confidence**     | 0.89                        |
+| Attribute          | Value            |
+| ------------------ | ---------------- |
+| **Component Name** | Telemetry Stream |
+| **Service Type**   | Async Push       |
 
 **Protocol Details**: ApplicationInsights logger (`loggerType: applicationInsights`) using InstrumentationKey credential. Push initiated by APIM on each API request/response cycle. No message queue — direct HTTP push to Application Insights ingestion endpoint.
 
@@ -859,12 +813,10 @@ sequenceDiagram
 
 #### 5.6.3 Module Output Chaining
 
-| Attribute          | Value                    |
-| ------------------ | ------------------------ |
-| **Component Name** | Module Output Chaining   |
-| **Service Type**   | Request/Response         |
-| **Source**         | infra/main.bicep:100-170 |
-| **Confidence**     | 0.82                     |
+| Attribute          | Value                  |
+| ------------------ | ---------------------- |
+| **Component Name** | Module Output Chaining |
+| **Service Type**   | Request/Response       |
 
 **Protocol Details**: ARM deployment-time parameter/output pass-through. `shared` outputs consumed by `core` params; `core` outputs consumed by `inventory` params. Synchronous sequential ARM deployment enforced by Bicep implicit dependencies.
 
@@ -878,8 +830,6 @@ sequenceDiagram
 | ------------------ | ------------------------ |
 | **Component Name** | Pre-Provision Hook Event |
 | **Service Type**   | Lifecycle Hook           |
-| **Source**         | azure.yaml:30-50         |
-| **Confidence**     | 0.82                     |
 
 **Event Schema**: `azd` hooks specification in `azure.yaml`. Trigger: `preprovision` lifecycle event. Shell: `sh`. Payload: `$AZURE_LOCATION` environment variable. No dead-letter queue — script failures halt `azd` provisioning with exit code `1`.
 
@@ -889,12 +839,10 @@ sequenceDiagram
 
 #### 5.7.2 APIM Deployment Event
 
-| Attribute          | Value                       |
-| ------------------ | --------------------------- |
-| **Component Name** | APIM Deployment Event       |
-| **Service Type**   | ARM Event                   |
-| **Source**         | src/core/main.bicep:200-240 |
-| **Confidence**     | 0.80                        |
+| Attribute          | Value                 |
+| ------------------ | --------------------- |
+| **Component Name** | APIM Deployment Event |
+| **Service Type**   | ARM Event             |
 
 **Event Schema**: ARM deployment completion event for `Microsoft.ApiManagement/service`. Triggers implicit dependency resolution in Bicep — `workspaces.bicep` and `developer-portal.bicep` modules begin deployment only after `apim.bicep` deployment succeeds.
 
@@ -904,12 +852,10 @@ sequenceDiagram
 
 #### 5.8.1 ApiManagement Config Object
 
-| Attribute          | Value                                |
-| ------------------ | ------------------------------------ |
-| **Component Name** | ApiManagement Config Object          |
-| **Service Type**   | DTO                                  |
-| **Source**         | src/shared/common-types.bicep:75-105 |
-| **Confidence**     | 0.87                                 |
+| Attribute          | Value                       |
+| ------------------ | --------------------------- |
+| **Component Name** | ApiManagement Config Object |
+| **Service Type**   | DTO                         |
 
 **Data Structure**: Bicep exported type `ApiManagement` with fields: `name: string`, `publisherEmail: string`, `publisherName: string`, `sku: ApimSku { name, capacity }`, `identity: SystemAssignedIdentity { type, userAssignedIdentities }`, `workspaces: array`.
 
@@ -919,12 +865,10 @@ sequenceDiagram
 
 #### 5.8.2 Deployment Output Bundle
 
-| Attribute          | Value                       |
-| ------------------ | --------------------------- |
-| **Component Name** | Deployment Output Bundle    |
-| **Service Type**   | DTO                         |
-| **Source**         | src/core/apim.bicep:310-345 |
-| **Confidence**     | 0.84                        |
+| Attribute          | Value                    |
+| ------------------ | ------------------------ |
+| **Component Name** | Deployment Output Bundle |
+| **Service Type**   | DTO                      |
 
 **Data Structure**: Set of string outputs: `API_MANAGEMENT_RESOURCE_ID`, `API_MANAGEMENT_NAME`, `AZURE_API_MANAGEMENT_IDENTITY_PRINCIPAL_ID`, `AZURE_CLIENT_SECRET_ID`, `AZURE_CLIENT_SECRET_NAME`, `AZURE_CLIENT_SECRET_PRINCIPAL_ID`, `AZURE_CLIENT_SECRET_CLIENT_ID`.
 
@@ -936,12 +880,10 @@ sequenceDiagram
 
 #### 5.9.1 API Gateway Pattern
 
-| Attribute          | Value                     |
-| ------------------ | ------------------------- |
-| **Component Name** | API Gateway Pattern       |
-| **Service Type**   | API Gateway               |
-| **Source**         | src/core/apim.bicep:1-345 |
-| **Confidence**     | 0.90                      |
+| Attribute          | Value               |
+| ------------------ | ------------------- |
+| **Component Name** | API Gateway Pattern |
+| **Service Type**   | API Gateway         |
 
 **Integration Specification**: APIM acts as the single ingress surface for all managed APIs. Policy pipeline enforces CORS, authentication, transformation, and rate limiting. Backend forwarding via `<forward-request>` policy element. Error handling: unmatched requests not terminated (`terminate-unmatched-request: false`). Compensation logic: soft-delete purge provides deployment compensation via `pre-provision.sh`.
 
@@ -949,12 +891,10 @@ sequenceDiagram
 
 #### 5.9.2 Diagnostic Fan-Out Pattern
 
-| Attribute          | Value                       |
-| ------------------ | --------------------------- |
-| **Component Name** | Diagnostic Fan-Out Pattern  |
-| **Service Type**   | Fan-Out                     |
-| **Source**         | src/core/apim.bicep:200-280 |
-| **Confidence**     | 0.88                        |
+| Attribute          | Value                      |
+| ------------------ | -------------------------- |
+| **Component Name** | Diagnostic Fan-Out Pattern |
+| **Service Type**   | Fan-Out                    |
 
 **Integration Specification**: Single APIM diagnostic source fans out to three independent telemetry sinks: Log Analytics (structured log analysis), Storage Account (cold archival), and Application Insights (real-time APM). This is a write-three pattern with no acknowledgment back to the source. Error handling: platform-level; individual sink failures do not affect other sinks.
 
@@ -964,12 +904,10 @@ sequenceDiagram
 
 #### 5.10.1 Bicep Module Interface Contract
 
-| Attribute          | Value                               |
-| ------------------ | ----------------------------------- |
-| **Component Name** | Bicep Module Interface Contract     |
-| **Service Type**   | API Contract                        |
-| **Source**         | src/shared/common-types.bicep:1-175 |
-| **Confidence**     | 0.90                                |
+| Attribute          | Value                           |
+| ------------------ | ------------------------------- |
+| **Component Name** | Bicep Module Interface Contract |
+| **Service Type**   | API Contract                    |
 
 **Full Contract Documentation**: Exported Bicep types (`@export()`) — `ApiManagement`, `Inventory`, `Monitoring`, `Shared` — define the complete parameter contracts for all modules. Each module's `param` declarations reference these types, enforcing schema compliance at compile-time.
 
@@ -985,8 +923,6 @@ sequenceDiagram
 | ------------------ | ----------------------------- |
 | **Component Name** | APIM ARM API Version Contract |
 | **Service Type**   | API Contract                  |
-| **Source**         | src/core/apim.bicep:150-155   |
-| **Confidence**     | 0.88                          |
 
 **Full Contract Documentation**: Resource type `Microsoft.ApiManagement/service@2025-03-01-preview`. This pinned API version defines the accepted properties, required fields, and response shape for all APIM ARM operations in this solution. Preview API — subject to breaking changes; upgrade requires testing.
 
@@ -1004,8 +940,6 @@ sequenceDiagram
 | ------------------ | ------------------------- |
 | **Component Name** | Azure Developer CLI (azd) |
 | **Service Type**   | External CLI Tool         |
-| **Source**         | azure.yaml:1-50           |
-| **Confidence**     | 0.88                      |
 
 **Dependency Specification**: External runtime dependency. Required for `azd up`, `azd provision`, `azd deploy`, `azd down` lifecycle operations. Lifecycle hooks (`preprovision`) depend on `azd` hook execution model.
 
@@ -1021,8 +955,6 @@ sequenceDiagram
 | ------------------ | -------------------------------- |
 | **Component Name** | Azure Resource Manager (ARM) API |
 | **Service Type**   | Platform Dependency              |
-| **Source**         | infra/main.bicep:1-50            |
-| **Confidence**     | 0.86                             |
 
 **Dependency Specification**: Platform-level dependency. All Bicep modules deploy through ARM. Subscription-scoped deployment requires `Microsoft.Authorization` and `Microsoft.Resources` resource providers plus APIM, Monitor, Storage, and API Center providers.
 
@@ -1124,18 +1056,18 @@ flowchart TB
 
 #### Service-to-Service Call Graph
 
-| Producer              | Consumer                 | Direction   | Protocol     | Data Type                                    | Source                                            |
-| --------------------- | ------------------------ | ----------- | ------------ | -------------------------------------------- | ------------------------------------------------- |
-| infra/main.bicep      | src/shared/main.bicep    | Deploy-time | ARM Module   | Shared monitoring outputs                    | infra/main.bicep:100-120                          |
-| src/shared/main.bicep | src/core/main.bicep      | Deploy-time | ARM Output   | LAW_ID, SA_ID, AI_ID                         | infra/main.bicep:120-145                          |
-| src/core/main.bicep   | src/inventory/main.bicep | Deploy-time | ARM Output   | APIM_ID, APIM_NAME                           | infra/main.bicep:145-170                          |
-| APIM Gateway Service  | Log Analytics Workspace  | Runtime     | HTTPS Push   | allLogs, AllMetrics diagnostic stream        | src/core/apim.bicep:200-260                       |
-| APIM Gateway Service  | Storage Account          | Runtime     | HTTPS Blob   | Archived diagnostic logs                     | src/core/apim.bicep:200-260                       |
-| APIM Gateway Service  | Application Insights     | Runtime     | HTTPS Push   | API telemetry (requests, latency, errors)    | src/core/apim.bicep:262-280                       |
-| Application Insights  | Log Analytics Workspace  | Runtime     | Internal     | Telemetry routed via LogAnalytics ingestion  | src/shared/monitoring/insights/main.bicep:120-145 |
-| API Center Service    | APIM Gateway Service     | Runtime     | ARM/Internal | API definitions and metadata synchronization | src/inventory/main.bicep:165-186                  |
-| azd CLI               | pre-provision.sh         | Deploy-time | Shell Hook   | $AZURE_LOCATION environment variable         | azure.yaml:30-50                                  |
-| pre-provision.sh      | Azure CLI (az)           | Deploy-time | CLI Process  | az apim deletedservice list / purge commands | infra/azd-hooks/pre-provision.sh:55-80            |
+| 📤 Producer           | 📥 Consumer              | ↔️ Direction | 🔌 Protocol  | 📦 Data Type                                 |
+| --------------------- | ------------------------ | ------------ | ------------ | -------------------------------------------- |
+| infra/main.bicep      | src/shared/main.bicep    | Deploy-time  | ARM Module   | Shared monitoring outputs                    |
+| src/shared/main.bicep | src/core/main.bicep      | Deploy-time  | ARM Output   | LAW_ID, SA_ID, AI_ID                         |
+| src/core/main.bicep   | src/inventory/main.bicep | Deploy-time  | ARM Output   | APIM_ID, APIM_NAME                           |
+| APIM Gateway Service  | Log Analytics Workspace  | Runtime      | HTTPS Push   | allLogs, AllMetrics diagnostic stream        |
+| APIM Gateway Service  | Storage Account          | Runtime      | HTTPS Blob   | Archived diagnostic logs                     |
+| APIM Gateway Service  | Application Insights     | Runtime      | HTTPS Push   | API telemetry (requests, latency, errors)    |
+| Application Insights  | Log Analytics Workspace  | Runtime      | Internal     | Telemetry routed via LogAnalytics ingestion  |
+| API Center Service    | APIM Gateway Service     | Runtime      | ARM/Internal | API definitions and metadata synchronization |
+| azd CLI               | pre-provision.sh         | Deploy-time  | Shell Hook   | $AZURE_LOCATION environment variable         |
+| pre-provision.sh      | Azure CLI (az)           | Deploy-time  | CLI Process  | az apim deletedservice list / purge commands |
 
 #### Data Flow Dependency Table
 
@@ -1150,12 +1082,12 @@ flowchart TB
 
 #### External API Integrations
 
-| External System        | Integration Type                     | Protocol          | Authentication          | Source                                 |
-| ---------------------- | ------------------------------------ | ----------------- | ----------------------- | -------------------------------------- |
-| Azure Active Directory | Identity provider (developer portal) | OAuth2 / MSAL 2.0 | Client ID + Secret      | src/core/developer-portal.bicep:55-130 |
-| Azure Resource Manager | Infrastructure deployment            | HTTPS / ARM API   | Azure CLI / azd auth    | infra/main.bicep:1-50                  |
-| Azure Monitor          | Diagnostic sink                      | HTTPS             | Managed identity        | src/core/apim.bicep:200-280            |
-| Azure API Center       | API catalog                          | HTTPS / REST      | Managed identity (RBAC) | src/inventory/main.bicep:103-115       |
+| 🌐 External System     | 🔗 Integration Type                  | 🔌 Protocol       | 🔒 Authentication       |
+| ---------------------- | ------------------------------------ | ----------------- | ----------------------- |
+| Azure Active Directory | Identity provider (developer portal) | OAuth2 / MSAL 2.0 | Client ID + Secret      |
+| Azure Resource Manager | Infrastructure deployment            | HTTPS / ARM API   | Azure CLI / azd auth    |
+| Azure Monitor          | Diagnostic sink                      | HTTPS             | Managed identity        |
+| Azure API Center       | API catalog                          | HTTPS / REST      | Managed identity (RBAC) |
 
 #### Event Subscription Map
 
