@@ -39,9 +39,9 @@ framework: "TOGAF 10 Application Architecture"
 
 ---
 
-## 1. Executive Summary
+## 1. 🔍 Executive Summary
 
-### Overview
+### 🔍 Overview
 
 The APIM Accelerator is an enterprise-grade Azure Infrastructure-as-Code (IaC) solution that deploys a complete Azure API Management landing zone through a declarative, configuration-driven Bicep and Azure Developer CLI (`azd`) pipeline. This Application Architecture analysis scanned the entire repository root (`.`) and identified **34 Application layer components** across all 11 TOGAF Application Architecture component types. Evidence is drawn from source files including `infra/main.bicep`, `src/core/apim.bicep`, `src/core/developer-portal.bicep`, `src/core/workspaces.bicep`, `src/core/main.bicep`, `src/inventory/main.bicep`, `src/shared/main.bicep`, `src/shared/common-types.bicep`, `src/shared/constants.bicep`, `src/shared/monitoring/main.bicep`, `src/shared/monitoring/operational/main.bicep`, `src/shared/monitoring/insights/main.bicep`, `infra/settings.yaml`, `azure.yaml`, and `infra/azd-hooks/pre-provision.sh`.
 
@@ -68,9 +68,9 @@ The architecture follows strict layer separation: the Shared Monitoring layer pr
 
 ---
 
-## 2. Architecture Landscape
+## 2. 🗺️ Architecture Landscape
 
-### Overview
+### 🗺️ Overview
 
 This section provides a comprehensive inventory of all Application layer components identified in the APIM Accelerator repository, organized by the eleven TOGAF Application Architecture component types. Components are classified using the weighted confidence formula: (30% × filename signal) + (25% × path signal) + (35% × content signal) + (10% × cross-reference signal), applied against evidence across all source files within `folder_paths: ["."]`.
 
@@ -161,7 +161,7 @@ flowchart TB
 
 ✅ Mermaid Verification: 5/5 | Score: 98/100 | Diagrams: 1 | Violations: 0
 
-### 2.1 Application Services
+### 2.1 🔧 Application Services
 
 | Name                           | Description                                                                                                                                | Service Type      |
 | ------------------------------ | ------------------------------------------------------------------------------------------------------------------------------------------ | ----------------- |
@@ -170,7 +170,7 @@ flowchart TB
 | Developer Portal Application   | Self-service web application with Azure AD authentication, CORS policy, MSAL 2.0, and API documentation/testing capabilities               | Portal            |
 | Monitoring Aggregation Service | Composite observability service comprising Log Analytics workspace, Application Insights, and diagnostic storage for centralized telemetry | Background Worker |
 
-### 2.2 Application Components
+### 2.2 📦 Application Components
 
 | Name                         | Description                                                                                                           | Service Type |
 | ---------------------------- | --------------------------------------------------------------------------------------------------------------------- | ------------ |
@@ -180,7 +180,7 @@ flowchart TB
 | Common Type System           | Bicep exported type definitions (`src/shared/common-types.bicep`) forming the application's parameter contract schema | Module       |
 | Constants & Utility Module   | Bicep exported functions and constants (`src/shared/constants.bicep`) for naming conventions and configuration        | Module       |
 
-### 2.3 Application Interfaces
+### 2.3 🔌 Application Interfaces
 
 | Name                                     | Description                                                                                                                                       | Service Type |
 | ---------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------- | ------------ |
@@ -189,7 +189,7 @@ flowchart TB
 | Log Analytics Query Interface            | KQL query endpoint of the Log Analytics workspace consumed via Azure Monitor diagnostic pipelines                                                 | REST API     |
 | Application Insights Ingestion Interface | Telemetry ingestion interface using `InstrumentationKey`-authenticated push from APIM ApplicationInsights logger                                  | REST API     |
 
-### 2.4 Application Collaborations
+### 2.4 🤝 Application Collaborations
 
 | Name                                    | Description                                                                                                                                                    | Service Type          |
 | --------------------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------- | --------------------- |
@@ -197,7 +197,7 @@ flowchart TB
 | Inventory–Core APIM Collaboration       | `src/inventory/main.bicep` consumes `API_MANAGEMENT_NAME` and `API_MANAGEMENT_RESOURCE_ID` outputs from core module to link API source                         | Service Orchestration |
 | APIM–Application Insights Collaboration | APIM `appInsightsLogger` resource pushes telemetry into Application Insights using the instrumentation key reference at deploy time                            | Integration           |
 
-### 2.5 Application Functions
+### 2.5 ⚙️ Application Functions
 
 | Name                             | Description                                                                                                                             | Service Type   |
 | -------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------- | -------------- |
@@ -207,7 +207,7 @@ flowchart TB
 | API Auto-Discovery Function      | Automated API catalog synchronization from APIM to API Center via `apiSources` resource linking                                         | Integration    |
 | Soft-Delete Purge Function       | `pre-provision.sh` lifecycle function that lists and purges soft-deleted APIM instances before provisioning to prevent naming conflicts | Scheduled Job  |
 
-### 2.6 Application Interactions
+### 2.6 🔄 Application Interactions
 
 | Name                   | Description                                                                                                                         | Service Type     |
 | ---------------------- | ----------------------------------------------------------------------------------------------------------------------------------- | ---------------- |
@@ -215,50 +215,50 @@ flowchart TB
 | Telemetry Stream       | APIM `appInsightsLogger` pushes API request/response telemetry to Application Insights using credentials-based logger registration  | Async Push       |
 | Module Output Chaining | Bicep module `output` values from `shared` are consumed as `param` inputs in `core`, and `core` outputs are consumed by `inventory` | Request/Response |
 
-### 2.7 Application Events
+### 2.7 📣 Application Events
 
 | Name                     | Description                                                                                                                        | Service Type   |
 | ------------------------ | ---------------------------------------------------------------------------------------------------------------------------------- | -------------- |
 | Pre-Provision Hook Event | `azd` preprovision lifecycle event triggers `pre-provision.sh` bash script via the `azure.yaml` hooks configuration                | Lifecycle Hook |
 | APIM Deployment Event    | ARM deployment event signaling successful provisioning of the APIM resource, unlocking dependent workspace and portal provisioning | ARM Event      |
 
-### 2.8 Application Data Objects
+### 2.8 🗃️ Application Data Objects
 
 | Name                        | Description                                                                                                                                                | Service Type |
 | --------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------- | ------------ |
 | ApiManagement Config Object | Strongly typed Bicep object (`ApiManagement` type) carrying `name`, `publisherEmail`, `publisherName`, `sku`, `identity`, `workspaces`                     | DTO          |
 | Deployment Output Bundle    | Set of output strings (`API_MANAGEMENT_RESOURCE_ID`, `API_MANAGEMENT_NAME`, `AZURE_API_MANAGEMENT_IDENTITY_PRINCIPAL_ID`) emitted by `src/core/apim.bicep` | DTO          |
 
-### 2.9 Integration Patterns
+### 2.9 🏗️ Integration Patterns
 
 | Name                       | Description                                                                                                                                             | Service Type |
 | -------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------- | ------------ |
 | API Gateway Pattern        | APIM serves as a centralized API gateway providing a single ingress surface for all backend APIs with policy-based mediation                            | API Gateway  |
 | Diagnostic Fan-Out Pattern | Diagnostic settings route the same telemetry stream simultaneously to Log Analytics (query), Storage Account (archival), and Application Insights (APM) | Fan-Out      |
 
-### 2.10 Service Contracts
+### 2.10 📋 Service Contracts
 
 | Name                            | Description                                                                                                                               | Service Type |
 | ------------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------- | ------------ |
 | Bicep Module Interface Contract | Typed `param` and `output` blocks across all Bicep modules define the formal application service contracts for orchestration dependencies | API Contract |
 | APIM ARM API Version Contract   | Pinned API version `2025-03-01-preview` for `Microsoft.ApiManagement/service` constitutes the service contract between Bicep and APIM ARM | API Contract |
 
-### 2.11 Application Dependencies
+### 2.11 📎 Application Dependencies
 
 | Name                             | Description                                                                                                  | Service Type        |
 | -------------------------------- | ------------------------------------------------------------------------------------------------------------ | ------------------- |
 | Azure Developer CLI (azd)        | External runtime dependency providing lifecycle orchestration (`azd up`, `azd provision`, hooks execution)   | External CLI Tool   |
 | Azure Resource Manager (ARM) API | Platform dependency: all Bicep modules deploy through ARM which governs resource creation, updates, and RBAC | Platform Dependency |
 
-### Summary
+### 🗺️ Summary
 
 The APIM Accelerator Application Architecture comprises **34 Application layer components** across all 11 TOGAF types. The four primary application services (APIM Gateway, Developer Portal, API Inventory Service, and Monitoring Service) are orchestrated by three Bicep modules with formal typed interface contracts and output-chained integration. All interactions are either synchronous ARM deploy-time (module output chaining) or asynchronous push-based telemetry (diagnostic settings, Application Insights logger). The integration pattern is API Gateway with Diagnostic Fan-Out. Average confidence is **0.86**, with the highest scores on the APIM Management REST API (0.93) and the Core Platform Module (0.91), both backed by explicit, pinned resource declarations.
 
 ---
 
-## 3. Architecture Principles
+## 3. 📐 Architecture Principles
 
-### Overview
+### 📐 Overview
 
 This section documents five design principles observed directly in the APIM Accelerator source files. Each principle is grounded in explicit evidence from the repository — no aspirational or presumed principles are included. Evidence is cited with source file and line range.
 
@@ -341,15 +341,15 @@ flowchart LR
 
 ---
 
-## 4. Current State Baseline
+## 4. 📊 Current State Baseline
 
-### Overview
+### 📊 Overview
 
 This section documents the current deployed topology of the APIM Accelerator application layer as expressed in the source files. All topology information is derived from Bicep module declarations, `infra/settings.yaml`, and `azure.yaml`. No runtime state is available — this baseline reflects the declared desired state of the deployment configuration at the time of analysis.
 
 The deployment model is a three-layer, subscription-scoped orchestration: the `shared` layer establishes monitoring foundations, the `core` layer deploys the API Management platform, and the `inventory` layer integrates API Center. Each layer is a discrete Bicep module deployed in strict dependency sequence. No circular dependencies exist, and all inter-layer communication is through ARM output chaining.
 
-#### Service Topology
+#### 🗺️ Service Topology
 
 | Service Name                  | Deployment Target           | Protocol     | Status     | Module                                       |
 | ----------------------------- | --------------------------- | ------------ | ---------- | -------------------------------------------- |
@@ -361,7 +361,7 @@ The deployment model is a three-layer, subscription-scoped orchestration: the `s
 | Storage Account (Diagnostics) | Azure Blob Storage          | HTTPS        | Configured | src/shared/monitoring/operational/main.bicep |
 | API Center Service            | Azure API Center            | REST         | Configured | src/inventory/main.bicep                     |
 
-#### Deployment State Summary
+#### ⚙️ Deployment State Summary
 
 | Attribute             | Value                                           |
 | --------------------- | ----------------------------------------------- |
@@ -375,7 +375,7 @@ The deployment model is a three-layer, subscription-scoped orchestration: the `s
 | Workspaces            | 1 default workspace (`workspace1`)              |
 | Public Network Access | Enabled (configurable)                          |
 
-#### Protocol Inventory
+#### 🔌 Protocol Inventory
 
 | 🔌 Protocol       | 📄 Usage                                                   |
 | ----------------- | ---------------------------------------------------------- |
@@ -386,7 +386,7 @@ The deployment model is a three-layer, subscription-scoped orchestration: the `s
 | HTTPS / ARM       | Azure Resource Manager deployment and management API       |
 | OAuth2 / MSAL 2.0 | Developer portal Azure AD identity provider authentication |
 
-#### Versioning Status
+#### 📌 Versioning Status
 
 | Component               | Pinned API Version | Notes                                                   |
 | ----------------------- | ------------------ | ------------------------------------------------------- |
@@ -402,19 +402,19 @@ The deployment model is a three-layer, subscription-scoped orchestration: the `s
 | API Center Workspace    | 2024-03-01         | Stable GA, src/inventory/main.bicep                     |
 | Resource Groups         | 2025-04-01         | Latest GA, infra/main.bicep                             |
 
-#### Health Posture
+#### 💬 Health Posture
 
 The current state does not include runtime health endpoints or SLO definitions within the IaC code. APIM Platform health is observable through Application Insights performance dashboards and Log Analytics KQL queries. The Developer Portal health is inferred from APIM gateway availability. API Center availability follows Azure platform SLAs. No custom `/health/live` or `/health/ready` probes are declared in the current configuration; health monitoring is entirely telemetry-driven.
 
-### Summary
+### 📊 Summary
 
 The APIM Accelerator application baseline represents a configured, production-ready API Management platform with Premium SKU, System-Assigned managed identity, integrated observability, Azure AD-backed developer portal, and API Center governance. The deployment is fully declarative, subscription-scoped, and configuration-driven. Protocol coverage spans REST, KQL, AI telemetry push, Blob HTTPS, ARM API, and OAuth2. Versioning is stable with all API versions explicitly pinned. The primary gap in the current baseline is the absence of custom health check endpoints, runtime SLO definitions, and explicit resilience policies (circuit breakers, retry policies) — these are delegated to the Azure PaaS platform SLA by design.
 
 ---
 
-## 5. Component Catalog
+## 5. 📖 Component Catalog
 
-### Overview
+### 📖 Overview
 
 This section provides detailed specifications for all 34 Application layer components identified in the APIM Accelerator. Each subsection corresponds to one of the 11 TOGAF Application Architecture component types. Components include service type, API surface, dependencies, resilience configuration, scaling strategy, and health information — all derived from source file evidence.
 
@@ -459,7 +459,7 @@ sequenceDiagram
 
 ---
 
-### 5.1 Application Services
+### 5.1 🔧 Application Services
 
 #### 5.1.1 APIM Gateway Service
 
@@ -585,7 +585,7 @@ sequenceDiagram
 
 ---
 
-### 5.2 Application Components
+### 5.2 📦 Application Components
 
 #### 5.2.1 Core Platform Module
 
@@ -639,7 +639,7 @@ sequenceDiagram
 
 ---
 
-### 5.3 Application Interfaces
+### 5.3 🔌 Application Interfaces
 
 #### 5.3.1 APIM Management REST API
 
@@ -689,7 +689,7 @@ sequenceDiagram
 
 ---
 
-### 5.4 Application Collaborations
+### 5.4 🤝 Application Collaborations
 
 #### 5.4.1 Core–Shared Monitoring Collaboration
 
@@ -724,7 +724,7 @@ sequenceDiagram
 
 ---
 
-### 5.5 Application Functions
+### 5.5 ⚙️ Application Functions
 
 #### 5.5.1 API Gateway Function
 
@@ -785,7 +785,7 @@ sequenceDiagram
 
 ---
 
-### 5.6 Application Interactions
+### 5.6 🔄 Application Interactions
 
 #### 5.6.1 Diagnostic Log Push
 
@@ -822,7 +822,7 @@ sequenceDiagram
 
 ---
 
-### 5.7 Application Events
+### 5.7 📣 Application Events
 
 #### 5.7.1 Pre-Provision Hook Event
 
@@ -848,7 +848,7 @@ sequenceDiagram
 
 ---
 
-### 5.8 Application Data Objects
+### 5.8 🗃️ Application Data Objects
 
 #### 5.8.1 ApiManagement Config Object
 
@@ -876,7 +876,7 @@ sequenceDiagram
 
 ---
 
-### 5.9 Integration Patterns
+### 5.9 🏗️ Integration Patterns
 
 #### 5.9.1 API Gateway Pattern
 
@@ -900,7 +900,7 @@ sequenceDiagram
 
 ---
 
-### 5.10 Service Contracts
+### 5.10 📋 Service Contracts
 
 #### 5.10.1 Bicep Module Interface Contract
 
@@ -932,7 +932,7 @@ sequenceDiagram
 
 ---
 
-### 5.11 Application Dependencies
+### 5.11 📎 Application Dependencies
 
 #### 5.11.1 Azure Developer CLI (azd)
 
@@ -964,9 +964,9 @@ sequenceDiagram
 
 ---
 
-## 8. Dependencies & Integration
+## 8. 🔗 Dependencies & Integration
 
-### Overview
+### 🔗 Overview
 
 This section documents all service-to-service dependencies, data flow connections, external API integrations, and event subscriptions identified in the APIM Accelerator Application Architecture. Every dependency documented in Section 5 appears here in consolidated form. The section is organized into four subsections: service call graph, data flow dependencies, external integrations, and the integration pattern matrix.
 
@@ -1054,7 +1054,7 @@ flowchart TB
 
 ✅ Mermaid Verification: 5/5 | Score: 98/100 | Diagrams: 1 | Violations: 0
 
-#### Service-to-Service Call Graph
+#### 🏗️ Service-to-Service Call Graph
 
 | 📤 Producer           | 📥 Consumer              | ↔️ Direction | 🔌 Protocol  | 📦 Data Type                                 |
 | --------------------- | ------------------------ | ------------ | ------------ | -------------------------------------------- |
@@ -1069,7 +1069,7 @@ flowchart TB
 | azd CLI               | pre-provision.sh         | Deploy-time  | Shell Hook   | $AZURE_LOCATION environment variable         |
 | pre-provision.sh      | Azure CLI (az)           | Deploy-time  | CLI Process  | az apim deletedservice list / purge commands |
 
-#### Data Flow Dependency Table
+#### 🌊 Data Flow Dependency Table
 
 | Data Flow Name        | Source Service       | Sink Service         | Data Category        | Retention          | Security Controls                     |
 | --------------------- | -------------------- | -------------------- | -------------------- | ------------------ | ------------------------------------- |
@@ -1080,7 +1080,7 @@ flowchart TB
 | AI to LAW             | Application Insights | Log Analytics        | Unified telemetry    | Platform default   | Workspace-based mode                  |
 | API Discovery Sync    | API Center           | APIM source          | API catalog metadata | API Center storage | Managed identity, RBAC                |
 
-#### External API Integrations
+#### 🌐 External API Integrations
 
 | 🌐 External System     | 🔗 Integration Type                  | 🔌 Protocol       | 🔒 Authentication       |
 | ---------------------- | ------------------------------------ | ----------------- | ----------------------- |
@@ -1089,7 +1089,7 @@ flowchart TB
 | Azure Monitor          | Diagnostic sink                      | HTTPS             | Managed identity        |
 | Azure API Center       | API catalog                          | HTTPS / REST      | Managed identity (RBAC) |
 
-#### Event Subscription Map
+#### 📨 Event Subscription Map
 
 | Event                        | Publisher           | Subscriber                               | Trigger Mechanism         | Error Handling                        |
 | ---------------------------- | ------------------- | ---------------------------------------- | ------------------------- | ------------------------------------- |
@@ -1098,7 +1098,7 @@ flowchart TB
 | Shared outputs available     | ARM (shared module) | core module                              | ARM output chaining       | Deployment fails if outputs missing   |
 | Core outputs available       | ARM (core module)   | inventory module                         | ARM output chaining       | Deployment fails if outputs missing   |
 
-#### Integration Pattern Matrix
+#### 🧩 Integration Pattern Matrix
 
 | Pattern Name                 | Applies To                                    | Characteristics                                                                                          | Trade-offs                                                                     |
 | ---------------------------- | --------------------------------------------- | -------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------ |
@@ -1107,7 +1107,7 @@ flowchart TB
 | ARM Output Chaining          | All modules                                   | Synchronous deploy-time dependency graph; no runtime messaging; typed contract via Bicep exports         | Tightly coupled deploy order; any module failure blocks downstream deployments |
 | Pre-Provision Lifecycle Hook | azd → pre-provision.sh                        | Event-driven cleanup before idempotent reprovisioning; non-interactive, automated soft-delete management | Suppressed individual purge errors may leave stale resources in edge cases     |
 
-### Summary
+### 🔗 Summary
 
 The APIM Accelerator Application layer exhibits **four distinct integration patterns**: API Gateway (APIM as single ingress for all APIs), Diagnostic Fan-Out (three-sink telemetry distribution), ARM Output Chaining (deploy-time module composition), and Pre-Provision Lifecycle Hook (automated infrastructure cleanup). All runtime integrations are push-based and asynchronous (diagnostic streams, telemetry push). All deploy-time integrations are synchronous and sequentially ordered via ARM dependency resolution. There are no event buses, message queues, or pub/sub patterns — the integration model is direct push to Azure PaaS sinks and declarative ARM module chaining. External dependencies are limited to Azure Active Directory (developer portal authentication), Azure Resource Manager (infrastructure deployment), and the Azure Developer CLI (lifecycle orchestration).
 
