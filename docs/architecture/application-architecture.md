@@ -471,7 +471,7 @@ sequenceDiagram
 
 **API Surface:**
 
-| Endpoint Type    | Count | Protocol     | Description                                                  |
+| 🔗 Endpoint Type    | 🔢 Count | 📡 Protocol     | 📄 Description                                                  |
 | ---------------- | ----- | ------------ | ------------------------------------------------------------ |
 | Gateway REST     | \*    | HTTPS        | All backend API proxied endpoints managed via APIM policies  |
 | Management API   | \*    | HTTPS / ARM  | Azure Resource Manager REST API for service administration   |
@@ -479,7 +479,7 @@ sequenceDiagram
 
 **Dependencies:**
 
-| Dependency              | Direction  | Protocol   | Purpose                                    |
+| 🔗 Dependency              | ↔️ Direction  | 📡 Protocol   | 🎯 Purpose                                    |
 | ----------------------- | ---------- | ---------- | ------------------------------------------ |
 | Log Analytics Workspace | Downstream | HTTPS      | Receives diagnostic allLogs and AllMetrics |
 | Application Insights    | Downstream | HTTPS Push | Receives API request/response telemetry    |
@@ -504,14 +504,14 @@ sequenceDiagram
 
 **API Surface:**
 
-| Endpoint Type   | Count | Protocol     | Description                                         |
+| 🔗 Endpoint Type   | 🔢 Count | 📡 Protocol     | 📄 Description                                         |
 | --------------- | ----- | ------------ | --------------------------------------------------- |
 | API Center REST | \*    | HTTPS / ARM  | ARM-managed API Center service management interface |
 | API Source Sync | 1     | Internal ARM | Automatic APIM-to-API Center API synchronization    |
 
 **Dependencies:**
 
-| Dependency           | Direction | Protocol | Purpose                                             |
+| 🔗 Dependency           | ↔️ Direction | 📡 Protocol | 🎯 Purpose                                             |
 | -------------------- | --------- | -------- | --------------------------------------------------- |
 | APIM Gateway Service | Upstream  | ARM      | Source of APIs for automatic catalog population     |
 | Azure RBAC           | Upstream  | ARM      | API Center Data Reader and Compliance Manager roles |
@@ -534,7 +534,7 @@ sequenceDiagram
 
 **API Surface:**
 
-| Endpoint Type         | Count | Protocol           | Description                                                 |
+| 🔗 Endpoint Type         | 🔢 Count | 📡 Protocol           | 📄 Description                                                 |
 | --------------------- | ----- | ------------------ | ----------------------------------------------------------- |
 | Developer Portal UI   | 1     | HTTPS              | Web application interface for API documentation and testing |
 | AAD Identity Provider | 1     | OAuth2 / MSAL 2.0  | Azure AD sign-in/sign-up flow via `login.windows.net`       |
@@ -542,7 +542,7 @@ sequenceDiagram
 
 **Dependencies:**
 
-| Dependency             | Direction | Protocol | Purpose                                        |
+| 🔗 Dependency             | ↔️ Direction | 📡 Protocol | 🎯 Purpose                                        |
 | ---------------------- | --------- | -------- | ---------------------------------------------- |
 | APIM Gateway Service   | Upstream  | Parent   | Hosted as a child resource of the APIM service |
 | Azure Active Directory | Upstream  | OAuth2   | Identity provider for developer authentication |
@@ -565,7 +565,7 @@ sequenceDiagram
 
 **API Surface:**
 
-| Endpoint Type         | Count | Protocol   | Description                                        |
+| 🔗 Endpoint Type         | 🔢 Count | 📡 Protocol   | 📄 Description                                        |
 | --------------------- | ----- | ---------- | -------------------------------------------------- |
 | KQL Query Endpoint    | 1     | HTTPS      | Log Analytics workspace KQL query interface        |
 | AI Ingestion Endpoint | 1     | HTTPS Push | Application Insights telemetry collection endpoint |
@@ -573,7 +573,7 @@ sequenceDiagram
 
 **Dependencies:**
 
-| Dependency   | Direction | Protocol | Purpose                            |
+| 🔗 Dependency   | ↔️ Direction | 📡 Protocol | 🎯 Purpose                            |
 | ------------ | --------- | -------- | ---------------------------------- |
 | APIM Service | Upstream  | Push     | Primary telemetry and log producer |
 
@@ -1071,7 +1071,7 @@ flowchart TB
 
 #### 🌊 Data Flow Dependency Table
 
-| Data Flow Name        | Source Service       | Sink Service         | Data Category        | Retention          | Security Controls                     |
+| 🌊 Data Flow Name        | 📤 Source Service       | 📥 Sink Service         | 🏷️ Data Category        | 🕒 Retention          | 🛡️ Security Controls                     |
 | --------------------- | -------------------- | -------------------- | -------------------- | ------------------ | ------------------------------------- |
 | Diagnostic Log Stream | APIM Gateway         | Log Analytics        | Operational logs     | Platform default   | Managed identity, workspace isolation |
 | Metric Stream         | APIM Gateway         | Log Analytics        | Performance metrics  | Platform default   | Managed identity                      |
@@ -1091,7 +1091,7 @@ flowchart TB
 
 #### 📨 Event Subscription Map
 
-| Event                        | Publisher           | Subscriber                               | Trigger Mechanism         | Error Handling                        |
+| 📣 Event                        | 📤 Publisher           | 📥 Subscriber                               | ⚡ Trigger Mechanism         | 🚨 Error Handling                        |
 | ---------------------------- | ------------------- | ---------------------------------------- | ------------------------- | ------------------------------------- |
 | preprovision lifecycle event | azd CLI             | pre-provision.sh                         | azure.yaml hooks config   | Script exit 1 halts azd provisioning  |
 | APIM deployment completion   | ARM                 | workspaces.bicep, developer-portal.bicep | Bicep implicit dependency | ARM deployment failure halts pipeline |
@@ -1100,7 +1100,7 @@ flowchart TB
 
 #### 🧩 Integration Pattern Matrix
 
-| Pattern Name                 | Applies To                                    | Characteristics                                                                                          | Trade-offs                                                                     |
+| 🧩 Pattern Name                 | 🎯 Applies To                                    | ⭐ Characteristics                                                                                          | ⚖️ Trade-offs                                                                     |
 | ---------------------------- | --------------------------------------------- | -------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------ |
 | API Gateway                  | APIM Gateway Service (core)                   | Single ingress, policy pipeline, protocol mediation, consumer abstraction from backends                  | Single point of failure mitigated by Premium SLA (99.95%); latency overhead    |
 | Diagnostic Fan-Out           | APIM → Log Analytics + Storage + App Insights | Write-three pattern, platform-managed, no acknowledgment back to source, independent sink failures       | Storage and LAW are decoupled; AI and LAW share workspace reducing redundancy  |
