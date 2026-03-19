@@ -101,8 +101,8 @@ A total of **53 data layer components** were identified across 11 canonical comp
 
 ### 🔍 Key Findings
 
-| 🔍 Finding | 📝 Detail | ⚠️ Severity |
-| --- | --- | --- |
+| 🔍 Finding                                 | 📝 Detail                                                         | ⚠️ Severity   |
+| ------------------------------------------ | ----------------------------------------------------------------- | ------------- |
 | **53 data components identified**          | Across all 11 canonical types from 8 source files                 | Informational |
 | **4 Azure data stores deployed**           | Log Analytics, Storage Account, Application Insights, API Center  | Informational |
 | **5 data flows documented**                | All as declarative Bicep diagnostic/logger/source resources       | Informational |
@@ -145,53 +145,53 @@ The architecture follows an **ingestion-forward** data pattern: all runtime data
 
 ### 🧩 2.1 Data Entities
 
-| 🧩 Name | 📝 Description | 🏷️ Classification |
-| --- | --- | --- |
-| ApiManagement          | Configuration entity for the Azure APIM service including SKU, identity, publisher info, and workspace list | Internal       |
-| Monitoring             | Composite configuration entity for observability infrastructure (Log Analytics + App Insights)              | Internal       |
-| LogAnalytics           | Workspace configuration entity with SKU, identity, and resource ID fields                                   | Internal       |
-| ApplicationInsights    | App Insights instance configuration entity linked to a Log Analytics workspace                              | Internal       |
-| Inventory              | API Center and tagging configuration entity for inventory management                                        | Internal       |
-| ApiCenter              | API Center service configuration entity with identity options                                               | Internal       |
-| SystemAssignedIdentity | Managed identity entity for system-assigned or user-assigned identity types                                 | Internal       |
-| ExtendedIdentity       | Extended identity entity supporting combined and None identity types                                        | Internal       |
-| ApimSku                | SKU configuration entity specifying the pricing tier and capacity                                           | Internal       |
-| Shared                 | Shared infrastructure configuration entity composing monitoring settings and resource tags                  | Internal       |
+| 🧩 Name                | 📝 Description                                                                                              | 🏷️ Classification |
+| ---------------------- | ----------------------------------------------------------------------------------------------------------- | ----------------- |
+| ApiManagement          | Configuration entity for the Azure APIM service including SKU, identity, publisher info, and workspace list | Internal          |
+| Monitoring             | Composite configuration entity for observability infrastructure (Log Analytics + App Insights)              | Internal          |
+| LogAnalytics           | Workspace configuration entity with SKU, identity, and resource ID fields                                   | Internal          |
+| ApplicationInsights    | App Insights instance configuration entity linked to a Log Analytics workspace                              | Internal          |
+| Inventory              | API Center and tagging configuration entity for inventory management                                        | Internal          |
+| ApiCenter              | API Center service configuration entity with identity options                                               | Internal          |
+| SystemAssignedIdentity | Managed identity entity for system-assigned or user-assigned identity types                                 | Internal          |
+| ExtendedIdentity       | Extended identity entity supporting combined and None identity types                                        | Internal          |
+| ApimSku                | SKU configuration entity specifying the pricing tier and capacity                                           | Internal          |
+| Shared                 | Shared infrastructure configuration entity composing monitoring settings and resource tags                  | Internal          |
 
 ### 🗃️ 2.2 Data Models
 
-| 🗃️ Name | 📝 Description | 🏷️ Classification |
-| --- | --- | --- |
-| Bicep Type System         | Strongly typed data model defined via Bicep `type` exports in common-types.bicep; enforces parameter contracts across all modules | Internal       |
-| YAML Configuration Schema | Human-readable configuration data model in settings.yaml; defines all environment-level parameters consumed by main.bicep         | Internal       |
-| ARM Resource Schema       | Implicit data model defined by Azure Resource Manager API versions pinned in all Bicep resource declarations                      | Internal       |
+| 🗃️ Name                   | 📝 Description                                                                                                                    | 🏷️ Classification |
+| ------------------------- | --------------------------------------------------------------------------------------------------------------------------------- | ----------------- |
+| Bicep Type System         | Strongly typed data model defined via Bicep `type` exports in common-types.bicep; enforces parameter contracts across all modules | Internal          |
+| YAML Configuration Schema | Human-readable configuration data model in settings.yaml; defines all environment-level parameters consumed by main.bicep         | Internal          |
+| ARM Resource Schema       | Implicit data model defined by Azure Resource Manager API versions pinned in all Bicep resource declarations                      | Internal          |
 
 ### 🗄️ 2.3 Data Stores
 
-| 🗄️ Name | 📝 Description | 🏷️ Classification |
-| --- | --- | --- |
-| Log Analytics Workspace | Centralized log and metric store; receives diagnostic data from APIM and App Insights; supports KQL queries   | Internal       |
-| Azure Storage Account   | Blob-based log archival store using Standard_LRS; receives diagnostic logs from APIM for long-term retention  | Internal       |
-| Application Insights    | Telemetry and APM data store; ingests APIM request/response traces in workspace-based (LogAnalytics) mode     | Internal       |
-| Azure API Center        | API metadata catalog store; holds API definitions, governance state, and compliance data discovered from APIM | Internal       |
+| 🗄️ Name                 | 📝 Description                                                                                                | 🏷️ Classification |
+| ----------------------- | ------------------------------------------------------------------------------------------------------------- | ----------------- |
+| Log Analytics Workspace | Centralized log and metric store; receives diagnostic data from APIM and App Insights; supports KQL queries   | Internal          |
+| Azure Storage Account   | Blob-based log archival store using Standard_LRS; receives diagnostic logs from APIM for long-term retention  | Internal          |
+| Application Insights    | Telemetry and APM data store; ingests APIM request/response traces in workspace-based (LogAnalytics) mode     | Internal          |
+| Azure API Center        | API metadata catalog store; holds API definitions, governance state, and compliance data discovered from APIM | Internal          |
 
 ### 🔄 2.4 Data Flows
 
-| 🔄 Name | 📝 Description | 🏷️ Classification |
-| --- | --- | --- |
-| APIM → Log Analytics         | Diagnostic logs and all metrics streamed from APIM to Log Analytics via diagnostic settings resource     | Internal       |
-| APIM → Storage Account       | Diagnostic log archival from APIM to Storage Account blob containers for long-term retention             | Internal       |
-| APIM → Application Insights  | API telemetry (requests, latency, errors) pushed to App Insights via ApplicationInsights logger resource | Internal       |
-| App Insights → Log Analytics | Workspace-based ingestion mode routes all App Insights telemetry into the linked Log Analytics workspace | Internal       |
-| APIM → API Center            | API discovery and synchronization from APIM to API Center via API source integration resource            | Internal       |
+| 🔄 Name                      | 📝 Description                                                                                           | 🏷️ Classification |
+| ---------------------------- | -------------------------------------------------------------------------------------------------------- | ----------------- |
+| APIM → Log Analytics         | Diagnostic logs and all metrics streamed from APIM to Log Analytics via diagnostic settings resource     | Internal          |
+| APIM → Storage Account       | Diagnostic log archival from APIM to Storage Account blob containers for long-term retention             | Internal          |
+| APIM → Application Insights  | API telemetry (requests, latency, errors) pushed to App Insights via ApplicationInsights logger resource | Internal          |
+| App Insights → Log Analytics | Workspace-based ingestion mode routes all App Insights telemetry into the linked Log Analytics workspace | Internal          |
+| APIM → API Center            | API discovery and synchronization from APIM to API Center via API source integration resource            | Internal          |
 
 ### ⚡ 2.5 Data Services
 
-| ⚡ Name | 📝 Description | 🏷️ Classification |
-| --- | --- | --- |
-| Azure API Management Gateway | Primary API proxy service exposing APIs to consumers; central data access surface for all managed APIs                 | Internal       |
-| Azure API Center             | Read access to API catalog metadata via API Center Data Reader RBAC role; API governance query interface               | Internal       |
-| Developer Portal             | Self-service API documentation and testing portal with Azure AD authentication; exposes API contract data to consumers | Internal       |
+| ⚡ Name                      | 📝 Description                                                                                                         | 🏷️ Classification |
+| ---------------------------- | ---------------------------------------------------------------------------------------------------------------------- | ----------------- |
+| Azure API Management Gateway | Primary API proxy service exposing APIs to consumers; central data access surface for all managed APIs                 | Internal          |
+| Azure API Center             | Read access to API catalog metadata via API Center Data Reader RBAC role; API governance query interface               | Internal          |
+| Developer Portal             | Self-service API documentation and testing portal with Azure AD authentication; exposes API contract data to consumers | Internal          |
 
 ### 🏛️ 2.6 Data Governance
 
@@ -204,52 +204,52 @@ The architecture follows an **ingestion-forward** data pattern: all runtime data
 
 ### ✅ 2.7 Data Quality Rules
 
-| ✅ Name | 📝 Description | 🏷️ Classification |
-| --- | --- | --- |
-| Parameter Allowed-Value Validators | Bicep `@allowed` decorators enforce enumerated valid values for SKU names, identity types, virtual network types, and ingestion modes | Internal       |
-| String Length Constraints          | `@minLength` / `@maxLength` decorators on resource name parameters prevent invalid Azure resource names                               | Internal       |
-| Numeric Range Constraints          | `@minValue(90)` / `@maxValue(730)` on retentionInDays enforces valid Application Insights retention window                            | Internal       |
-| Unique Name Generation             | `generateUniqueSuffix()` enforces globally unique storage account names to prevent deployment collisions                              | Internal       |
-| Storage Name Character Constraints | `maxNameLength: 24` constant with `toLower(take(...replace(...)))` enforces Azure storage account naming rules                        | Internal       |
+| ✅ Name                            | 📝 Description                                                                                                                        | 🏷️ Classification |
+| ---------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------- | ----------------- |
+| Parameter Allowed-Value Validators | Bicep `@allowed` decorators enforce enumerated valid values for SKU names, identity types, virtual network types, and ingestion modes | Internal          |
+| String Length Constraints          | `@minLength` / `@maxLength` decorators on resource name parameters prevent invalid Azure resource names                               | Internal          |
+| Numeric Range Constraints          | `@minValue(90)` / `@maxValue(730)` on retentionInDays enforces valid Application Insights retention window                            | Internal          |
+| Unique Name Generation             | `generateUniqueSuffix()` enforces globally unique storage account names to prevent deployment collisions                              | Internal          |
+| Storage Name Character Constraints | `maxNameLength: 24` constant with `toLower(take(...replace(...)))` enforces Azure storage account naming rules                        | Internal          |
 
 ### 🌟 2.8 Master Data
 
-| 🌟 Name | 📝 Description | 🏷️ Classification |
-| --- | --- | --- |
-| Azure RBAC Role Definition IDs | Canonical GUIDs for built-in Azure roles: Reader, Key Vault Secrets User/Officer, API Center Data Reader, API Center Compliance Manager | Internal       |
-| APIM SKU Option Reference      | Authoritative list of valid APIM SKU names: Basic, BasicV2, Developer, Isolated, Standard, StandardV2, Premium, Consumption             | Internal       |
-| Identity Type Enumeration      | Canonical identity type values: SystemAssigned, UserAssigned, SystemAssigned+UserAssigned, None                                         | Internal       |
-| Log Analytics SKU Reference    | Authoritative list of valid Log Analytics SKUs: CapacityReservation, Free, LACluster, PerGB2018, PerNode, Premium, Standalone, Standard | Internal       |
+| 🌟 Name                        | 📝 Description                                                                                                                          | 🏷️ Classification |
+| ------------------------------ | --------------------------------------------------------------------------------------------------------------------------------------- | ----------------- |
+| Azure RBAC Role Definition IDs | Canonical GUIDs for built-in Azure roles: Reader, Key Vault Secrets User/Officer, API Center Data Reader, API Center Compliance Manager | Internal          |
+| APIM SKU Option Reference      | Authoritative list of valid APIM SKU names: Basic, BasicV2, Developer, Isolated, Standard, StandardV2, Premium, Consumption             | Internal          |
+| Identity Type Enumeration      | Canonical identity type values: SystemAssigned, UserAssigned, SystemAssigned+UserAssigned, None                                         | Internal          |
+| Log Analytics SKU Reference    | Authoritative list of valid Log Analytics SKUs: CapacityReservation, Free, LACluster, PerGB2018, PerNode, Premium, Standalone, Standard | Internal          |
 
 ### 🔀 2.9 Data Transformations
 
-| 🔀 Name | 📝 Description | 🏷️ Classification |
-| --- | --- | --- |
-| generateUniqueSuffix()           | Derives deterministic unique suffix from subscriptionId, resourceGroupId, resourceGroupName, solutionName, location using uniqueString() | Internal       |
-| generateStorageAccountName()     | Constructs compliant storage account name: toLower(take(replace(baseName+sa+suffix, '-', ''), 24))                                       | Internal       |
-| generateDiagnosticSettingsName() | Appends '-diag' suffix to resource names for consistent diagnostic setting naming                                                        | Internal       |
-| createIdentityConfig()           | Transforms identity type string + identity array into an ARM identity configuration object                                               | Internal       |
-| toObject()                       | Converts user-assigned identity resource ID array to object form required by ARM API                                                     | Internal       |
+| 🔀 Name                          | 📝 Description                                                                                                                           | 🏷️ Classification |
+| -------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------- | ----------------- |
+| generateUniqueSuffix()           | Derives deterministic unique suffix from subscriptionId, resourceGroupId, resourceGroupName, solutionName, location using uniqueString() | Internal          |
+| generateStorageAccountName()     | Constructs compliant storage account name: toLower(take(replace(baseName+sa+suffix, '-', ''), 24))                                       | Internal          |
+| generateDiagnosticSettingsName() | Appends '-diag' suffix to resource names for consistent diagnostic setting naming                                                        | Internal          |
+| createIdentityConfig()           | Transforms identity type string + identity array into an ARM identity configuration object                                               | Internal          |
+| toObject()                       | Converts user-assigned identity resource ID array to object form required by ARM API                                                     | Internal          |
 
 ### 📜 2.10 Data Contracts
 
-| 📜 Name | 📝 Description | 🏷️ Classification |
-| --- | --- | --- |
-| ApiManagement Type Export     | Typed Bicep contract defining the ApiManagement parameter interface exported from common-types.bicep       | Internal       |
-| Inventory Type Export         | Typed Bicep contract defining the Inventory parameter interface including API Center and tags              | Internal       |
-| Monitoring Type Export        | Typed Bicep contract defining the Monitoring parameter interface including Log Analytics and App Insights  | Internal       |
-| Shared Type Export            | Typed Bicep contract defining the Shared infrastructure parameter interface                                | Internal       |
-| settings.yaml Schema Contract | YAML-encoded configuration contract between infra/settings.yaml and infra/main.bicep via loadYamlContent() | Internal       |
+| 📜 Name                       | 📝 Description                                                                                             | 🏷️ Classification |
+| ----------------------------- | ---------------------------------------------------------------------------------------------------------- | ----------------- |
+| ApiManagement Type Export     | Typed Bicep contract defining the ApiManagement parameter interface exported from common-types.bicep       | Internal          |
+| Inventory Type Export         | Typed Bicep contract defining the Inventory parameter interface including API Center and tags              | Internal          |
+| Monitoring Type Export        | Typed Bicep contract defining the Monitoring parameter interface including Log Analytics and App Insights  | Internal          |
+| Shared Type Export            | Typed Bicep contract defining the Shared infrastructure parameter interface                                | Internal          |
+| settings.yaml Schema Contract | YAML-encoded configuration contract between infra/settings.yaml and infra/main.bicep via loadYamlContent() | Internal          |
 
 ### 🔐 2.11 Data Security
 
-| 🔐 Name | 📝 Description | 🏷️ Classification |
-| --- | --- | --- |
-| @secure() Output Annotations    | APPLICATION_INSIGHTS_INSTRUMENTATION_KEY and clientSecret outputs decorated with @secure() to prevent logging in deployment history | Confidential   |
-| SystemAssigned Managed Identity | APIM, Log Analytics, and API Center authenticated to Azure services via managed identity; no stored credentials                     | Internal       |
-| RBAC Least-Privilege Access     | Minimum required roles assigned: Reader on resource group for APIM; API Center Data Reader and Compliance Manager for API Center    | Internal       |
-| Network Access Controls         | publicNetworkAccess and virtualNetworkType parameters control APIM exposure; Application Insights supports private endpoint mode    | Internal       |
-| GDPR Compliance Tagging         | RegulatoryCompliance: GDPR governance tag applied to all resources via settings.yaml propagated through commonTags                  | Confidential   |
+| 🔐 Name                         | 📝 Description                                                                                                                      | 🏷️ Classification |
+| ------------------------------- | ----------------------------------------------------------------------------------------------------------------------------------- | ----------------- |
+| @secure() Output Annotations    | APPLICATION_INSIGHTS_INSTRUMENTATION_KEY and clientSecret outputs decorated with @secure() to prevent logging in deployment history | Confidential      |
+| SystemAssigned Managed Identity | APIM, Log Analytics, and API Center authenticated to Azure services via managed identity; no stored credentials                     | Internal          |
+| RBAC Least-Privilege Access     | Minimum required roles assigned: Reader on resource group for APIM; API Center Data Reader and Compliance Manager for API Center    | Internal          |
+| Network Access Controls         | publicNetworkAccess and virtualNetworkType parameters control APIM exposure; Application Insights supports private endpoint mode    | Internal          |
+| GDPR Compliance Tagging         | RegulatoryCompliance: GDPR governance tag applied to all resources via settings.yaml propagated through commonTags                  | Confidential      |
 
 ### �️ Data Domain Map
 
@@ -345,14 +345,14 @@ A secondary principle is **Telemetry-First Observability**: every Azure resource
 
 ### 💡 Core Data Principles
 
-| 💡 Principle | 📝 Statement |
-| --- | --- |
-| **Configuration as Data**         | Infrastructure parameters SHALL be typed, validated schemas, not unstructured strings                  | Bicep `@export()` type system with strongly typed interfaces                     |
-| **Telemetry-First Observability** | All resources MUST emit diagnostic data to the centralized monitoring estate                           | `diagnosticSettings` resource with allLogs + allMetrics in all modules           | src/core/apim.bicep:256-295         |
+| 💡 Principle                      | 📝 Statement                                                                                           |
+| --------------------------------- | ------------------------------------------------------------------------------------------------------ |
+| **Configuration as Data**         | Infrastructure parameters SHALL be typed, validated schemas, not unstructured strings                  |
+| **Telemetry-First Observability** | All resources MUST emit diagnostic data to the centralized monitoring estate                           |
 | **Identity Without Credentials**  | Data access between Azure services MUST use managed identity; credential storage in code is prohibited |
 | **Least-Privilege Data Access**   | Service principals receive only the minimum RBAC roles required for their function                     |
 | **Governance-First Tagging**      | All data-bearing resources MUST carry a mandatory tag set including RegulatoryCompliance               |
-| **Deterministic Resource Naming** | Resource names MUST be reproducible across deployments using a deterministic unique suffix             | `generateUniqueSuffix()` based on subscription+RG+solution+location hash         | src/shared/constants.bicep:150-165  |
+| **Deterministic Resource Naming** | Resource names MUST be reproducible across deployments using a deterministic unique suffix             |
 
 ### 📐 Data Schema Design Standards
 
@@ -366,11 +366,11 @@ A secondary principle is **Telemetry-First Observability**: every Azure resource
 
 The solution does not define an explicit data classification taxonomy document. Classifications used in this analysis are derived from the operational sensitivity of each component type:
 
-| 🏷️ Classification | 📝 Definition | 💼 Examples in This Repository |
-| --- | --- | --- |
-| **Confidential** | Data that if disclosed would cause regulatory or contractual harm       | Application Insights instrumentation key, AAD client secret         |
-| **Internal**     | Data intended for internal operational use; not for external disclosure | Configuration schemas, diagnostic logs, API metadata, RBAC role IDs |
-| **Public**       | Data with no sensitivity constraints                                    | Developer portal API documentation exposed to registered consumers  |
+| 🏷️ Classification | 📝 Definition                                                           | 💼 Examples in This Repository                                      |
+| ----------------- | ----------------------------------------------------------------------- | ------------------------------------------------------------------- |
+| **Confidential**  | Data that if disclosed would cause regulatory or contractual harm       | Application Insights instrumentation key, AAD client secret         |
+| **Internal**      | Data intended for internal operational use; not for external disclosure | Configuration schemas, diagnostic logs, API metadata, RBAC role IDs |
+| **Public**        | Data with no sensitivity constraints                                    | Developer portal API documentation exposed to registered consumers  |
 
 > **Gap**: No formal classification policy file was detected in the source files. It is recommended to create a `docs/standards/data-classification-policy.md` file codifying these classifications.
 
@@ -482,8 +482,8 @@ flowchart TB
 
 ### 💾 Storage Distribution
 
-| 🗄️ Store | 📂 Type | 💰 SKU | ⏰ Retention | 📊 Data Category | 📥 Ingestion Mode |
-| --- | --- | --- | --- | --- | --- |
+| 🗄️ Store                | 📂 Type                      | 💰 SKU                | ⏰ Retention                           | 📊 Data Category                          | 📥 Ingestion Mode          |
+| ----------------------- | ---------------------------- | --------------------- | -------------------------------------- | ----------------------------------------- | -------------------------- |
 | Log Analytics Workspace | Key-Value / Log Analytics    | PerGB2018             | Configurable (default 30d)             | Diagnostic logs, metrics, KQL queries     | Push (diagnostic settings) |
 | Azure Storage Account   | Object Storage               | Standard_LRS          | Long-term (configurable via lifecycle) | Archived diagnostic logs                  | Push (diagnostic settings) |
 | Application Insights    | Document Store (telemetry)   | Workspace-based       | 90–730 days (default 90d)              | API traces, requests, exceptions, metrics | Push (APIM logger)         |
@@ -491,36 +491,36 @@ flowchart TB
 
 ### 📈 Quality Baseline
 
-| 📐 Quality Dimension | 📊 Current State | 🎯 Target State | ⚠️ Gap |
-| --- | --- | --- | --- |
-| Schema Completeness | Bicep types cover 10 entities; YAML has informal tag schema | All configuration objects have formal typed schemas     | Tags object uses generic `object` type |
-| Data Validation     | Bicep compile-time validation via @allowed / @minValue      | Runtime data quality monitoring per store               | No runtime quality checks              |
-| Retention Policy    | 90d default for AI; no explicit LAW retention set           | Documented retention policy per store aligned with GDPR | Missing explicit retention document    |
-| Lineage Tracking    | Diagnostic settings document data flow declaratively        | Automated lineage graph (e.g., Purview)                 | No lineage tooling                     |
-| Encryption          | Azure platform encryption at rest; TLS in transit           | Explicit encryption policy document                     | No encryption policy file              |
+| 📐 Quality Dimension | 📊 Current State                                            | 🎯 Target State                                         | ⚠️ Gap                                 |
+| -------------------- | ----------------------------------------------------------- | ------------------------------------------------------- | -------------------------------------- |
+| Schema Completeness  | Bicep types cover 10 entities; YAML has informal tag schema | All configuration objects have formal typed schemas     | Tags object uses generic `object` type |
+| Data Validation      | Bicep compile-time validation via @allowed / @minValue      | Runtime data quality monitoring per store               | No runtime quality checks              |
+| Retention Policy     | 90d default for AI; no explicit LAW retention set           | Documented retention policy per store aligned with GDPR | Missing explicit retention document    |
+| Lineage Tracking     | Diagnostic settings document data flow declaratively        | Automated lineage graph (e.g., Purview)                 | No lineage tooling                     |
+| Encryption           | Azure platform encryption at rest; TLS in transit           | Explicit encryption policy document                     | No encryption policy file              |
 
 ### 🎯 Governance Maturity
 
 **Assessed Level: 2 — Managed**
 
-| 📈 Level | 📋 Criteria | ✅ Status |
-| --- | --- | --- |
+| 📈 Level        | 📋 Criteria                                                                                                                     | ✅ Status                                                                    |
+| --------------- | ------------------------------------------------------------------------------------------------------------------------------- | ---------------------------------------------------------------------------- |
 | 1 — Ad-hoc      | No data dictionary, manual scripts, no schema versioning, ad-hoc access                                                         | ✅ Surpassed                                                                 |
 | **2 — Managed** | **Basic data dictionary (Bicep types), scheduled deployments (azd), schema migrations tracked (ARM API versions), RBAC access** | ✅ **Achieved**                                                              |
 | 3 — Defined     | Centralized data catalog, automated quality checks, schema registry, lineage tracked                                            | ⚠️ Partially achieved (API Center catalog for APIs only; no schema registry) |
 | 4 — Measured    | Data quality SLAs, anomaly detection, contract testing, data mesh                                                               | ❌ Not achieved                                                              |
 | 5 — Optimized   | Self-service platform, real-time quality dashboards, automated schema evolution                                                 | ❌ Not achieved                                                              |
 
-| 🎯 Claimed Level | 📊 Actual Level | ⚠️ Missing Criteria | 🔧 Action |
-| --- | --- | --- | --- |
-| 2             | 2            | All Level 2 criteria met                                                     | None                                           |
-| —             | 3 (partial)  | No formal schema registry; no broader data catalog; data lineage tool absent | Recommend Microsoft Purview, AsyncAPI registry |
+| 🎯 Claimed Level | 📊 Actual Level | ⚠️ Missing Criteria                                                          | 🔧 Action                                      |
+| ---------------- | --------------- | ---------------------------------------------------------------------------- | ---------------------------------------------- |
+| 2                | 2               | All Level 2 criteria met                                                     | None                                           |
+| —                | 3 (partial)     | No formal schema registry; no broader data catalog; data lineage tool absent | Recommend Microsoft Purview, AsyncAPI registry |
 
 ### ✅ Compliance Posture
 
-| 🛡️ Control | ✅ Status |
-| --- | --- |
-| GDPR Tagging                 | ✅ Present          | `RegulatoryCompliance: "GDPR"` in commonTags              | infra/settings.yaml:38                            |
+| 🛡️ Control                   | ✅ Status           |
+| ---------------------------- | ------------------- |
+| GDPR Tagging                 | ✅ Present          |
 | Credential-Free Access       | ✅ Present          |
 | Audit Logging                | ✅ Present          |
 | Data Residency               | ⚠️ Configurable     |
@@ -548,18 +548,18 @@ For components where owner, retention, or freshness SLA data could not be determ
 
 ### 🧩 5.1 Data Entities
 
-| 🔍 Component | 📝 Description | 🏷️ Classification | 💾 Storage | 👤 Owner | ⏰ Retention | ⚡ Freshness SLA | 📥 Source Systems | 📤 Consumers |
-| --- | --- | --- | --- | --- | --- | --- | --- | --- |
-| ApiManagement          | Typed Bicep configuration entity for the Azure APIM service: name, publisherEmail, publisherName, SKU, identity, workspaces | Internal       | Not detected | Cloud Platform Team | Not detected | batch         | settings.yaml  | core/main.bicep, infra/main.bicep                        |
-| Monitoring             | Composite configuration entity aggregating Log Analytics and Application Insights configuration; includes resource tags     | Internal       | Not detected | Cloud Platform Team | Not detected | batch         | settings.yaml  | shared/monitoring/main.bicep                             |
-| LogAnalytics           | Workspace configuration entity: name, workSpaceResourceId, identity configuration                                           | Internal       | Not detected | Cloud Platform Team | Not detected | batch         | settings.yaml  | shared/monitoring/operational/main.bicep                 |
-| ApplicationInsights    | App Insights configuration entity: name, logAnalyticsWorkspaceResourceId reference                                          | Internal       | Not detected | Cloud Platform Team | Not detected | batch         | settings.yaml  | shared/monitoring/insights/main.bicep                    |
-| Inventory              | API Center inventory configuration entity: apiCenter settings + resource tags                                               | Internal       | Not detected | Cloud Platform Team | Not detected | batch         | settings.yaml  | inventory/main.bicep                                     |
-| ApiCenter              | API Center service configuration entity: name and identity configuration                                                    | Internal       | Not detected | Cloud Platform Team | Not detected | batch         | settings.yaml  | inventory/main.bicep                                     |
-| SystemAssignedIdentity | Identity entity for SystemAssigned or UserAssigned managed identity types with userAssignedIdentities array                 | Internal       | Not detected | Cloud Platform Team | Not detected | batch         | settings.yaml  | apim.bicep, operational/main.bicep, inventory/main.bicep |
-| ExtendedIdentity       | Extended identity entity supporting combined and None types for API Center and other resources                              | Internal       | Not detected | Cloud Platform Team | Not detected | batch         | settings.yaml  | inventory/main.bicep                                     |
-| ApimSku                | SKU configuration entity: name (tier enum) and capacity (scale units)                                                       | Internal       | Not detected | Cloud Platform Team | Not detected | batch         | settings.yaml  | core/main.bicep                                          |
-| Shared                 | Composite entity aggregating monitoring configuration and resource tags for shared infrastructure                           | Internal       | Not detected | Cloud Platform Team | Not detected | batch         | settings.yaml  | infra/main.bicep, shared/main.bicep                      |
+| 🔍 Component           | 📝 Description                                                                                                              | 🏷️ Classification | 💾 Storage   | 👤 Owner            | ⏰ Retention | ⚡ Freshness SLA | 📥 Source Systems | 📤 Consumers                                             |
+| ---------------------- | --------------------------------------------------------------------------------------------------------------------------- | ----------------- | ------------ | ------------------- | ------------ | ---------------- | ----------------- | -------------------------------------------------------- |
+| ApiManagement          | Typed Bicep configuration entity for the Azure APIM service: name, publisherEmail, publisherName, SKU, identity, workspaces | Internal          | Not detected | Cloud Platform Team | Not detected | batch            | settings.yaml     | core/main.bicep, infra/main.bicep                        |
+| Monitoring             | Composite configuration entity aggregating Log Analytics and Application Insights configuration; includes resource tags     | Internal          | Not detected | Cloud Platform Team | Not detected | batch            | settings.yaml     | shared/monitoring/main.bicep                             |
+| LogAnalytics           | Workspace configuration entity: name, workSpaceResourceId, identity configuration                                           | Internal          | Not detected | Cloud Platform Team | Not detected | batch            | settings.yaml     | shared/monitoring/operational/main.bicep                 |
+| ApplicationInsights    | App Insights configuration entity: name, logAnalyticsWorkspaceResourceId reference                                          | Internal          | Not detected | Cloud Platform Team | Not detected | batch            | settings.yaml     | shared/monitoring/insights/main.bicep                    |
+| Inventory              | API Center inventory configuration entity: apiCenter settings + resource tags                                               | Internal          | Not detected | Cloud Platform Team | Not detected | batch            | settings.yaml     | inventory/main.bicep                                     |
+| ApiCenter              | API Center service configuration entity: name and identity configuration                                                    | Internal          | Not detected | Cloud Platform Team | Not detected | batch            | settings.yaml     | inventory/main.bicep                                     |
+| SystemAssignedIdentity | Identity entity for SystemAssigned or UserAssigned managed identity types with userAssignedIdentities array                 | Internal          | Not detected | Cloud Platform Team | Not detected | batch            | settings.yaml     | apim.bicep, operational/main.bicep, inventory/main.bicep |
+| ExtendedIdentity       | Extended identity entity supporting combined and None types for API Center and other resources                              | Internal          | Not detected | Cloud Platform Team | Not detected | batch            | settings.yaml     | inventory/main.bicep                                     |
+| ApimSku                | SKU configuration entity: name (tier enum) and capacity (scale units)                                                       | Internal          | Not detected | Cloud Platform Team | Not detected | batch            | settings.yaml     | core/main.bicep                                          |
+| Shared                 | Composite entity aggregating monitoring configuration and resource tags for shared infrastructure                           | Internal          | Not detected | Cloud Platform Team | Not detected | batch            | settings.yaml     | infra/main.bicep, shared/main.bicep                      |
 
 ```mermaid
 ---
@@ -671,52 +671,52 @@ erDiagram
 
 ### 🗃️ 5.2 Data Models
 
-| 🔍 Component | 📝 Description | 🏷️ Classification | 💾 Storage | 👤 Owner | ⏰ Retention | ⚡ Freshness SLA | 📥 Source Systems | 📤 Consumers |
-| --- | --- | --- | --- | --- | --- | --- | --- | --- |
-| Bicep Type System         | Strongly typed data model with 4 exported types (ApiManagement, Inventory, Monitoring, Shared) plus 7 internal types; enforces compile-time schema validation across all Bicep modules    | Internal       | Not detected | Cloud Platform Team | Not detected | batch         | infra/settings.yaml    | src/core/main.bicep, src/shared/main.bicep, src/inventory/main.bicep |
-| YAML Configuration Schema | Human-readable infrastructure configuration schema encoding all environment parameters: solutionName, shared monitoring config, core APIM config, inventory config, and 10-key tag schema | Internal       | Not detected | Cloud Platform Team | Not detected | batch         | Not detected           | infra/main.bicep                                                     |
-| ARM Resource Schema       | Implicit resource contract defined by Azure Resource Manager API versions pinned in each Bicep resource declaration; governs allowed properties and structure for all Azure resources     | Internal       | Not detected | Cloud Platform Team | Not detected | batch         | Azure Resource Manager | All Bicep resource blocks                                            |
+| 🔍 Component              | 📝 Description                                                                                                                                                                            | 🏷️ Classification | 💾 Storage   | 👤 Owner            | ⏰ Retention | ⚡ Freshness SLA | 📥 Source Systems      | 📤 Consumers                                                         |
+| ------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ----------------- | ------------ | ------------------- | ------------ | ---------------- | ---------------------- | -------------------------------------------------------------------- |
+| Bicep Type System         | Strongly typed data model with 4 exported types (ApiManagement, Inventory, Monitoring, Shared) plus 7 internal types; enforces compile-time schema validation across all Bicep modules    | Internal          | Not detected | Cloud Platform Team | Not detected | batch            | infra/settings.yaml    | src/core/main.bicep, src/shared/main.bicep, src/inventory/main.bicep |
+| YAML Configuration Schema | Human-readable infrastructure configuration schema encoding all environment parameters: solutionName, shared monitoring config, core APIM config, inventory config, and 10-key tag schema | Internal          | Not detected | Cloud Platform Team | Not detected | batch            | Not detected           | infra/main.bicep                                                     |
+| ARM Resource Schema       | Implicit resource contract defined by Azure Resource Manager API versions pinned in each Bicep resource declaration; governs allowed properties and structure for all Azure resources     | Internal          | Not detected | Cloud Platform Team | Not detected | batch            | Azure Resource Manager | All Bicep resource blocks                                            |
 
 ### 🗄️ 5.3 Data Stores
 
-| 🔍 Component | 📝 Description | 🏷️ Classification | 💾 Storage | 👤 Owner | ⏰ Retention | ⚡ Freshness SLA | 📥 Source Systems | 📤 Consumers |
-| --- | --- | --- | --- | --- | --- | --- | --- | --- |
-| Log Analytics Workspace | Centralized log and metric aggregation store; SKU PerGB2018; supports KQL queries; receives allLogs and allMetrics from APIM and Application Insights          | Internal       | Key-Value      | Cloud Platform Team | Not detected                  | real-time     | Azure APIM, Application Insights    | Operations team, alerting rules         |
-| Azure Storage Account   | Blob-based diagnostic log archival store; Standard_LRS SKU; StorageV2 kind; receives cold diagnostic log data from APIM diagnostic settings                    | Internal       | Object Storage | Cloud Platform Team | indefinite                    | batch         | Azure APIM, Log Analytics Workspace | Compliance audits, long-term analysis   |
-| Application Insights    | Telemetry and APM data store; workspace-based ingestion mode (LogAnalytics); 90-day default retention; ingests APIM request traces and performance metrics     | Internal       | Document Store | Cloud Platform Team | 90d (configurable up to 730d) | real-time     | Azure APIM logger                   | Operations team, performance dashboards |
-| Azure API Center        | API metadata catalog store; stores API definitions, compliance metadata, and governance state; automatically synchronized from APIM via API source integration | Internal       | Document Store | Cloud Platform Team | indefinite                    | batch         | Azure APIM service                  | API consumers, governance team          |
+| 🔍 Component            | 📝 Description                                                                                                                                                 | 🏷️ Classification | 💾 Storage     | 👤 Owner            | ⏰ Retention                  | ⚡ Freshness SLA | 📥 Source Systems                   | 📤 Consumers                            |
+| ----------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------- | ----------------- | -------------- | ------------------- | ----------------------------- | ---------------- | ----------------------------------- | --------------------------------------- |
+| Log Analytics Workspace | Centralized log and metric aggregation store; SKU PerGB2018; supports KQL queries; receives allLogs and allMetrics from APIM and Application Insights          | Internal          | Key-Value      | Cloud Platform Team | Not detected                  | real-time        | Azure APIM, Application Insights    | Operations team, alerting rules         |
+| Azure Storage Account   | Blob-based diagnostic log archival store; Standard_LRS SKU; StorageV2 kind; receives cold diagnostic log data from APIM diagnostic settings                    | Internal          | Object Storage | Cloud Platform Team | indefinite                    | batch            | Azure APIM, Log Analytics Workspace | Compliance audits, long-term analysis   |
+| Application Insights    | Telemetry and APM data store; workspace-based ingestion mode (LogAnalytics); 90-day default retention; ingests APIM request traces and performance metrics     | Internal          | Document Store | Cloud Platform Team | 90d (configurable up to 730d) | real-time        | Azure APIM logger                   | Operations team, performance dashboards |
+| Azure API Center        | API metadata catalog store; stores API definitions, compliance metadata, and governance state; automatically synchronized from APIM via API source integration | Internal          | Document Store | Cloud Platform Team | indefinite                    | batch            | Azure APIM service                  | API consumers, governance team          |
 
 ### 🔄 5.4 Data Flows
 
-| 🔍 Component | 📝 Description | 🏷️ Classification | 💾 Storage | 👤 Owner | ⏰ Retention | ⚡ Freshness SLA | 📥 Source Systems | 📤 Consumers |
-| --- | --- | --- | --- | --- | --- | --- | --- | --- |
-| APIM → Log Analytics         | Diagnostic data flow: allLogs category group + AllMetrics to Log Analytics Workspace; conditional on non-empty logAnalyticsWorkspaceId                                       | Internal       | Key-Value      | Cloud Platform Team | Workspace default | real-time     | Azure APIM service   | Log Analytics KQL queries, Azure Monitor alerts |
-| APIM → Storage Account       | Diagnostic log archival flow: APIM logs streamed to Storage Account for long-term retention; configured alongside Log Analytics in same diagnostic settings resource         | Internal       | Object Storage | Cloud Platform Team | indefinite        | batch         | Azure APIM service   | Compliance audits, long-term storage            |
-| APIM → Application Insights  | Telemetry flow via ApplicationInsights logger resource; uses instrumentation key reference; captures request performance, errors, and custom traces                          | Internal       | Document Store | Cloud Platform Team | 90d               | real-time     | Azure APIM service   | Application performance dashboards              |
-| App Insights → Log Analytics | Workspace-based ingestion mode routes all Application Insights telemetry into linked Log Analytics workspace; enables unified KQL queries across infrastructure and APM data | Internal       | Key-Value      | Cloud Platform Team | Workspace default | real-time     | Application Insights | Log Analytics, Azure Monitor                    |
-| APIM → API Center            | API discovery sync flow via apiSources child resource in API Center; links APIM service as an API source enabling automatic API registration and metadata synchronization    | Internal       | Document Store | Cloud Platform Team | indefinite        | batch         | Azure APIM service   | API Center catalog, governance consumers        |
+| 🔍 Component                 | 📝 Description                                                                                                                                                               | 🏷️ Classification | 💾 Storage     | 👤 Owner            | ⏰ Retention      | ⚡ Freshness SLA | 📥 Source Systems    | 📤 Consumers                                    |
+| ---------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ----------------- | -------------- | ------------------- | ----------------- | ---------------- | -------------------- | ----------------------------------------------- |
+| APIM → Log Analytics         | Diagnostic data flow: allLogs category group + AllMetrics to Log Analytics Workspace; conditional on non-empty logAnalyticsWorkspaceId                                       | Internal          | Key-Value      | Cloud Platform Team | Workspace default | real-time        | Azure APIM service   | Log Analytics KQL queries, Azure Monitor alerts |
+| APIM → Storage Account       | Diagnostic log archival flow: APIM logs streamed to Storage Account for long-term retention; configured alongside Log Analytics in same diagnostic settings resource         | Internal          | Object Storage | Cloud Platform Team | indefinite        | batch            | Azure APIM service   | Compliance audits, long-term storage            |
+| APIM → Application Insights  | Telemetry flow via ApplicationInsights logger resource; uses instrumentation key reference; captures request performance, errors, and custom traces                          | Internal          | Document Store | Cloud Platform Team | 90d               | real-time        | Azure APIM service   | Application performance dashboards              |
+| App Insights → Log Analytics | Workspace-based ingestion mode routes all Application Insights telemetry into linked Log Analytics workspace; enables unified KQL queries across infrastructure and APM data | Internal          | Key-Value      | Cloud Platform Team | Workspace default | real-time        | Application Insights | Log Analytics, Azure Monitor                    |
+| APIM → API Center            | API discovery sync flow via apiSources child resource in API Center; links APIM service as an API source enabling automatic API registration and metadata synchronization    | Internal          | Document Store | Cloud Platform Team | indefinite        | batch            | Azure APIM service   | API Center catalog, governance consumers        |
 
 ### ⚡ 5.5 Data Services
 
-| 🔍 Component | 📝 Description | 🏷️ Classification | 💾 Storage | 👤 Owner | ⏰ Retention | ⚡ Freshness SLA | 📥 Source Systems | 📤 Consumers |
-| --- | --- | --- | --- | --- | --- | --- | --- | --- |
-| Azure API Management Gateway | Primary API proxy and management service; routes API calls, enforces policies, and provides API lifecycle management; configurable SKU (Premium default), VNet integration, and managed identity | Internal       | Not detected   | Cloud Platform Team | Not detected | real-time     | API backend services   | API consumers, developer portal users |
-| Azure API Center Service     | API catalog and governance service providing centralized API discovery, documentation, and compliance management; accessed via API Center Data Reader RBAC role                                  | Internal       | Document Store | Cloud Platform Team | indefinite   | batch         | Azure APIM service     | API consumers, governance team        |
-| Developer Portal             | Self-service API documentation and testing portal integrated with the APIM service; configured with Azure AD identity provider (AAD), CORS policy, and sign-in/sign-up settings                  | Internal       | Not detected   | Cloud Platform Team | Not detected | real-time     | APIM service, Azure AD | External API consumers, developers    |
+| 🔍 Component                 | 📝 Description                                                                                                                                                                                   | 🏷️ Classification | 💾 Storage     | 👤 Owner            | ⏰ Retention | ⚡ Freshness SLA | 📥 Source Systems      | 📤 Consumers                          |
+| ---------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ | ----------------- | -------------- | ------------------- | ------------ | ---------------- | ---------------------- | ------------------------------------- |
+| Azure API Management Gateway | Primary API proxy and management service; routes API calls, enforces policies, and provides API lifecycle management; configurable SKU (Premium default), VNet integration, and managed identity | Internal          | Not detected   | Cloud Platform Team | Not detected | real-time        | API backend services   | API consumers, developer portal users |
+| Azure API Center Service     | API catalog and governance service providing centralized API discovery, documentation, and compliance management; accessed via API Center Data Reader RBAC role                                  | Internal          | Document Store | Cloud Platform Team | indefinite   | batch            | Azure APIM service     | API consumers, governance team        |
+| Developer Portal             | Self-service API documentation and testing portal integrated with the APIM service; configured with Azure AD identity provider (AAD), CORS policy, and sign-in/sign-up settings                  | Internal          | Not detected   | Cloud Platform Team | Not detected | real-time        | APIM service, Azure AD | External API consumers, developers    |
 
 ### 🏛️ 5.6 Data Governance
 
-| 🔍 Component | 📝 Description | 🏷️ Classification | 💾 Storage | 👤 Owner | ⏰ Retention | ⚡ Freshness SLA | 📥 Source Systems | 📤 Consumers |
-| --- | --- | --- | --- | --- | --- | --- | --- | --- |
-| Resource Tagging Framework | Mandatory 10-key tag schema: CostCenter (CC-1234), BusinessUnit (IT), Owner, ApplicationName, ProjectName, ServiceClass, RegulatoryCompliance (GDPR), SupportContact, ChargebackModel, BudgetCode; applied to all resources via commonTags union | Internal       | Not detected | Cloud Platform Team | indefinite        | batch         | infra/settings.yaml                           | Azure Cost Management, Azure Policy        |
-| RBAC Role Assignments      | Least-privilege role assignments across resource group scope: Reader for APIM managed identity; API Center Data Reader and API Center Compliance Manager for API Center identity                                                                 | Internal       | Not detected | Cloud Platform Team | indefinite        | batch         | src/core/apim.bicep, src/inventory/main.bicep | Azure RBAC enforcement engine              |
-| Managed Identity Policy    | SystemAssigned managed identity configuration on APIM, Log Analytics workspace, and API Center; eliminates credential storage in code or configuration                                                                                           | Confidential   | Not detected | Cloud Platform Team | Not detected      | batch         | infra/settings.yaml                           | Azure Active Directory, resource providers |
-| Diagnostic Audit Trail     | Diagnostic settings resources capture allLogs and allMetrics on APIM and Log Analytics Workspace itself; provides audit trail for compliance and security review                                                                                 | Internal       | Key-Value    | Cloud Platform Team | Workspace default | real-time     | Azure APIM, Log Analytics                     | Security operations, compliance auditors   |
+| 🔍 Component               | 📝 Description                                                                                                                                                                                                                                   | 🏷️ Classification | 💾 Storage   | 👤 Owner            | ⏰ Retention      | ⚡ Freshness SLA | 📥 Source Systems                             | 📤 Consumers                               |
+| -------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ | ----------------- | ------------ | ------------------- | ----------------- | ---------------- | --------------------------------------------- | ------------------------------------------ |
+| Resource Tagging Framework | Mandatory 10-key tag schema: CostCenter (CC-1234), BusinessUnit (IT), Owner, ApplicationName, ProjectName, ServiceClass, RegulatoryCompliance (GDPR), SupportContact, ChargebackModel, BudgetCode; applied to all resources via commonTags union | Internal          | Not detected | Cloud Platform Team | indefinite        | batch            | infra/settings.yaml                           | Azure Cost Management, Azure Policy        |
+| RBAC Role Assignments      | Least-privilege role assignments across resource group scope: Reader for APIM managed identity; API Center Data Reader and API Center Compliance Manager for API Center identity                                                                 | Internal          | Not detected | Cloud Platform Team | indefinite        | batch            | src/core/apim.bicep, src/inventory/main.bicep | Azure RBAC enforcement engine              |
+| Managed Identity Policy    | SystemAssigned managed identity configuration on APIM, Log Analytics workspace, and API Center; eliminates credential storage in code or configuration                                                                                           | Confidential      | Not detected | Cloud Platform Team | Not detected      | batch            | infra/settings.yaml                           | Azure Active Directory, resource providers |
+| Diagnostic Audit Trail     | Diagnostic settings resources capture allLogs and allMetrics on APIM and Log Analytics Workspace itself; provides audit trail for compliance and security review                                                                                 | Internal          | Key-Value    | Cloud Platform Team | Workspace default | real-time        | Azure APIM, Log Analytics                     | Security operations, compliance auditors   |
 
 ### ✅ 5.7 Data Quality Rules
 
-| Component                          | Description                                                                                                                                                                                                   | Classification | Storage      | Owner               | Retention    | Freshness SLA | Source Systems                             | Consumers                                     | Source File                                       |
-| ---------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | -------------- | ------------ | ------------------- | ------------ | ------------- | ------------------------------------------ | --------------------------------------------- | ------------------------------------------------- |
+| Component                          | Description                                                                                                                                                                                                   | Classification | Storage      | Owner               | Retention    | Freshness SLA | Source Systems                             | Consumers                                     | Source File |
+| ---------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | -------------- | ------------ | ------------------- | ------------ | ------------- | ------------------------------------------ | --------------------------------------------- | ----------- |
 | Parameter Allowed-Value Validators | Bicep `@allowed` decorators enforce enumerated valid values for skuName, identityType, virtualNetworkType, ingestionMode, kind, applicationType; prevents invalid SKU or configuration combinations           | Internal       | Not detected | Cloud Platform Team | Not detected | batch         | Bicep compiler                             | Deployment pipeline, IaC authors              |
 | String Length Constraints          | `@minLength` and `@maxLength` decorators on name parameters to enforce Azure resource naming limits; e.g., Application Insights name: minLength(1), maxLength(260)                                            | Internal       | Not detected | Cloud Platform Team | Not detected | batch         | Bicep compiler                             | Deployment pipeline                           |
 | Numeric Range Constraints          | `@minValue(90)` / `@maxValue(730)` on retentionInDays parameter enforces valid Application Insights data retention window within Azure platform limits                                                        | Internal       | Not detected | Cloud Platform Team | Not detected | batch         | Bicep compiler                             | Deployment pipeline                           |
@@ -725,42 +725,42 @@ erDiagram
 
 ### 🌟 5.8 Master Data
 
-| 🔍 Component | 📝 Description | 🏷️ Classification | 💾 Storage | 👤 Owner | ⏰ Retention | ⚡ Freshness SLA | 📥 Source Systems | 📤 Consumers |
-| --- | --- | --- | --- | --- | --- | --- | --- | --- |
-| Azure RBAC Role Definition IDs | Canonical immutable GUIDs for 5 Azure built-in roles: Reader (acdd72a7), Key Vault Secrets User (4633458b), Key Vault Secrets Officer (b86a8fe4), API Center Data Reader (71522526), API Center Compliance Manager (6cba8790) | Internal       | Not detected | Cloud Platform Team | indefinite | batch         | Azure platform built-in roles | src/core/apim.bicep, src/inventory/main.bicep |
-| APIM SKU Option Reference      | Authoritative enumeration of 8 valid APIM pricing tiers: Basic, BasicV2, Developer, Isolated, Standard, StandardV2, Premium, Consumption                                                                                      | Internal       | Not detected | Cloud Platform Team | indefinite | batch         | Azure API Management service  | src/core/apim.bicep, settings.yaml            |
-| Identity Type Enumeration      | Authoritative list of 4 valid managed identity types: SystemAssigned, UserAssigned, SystemAssigned+UserAssigned, None; used as validation reference for identity configuration                                                | Internal       | Not detected | Cloud Platform Team | indefinite | batch         | Azure Active Directory        | src/shared/common-types.bicep, all modules    |
-| Log Analytics SKU Reference    | Authoritative enumeration of 8 valid Log Analytics pricing tiers: CapacityReservation, Free, LACluster, PerGB2018, PerNode, Premium, Standalone, Standard                                                                     | Internal       | Not detected | Cloud Platform Team | indefinite | batch         | Azure Monitor                 | src/shared/monitoring/operational/main.bicep  |
+| 🔍 Component                   | 📝 Description                                                                                                                                                                                                                | 🏷️ Classification | 💾 Storage   | 👤 Owner            | ⏰ Retention | ⚡ Freshness SLA | 📥 Source Systems             | 📤 Consumers                                  |
+| ------------------------------ | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ----------------- | ------------ | ------------------- | ------------ | ---------------- | ----------------------------- | --------------------------------------------- |
+| Azure RBAC Role Definition IDs | Canonical immutable GUIDs for 5 Azure built-in roles: Reader (acdd72a7), Key Vault Secrets User (4633458b), Key Vault Secrets Officer (b86a8fe4), API Center Data Reader (71522526), API Center Compliance Manager (6cba8790) | Internal          | Not detected | Cloud Platform Team | indefinite   | batch            | Azure platform built-in roles | src/core/apim.bicep, src/inventory/main.bicep |
+| APIM SKU Option Reference      | Authoritative enumeration of 8 valid APIM pricing tiers: Basic, BasicV2, Developer, Isolated, Standard, StandardV2, Premium, Consumption                                                                                      | Internal          | Not detected | Cloud Platform Team | indefinite   | batch            | Azure API Management service  | src/core/apim.bicep, settings.yaml            |
+| Identity Type Enumeration      | Authoritative list of 4 valid managed identity types: SystemAssigned, UserAssigned, SystemAssigned+UserAssigned, None; used as validation reference for identity configuration                                                | Internal          | Not detected | Cloud Platform Team | indefinite   | batch            | Azure Active Directory        | src/shared/common-types.bicep, all modules    |
+| Log Analytics SKU Reference    | Authoritative enumeration of 8 valid Log Analytics pricing tiers: CapacityReservation, Free, LACluster, PerGB2018, PerNode, Premium, Standalone, Standard                                                                     | Internal          | Not detected | Cloud Platform Team | indefinite   | batch            | Azure Monitor                 | src/shared/monitoring/operational/main.bicep  |
 
 ### 🔀 5.9 Data Transformations
 
-| 🔍 Component | 📝 Description | 🏷️ Classification | 💾 Storage | 👤 Owner | ⏰ Retention | ⚡ Freshness SLA | 📥 Source Systems | 📤 Consumers |
-| --- | --- | --- | --- | --- | --- | --- | --- | --- |
-| generateUniqueSuffix()                | Deterministic hash function: uniqueString(subscriptionId, resourceGroupId, resourceGroupName, solutionName, location) → reproducible unique string suffix for resource naming                | Internal       | Not detected | Cloud Platform Team | Not detected | batch         | Bicep deployment context      | core/main.bicep, shared/monitoring/main.bicep            |
-| generateStorageAccountName()          | Name construction: toLower(take(replace(baseName + 'sa' + uniqueSuffix, '-', ''), 24)) → globally unique, lowercase, max 24-char Azure storage account name                                  | Internal       | Not detected | Cloud Platform Team | Not detected | batch         | generateUniqueSuffix() output | shared/monitoring/operational/main.bicep                 |
-| generateDiagnosticSettingsName()      | String concatenation: resourceName + '-diag' → standardized diagnostic setting resource name following organizational naming convention                                                      | Internal       | Not detected | Cloud Platform Team | Not detected | batch         | Resource name parameters      | apim.bicep, operational/main.bicep, insights/main.bicep  |
-| createIdentityConfig()                | Conditional object construction: maps identityType string + userAssignedIdentities array → ARM-compliant identity configuration object; handles SystemAssigned, UserAssigned, and None cases | Internal       | Not detected | Cloud Platform Team | Not detected | batch         | Identity parameters           | apim.bicep, inventory/main.bicep                         |
-| toObject() (identity array transform) | Bicep built-in transformation: converts user-assigned identity resource ID array → object with IDs as keys and empty objects as values, as required by ARM API                               | Internal       | Not detected | Cloud Platform Team | Not detected | batch         | userAssignedIdentities array  | apim.bicep, inventory/main.bicep, operational/main.bicep |
+| 🔍 Component                          | 📝 Description                                                                                                                                                                               | 🏷️ Classification | 💾 Storage   | 👤 Owner            | ⏰ Retention | ⚡ Freshness SLA | 📥 Source Systems             | 📤 Consumers                                             |
+| ------------------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ----------------- | ------------ | ------------------- | ------------ | ---------------- | ----------------------------- | -------------------------------------------------------- |
+| generateUniqueSuffix()                | Deterministic hash function: uniqueString(subscriptionId, resourceGroupId, resourceGroupName, solutionName, location) → reproducible unique string suffix for resource naming                | Internal          | Not detected | Cloud Platform Team | Not detected | batch            | Bicep deployment context      | core/main.bicep, shared/monitoring/main.bicep            |
+| generateStorageAccountName()          | Name construction: toLower(take(replace(baseName + 'sa' + uniqueSuffix, '-', ''), 24)) → globally unique, lowercase, max 24-char Azure storage account name                                  | Internal          | Not detected | Cloud Platform Team | Not detected | batch            | generateUniqueSuffix() output | shared/monitoring/operational/main.bicep                 |
+| generateDiagnosticSettingsName()      | String concatenation: resourceName + '-diag' → standardized diagnostic setting resource name following organizational naming convention                                                      | Internal          | Not detected | Cloud Platform Team | Not detected | batch            | Resource name parameters      | apim.bicep, operational/main.bicep, insights/main.bicep  |
+| createIdentityConfig()                | Conditional object construction: maps identityType string + userAssignedIdentities array → ARM-compliant identity configuration object; handles SystemAssigned, UserAssigned, and None cases | Internal          | Not detected | Cloud Platform Team | Not detected | batch            | Identity parameters           | apim.bicep, inventory/main.bicep                         |
+| toObject() (identity array transform) | Bicep built-in transformation: converts user-assigned identity resource ID array → object with IDs as keys and empty objects as values, as required by ARM API                               | Internal          | Not detected | Cloud Platform Team | Not detected | batch            | userAssignedIdentities array  | apim.bicep, inventory/main.bicep, operational/main.bicep |
 
 ### 📜 5.10 Data Contracts
 
-| 🔍 Component | 📝 Description | 🏷️ Classification | 💾 Storage | 👤 Owner | ⏰ Retention | ⚡ Freshness SLA | 📥 Source Systems | 📤 Consumers |
-| --- | --- | --- | --- | --- | --- | --- | --- | --- |
-| ApiManagement Type Export     | Typed Bicep module contract: `@export() type ApiManagement` defining name, publisherEmail, publisherName, sku (ApimSku), identity (SystemAssignedIdentity), workspaces (array); consumed by core/main.bicep | Internal       | Not detected | Cloud Platform Team | indefinite | batch         | infra/settings.yaml   | src/core/main.bicep                     |
-| Inventory Type Export         | Typed Bicep module contract: `@export() type Inventory` defining apiCenter (ApiCenter) and tags (object); consumed by inventory/main.bicep                                                                  | Internal       | Not detected | Cloud Platform Team | indefinite | batch         | infra/settings.yaml   | src/inventory/main.bicep                |
-| Monitoring Type Export        | Typed Bicep module contract: `@export() type Monitoring` defining logAnalytics (LogAnalytics), applicationInsights (ApplicationInsights), tags (object); consumed by shared/monitoring/main.bicep           | Internal       | Not detected | Cloud Platform Team | indefinite | batch         | infra/settings.yaml   |
-| Shared Type Export            | Typed Bicep module contract: `@export() type Shared` composing monitoring and tag configurations; consumed by infra/main.bicep and shared/main.bicep                                                        | Internal       | Not detected | Cloud Platform Team | indefinite | batch         | infra/settings.yaml   | infra/main.bicep, src/shared/main.bicep |
-| settings.yaml Schema Contract | YAML-encoded configuration contract consumed by infra/main.bicep via loadYamlContent(settingsFile); defines solutionName, shared monitoring params, core APIM params, inventory params, and resource tags   | Internal       | Not detected | Cloud Platform Team | indefinite | batch         | Configuration authors | infra/main.bicep                        |
+| 🔍 Component                  | 📝 Description                                                                                                                                                                                              | 🏷️ Classification | 💾 Storage   | 👤 Owner            | ⏰ Retention | ⚡ Freshness SLA | 📥 Source Systems     | 📤 Consumers                            |
+| ----------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ----------------- | ------------ | ------------------- | ------------ | ---------------- | --------------------- | --------------------------------------- |
+| ApiManagement Type Export     | Typed Bicep module contract: `@export() type ApiManagement` defining name, publisherEmail, publisherName, sku (ApimSku), identity (SystemAssignedIdentity), workspaces (array); consumed by core/main.bicep | Internal          | Not detected | Cloud Platform Team | indefinite   | batch            | infra/settings.yaml   | src/core/main.bicep                     |
+| Inventory Type Export         | Typed Bicep module contract: `@export() type Inventory` defining apiCenter (ApiCenter) and tags (object); consumed by inventory/main.bicep                                                                  | Internal          | Not detected | Cloud Platform Team | indefinite   | batch            | infra/settings.yaml   | src/inventory/main.bicep                |
+| Monitoring Type Export        | Typed Bicep module contract: `@export() type Monitoring` defining logAnalytics (LogAnalytics), applicationInsights (ApplicationInsights), tags (object); consumed by shared/monitoring/main.bicep           | Internal          | Not detected | Cloud Platform Team | indefinite   | batch            | infra/settings.yaml   |
+| Shared Type Export            | Typed Bicep module contract: `@export() type Shared` composing monitoring and tag configurations; consumed by infra/main.bicep and shared/main.bicep                                                        | Internal          | Not detected | Cloud Platform Team | indefinite   | batch            | infra/settings.yaml   | infra/main.bicep, src/shared/main.bicep |
+| settings.yaml Schema Contract | YAML-encoded configuration contract consumed by infra/main.bicep via loadYamlContent(settingsFile); defines solutionName, shared monitoring params, core APIM params, inventory params, and resource tags   | Internal          | Not detected | Cloud Platform Team | indefinite   | batch            | Configuration authors | infra/main.bicep                        |
 
 ### 🔐 5.11 Data Security
 
-| 🔍 Component | 📝 Description | 🏷️ Classification | 💾 Storage | 👤 Owner | ⏰ Retention | ⚡ Freshness SLA | 📥 Source Systems | 📤 Consumers |
-| --- | --- | --- | --- | --- | --- | --- | --- | --- |
-| @secure() Output Decorators      | APPLICATION_INSIGHTS_INSTRUMENTATION_KEY and clientSecret outputs marked @secure() preventing values from appearing in Azure deployment history, logs, or console output                                    | Confidential   | Not detected | Cloud Platform Team | Not detected | batch         | Bicep compiler            | Deployment pipeline security   |
-| SystemAssigned Managed Identity  | APIM, Log Analytics, and API Center use system-assigned managed identity for all Azure service-to-service authentication; eliminates hardcoded credentials and certificate rotation burden                  | Confidential   | Not detected | Cloud Platform Team | Not detected | batch         | Azure Active Directory    | Azure RBAC, resource providers |
-| RBAC Least-Privilege Enforcement | APIM identity granted Reader scope on resource group; API Center identity granted API Center Data Reader + Compliance Manager; role assignments use deterministic GUIDs for idempotency                     | Internal       | Not detected | Cloud Platform Team | indefinite   | batch         | Azure RBAC built-in roles | Azure authorization engine     |
-| Network Access Controls          | APIM publicNetworkAccess (default: Enabled) and virtualNetworkType (default: None) parameters enable production hardening; Application Insights supports privateNetworkAccessForIngestion / Query: Disabled | Internal       | Not detected | Cloud Platform Team | Not detected | batch         | Network configuration     | Azure network enforcement      |
-| GDPR Compliance Tag Enforcement  | RegulatoryCompliance: GDPR governance tag propagated to all resources via commonTags union in infra/main.bicep; enables Azure Policy GDPR compliance tracking                                               | Confidential   | Not detected | Cloud Platform Team | indefinite   | batch         | infra/settings.yaml       | Azure Policy, cost management  |
+| 🔍 Component                     | 📝 Description                                                                                                                                                                                              | 🏷️ Classification | 💾 Storage   | 👤 Owner            | ⏰ Retention | ⚡ Freshness SLA | 📥 Source Systems         | 📤 Consumers                   |
+| -------------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ----------------- | ------------ | ------------------- | ------------ | ---------------- | ------------------------- | ------------------------------ |
+| @secure() Output Decorators      | APPLICATION_INSIGHTS_INSTRUMENTATION_KEY and clientSecret outputs marked @secure() preventing values from appearing in Azure deployment history, logs, or console output                                    | Confidential      | Not detected | Cloud Platform Team | Not detected | batch            | Bicep compiler            | Deployment pipeline security   |
+| SystemAssigned Managed Identity  | APIM, Log Analytics, and API Center use system-assigned managed identity for all Azure service-to-service authentication; eliminates hardcoded credentials and certificate rotation burden                  | Confidential      | Not detected | Cloud Platform Team | Not detected | batch            | Azure Active Directory    | Azure RBAC, resource providers |
+| RBAC Least-Privilege Enforcement | APIM identity granted Reader scope on resource group; API Center identity granted API Center Data Reader + Compliance Manager; role assignments use deterministic GUIDs for idempotency                     | Internal          | Not detected | Cloud Platform Team | indefinite   | batch            | Azure RBAC built-in roles | Azure authorization engine     |
+| Network Access Controls          | APIM publicNetworkAccess (default: Enabled) and virtualNetworkType (default: None) parameters enable production hardening; Application Insights supports privateNetworkAccessForIngestion / Query: Disabled | Internal          | Not detected | Cloud Platform Team | Not detected | batch            | Network configuration     | Azure network enforcement      |
+| GDPR Compliance Tag Enforcement  | RegulatoryCompliance: GDPR governance tag propagated to all resources via commonTags union in infra/main.bicep; enables Azure Policy GDPR compliance tracking                                               | Confidential      | Not detected | Cloud Platform Team | indefinite   | batch            | infra/settings.yaml       | Azure Policy, cost management  |
 
 ### 📝 Summary
 
@@ -782,13 +782,13 @@ Future formal ADRs should be recorded in `/docs/architecture/decisions/` using s
 
 ### 📋 ADR Summary
 
-| 🔖 ID | 📝 Title | ✅ Status | 📅 Date |
-| --- | --- | --- | --- |
-| ADR-001 | Workspace-Based Application Insights Ingestion Mode        | Accepted | Inferred |
-| ADR-002 | Standard_LRS for Diagnostic Log Archival Storage           | Accepted | Inferred |
-| ADR-003 | Bicep Compile-Time Type System as Data Contract Mechanism  | Accepted | Inferred |
-| ADR-004 | SystemAssigned Managed Identity for All Service Principals | Accepted | Inferred |
-| ADR-005 | PerGB2018 Pay-As-You-Go SKU for Log Analytics              | Accepted | Inferred |
+| 🔖 ID   | 📝 Title                                                   | ✅ Status | 📅 Date  |
+| ------- | ---------------------------------------------------------- | --------- | -------- |
+| ADR-001 | Workspace-Based Application Insights Ingestion Mode        | Accepted  | Inferred |
+| ADR-002 | Standard_LRS for Diagnostic Log Archival Storage           | Accepted  | Inferred |
+| ADR-003 | Bicep Compile-Time Type System as Data Contract Mechanism  | Accepted  | Inferred |
+| ADR-004 | SystemAssigned Managed Identity for All Service Principals | Accepted  | Inferred |
+| ADR-005 | PerGB2018 Pay-As-You-Go SKU for Log Analytics              | Accepted  | Inferred |
 
 ### 📑 6.1 Detailed ADRs
 
@@ -866,8 +866,8 @@ The following standards should be formally documented and stored in `/docs/stand
 
 ### 📛 Data Naming Conventions
 
-| 📋 Standard | 📏 Rule | 💡 Example | 🔧 Enforcement |
-| --- | --- | --- | --- |
+| 📋 Standard                 | 📏 Rule                                                     | 💡 Example                     | 🔧 Enforcement                            |
+| --------------------------- | ----------------------------------------------------------- | ------------------------------ | ----------------------------------------- |
 | **Resource Name Pattern**   | `{solutionName}-{uniqueSuffix}-{resourceType}`              | `apim-accelerator-abc123-apim` | generateUniqueSuffix() in constants.bicep |
 | **Storage Account Name**    | Lowercase, max 24 chars, no hyphens; uses 'sa' abbreviation | `apimacceleratorsa1a2b`        | generateStorageAccountName()              |
 | **Diagnostic Setting Name** | `{resourceName}-diag`                                       | `apim-accelerator-apim-diag`   | generateDiagnosticSettingsName()          |
@@ -876,8 +876,8 @@ The following standards should be formally documented and stored in `/docs/stand
 
 ### 📐 Schema Design Standards
 
-| 📋 Standard | 📏 Rule | 🔧 Enforcement |
-| --- | --- | --- |
+| 📋 Standard                    | 📏 Rule                                                                                        | 🔧 Enforcement                                                                  |
+| ------------------------------ | ---------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------- |
 | **Type-First Design**          | All module object parameters MUST use named exported types from common-types.bicep             | Bicep compiler — anonymous object params trigger warnings                       |
 | **Enum-Based Validation**      | String parameters with fixed valid values MUST use `@allowed` decorator                        | Bicep compiler — fail if value outside allowed list                             |
 | **Nullable Safe Access**       | Optional nested property access MUST use Bicep safe-dereference operator (`?`)                 | Code review — e.g., `apiCenterSettings.?name` in inventory/main.bicep           |
@@ -886,8 +886,8 @@ The following standards should be formally documented and stored in `/docs/stand
 
 ### 🎯 Data Quality Standards
 
-| 📋 Standard | 📏 Rule | 🔧 Enforcement |
-| --- | --- | --- |
+| 📋 Standard           | 📏 Rule                                                                                                               | 🔧 Enforcement                                             |
+| --------------------- | --------------------------------------------------------------------------------------------------------------------- | ---------------------------------------------------------- |
 | **Retention Minimum** | Application Insights retentionInDays MUST be ≥90 days                                                                 | `@minValue(90)` decorator                                  |
 | **Retention Maximum** | Application Insights retentionInDays MUST NOT exceed 730 days                                                         | `@maxValue(730)` decorator                                 |
 | **Name Length**       | All Azure resource name parameters MUST have `@minLength` / `@maxLength` constraints where Azure limits apply         | Parameter decorators (`@minLength(1)`, `@maxLength(260)`)  |
@@ -908,8 +908,8 @@ Integration contracts between modules are formalized through the typed Bicep par
 
 ### 🔄 Data Flow Patterns
 
-| 🔄 Pattern Name | 📊 Flow Type | 📥 Source | 📤 Target | ⚙️ Processing | 📜 Contract |
-| --- | --- | --- | --- | --- | --- |
+| 🔄 Pattern Name              | 📊 Flow Type         | 📥 Source            | 📤 Target                                                | ⚙️ Processing                                            | 📜 Contract                    |
+| ---------------------------- | -------------------- | -------------------- | -------------------------------------------------------- | -------------------------------------------------------- | ------------------------------ |
 | Configuration Injection      | Batch (deploy-time)  | infra/settings.yaml  | infra/main.bicep                                         | loadYamlContent() YAML parse                             | YAML schema (implicit)         |
 | Type Contract Import         | Batch (compile-time) | common-types.bicep   | core/main.bicep, shared/main.bicep, inventory/main.bicep | Bicep type import                                        | @export() type contracts       |
 | APIM Diagnostic Log Flow     | Real-time (runtime)  | Azure APIM service   | Log Analytics Workspace                                  | Azure Monitor diagnostic settings — allLogs + allMetrics | ARM diagnostic settings schema |
@@ -1013,8 +1013,8 @@ flowchart LR
 
 ✅ Mermaid Verification: 5/5 | Score: 100/100 | Diagrams: 1 | Violations: 0
 
-| 📤 Producer | 📥 Consumer | 📊 Data Type | 🔄 Flow Type | 📜 Contract | ✅ Integration Health |
-| --- | --- | --- | --- | --- | --- |
+| 📤 Producer                   | 📥 Consumer                                              | 📊 Data Type               | 🔄 Flow Type         | 📜 Contract                    | ✅ Integration Health                         |
+| ----------------------------- | -------------------------------------------------------- | -------------------------- | -------------------- | ------------------------------ | --------------------------------------------- |
 | infra/settings.yaml           | infra/main.bicep                                         | Configuration parameters   | Batch (deploy-time)  | YAML implicit schema           | ✅ Healthy                                    |
 | src/shared/common-types.bicep | core/main.bicep, shared/main.bicep, inventory/main.bicep | Typed parameter contracts  | Batch (compile-time) | Bicep @export() type           | ✅ Healthy                                    |
 | Azure APIM service            | Log Analytics Workspace                                  | Diagnostic logs + metrics  | Real-time (runtime)  | ARM diagnostic settings schema | ✅ Healthy                                    |
@@ -1051,8 +1051,8 @@ Not detected in source files.
 
 ### 🔐 Access Control Model
 
-| 🔐 Resource | 👥 Role | 🤖 Principal | 🎯 Scope |
-| --- | --- | --- | --- |
+| 🔐 Resource             | 👥 Role                            | 🤖 Principal                    | 🎯 Scope       |
+| ----------------------- | ---------------------------------- | ------------------------------- | -------------- |
 | Resource Group          | Reader                             | APIM Managed Identity           | Resource Group |
 | API Center              | API Center Data Reader             | API Center Managed Identity     | Resource Group |
 | API Center              | API Center Compliance Manager      | API Center Managed Identity     | Resource Group |
@@ -1067,8 +1067,8 @@ Not detected in source files.
 
 ### 🕵️ Audit & Compliance
 
-| 🛡️ Control | 📊 Type | 📝 Implementation | ✅ Status |
-| --- | --- | --- | --- |
+| 🛡️ Control                       | 📊 Type                | 📝 Implementation                                                                                 | ✅ Status                                           |
+| -------------------------------- | ---------------------- | ------------------------------------------------------------------------------------------------- | --------------------------------------------------- |
 | Diagnostic Audit Logging         | Preventive + Detective | allLogs category on APIM; all diagnostic settings also captured on Log Analytics workspace itself | ✅ Implemented                                      |
 | GDPR Regulatory Tagging          | Preventive             | `RegulatoryCompliance: "GDPR"` tag on all resources                                               | ✅ Implemented                                      |
 | Secure Output Protection         | Preventive             | `@secure()` on instrumentation key and client secret outputs                                      | ✅ Implemented                                      |
