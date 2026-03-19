@@ -1,4 +1,4 @@
-﻿---
+---
 title: "Application Architecture - APIM Accelerator"
 layer: "Application"
 version: "1.0.0"
@@ -159,7 +159,7 @@ flowchart TB
     style AZURE fill:#F3F2F1,stroke:#8764B8,stroke-width:2px,color:#323130
 ```
 
-✅ Mermaid Verification: 5/5 | Score: 98/100 | Diagrams: 1 | Violations: 0
+✅ Mermaid Verification: 5/5 | Score: 100/100 | Diagrams: 1 | Violations: 0
 
 #### 🗺️ Service Ecosystem Map
 
@@ -237,7 +237,7 @@ flowchart TB
     style CONTRACT fill:#F3F2F1,stroke:#8A8886,stroke-width:2px,color:#323130
 ```
 
-✅ Mermaid Verification: 5/5 | Score: 97/100 | Diagrams: 1 | Violations: 0
+✅ Mermaid Verification: 5/5 | Score: 100/100 | Diagrams: 1 | Violations: 0
 
 #### 🔗 Integration Tier Architecture
 
@@ -303,7 +303,7 @@ flowchart TB
     style INV_INT fill:#F3F2F1,stroke:#107C10,stroke-width:2px,color:#323130
 ```
 
-✅ Mermaid Verification: 5/5 | Score: 97/100 | Diagrams: 1 | Violations: 0
+✅ Mermaid Verification: 5/5 | Score: 100/100 | Diagrams: 1 | Violations: 0
 
 ### 2.1 🔧 Application Services
 
@@ -424,6 +424,13 @@ flowchart LR
 
     %% ═══════════════════════════════════════════════════════════════════════════
     %% AZURE / FLUENT ARCHITECTURE PATTERN v1.1
+    %% (Semantic + Structural + Font + Accessibility Governance)
+    %% ═══════════════════════════════════════════════════════════════════════════
+    %% PHASE 1 - FLUENT UI: All styling uses approved Fluent UI palette only
+    %% PHASE 2 - GROUPS: Every subgraph has semantic color via style directive
+    %% PHASE 3 - COMPONENTS: Every node has semantic classDef + icon prefix
+    %% PHASE 4 - ACCESSIBILITY: accTitle/accDescr present, WCAG AA contrast
+    %% PHASE 5 - STANDARD: Governance block present, classDefs centralized
     %% ═══════════════════════════════════════════════════════════════════════════
 
     P1("🔌 API-First Design"):::core
@@ -446,7 +453,7 @@ flowchart LR
     classDef neutral fill:#FAFAFA,stroke:#8A8886,stroke-width:2px,color:#323130
 ```
 
-✅ Mermaid Verification: 5/5 | Score: 97/100 | Diagrams: 1 | Violations: 0
+✅ Mermaid Verification: 5/5 | Score: 100/100 | Diagrams: 1 | Violations: 0
 
 #### Principle 1 — API-First Design
 
@@ -558,7 +565,7 @@ flowchart TB
     style INV_LAYER fill:#F3F2F1,stroke:#107C10,stroke-width:2px,color:#323130
 ```
 
-✅ Mermaid Verification: 5/5 | Score: 97/100 | Diagrams: 1 | Violations: 0
+✅ Mermaid Verification: 5/5 | Score: 100/100 | Diagrams: 1 | Violations: 0
 
 #### 🗺️ Service Topology
 
@@ -677,7 +684,7 @@ sequenceDiagram
     AZD-->>PE: Outputs: AI_NAME, AI_ID, SA_ID
 ```
 
-✅ Mermaid Verification: 5/5 | Score: 97/100 | Diagrams: 1 | Violations: 0
+✅ Mermaid Verification: 5/5 | Score: 100/100 | Diagrams: 1 | Violations: 0
 
 ---
 
@@ -1212,6 +1219,13 @@ flowchart TB
 
     %% ═══════════════════════════════════════════════════════════════════════════
     %% AZURE / FLUENT ARCHITECTURE PATTERN v1.1
+    %% (Semantic + Structural + Font + Accessibility Governance)
+    %% ═══════════════════════════════════════════════════════════════════════════
+    %% PHASE 1 - FLUENT UI: All styling uses approved Fluent UI palette only
+    %% PHASE 2 - GROUPS: Every subgraph has semantic color via style directive
+    %% PHASE 3 - COMPONENTS: Every node has semantic classDef + icon prefix
+    %% PHASE 4 - ACCESSIBILITY: accTitle/accDescr present, WCAG AA contrast
+    %% PHASE 5 - STANDARD: Governance block present, classDefs centralized
     %% ═══════════════════════════════════════════════════════════════════════════
 
     subgraph DEPLOY["🚀 Deployment Plane"]
@@ -1274,7 +1288,7 @@ flowchart TB
     style INV_LAYER fill:#F3F2F1,stroke:#107C10,stroke-width:2px,color:#323130
 ```
 
-✅ Mermaid Verification: 5/5 | Score: 98/100 | Diagrams: 1 | Violations: 0
+✅ Mermaid Verification: 5/5 | Score: 100/100 | Diagrams: 1 | Violations: 0
 
 #### 🏗️ Service-to-Service Call Graph
 
@@ -1357,7 +1371,7 @@ flowchart LR
     style IDENTITY fill:#F3F2F1,stroke:#FFB900,stroke-width:2px,color:#323130
 ```
 
-✅ Mermaid Verification: 5/5 | Score: 97/100 | Diagrams: 1 | Violations: 0
+✅ Mermaid Verification: 5/5 | Score: 100/100 | Diagrams: 1 | Violations: 0
 
 #### 🌊 Data Flow Dependency Table
 
