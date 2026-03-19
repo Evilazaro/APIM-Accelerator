@@ -645,6 +645,17 @@ sequenceDiagram
     accTitle: APIM Accelerator Application Deployment Sequence Diagram
     accDescr: Sequence diagram showing the deployment-time collaboration flow between the four application services and the azd orchestrator
 
+    %% ═══════════════════════════════════════════════════════════════════════════
+    %% AZURE / FLUENT ARCHITECTURE PATTERN v1.1
+    %% (Semantic + Structural + Font + Accessibility Governance)
+    %% ═══════════════════════════════════════════════════════════════════════════
+    %% PHASE 1 - FLUENT UI: All styling uses approved Fluent UI palette only
+    %% PHASE 2 - GROUPS: Participant grouping follows semantic tier structure
+    %% PHASE 3 - COMPONENTS: Participants prefixed with semantic emoji icons
+    %% PHASE 4 - ACCESSIBILITY: accTitle/accDescr present, WCAG AA contrast
+    %% PHASE 5 - STANDARD: Governance block present, sequence follows deploy order
+    %% ═══════════════════════════════════════════════════════════════════════════
+
     participant PE as 👤 Platform Engineer
     participant AZD as 🚀 azd CLI
     participant HOOK as 📜 Pre-Provision Hook
