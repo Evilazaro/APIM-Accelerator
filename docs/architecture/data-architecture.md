@@ -116,16 +116,16 @@ A total of **53 data layer components** were identified across 11 canonical comp
 
 ### 📊 Data Quality Scorecard
 
-| Dimension               | Score   | Assessment                                                              | Evidence |
-| ----------------------- | ------- | ----------------------------------------------------------------------- | -------- |
-| **Schema Completeness** | 85/100  | Good — 10 typed entities defined; tags schema informal                  |
-| **Source Traceability** | 100/100 | All 53 components trace to source files                                 |
-| **Governance Coverage** | 80/100  | GDPR tag, RBAC, managed identity present; no DLP policy                 |
-| **Data Classification** | 70/100  | Implicit classification via RBAC; no explicit taxonomy file             |
-| **Security Controls**   | 90/100  | @secure(), managed identity, network access; no encryption-at-rest spec |
-| **Retention Policy**    | 60/100  | 90-day default for AI; no explicit policy for Log Analytics             |
-| **Data Lineage**        | 75/100  | Diagnostic flows documented; no formal lineage tool                     |
-| **Quality Automation**  | 80/100  | Bicep parameter validators; no runtime data quality checks              |
+| 📐 Dimension            | 🎯 Score | 📊 Assessment                                                           |
+| ----------------------- | -------- | ----------------------------------------------------------------------- |
+| **Schema Completeness** | 85/100   | Good — 10 typed entities defined; tags schema informal                  |
+| **Source Traceability** | 100/100  | All 53 components trace to source files                                 |
+| **Governance Coverage** | 80/100   | GDPR tag, RBAC, managed identity present; no DLP policy                 |
+| **Data Classification** | 70/100   | Implicit classification via RBAC; no explicit taxonomy file             |
+| **Security Controls**   | 90/100   | @secure(), managed identity, network access; no encryption-at-rest spec |
+| **Retention Policy**    | 60/100   | 90-day default for AI; no explicit policy for Log Analytics             |
+| **Data Lineage**        | 75/100   | Diagnostic flows documented; no formal lineage tool                     |
+| **Quality Automation**  | 80/100   | Bicep parameter validators; no runtime data quality checks              |
 
 ### 🛡️ Coverage Summary
 
@@ -323,8 +323,6 @@ flowchart TB
     style secdomain fill:#F3F2F1,stroke:#8A8886,stroke-width:2px,color:#323130
 ```
 
-✅ Mermaid Verification: 5/5 | Score: 100/100 | Diagrams: 1 | Violations: 0
-
 ### �📝 Summary
 
 The APIM-Accelerator data landscape encompasses 53 components across all 11 canonical data types. The four primary data stores (Log Analytics, Storage Account, Application Insights, API Center) form the operational backbone, while the 10 configuration entities defined in the Bicep type system constitute the solution's configuration data model. Data flows are exclusively push-based and declarative, with five distinct diagnostic and telemetry pipelines directing data from the APIM gateway into the monitoring estate.
@@ -477,8 +475,6 @@ flowchart TB
     style apimLayer fill:#F3F2F1,stroke:#8A8886,stroke-width:2px,color:#323130
     style inventorylayer fill:#F3F2F1,stroke:#8A8886,stroke-width:2px,color:#323130
 ```
-
-✅ Mermaid Verification: 5/5 | Score: 100/100 | Diagrams: 1 | Violations: 0
 
 ### 💾 Storage Distribution
 
@@ -667,8 +663,6 @@ erDiagram
     }
 ```
 
-✅ Mermaid Verification: 5/5 | Score: 100/100 | Diagrams: 1 | Violations: 0
-
 ### 🗃️ 5.2 Data Models
 
 | 🔍 Component              | 📝 Description                                                                                                                                                                            | 🏷️ Classification | 💾 Storage   | 👤 Owner            | ⏰ Retention | ⚡ Freshness SLA | 📥 Source Systems      | 📤 Consumers                                                         |
@@ -715,13 +709,13 @@ erDiagram
 
 ### ✅ 5.7 Data Quality Rules
 
-| Component                          | Description                                                                                                                                                                                                   | Classification | Storage      | Owner               | Retention    | Freshness SLA | Source Systems                             | Consumers                                     | Source File |
-| ---------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | -------------- | ------------ | ------------------- | ------------ | ------------- | ------------------------------------------ | --------------------------------------------- | ----------- |
-| Parameter Allowed-Value Validators | Bicep `@allowed` decorators enforce enumerated valid values for skuName, identityType, virtualNetworkType, ingestionMode, kind, applicationType; prevents invalid SKU or configuration combinations           | Internal       | Not detected | Cloud Platform Team | Not detected | batch         | Bicep compiler                             | Deployment pipeline, IaC authors              |
-| String Length Constraints          | `@minLength` and `@maxLength` decorators on name parameters to enforce Azure resource naming limits; e.g., Application Insights name: minLength(1), maxLength(260)                                            | Internal       | Not detected | Cloud Platform Team | Not detected | batch         | Bicep compiler                             | Deployment pipeline                           |
-| Numeric Range Constraints          | `@minValue(90)` / `@maxValue(730)` on retentionInDays parameter enforces valid Application Insights data retention window within Azure platform limits                                                        | Internal       | Not detected | Cloud Platform Team | Not detected | batch         | Bicep compiler                             | Deployment pipeline                           |
-| Storage Name Character Constraints | `maxNameLength: 24` constant combined with toLower, take, replace transformations in generateStorageAccountName() enforce Azure globally-unique storage account naming rules                                  | Internal       | Not detected | Cloud Platform Team | Not detected | batch         | constants.bicep generateStorageAccountName | Deployment pipeline                           |
-| Unique Name Collision Prevention   | generateUniqueSuffix() derives a deterministic unique suffix from subscription ID, resource group ID, resource group name, solution name, and location to prevent resource name collisions across deployments | Internal       | Not detected | Cloud Platform Team | Not detected | batch         | Bicep uniqueString() built-in              | core/main.bicep, shared/monitoring/main.bicep |
+| 🔍 Component                       | 📝 Description                                                                                                                                                                                                | 🏷️ Classification | 💾 Storage   | 👤 Owner            | ⏰ Retention | ⚡ Freshness SLA | 📥 Source Systems                          | 📤 Consumers                                  |
+| ---------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ----------------- | ------------ | ------------------- | ------------ | ---------------- | ------------------------------------------ | --------------------------------------------- |
+| Parameter Allowed-Value Validators | Bicep `@allowed` decorators enforce enumerated valid values for skuName, identityType, virtualNetworkType, ingestionMode, kind, applicationType; prevents invalid SKU or configuration combinations           | Internal          | Not detected | Cloud Platform Team | Not detected | batch            | Bicep compiler                             | Deployment pipeline, IaC authors              |
+| String Length Constraints          | `@minLength` and `@maxLength` decorators on name parameters to enforce Azure resource naming limits; e.g., Application Insights name: minLength(1), maxLength(260)                                            | Internal          | Not detected | Cloud Platform Team | Not detected | batch            | Bicep compiler                             | Deployment pipeline                           |
+| Numeric Range Constraints          | `@minValue(90)` / `@maxValue(730)` on retentionInDays parameter enforces valid Application Insights data retention window within Azure platform limits                                                        | Internal          | Not detected | Cloud Platform Team | Not detected | batch            | Bicep compiler                             | Deployment pipeline                           |
+| Storage Name Character Constraints | `maxNameLength: 24` constant combined with toLower, take, replace transformations in generateStorageAccountName() enforce Azure globally-unique storage account naming rules                                  | Internal          | Not detected | Cloud Platform Team | Not detected | batch            | constants.bicep generateStorageAccountName | Deployment pipeline                           |
+| Unique Name Collision Prevention   | generateUniqueSuffix() derives a deterministic unique suffix from subscription ID, resource group ID, resource group name, solution name, and location to prevent resource name collisions across deployments | Internal          | Not detected | Cloud Platform Team | Not detected | batch            | Bicep uniqueString() built-in              | core/main.bicep, shared/monitoring/main.bicep |
 
 ### 🌟 5.8 Master Data
 
@@ -1010,8 +1004,6 @@ flowchart LR
     style runtimeServices fill:#F3F2F1,stroke:#8A8886,stroke-width:2px,color:#323130
     style consumers fill:#F3F2F1,stroke:#8A8886,stroke-width:2px,color:#323130
 ```
-
-✅ Mermaid Verification: 5/5 | Score: 100/100 | Diagrams: 1 | Violations: 0
 
 | 📤 Producer                   | 📥 Consumer                                              | 📊 Data Type               | 🔄 Flow Type         | 📜 Contract                    | ✅ Integration Health                         |
 | ----------------------------- | -------------------------------------------------------- | -------------------------- | -------------------- | ------------------------------ | --------------------------------------------- |

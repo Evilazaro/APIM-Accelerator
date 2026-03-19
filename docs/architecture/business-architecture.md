@@ -340,9 +340,6 @@ flowchart TB
     classDef data fill:#F0E6FA,stroke:#8764B8,stroke-width:2px,color:#323130
 ```
 
-> ✅ Mermaid Verification: 5/5 | Score: 98/100 | Violations: 0
-> Phase 1 ✅ | Phase 2 ✅ | Phase 3 ✅ | Phase 4 ✅ | Phase 5 ✅ | Semantic classes: 4/5 | Nesting depth: 1/3
-
 ### 4.2 🔄 Business Process Flow — API Platform Provisioning
 
 ```mermaid
@@ -410,9 +407,6 @@ flowchart LR
     classDef warning fill:#FFF4CE,stroke:#FFB900,stroke-width:2px,color:#323130
     classDef data fill:#F0E6FA,stroke:#8764B8,stroke-width:2px,color:#323130
 ```
-
-> ✅ Mermaid Verification: 5/5 | Score: 97/100 | Violations: 0
-> Phase 1 ✅ | Phase 2 ✅ | Phase 3 ✅ | Phase 4 ✅ | Phase 5 ✅ | Semantic classes: 5/5 | Nesting depth: 1/3
 
 ### 4.3 📈 Capability Maturity Heatmap
 
@@ -647,9 +641,6 @@ flowchart LR
     classDef success fill:#DFF6DD,stroke:#107C10,stroke-width:2px,color:#323130
 ```
 
-> ✅ Mermaid Verification: 5/5 | Score: 97/100 | Violations: 0
-> Phase 1 ✅ | Phase 2 ✅ | Phase 3 ✅ | Phase 4 ✅ | Phase 5 ✅ | Semantic classes: 3/5 | Nesting depth: 0/3
-
 ### 8.2 🌐 Business Service Integration Map
 
 ```mermaid
@@ -725,9 +716,6 @@ flowchart TB
     classDef external fill:#E0F7F7,stroke:#038387,stroke-width:2px,color:#323130
 ```
 
-> ✅ Mermaid Verification: 5/5 | Score: 98/100 | Violations: 0
-> Phase 1 ✅ | Phase 2 ✅ | Phase 3 ✅ | Phase 4 ✅ | Phase 5 ✅ | Semantic classes: 5/5 | Nesting depth: 1/3
-
 ---
 
 ### 8.3 📈 Capability Maturity Visual Heatmap
@@ -785,9 +773,6 @@ flowchart LR
     classDef optimising fill:#E0F7F7,stroke:#038387,stroke-width:2px,color:#323130
     classDef gap fill:#FAF9F8,stroke:#D13438,stroke-width:2px,color:#323130
 ```
-
-> ✅ Mermaid Verification: 5/5 | Score: 98/100 | Violations: 0
-> Phase 1 ✅ | Phase 2 ✅ | Phase 3 ✅ | Phase 4 ✅ | Phase 5 ✅ | Semantic classes: 5/5 | Nesting depth: 1/3
 
 ---
 
@@ -868,9 +853,6 @@ flowchart TB
     classDef tech fill:#EFF6FC,stroke:#0078D4,stroke-width:2px,color:#323130
     classDef external fill:#FAF9F8,stroke:#8A8886,stroke-width:2px,color:#323130
 ```
-
-> ✅ Mermaid Verification: 5/5 | Score: 98/100 | Violations: 0
-> Phase 1 ✅ | Phase 2 ✅ | Phase 3 ✅ | Phase 4 ✅ | Phase 5 ✅ | Semantic classes: 5/5 | Nesting depth: 1/3
 
 ---
 
