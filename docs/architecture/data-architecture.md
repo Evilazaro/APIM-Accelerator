@@ -1,4 +1,4 @@
-# Data Architecture - APIM-Accelerator
+﻿# Data Architecture - APIM-Accelerator
 
 **Generated**: 2026-03-19T00:00:00Z
 **Session ID**: a3f7e820-9c4b-4d1a-b5f6-2e8d30c19471
@@ -6,6 +6,22 @@
 **Data Assets Found**: 53
 **Target Layer**: Data
 **Analysis Scope**: `.` (workspace root — all Bicep modules, YAML configuration, and shell scripts)
+
+---
+
+## 📑 Quick Table of Contents
+
+| #   | Section                                                                | Description                                              |
+| --- | ---------------------------------------------------------------------- | -------------------------------------------------------- |
+| 1   | [📊 Executive Summary](#-section-1-executive-summary)                  | Data portfolio overview, key findings, quality scorecard |
+| 2   | [🗺️ Architecture Landscape](#️-section-2-architecture-landscape)        | Data ecosystem view across 11 component types            |
+| 3   | [⚖️ Architecture Principles](#️-section-3-architecture-principles)      | Data architecture principles and standards               |
+| 4   | [🏗️ Current State Baseline](#️-section-4-current-state-baseline)        | Existing data topology, quality, governance maturity     |
+| 5   | [📦 Component Catalog](#-section-5-component-catalog)                  | Complete 11-subsection component inventory (53 assets)   |
+| 6   | [📝 Architecture Decisions](#-section-6-architecture-decisions)        | Key ADRs: storage, identity, SKU, and contract decisions |
+| 7   | [📏 Architecture Standards](#-section-7-architecture-standards)        | Naming conventions, schema standards, quality rules      |
+| 8   | [🔗 Dependencies & Integration](#-section-8-dependencies--integration) | Data flow patterns, producer-consumer relationships      |
+| 9   | [🛡️ Governance & Management](#️-section-9-governance--management)       | Ownership, access control, audit, compliance             |
 
 ---
 
@@ -73,9 +89,9 @@ data_layer_reasoning:
 
 ---
 
-## Section 1: Executive Summary
+## 📊 Section 1: Executive Summary
 
-### Overview
+### 📋 Overview
 
 The APIM-Accelerator repository represents a cloud-native Infrastructure-as-Code (IaC) solution for deploying an Azure API Management Landing Zone. From a data architecture perspective, the repository defines configuration entities, managed data stores, observability data pipelines, and a governance framework encoded entirely in Bicep and YAML. The data domain spans three broad territories: **configuration data** (type-safe parameter schemas in Bicep), **operational data** (telemetry, log, and metric stores in Azure Monitor), and **API inventory data** (API metadata catalog in Azure API Center).
 
@@ -83,7 +99,7 @@ The solution's data layer is not a traditional application data tier with relati
 
 A total of **53 data layer components** were identified across 11 canonical component types, all traceable to files within the repository root. The average confidence score is **0.84**, with all components exceeding the 0.70 threshold. The overall data architecture maturity is assessed at **Level 2 (Managed)**: role-based access is implemented, a typed configuration schema (data dictionary equivalent) is maintained, and resource tagging governance is formalized. A centralized schema registry and dedicated data catalog beyond the API Center scope are not yet present, preventing Level 3 attainment.
 
-### Key Findings
+### 🔍 Key Findings
 
 | Finding                                    | Detail                                                            | Severity      |
 | ------------------------------------------ | ----------------------------------------------------------------- | ------------- |
@@ -98,7 +114,7 @@ A total of **53 data layer components** were identified across 11 canonical comp
 | **@secure() applied to sensitive outputs** | Instrumentation key and client secret protected                   | Positive      |
 | **Public network access configurable**     | Default open; production deployments should disable for APIM      | Risk          |
 
-### Data Quality Scorecard
+### 📊 Data Quality Scorecard
 
 | Dimension               | Score   | Assessment                                                              | Evidence                                          |
 | ----------------------- | ------- | ----------------------------------------------------------------------- | ------------------------------------------------- |
@@ -111,15 +127,15 @@ A total of **53 data layer components** were identified across 11 canonical comp
 | **Data Lineage**        | 75/100  | Diagnostic flows documented; no formal lineage tool                     | src/core/apim.bicep:256-295                       |
 | **Quality Automation**  | 80/100  | Bicep parameter validators; no runtime data quality checks              | src/shared/constants.bicep:1-200                  |
 
-### Coverage Summary
+### 🛡️ Coverage Summary
 
 The APIM-Accelerator data governance model relies on Azure native controls: managed identity eliminates credential sprawl, RBAC (Reader, API Center Data Reader, API Center Compliance Manager roles) enforces least privilege, resource tags provide cost allocation and compliance traceability, and diagnostic settings create an audit trail. However, the governance framework remains at an infrastructure level. There is no data stewardship register, no data owner RACI, and no formal data retention schedule beyond the 90-day Application Insights default. The overall data governance maturity aligns with **Level 2 (Managed)** on the 5-level TOGAF data maturity scale. Advancing to Level 3 requires: deploying a centralized data catalog (e.g., Microsoft Purview), defining explicit retention policies per data store, and establishing a schema registry or contract testing mechanism.
 
 ---
 
-## Section 2: Architecture Landscape
+## 🗺️ Section 2: Architecture Landscape
 
-### Overview
+### 📋 Overview
 
 The APIM-Accelerator data landscape is organized into four logical data domains: **Configuration Data** (Bicep type system and YAML schemas defining infrastructure parameters), **Operational Data** (Azure Monitor ecosystem capturing API and infrastructure telemetry), **API Inventory Data** (API Center catalog storing API metadata and governance state), and **Identity & Security Data** (managed identity configurations and RBAC role assignments). These four domains correspond to the three Bicep deployment modules—`shared`, `core`, and `inventory`—plus the cross-cutting `infra/settings.yaml` configuration contract.
 
@@ -127,7 +143,7 @@ All data stores are Azure PaaS services provisioned via Bicep. There are no cust
 
 The architecture follows an **ingestion-forward** data pattern: all runtime data flows are push-based (APIM pushes logs, metrics, and telemetry to monitoring stores). There is no pull-based data extraction or batch processing present. This pattern is well-suited to the operational nature of the solution but means there is no historical data warehouse or analytical workload managed within this repository.
 
-### 2.1 Data Entities
+### 🧩 2.1 Data Entities
 
 | Name                   | Description                                                                                                 | Classification |
 | ---------------------- | ----------------------------------------------------------------------------------------------------------- | -------------- |
@@ -142,7 +158,7 @@ The architecture follows an **ingestion-forward** data pattern: all runtime data
 | ApimSku                | SKU configuration entity specifying the pricing tier and capacity                                           | Internal       |
 | Shared                 | Shared infrastructure configuration entity composing monitoring settings and resource tags                  | Internal       |
 
-### 2.2 Data Models
+### 🗃️ 2.2 Data Models
 
 | Name                      | Description                                                                                                                       | Classification |
 | ------------------------- | --------------------------------------------------------------------------------------------------------------------------------- | -------------- |
@@ -150,7 +166,7 @@ The architecture follows an **ingestion-forward** data pattern: all runtime data
 | YAML Configuration Schema | Human-readable configuration data model in settings.yaml; defines all environment-level parameters consumed by main.bicep         | Internal       |
 | ARM Resource Schema       | Implicit data model defined by Azure Resource Manager API versions pinned in all Bicep resource declarations                      | Internal       |
 
-### 2.3 Data Stores
+### 🗄️ 2.3 Data Stores
 
 | Name                    | Description                                                                                                   | Classification |
 | ----------------------- | ------------------------------------------------------------------------------------------------------------- | -------------- |
@@ -159,7 +175,7 @@ The architecture follows an **ingestion-forward** data pattern: all runtime data
 | Application Insights    | Telemetry and APM data store; ingests APIM request/response traces in workspace-based (LogAnalytics) mode     | Internal       |
 | Azure API Center        | API metadata catalog store; holds API definitions, governance state, and compliance data discovered from APIM | Internal       |
 
-### 2.4 Data Flows
+### 🔄 2.4 Data Flows
 
 | Name                         | Description                                                                                              | Classification |
 | ---------------------------- | -------------------------------------------------------------------------------------------------------- | -------------- |
@@ -169,7 +185,7 @@ The architecture follows an **ingestion-forward** data pattern: all runtime data
 | App Insights → Log Analytics | Workspace-based ingestion mode routes all App Insights telemetry into the linked Log Analytics workspace | Internal       |
 | APIM → API Center            | API discovery and synchronization from APIM to API Center via API source integration resource            | Internal       |
 
-### 2.5 Data Services
+### ⚡ 2.5 Data Services
 
 | Name                         | Description                                                                                                            | Classification |
 | ---------------------------- | ---------------------------------------------------------------------------------------------------------------------- | -------------- |
@@ -177,7 +193,7 @@ The architecture follows an **ingestion-forward** data pattern: all runtime data
 | Azure API Center             | Read access to API catalog metadata via API Center Data Reader RBAC role; API governance query interface               | Internal       |
 | Developer Portal             | Self-service API documentation and testing portal with Azure AD authentication; exposes API contract data to consumers | Internal       |
 
-### 2.6 Data Governance
+### 🏛️ 2.6 Data Governance
 
 | Name                        | Description                                                                                                                                                                                       | Classification |
 | --------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | -------------- |
@@ -186,7 +202,7 @@ The architecture follows an **ingestion-forward** data pattern: all runtime data
 | Managed Identity Governance | SystemAssigned managed identity policy for APIM, Log Analytics, and API Center; eliminates credential sprawl                                                                                      | Internal       |
 | Diagnostic Audit Trail      | Diagnostic settings on APIM and Log Analytics workspace capturing allLogs + allMetrics for audit and compliance                                                                                   | Internal       |
 
-### 2.7 Data Quality Rules
+### ✅ 2.7 Data Quality Rules
 
 | Name                               | Description                                                                                                                           | Classification |
 | ---------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------- | -------------- |
@@ -196,7 +212,7 @@ The architecture follows an **ingestion-forward** data pattern: all runtime data
 | Unique Name Generation             | `generateUniqueSuffix()` enforces globally unique storage account names to prevent deployment collisions                              | Internal       |
 | Storage Name Character Constraints | `maxNameLength: 24` constant with `toLower(take(...replace(...)))` enforces Azure storage account naming rules                        | Internal       |
 
-### 2.8 Master Data
+### 🌟 2.8 Master Data
 
 | Name                           | Description                                                                                                                             | Classification |
 | ------------------------------ | --------------------------------------------------------------------------------------------------------------------------------------- | -------------- |
@@ -205,7 +221,7 @@ The architecture follows an **ingestion-forward** data pattern: all runtime data
 | Identity Type Enumeration      | Canonical identity type values: SystemAssigned, UserAssigned, SystemAssigned+UserAssigned, None                                         | Internal       |
 | Log Analytics SKU Reference    | Authoritative list of valid Log Analytics SKUs: CapacityReservation, Free, LACluster, PerGB2018, PerNode, Premium, Standalone, Standard | Internal       |
 
-### 2.9 Data Transformations
+### 🔀 2.9 Data Transformations
 
 | Name                             | Description                                                                                                                              | Classification |
 | -------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------- | -------------- |
@@ -215,7 +231,7 @@ The architecture follows an **ingestion-forward** data pattern: all runtime data
 | createIdentityConfig()           | Transforms identity type string + identity array into an ARM identity configuration object                                               | Internal       |
 | toObject()                       | Converts user-assigned identity resource ID array to object form required by ARM API                                                     | Internal       |
 
-### 2.10 Data Contracts
+### 📜 2.10 Data Contracts
 
 | Name                          | Description                                                                                                | Classification |
 | ----------------------------- | ---------------------------------------------------------------------------------------------------------- | -------------- |
@@ -225,7 +241,7 @@ The architecture follows an **ingestion-forward** data pattern: all runtime data
 | Shared Type Export            | Typed Bicep contract defining the Shared infrastructure parameter interface                                | Internal       |
 | settings.yaml Schema Contract | YAML-encoded configuration contract between infra/settings.yaml and infra/main.bicep via loadYamlContent() | Internal       |
 
-### 2.11 Data Security
+### 🔐 2.11 Data Security
 
 | Name                            | Description                                                                                                                         | Classification |
 | ------------------------------- | ----------------------------------------------------------------------------------------------------------------------------------- | -------------- |
@@ -235,7 +251,7 @@ The architecture follows an **ingestion-forward** data pattern: all runtime data
 | Network Access Controls         | publicNetworkAccess and virtualNetworkType parameters control APIM exposure; Application Insights supports private endpoint mode    | Internal       |
 | GDPR Compliance Tagging         | RegulatoryCompliance: GDPR governance tag applied to all resources via settings.yaml propagated through commonTags                  | Confidential   |
 
-### Summary
+### 📝 Summary
 
 The APIM-Accelerator data landscape encompasses 53 components across all 11 canonical data types. The four primary data stores (Log Analytics, Storage Account, Application Insights, API Center) form the operational backbone, while the 10 configuration entities defined in the Bicep type system constitute the solution's configuration data model. Data flows are exclusively push-based and declarative, with five distinct diagnostic and telemetry pipelines directing data from the APIM gateway into the monitoring estate.
 
@@ -243,9 +259,9 @@ Governance coverage is strong at the infrastructure layer—GDPR compliance tagg
 
 ---
 
-## Section 3: Architecture Principles
+## ⚖️ Section 3: Architecture Principles
 
-### Overview
+### 📋 Overview
 
 The APIM-Accelerator data architecture is governed by several observable principles derived directly from the source code. These principles reflect the solution's focus on cloud-native infrastructure patterns, security-first design, and operational excellence rather than traditional application data management concerns. Understanding these principles is important for maintaining architectural coherence when extending the solution.
 
@@ -253,7 +269,7 @@ The foundational principle is **Configuration as Data**: all infrastructure para
 
 A secondary principle is **Telemetry-First Observability**: every Azure resource provisioned by this solution emits structured diagnostic data to the centralized monitoring estate. This is mandated by the diagnostic settings resources in apim.bicep and operational/main.bicep, which route allLogs and allMetrics to Log Analytics. No resource is deployed without observability instrumentation, ensuring the monitoring data store always has complete coverage of the deployed estate.
 
-### Core Data Principles
+### 💡 Core Data Principles
 
 | Principle                         | Statement                                                                                              | Implementation Evidence                                                          | Source File                         |
 | --------------------------------- | ------------------------------------------------------------------------------------------------------ | -------------------------------------------------------------------------------- | ----------------------------------- |
@@ -264,7 +280,7 @@ A secondary principle is **Telemetry-First Observability**: every Azure resource
 | **Governance-First Tagging**      | All data-bearing resources MUST carry a mandatory tag set including RegulatoryCompliance               | 10-key tag schema applied via commonTags union in main.bicep                     | infra/settings.yaml:29-39           |
 | **Deterministic Resource Naming** | Resource names MUST be reproducible across deployments using a deterministic unique suffix             | `generateUniqueSuffix()` based on subscription+RG+solution+location hash         | src/shared/constants.bicep:150-165  |
 
-### Data Schema Design Standards
+### 📐 Data Schema Design Standards
 
 - **Type-First Design**: All Bicep module parameters of object type MUST use exported types from common-types.bicep rather than anonymous `object` declarations.
 - **No Nested Anonymous Objects**: Inline object type definitions in parameters are prohibited; types must be named and exported.
@@ -272,7 +288,7 @@ A secondary principle is **Telemetry-First Observability**: every Azure resource
 - **Nullable vs. Optional**: Optional parameters with defaults use `= defaultValue`; nullable parameters use `?` safe dereferencing (e.g., `apiCenterSettings.?name`).
 - **Immutable Constants**: All shared constants (SKU options, role definition IDs, suffix values) are defined once in constants.bicep with `@export()` and consumed via `import` statements.
 
-### Data Classification Taxonomy
+### 🏷️ Data Classification Taxonomy
 
 The solution does not define an explicit data classification taxonomy document. Classifications used in this analysis are derived from the operational sensitivity of each component type:
 
@@ -286,9 +302,9 @@ The solution does not define an explicit data classification taxonomy document. 
 
 ---
 
-## Section 4: Current State Baseline
+## 🏗️ Section 4: Current State Baseline
 
-### Overview
+### 📋 Overview
 
 The current state data architecture consists of three deployment-time layers and one runtime data layer. The **deployment configuration layer** (settings.yaml + Bicep type system) encodes all parameters as structured YAML consumed by Bicep templates at provisioning time. The **infrastructure provisioning layer** (main.bicep modules) materializes Azure resources from those configurations. The **runtime data layer** (Log Analytics, Storage, App Insights) receives operational telemetry once the solution is active. A fourth layer, the **API inventory layer** (API Center), bridges deployment configuration and runtime state by discovering APIs from the live APIM gateway.
 
@@ -296,7 +312,7 @@ The solution follows a hub-and-spoke monitoring topology: Log Analytics Workspac
 
 No legacy data stores, data migration requirements, or existing schema constraints were detected in the source files. The baseline represents a greenfield IaC deployment with no technical debt in the data layer. The primary baseline gap is the absence of explicit data governance artifacts (retention policies, data classification register, data stewardship assignments) that would advance the solution beyond Level 2 maturity.
 
-### Baseline Data Architecture
+### 🏛️ Baseline Data Architecture
 
 ```mermaid
 ---
@@ -390,7 +406,7 @@ flowchart TB
 
 ✅ Mermaid Verification: 5/5 | Score: 100/100 | Diagrams: 1 | Violations: 0
 
-### Storage Distribution
+### 💾 Storage Distribution
 
 | Store                   | Type                         | SKU                   | Retention                              | Data Category                             | Ingestion Mode             |
 | ----------------------- | ---------------------------- | --------------------- | -------------------------------------- | ----------------------------------------- | -------------------------- |
@@ -399,7 +415,7 @@ flowchart TB
 | Application Insights    | Document Store (telemetry)   | Workspace-based       | 90–730 days (default 90d)              | API traces, requests, exceptions, metrics | Push (APIM logger)         |
 | Azure API Center        | Document Store (API catalog) | N/A (managed service) | Indefinite (managed)                   | API definitions, compliance metadata      | Push (API source sync)     |
 
-### Quality Baseline
+### 📈 Quality Baseline
 
 | Quality Dimension   | Current State                                               | Target State                                            | Gap                                    |
 | ------------------- | ----------------------------------------------------------- | ------------------------------------------------------- | -------------------------------------- |
@@ -409,7 +425,7 @@ flowchart TB
 | Lineage Tracking    | Diagnostic settings document data flow declaratively        | Automated lineage graph (e.g., Purview)                 | No lineage tooling                     |
 | Encryption          | Azure platform encryption at rest; TLS in transit           | Explicit encryption policy document                     | No encryption policy file              |
 
-### Governance Maturity
+### 🎯 Governance Maturity
 
 **Assessed Level: 2 — Managed**
 
@@ -426,7 +442,7 @@ flowchart TB
 | 2             | 2            | All Level 2 criteria met                                                     | None                                           |
 | —             | 3 (partial)  | No formal schema registry; no broader data catalog; data lineage tool absent | Recommend Microsoft Purview, AsyncAPI registry |
 
-### Compliance Posture
+### ✅ Compliance Posture
 
 | Control                      | Status              | Evidence                                                  | Source File                                       |
 | ---------------------------- | ------------------- | --------------------------------------------------------- | ------------------------------------------------- |
@@ -438,7 +454,7 @@ flowchart TB
 | Data Retention Documentation | ❌ Missing          | 90d default only; no formal policy                        | src/shared/monitoring/insights/main.bicep:130-135 |
 | Data Breach Notification     | ❌ Not detected     | Not addressed in IaC scope                                | Not detected                                      |
 
-### Summary
+### 📝 Summary
 
 The APIM-Accelerator baseline data architecture is a well-structured, greenfield IaC deployment with strong identity and access governance controls. The monitoring data estate (Log Analytics hub + Storage archival + Application Insights APM) provides comprehensive runtime observability, and the API Center inventory store adds governance discoverability for API consumers. The configuration data layer is type-safe and compile-time validated, which is a significant quality advantage over typical YAML-only configurations.
 
@@ -446,9 +462,9 @@ The primary gaps requiring remediation are: (1) no documented retention policy a
 
 ---
 
-## Section 5: Component Catalog
+## 📦 Section 5: Component Catalog
 
-### Overview
+### 📋 Overview
 
 This section provides the complete inventory of all 53 data layer components identified across the APIM-Accelerator workspace. Components are organized into 11 canonical subsections aligned with the TOGAF Data Architecture component taxonomy. Every component entry includes a data classification, storage type, owner team, retention policy, freshness SLA, source systems, consumers, and a source file reference in `path/file:line-range` format. All components are grounded in direct evidence from source files; no components have been fabricated.
 
@@ -456,7 +472,7 @@ The catalog confirms that this is a configuration-and-infrastructure-focused dat
 
 For components where owner, retention, or freshness SLA data could not be determined from source files, the value is marked as `Not detected` per the mandatory cell-value standard. Consumers and source systems reflect the module dependency graph extracted from Bicep `import` and `module` declarations.
 
-### 5.1 Data Entities
+### 🧩 5.1 Data Entities
 
 | Component              | Description                                                                                                                 | Classification | Storage      | Owner               | Retention    | Freshness SLA | Source Systems | Consumers                                                | Source File                           |
 | ---------------------- | --------------------------------------------------------------------------------------------------------------------------- | -------------- | ------------ | ------------------- | ------------ | ------------- | -------------- | -------------------------------------------------------- | ------------------------------------- |
@@ -579,7 +595,7 @@ erDiagram
 
 ✅ Mermaid Verification: 5/5 | Score: 100/100 | Diagrams: 1 | Violations: 0
 
-### 5.2 Data Models
+### 🗃️ 5.2 Data Models
 
 | Component                 | Description                                                                                                                                                                               | Classification | Storage      | Owner               | Retention    | Freshness SLA | Source Systems         | Consumers                                                            | Source File                         |
 | ------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | -------------- | ------------ | ------------------- | ------------ | ------------- | ---------------------- | -------------------------------------------------------------------- | ----------------------------------- |
@@ -587,7 +603,7 @@ erDiagram
 | YAML Configuration Schema | Human-readable infrastructure configuration schema encoding all environment parameters: solutionName, shared monitoring config, core APIM config, inventory config, and 10-key tag schema | Internal       | Not detected | Cloud Platform Team | Not detected | batch         | Not detected           | infra/main.bicep                                                     | infra/settings.yaml:1-70            |
 | ARM Resource Schema       | Implicit resource contract defined by Azure Resource Manager API versions pinned in each Bicep resource declaration; governs allowed properties and structure for all Azure resources     | Internal       | Not detected | Cloud Platform Team | Not detected | batch         | Azure Resource Manager | All Bicep resource blocks                                            | infra/main.bicep:90-95              |
 
-### 5.3 Data Stores
+### 🗄️ 5.3 Data Stores
 
 | Component               | Description                                                                                                                                                    | Classification | Storage        | Owner               | Retention                     | Freshness SLA | Source Systems                      | Consumers                               | Source File                                          |
 | ----------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------- | -------------- | -------------- | ------------------- | ----------------------------- | ------------- | ----------------------------------- | --------------------------------------- | ---------------------------------------------------- |
@@ -596,7 +612,7 @@ erDiagram
 | Application Insights    | Telemetry and APM data store; workspace-based ingestion mode (LogAnalytics); 90-day default retention; ingests APIM request traces and performance metrics     | Internal       | Document Store | Cloud Platform Team | 90d (configurable up to 730d) | real-time     | Azure APIM logger                   | Operations team, performance dashboards | src/shared/monitoring/insights/main.bicep:1-200      |
 | Azure API Center        | API metadata catalog store; stores API definitions, compliance metadata, and governance state; automatically synchronized from APIM via API source integration | Internal       | Document Store | Cloud Platform Team | indefinite                    | batch         | Azure APIM service                  | API consumers, governance team          | src/inventory/main.bicep:85-140                      |
 
-### 5.4 Data Flows
+### 🔄 5.4 Data Flows
 
 | Component                    | Description                                                                                                                                                                  | Classification | Storage        | Owner               | Retention         | Freshness SLA | Source Systems       | Consumers                                       | Source File                                       |
 | ---------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | -------------- | -------------- | ------------------- | ----------------- | ------------- | -------------------- | ----------------------------------------------- | ------------------------------------------------- |
@@ -606,7 +622,7 @@ erDiagram
 | App Insights → Log Analytics | Workspace-based ingestion mode routes all Application Insights telemetry into linked Log Analytics workspace; enables unified KQL queries across infrastructure and APM data | Internal       | Key-Value      | Cloud Platform Team | Workspace default | real-time     | Application Insights | Log Analytics, Azure Monitor                    | src/shared/monitoring/insights/main.bicep:135-160 |
 | APIM → API Center            | API discovery sync flow via apiSources child resource in API Center; links APIM service as an API source enabling automatic API registration and metadata synchronization    | Internal       | Document Store | Cloud Platform Team | indefinite        | batch         | Azure APIM service   | API Center catalog, governance consumers        | src/inventory/main.bicep:140-175                  |
 
-### 5.5 Data Services
+### ⚡ 5.5 Data Services
 
 | Component                    | Description                                                                                                                                                                                      | Classification | Storage        | Owner               | Retention    | Freshness SLA | Source Systems         | Consumers                             | Source File                            |
 | ---------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ | -------------- | -------------- | ------------------- | ------------ | ------------- | ---------------------- | ------------------------------------- | -------------------------------------- |
@@ -614,7 +630,7 @@ erDiagram
 | Azure API Center Service     | API catalog and governance service providing centralized API discovery, documentation, and compliance management; accessed via API Center Data Reader RBAC role                                  | Internal       | Document Store | Cloud Platform Team | indefinite   | batch         | Azure APIM service     | API consumers, governance team        | src/inventory/main.bicep:85-115        |
 | Developer Portal             | Self-service API documentation and testing portal integrated with the APIM service; configured with Azure AD identity provider (AAD), CORS policy, and sign-in/sign-up settings                  | Internal       | Not detected   | Cloud Platform Team | Not detected | real-time     | APIM service, Azure AD | External API consumers, developers    | src/core/developer-portal.bicep:80-200 |
 
-### 5.6 Data Governance
+### 🏛️ 5.6 Data Governance
 
 | Component                  | Description                                                                                                                                                                                                                                      | Classification | Storage      | Owner               | Retention         | Freshness SLA | Source Systems                                | Consumers                                  | Source File                         |
 | -------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ | -------------- | ------------ | ------------------- | ----------------- | ------------- | --------------------------------------------- | ------------------------------------------ | ----------------------------------- |
@@ -623,7 +639,7 @@ erDiagram
 | Managed Identity Policy    | SystemAssigned managed identity configuration on APIM, Log Analytics workspace, and API Center; eliminates credential storage in code or configuration                                                                                           | Confidential   | Not detected | Cloud Platform Team | Not detected      | batch         | infra/settings.yaml                           | Azure Active Directory, resource providers | src/shared/common-types.bicep:39-56 |
 | Diagnostic Audit Trail     | Diagnostic settings resources capture allLogs and allMetrics on APIM and Log Analytics Workspace itself; provides audit trail for compliance and security review                                                                                 | Internal       | Key-Value    | Cloud Platform Team | Workspace default | real-time     | Azure APIM, Log Analytics                     | Security operations, compliance auditors   | src/core/apim.bicep:256-290         |
 
-### 5.7 Data Quality Rules
+### ✅ 5.7 Data Quality Rules
 
 | Component                          | Description                                                                                                                                                                                                   | Classification | Storage      | Owner               | Retention    | Freshness SLA | Source Systems                             | Consumers                                     | Source File                                       |
 | ---------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | -------------- | ------------ | ------------------- | ------------ | ------------- | ------------------------------------------ | --------------------------------------------- | ------------------------------------------------- |
@@ -633,7 +649,7 @@ erDiagram
 | Storage Name Character Constraints | `maxNameLength: 24` constant combined with toLower, take, replace transformations in generateStorageAccountName() enforce Azure globally-unique storage account naming rules                                  | Internal       | Not detected | Cloud Platform Team | Not detected | batch         | constants.bicep generateStorageAccountName | Deployment pipeline                           | src/shared/constants.bicep:55-60                  |
 | Unique Name Collision Prevention   | generateUniqueSuffix() derives a deterministic unique suffix from subscription ID, resource group ID, resource group name, solution name, and location to prevent resource name collisions across deployments | Internal       | Not detected | Cloud Platform Team | Not detected | batch         | Bicep uniqueString() built-in              | core/main.bicep, shared/monitoring/main.bicep | src/shared/constants.bicep:150-165                |
 
-### 5.8 Master Data
+### 🌟 5.8 Master Data
 
 | Component                      | Description                                                                                                                                                                                                                   | Classification | Storage      | Owner               | Retention  | Freshness SLA | Source Systems                | Consumers                                     | Source File                        |
 | ------------------------------ | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | -------------- | ------------ | ------------------- | ---------- | ------------- | ----------------------------- | --------------------------------------------- | ---------------------------------- |
@@ -642,7 +658,7 @@ erDiagram
 | Identity Type Enumeration      | Authoritative list of 4 valid managed identity types: SystemAssigned, UserAssigned, SystemAssigned+UserAssigned, None; used as validation reference for identity configuration                                                | Internal       | Not detected | Cloud Platform Team | indefinite | batch         | Azure Active Directory        | src/shared/common-types.bicep, all modules    | src/shared/constants.bicep:105-116 |
 | Log Analytics SKU Reference    | Authoritative enumeration of 8 valid Log Analytics pricing tiers: CapacityReservation, Free, LACluster, PerGB2018, PerNode, Premium, Standalone, Standard                                                                     | Internal       | Not detected | Cloud Platform Team | indefinite | batch         | Azure Monitor                 | src/shared/monitoring/operational/main.bicep  | src/shared/constants.bicep:65-80   |
 
-### 5.9 Data Transformations
+### 🔀 5.9 Data Transformations
 
 | Component                             | Description                                                                                                                                                                                  | Classification | Storage      | Owner               | Retention    | Freshness SLA | Source Systems                | Consumers                                                | Source File                        |
 | ------------------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | -------------- | ------------ | ------------------- | ------------ | ------------- | ----------------------------- | -------------------------------------------------------- | ---------------------------------- |
@@ -652,7 +668,7 @@ erDiagram
 | createIdentityConfig()                | Conditional object construction: maps identityType string + userAssignedIdentities array → ARM-compliant identity configuration object; handles SystemAssigned, UserAssigned, and None cases | Internal       | Not detected | Cloud Platform Team | Not detected | batch         | Identity parameters           | apim.bicep, inventory/main.bicep                         | src/shared/constants.bicep:182-200 |
 | toObject() (identity array transform) | Bicep built-in transformation: converts user-assigned identity resource ID array → object with IDs as keys and empty objects as values, as required by ARM API                               | Internal       | Not detected | Cloud Platform Team | Not detected | batch         | userAssignedIdentities array  | apim.bicep, inventory/main.bicep, operational/main.bicep | src/core/apim.bicep:155-162        |
 
-### 5.10 Data Contracts
+### 📜 5.10 Data Contracts
 
 | Component                     | Description                                                                                                                                                                                                 | Classification | Storage      | Owner               | Retention  | Freshness SLA | Source Systems        | Consumers                               | Source File                           |
 | ----------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | -------------- | ------------ | ------------------- | ---------- | ------------- | --------------------- | --------------------------------------- | ------------------------------------- |
@@ -662,7 +678,7 @@ erDiagram
 | Shared Type Export            | Typed Bicep module contract: `@export() type Shared` composing monitoring and tag configurations; consumed by infra/main.bicep and shared/main.bicep                                                        | Internal       | Not detected | Cloud Platform Team | indefinite | batch         | infra/settings.yaml   | infra/main.bicep, src/shared/main.bicep | src/shared/common-types.bicep:154-155 |
 | settings.yaml Schema Contract | YAML-encoded configuration contract consumed by infra/main.bicep via loadYamlContent(settingsFile); defines solutionName, shared monitoring params, core APIM params, inventory params, and resource tags   | Internal       | Not detected | Cloud Platform Team | indefinite | batch         | Configuration authors | infra/main.bicep                        | infra/settings.yaml:1-70              |
 
-### 5.11 Data Security
+### 🔐 5.11 Data Security
 
 | Component                        | Description                                                                                                                                                                                                 | Classification | Storage      | Owner               | Retention    | Freshness SLA | Source Systems            | Consumers                      | Source File                                       |
 | -------------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | -------------- | ------------ | ------------------- | ------------ | ------------- | ------------------------- | ------------------------------ | ------------------------------------------------- |
@@ -672,7 +688,7 @@ erDiagram
 | Network Access Controls          | APIM publicNetworkAccess (default: Enabled) and virtualNetworkType (default: None) parameters enable production hardening; Application Insights supports privateNetworkAccessForIngestion / Query: Disabled | Internal       | Not detected | Cloud Platform Team | Not detected | batch         | Network configuration     | Azure network enforcement      | src/core/apim.bicep:122-134                       |
 | GDPR Compliance Tag Enforcement  | RegulatoryCompliance: GDPR governance tag propagated to all resources via commonTags union in infra/main.bicep; enables Azure Policy GDPR compliance tracking                                               | Confidential   | Not detected | Cloud Platform Team | indefinite   | batch         | infra/settings.yaml       | Azure Policy, cost management  | infra/main.bicep:79-84                            |
 
-### Summary
+### 📝 Summary
 
 Across all 11 canonical data component types, 53 components were identified and documented with full source traceability. The dominant patterns are: (1) **configuration entities** (10 typed Bicep entities form the solution's logical data dictionary), (2) **Azure Monitor data stores** (Log Analytics + App Insights + Storage Account form the runtime observability backbone), and (3) **typed contract exports** (4 Bicep type exports enforce interface compliance across all modules). The data transformation layer (5 functions in constants.bicep) is particularly well-designed, enforcing naming convention compliance and preventing deployment collisions.
 
@@ -680,9 +696,9 @@ The most significant gaps are: no formal data retention policy documents for Log
 
 ---
 
-## Section 6: Architecture Decisions
+## 📝 Section 6: Architecture Decisions
 
-### Overview
+### 📋 Overview
 
 This section documents the key architectural decisions (ADRs) observable from the APIM-Accelerator source files. While no formal ADR files (e.g., `/docs/architecture/decisions/ADR-NNN.md`) were detected in the repository, the architectural choices embedded in the Bicep code and YAML configuration represent implicit decisions with clear rationale and consequences. These have been reconstructed from the code evidence following the MADR (Markdown ADR) format.
 
@@ -690,7 +706,7 @@ The most significant data architecture decisions revolve around four areas: the 
 
 Future formal ADRs should be recorded in `/docs/architecture/decisions/` using sequential numbering and the MADR format, covering storage technology choices, data governance model (centralized vs. federated), encryption key management strategy, and retention policy alignment with GDPR obligations.
 
-### ADR Summary
+### 📋 ADR Summary
 
 | ID      | Title                                                      | Status   | Date     |
 | ------- | ---------------------------------------------------------- | -------- | -------- |
@@ -700,9 +716,9 @@ Future formal ADRs should be recorded in `/docs/architecture/decisions/` using s
 | ADR-004 | SystemAssigned Managed Identity for All Service Principals | Accepted | Inferred |
 | ADR-005 | PerGB2018 Pay-As-You-Go SKU for Log Analytics              | Accepted | Inferred |
 
-### 6.1 Detailed ADRs
+### 📑 6.1 Detailed ADRs
 
-#### 6.1.1 ADR-001: Workspace-Based Application Insights Ingestion Mode
+#### 🔵 6.1.1 ADR-001: Workspace-Based Application Insights Ingestion Mode
 
 **Context**: Application Insights supports three ingestion modes — classic (ApplicationInsights), hybrid (ApplicationInsightsWithDiagnosticSettings), and workspace-based (LogAnalytics). The choice of ingestion mode affects data residency, query capabilities, and cost management.
 
@@ -714,7 +730,7 @@ Future formal ADRs should be recorded in `/docs/architecture/decisions/` using s
 
 **Evidence**: `src/shared/monitoring/insights/main.bicep:120-125`
 
-#### 6.1.2 ADR-002: Standard_LRS for Diagnostic Log Archival Storage
+#### 🔵 6.1.2 ADR-002: Standard_LRS for Diagnostic Log Archival Storage
 
 **Context**: Azure Storage offers multiple replication tiers: LRS, ZRS, GRS, RA-GRS. For diagnostic log archival, data durability requirements must be weighed against cost.
 
@@ -726,7 +742,7 @@ Future formal ADRs should be recorded in `/docs/architecture/decisions/` using s
 
 **Evidence**: `src/shared/monitoring/operational/main.bicep:92-95`
 
-#### 6.1.3 ADR-003: Bicep Compile-Time Type System as Data Contract Mechanism
+#### 🔵 6.1.3 ADR-003: Bicep Compile-Time Type System as Data Contract Mechanism
 
 **Context**: Module interface contracts in IaC can be enforced statically (Bicep types) or dynamically (ARM schema validation at deploy time). Bicep exports allow type-safe parameter contracts.
 
@@ -738,7 +754,7 @@ Future formal ADRs should be recorded in `/docs/architecture/decisions/` using s
 
 **Evidence**: `src/shared/common-types.bicep:1-155`
 
-#### 6.1.4 ADR-004: SystemAssigned Managed Identity for All Service Principals
+#### 🔵 6.1.4 ADR-004: SystemAssigned Managed Identity for All Service Principals
 
 **Context**: Azure resources can use system-assigned (auto-lifecycle) or user-assigned (independent lifecycle) managed identities. The choice affects operational complexity and cross-resource identity sharing.
 
@@ -750,7 +766,7 @@ Future formal ADRs should be recorded in `/docs/architecture/decisions/` using s
 
 **Evidence**: `infra/settings.yaml:17`, `src/shared/common-types.bicep:39-47`
 
-#### 6.1.5 ADR-005: PerGB2018 Pay-As-You-Go Log Analytics SKU
+#### 🔵 6.1.5 ADR-005: PerGB2018 Pay-As-You-Go Log Analytics SKU
 
 **Context**: Log Analytics offers commitment-tier pricing (CapacityReservation) for high-volume environments and pay-as-you-go (PerGB2018) for variable workloads.
 
@@ -764,9 +780,9 @@ Future formal ADRs should be recorded in `/docs/architecture/decisions/` using s
 
 ---
 
-## Section 7: Architecture Standards
+## 📏 Section 7: Architecture Standards
 
-### Overview
+### 📋 Overview
 
 The APIM-Accelerator enforces several data architecture standards through code conventions, Bicep type constraints, and constants. While no formal written standards document was detected in the repository, the standards are observable through the patterns codified in `common-types.bicep`, `constants.bicep`, and the Bicep parameter decorators across all modules. This section documents those standards as they exist today and identifies gaps where formal documentation is recommended.
 
@@ -774,7 +790,7 @@ The most mature standards area is **resource naming**: a deterministic unique su
 
 The following standards should be formally documented and stored in `/docs/standards/` to advance the data governance maturity from Level 2 to Level 3.
 
-### Data Naming Conventions
+### 📛 Data Naming Conventions
 
 | Standard                    | Rule                                                        | Example                        | Enforcement                               |
 | --------------------------- | ----------------------------------------------------------- | ------------------------------ | ----------------------------------------- |
@@ -784,7 +800,7 @@ The following standards should be formally documented and stored in `/docs/stand
 | **Resource Type Suffixes**  | APIM: `apim`, Storage: `sa`, API Center: `apicenter`        | `apim-accelerator-apim`        | constants.bicep suffix variables          |
 | **Workspace Name**          | Lowercase with hyphens, ≤50 chars                           | `workspace1`                   | @minLength/@maxLength on name param       |
 
-### Schema Design Standards
+### 📐 Schema Design Standards
 
 | Standard                       | Rule                                                                                           | Enforcement                                                                     |
 | ------------------------------ | ---------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------- |
@@ -794,7 +810,7 @@ The following standards should be formally documented and stored in `/docs/stand
 | **Constants Module Isolation** | All shared constants (IDs, lengths, SKU lists) MUST be defined in constants.bicep and imported | Code review                                                                     |
 | **API Version Pinning**        | All resource declarations MUST use specific API versions (not `latest`)                        | Code review — all resources use dated API versions (e.g., `2025-03-01-preview`) |
 
-### Data Quality Standards
+### 🎯 Data Quality Standards
 
 | Standard              | Rule                                                                                                                  | Enforcement                                                |
 | --------------------- | --------------------------------------------------------------------------------------------------------------------- | ---------------------------------------------------------- |
@@ -806,9 +822,9 @@ The following standards should be formally documented and stored in `/docs/stand
 
 ---
 
-## Section 8: Dependencies & Integration
+## 🔗 Section 8: Dependencies & Integration
 
-### Overview
+### 📋 Overview
 
 The APIM-Accelerator data integration architecture is defined entirely through declarative Bicep module dependencies and Azure resource relationships. Data integration follows two patterns: **configuration data flow** (settings.yaml → Bicep templates → Azure resource properties at deployment time) and **runtime data flow** (APIM runtime → monitoring stores → operational visibility at runtime). Both patterns are push-based; no pull-based data extraction, polling, or batch ETL is present in the current implementation.
 
@@ -816,7 +832,7 @@ The deployment dependency graph has a strict ordering requirement enforced by Bi
 
 Integration contracts between modules are formalized through the typed Bicep parameter interfaces (ApiManagement, Inventory, Monitoring types). These types function as schema-enforced data contracts that consumers must satisfy at compile time, providing a form of contract testing at the IaC layer. This is analogous to AsyncAPI or OpenAPI schema contracts at the application layer.
 
-### Data Flow Patterns
+### 🔄 Data Flow Patterns
 
 | Pattern Name                 | Flow Type            | Source               | Target                                                   | Processing                                               | Contract                       | Source File                                       |
 | ---------------------------- | -------------------- | -------------------- | -------------------------------------------------------- | -------------------------------------------------------- | ------------------------------ | ------------------------------------------------- |
@@ -828,7 +844,7 @@ Integration contracts between modules are formalized through the typed Bicep par
 | App Insights → Log Analytics | Real-time (runtime)  | Application Insights | Log Analytics Workspace                                  | Workspace-based ingestion mode (LogAnalytics)            | App Insights workspace link    | src/shared/monitoring/insights/main.bicep:135-160 |
 | API Catalog Sync             | Batch (runtime)      | Azure APIM service   | Azure API Center                                         | API source integration resource (auto-discovery)         | API Center apiSources schema   | src/inventory/main.bicep:140-175                  |
 
-### Producer-Consumer Relationships
+### 🔗 Producer-Consumer Relationships
 
 ```mermaid
 ---
@@ -935,7 +951,7 @@ flowchart LR
 | Log Analytics Workspace       | Operations team                                          | KQL queries + alerts       | On-demand            | Azure Monitor API              | ⚠️ No alerting rules defined in source        |
 | Storage Account               | Compliance auditors                                      | Archived log evidence      | Batch (ad-hoc)       | Azure Storage SDK / browser    | ⚠️ No retention policy lifecycle rule defined |
 
-### Summary
+### 📝 Summary
 
 The APIM-Accelerator data integration architecture is well-structured and all seven documented data flows are architecturally sound. Deployment-time integration (configuration injection and type contract testing) is particularly robust, with the Bicep type system providing compile-time contract validation equivalent to schema registry checks. Runtime data flows are all push-based, unconditional (except the APIM diagnostic settings conditional on non-empty logAnalyticsWorkspaceId), and follow Azure Monitor standard patterns.
 
@@ -943,9 +959,9 @@ Two integration health gaps require attention: (1) no Azure Monitor alert rules 
 
 ---
 
-## Section 9: Governance & Management
+## 🛡️ Section 9: Governance & Management
 
-### Overview
+### 📋 Overview
 
 The APIM-Accelerator data governance model is implemented entirely through Azure native controls embedded in the Bicep IaC templates. Governance is declarative — RBAC role assignments, managed identity configurations, resource tags, and diagnostic settings are all provisioned as code alongside the data stores they govern. This ensures governance controls are never absent from a deployed environment, as they are inseparable from the resources themselves.
 
@@ -953,13 +969,13 @@ The current governance model provides strong preventive controls (managed identi
 
 For an API platform serving production workloads — particularly one tagged with GDPR compliance obligations — advancing the governance capabilities to include data owner assignments, formal retention schedules, and automated compliance monitoring is recommended. Microsoft Purview Data Governance and Azure Policy can provide the tooling to operationalize these improvements within the existing Azure-native architecture.
 
-### Data Ownership Model
+### 👥 Data Ownership Model
 
 Not detected in source files.
 
 > **Recommendation**: Define a RACI matrix for the four data domains: Configuration Data (IaC team), Operational Telemetry (Platform Operations team), API Inventory Data (API Governance team), Security & Identity Data (Cloud Security team). Document in `/docs/standards/data-ownership-raci.md`.
 
-### Access Control Model
+### 🔐 Access Control Model
 
 | Resource                | Role                               | Principal                       | Scope          | Source File                        |
 | ----------------------- | ---------------------------------- | ------------------------------- | -------------- | ---------------------------------- |
@@ -975,7 +991,7 @@ Not detected in source files.
 - Role assignment GUIDs are deterministic (`guid(subscription().id, resourceGroup().id, ...)`) ensuring idempotent re-deployments do not create duplicate role assignments
 - No Azure AD group-based role assignments detected; all assignments are to service principal object IDs
 
-### Audit & Compliance
+### 🕵️ Audit & Compliance
 
 | Control                          | Type                   | Implementation                                                                                    | Status                                              |
 | -------------------------------- | ---------------------- | ------------------------------------------------------------------------------------------------- | --------------------------------------------------- |
