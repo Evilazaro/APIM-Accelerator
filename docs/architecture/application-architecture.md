@@ -1352,13 +1352,13 @@ flowchart LR
         AD("🔐 Azure Active Directory"):::warning
     end
 
-    APIM -->|"allLogs + AllMetrics\n(diagnosticSettings)"| LAW
-    APIM -->|"API telemetry\n(appInsightsLogger)"| APPINS
-    APIM -->|"Diagnostic archives\n(HTTPS/Blob)"| SA
-    APPINS -->|"Unified telemetry\n(workspace ingestion)"| LAW
-    PORTAL -->|"Auth tokens\n(OAuth2/MSAL 2.0)"| AD
+    APIM -->|"allLogs + AllMetrics<br>(diagnosticSettings)"| LAW
+    APIM -->|"API telemetry<br>(appInsightsLogger)"| APPINS
+    APIM -->|"Diagnostic archives<br>(HTTPS/Blob)"| SA
+    APPINS -->|"Unified telemetry<br>(workspace ingestion)"| LAW
+    PORTAL -->|"Auth tokens<br>(OAuth2/MSAL 2.0)"| AD
     AD -->|"Identity tokens"| PORTAL
-    APIC -->|"API definitions sync\n(apiSources resource)"| APIM
+    APIC -->|"API definitions sync<br>(apiSources resource)"| APIM
 
     classDef neutral fill:#FAFAFA,stroke:#8A8886,stroke-width:2px,color:#323130
     classDef core fill:#EFF6FC,stroke:#0078D4,stroke-width:2px,color:#323130

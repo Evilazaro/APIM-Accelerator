@@ -758,26 +758,26 @@ flowchart LR
     %% ═══════════════════════════════════════════════════════════════════════════
 
     subgraph apiPlatform["🚀 API Platform Delivery — Level 4 Managed"]
-        c1("⚡ API Provisioning\nCurrent: 4 | Target: 5"):::managed
-        c2("📊 Monitoring & Observability\nCurrent: 4 | Target: 5"):::managed
-        c3("🔑 APIM Configuration\nCurrent: 4 | Target: 4"):::managed
+        c1("⚡ API Provisioning<br>Current: 4 | Target: 5"):::managed
+        c2("📊 Monitoring & Observability<br>Current: 4 | Target: 5"):::managed
+        c3("🔑 APIM Configuration<br>Current: 4 | Target: 4"):::managed
     end
 
     subgraph devExp["👤 Developer Experience — Level 3 Defined"]
-        c4("🌐 Developer Portal\nCurrent: 3 | Target: 4"):::defined
-        c5("🧩 Workspace Mgmt\nCurrent: 3 | Target: 4"):::defined
-        c6("📋 API Discovery\nCurrent: 3 | Target: 5"):::defined
+        c4("🌐 Developer Portal<br>Current: 3 | Target: 4"):::defined
+        c5("🧩 Workspace Mgmt<br>Current: 3 | Target: 4"):::defined
+        c6("📋 API Discovery<br>Current: 3 | Target: 5"):::defined
     end
 
     subgraph governance["🛡️ API Governance & Security — Level 3 Defined"]
-        c7("🔒 API Governance\nCurrent: 3 | Target: 4"):::defined
-        c8("🔐 Identity & Access Mgmt\nCurrent: 3 | Target: 4"):::defined
-        c9("📜 Policy Enforcement\nCurrent: 3 | Target: 4"):::defined
+        c7("🔒 API Governance<br>Current: 3 | Target: 4"):::defined
+        c8("🔐 Identity & Access Mgmt<br>Current: 3 | Target: 4"):::defined
+        c9("📜 Policy Enforcement<br>Current: 3 | Target: 4"):::defined
     end
 
     subgraph opEx["⚙️ Operational Excellence — Level 4 Managed"]
-        c10("🔄 IaC Automation\nCurrent: 4 | Target: 5"):::managed
-        c11("🚦 Deployment Orchestration\nCurrent: 4 | Target: 5"):::managed
+        c10("🔄 IaC Automation<br>Current: 4 | Target: 5"):::managed
+        c11("🚦 Deployment Orchestration<br>Current: 4 | Target: 5"):::managed
     end
 
     style apiPlatform fill:#F3F2F1,stroke:#0078D4,stroke-width:2px,color:#323130
@@ -840,10 +840,10 @@ flowchart TB
     end
 
     subgraph techLayer["⚙️ Technology Layer"]
-        t1("📦 APIM Service\nsrc/core/apim.bicep"):::tech
-        t2("🔭 Log Analytics + App Insights\nsrc/shared/monitoring/"):::tech
-        t3("🗂️ Inventory Module\nsrc/inventory/main.bicep"):::tech
-        t4("🏛️ Networking\nsrc/shared/networking/"):::tech
+        t1("📦 APIM Service<br>src/core/apim.bicep"):::tech
+        t2("🔭 Log Analytics + App Insights<br>src/shared/monitoring/"):::tech
+        t3("🗂️ Inventory Module<br>src/inventory/main.bicep"):::tech
+        t4("🏛️ Networking<br>src/shared/networking/"):::tech
     end
 
     subgraph extLayer["🌐 External Dependencies"]
