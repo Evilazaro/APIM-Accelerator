@@ -1,16 +1,40 @@
 const fs = require('fs');
 const path = 'z:\\APIM-Accelerator\\docs\\architecture\\technology-architecture.md';
+// Use the original committed version to extract Mermaid blocks
+const origPath = 'z:\\APIM-Accelerator\\scripts\\_original-tech-arch.md';
 
-// Read original to extract Mermaid blocks exactly
-const original = fs.readFileSync(path, 'utf8');
+function extractMermaid(content, nthOccurrence) {
+  const OPEN = '```mermaid';
+  const CLOSE = '```';
+  let pos = 0;
+  for (let n = 0; n < nthOccurrence; n++) {
+    pos = content.indexOf(OPEN, pos);
+    if (pos === -1) throw new Error('Mermaid block ' + (n+1) + ' not found');
+    if (n < nthOccurrence - 1) pos += OPEN.length;
+  }
+  const blockStart = pos;
+  // Find end: find CLOSE after the opening line
+  const nextLine = content.indexOf('\n', blockStart) + 1;
+  let closePos = nextLine;
+  while (closePos < content.length) {
+    const lineEnd = content.indexOf('\n', closePos);
+    const line = lineEnd === -1 ? content.substring(closePos) : content.substring(closePos, lineEnd);
+    const trimmed = line.replace(/\r/g, '').trim();
+    if (trimmed === CLOSE) {
+      return content.substring(blockStart, lineEnd !== -1 ? lineEnd + 1 : content.length).replace(/\r\n/g, '\n');
+    }
+    closePos = lineEnd === -1 ? content.length : lineEnd + 1;
+  }
+  throw new Error('No closing fence found for mermaid block ' + nthOccurrence);
+}
 
-const m1Start = original.indexOf('```mermaid');
-const m1End = original.indexOf('\n```\n', m1Start + 10) + 5;
-const mermaid1 = original.substring(m1Start, m1End);
+// Read the original committed file (539b1c4) to get the mermaid diagrams
+const origFile = fs.readFileSync('z:\\APIM-Accelerator\\scripts\\_orig3.md', 'utf8');
+const mermaid1 = extractMermaid(origFile, 1);
+const mermaid2 = extractMermaid(origFile, 2);
 
-const m2Start = original.indexOf('```mermaid', m1End);
-const m2End = original.indexOf('\n```\n', m2Start + 10) + 5;
-const mermaid2 = original.substring(m2Start, m2End);
+console.log('Mermaid1 length:', mermaid1.length);
+console.log('Mermaid2 length:', mermaid2.length);
 
 const doc = `# 🏗️ Technology Architecture - APIM Accelerator
 

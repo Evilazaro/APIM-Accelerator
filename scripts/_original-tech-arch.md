@@ -274,83 +274,271 @@ The APIM Accelerator deploys a complete API Management landing zone in a single 
 
 ### 🖼️ 4.2 Deployment Architecture Diagram
 
-```mermaid
+chnology Architecture - APIM Accelerator
+
+**Generated**: 2026-03-19T00:00:00Z  
+**Session ID**: 7f3e4a1b-9c2d-4f8e-b6a0-553241770001  
+**Target Layer**: Technology  
+**Framework**: TOGAF 10 Technology Architecture  
+**Infrastructure Components Found**: 12  
+**Confidence Threshold**: 0.70  
+**Quality Level**: Comprehensive
+
+> **Sections Generated**: 1, 2, 3, 4, 5, 8 (per `output_sections: [1, 2, 3, 4, 5, 8]`)
+
 ---
-title: APIM Accelerator - Technology Infrastructure Context
-config:
-  theme: base
-  look: classic
-  layout: dagre
-  themeVariables:
-    fontSize: '16px'
+
+## Section 1: Executive Summary
+
+The **APIM Accelerator** is an Azure-native API Management landing zone implemented entirely as Infrastructure as Code using Bicep templates. The solution deploys a production-grade Azure API Management service (Premium SKU) alongside a complete observability stack and a centralized API governance platform, all orchestrated from a subscription-scoped main template.
+
+### Infrastructure Portfolio by Type
+
+| Component Type             | Count | Confidence Level | Primary Sources                                                                             |
+| -------------------------- | ----- | ---------------- | ------------------------------------------------------------------------------------------- |
+| Compute Resources          | 0     | N/A              | Not detected                                                                                |
+| Storage Systems            | 1     | High (0.89)      | `src/shared/monitoring/operational/main.bicep`                                              |
+| Network Infrastructure     | 1     | Medium (0.78)    | `src/shared/networking/main.bicep`                                                          |
+| Container Platforms        | 0     | N/A              | Not detected                                                                                |
+| Cloud Services (PaaS/SaaS) | 3     | High (0.92)      | `infra/main.bicep`, `src/core/main.bicep`, `src/inventory/main.bicep`                       |
+| Security Infrastructure    | 3     | High (0.91)      | `src/core/apim.bicep`, `src/core/developer-portal.bicep`, `src/shared/constants.bicep`      |
+| Messaging Infrastructure   | 0     | N/A              | Not detected                                                                                |
+| Monitoring & Observability | 2     | High (0.89)      | `src/shared/monitoring/insights/main.bicep`, `src/shared/monitoring/operational/main.bicep` |
+| Identity & Access          | 3     | High (0.90)      | `src/core/apim.bicep`, `src/inventory/main.bicep`, `src/shared/common-types.bicep`          |
+| API Management             | 3     | High (0.95)      | `src/core/apim.bicep`, `src/core/workspaces.bicep`, `src/core/developer-portal.bicep`       |
+| Caching Infrastructure     | 0     | N/A              | Not detected                                                                                |
+
+**Total detected components**: 12 across 9 source Bicep files  
+**Average confidence score (detected)**: 0.89 (High)  
+**Deployment scope**: Azure Subscription (subscription-scoped Bicep orchestration)  
+**Provisioning mechanism**: Azure Developer CLI (`azd up`) / Azure CLI (`az deployment sub create`)
+
+### Maturity Assessment
+
+| Dimension              | Assessment  | Evidence                                                                                                    |
+| ---------------------- | ----------- | ----------------------------------------------------------------------------------------------------------- |
+| IaC Coverage           | High        | 100% of resources defined in Bicep; no manual portal deployments detected                                   |
+| Observability          | High        | Diagnostic settings enabled for all resources; dual-destination log routing                                 |
+| Security Configuration | Medium-High | Managed Identity used; AAD auth configured; public network access enabled by default (parameter-controlled) |
+| Naming Consistency     | High        | Deterministic naming pattern: `{solutionName}-{uniqueSuffix}-{suffix}`                                      |
+| Governance & Tagging   | High        | Comprehensive tag schema in `infra/settings.yaml` applied to all resources                                  |
+
 ---
-flowchart TB
-    accTitle: APIM Accelerator Technology Infrastructure Context
-    accDescr: Shows all 23 Azure technology components organized within the resource group and their primary connectivity relationships
 
-    %% ═══════════════════════════════════════════════════════════════════════════
-    %% AZURE / FLUENT ARCHITECTURE PATTERN v1.1
-    %% (Semantic + Structural + Font + Accessibility Governance)
-    %% ═══════════════════════════════════════════════════════════════════════════
-    %% PHASE 1 - STRUCTURAL: Direction TB, flat topology, nesting ≤ 3
-    %% PHASE 2 - SEMANTIC: Max 4 semantic classes, neutral-first palette
-    %% PHASE 3 - FONT: Dark text on light backgrounds, contrast ≥ 4.5:1
-    %% PHASE 4 - ACCESSIBILITY: accTitle/accDescr present, icons on nodes
-    %% PHASE 5 - STANDARD: Governance block present, classDefs centralized
-    %% ═══════════════════════════════════════════════════════════════════════════
+## Section 2: Architecture Landscape
 
-    Internet(["🌍 API Consumers / Internet"]):::neutral
+### 2.1 Compute Resources (0)
 
-    subgraph AzSub["☁️ Azure Subscription"]
-        subgraph RG["📦 Resource Group — apim-accelerator-{env}-{location}-rg"]
+| Component | Type | Description                  | Source | Confidence |
+| --------- | ---- | ---------------------------- | ------ | ---------- |
+| —         | —    | Not detected in source files | —      | —          |
 
-            subgraph CorePlatform["⚙️ Core Platform Module"]
-                APIM["⚙️ Azure API Management\nPremium SKU · 1 unit\nSystemAssigned MI"]:::primary
-                DevPortal["🖥️ Developer Portal\nAAD OAuth2 · MSAL-2"]:::primary
-                WS["📁 APIM Workspace\nworkspace1"]:::primary
-            end
+**Status**: Not detected in current infrastructure configuration. The solution uses exclusively PaaS (Platform-as-Service) managed compute. No Virtual Machines, container workloads, or serverless Function apps are provisioned. API processing capacity is provided by Azure API Management's managed compute plane (configured in §2.10).
 
-            subgraph Inventory["📋 API Inventory Module"]
-                APICenter["📋 Azure API Center\nSystemAssigned MI"]:::secondary
-                APICWorkspace["📁 API Center Workspace\ndefault"]:::secondary
-            end
+---
 
-            subgraph SharedMon["📊 Shared Monitoring Module"]
-                LAW["📊 Log Analytics Workspace\nPerGB2018 · SystemAssigned MI"]:::monitoring
-                AppIns["🔭 Application Insights\nweb · LogAnalytics mode\n90d retention"]:::monitoring
-                StorageAcct["💾 Storage Account\nStandard_LRS · StorageV2"]:::neutral
-            end
+### 2.2 Storage Systems (1)
 
-            VNet["🔗 Virtual Network\n(SCVMM placeholder)"]:::neutral
-        end
-    end
+| Component             | Type                         | Description                                                                           | Source                                                 | Confidence  |
+| --------------------- | ---------------------------- | ------------------------------------------------------------------------------------- | ------------------------------------------------------ | ----------- |
+| Azure Storage Account | Cloud Storage (Standard_LRS) | Diagnostic log archival and long-term retention for Log Analytics and APIM audit data | `src/shared/monitoring/operational/main.bicep:109-130` | 0.89 (High) |
 
-    Internet -->|HTTPS API calls| APIM
-    Internet -->|Developer portal| DevPortal
-    DevPortal -->|Auth delegation| APIM
-    APIM -->|Workspace isolation| WS
-    APIM -->|API Source integration| APICenter
-    APICenter -->|Catalog| APICWorkspace
-    APIM -->|Diagnostic logs & metrics| LAW
-    APIM -->|Telemetry via logger| AppIns
-    APIM -->|Archive logs| StorageAcct
-    AppIns -->|Workspace-linked data| LAW
-    AppIns -->|Archive| StorageAcct
-    LAW -->|Self-monitoring| StorageAcct
+---
 
-    %% Centralized classDefs — WCAG AA compliant
-    classDef primary fill:#0078D4,stroke:#005A9E,stroke-width:2px,color:#FFFFFF
-    classDef secondary fill:#00B7C3,stroke:#007C85,stroke-width:2px,color:#1A1A1A
-    classDef monitoring fill:#5C2D91,stroke:#3B1A5A,stroke-width:2px,color:#FFFFFF
-    classDef neutral fill:#FAFAFA,stroke:#8A8886,stroke-width:2px,color:#323130
+### 2.3 Network Infrastructure (1)
 
-    %% Subgraph styling (no class directive on subgraphs — use style)
-    style AzSub fill:#F3F2F1,stroke:#A19F9D,stroke-width:3px,color:#323130
-    style RG fill:#EFF6FC,stroke:#0078D4,stroke-width:2px,color:#323130
-    style CorePlatform fill:#E8F4FD,stroke:#0078D4,stroke-width:1px,color:#323130
-    style Inventory fill:#E0FAFA,stroke:#00B7C3,stroke-width:1px,color:#323130
-    style SharedMon fill:#F1EBF9,stroke:#5C2D91,stroke-width:1px,color:#323130
-```
+| Component                     | Type                                   | Description                                                                                       | Source                                   | Confidence    |
+| ----------------------------- | -------------------------------------- | ------------------------------------------------------------------------------------------------- | ---------------------------------------- | ------------- |
+| Virtual Network (Placeholder) | VNet (Microsoft.ScVmm/virtualNetworks) | Placeholder networking module; SCVMM-based VNet placeholder for future VNet integration with APIM | `src/shared/networking/main.bicep:60-68` | 0.78 (Medium) |
+
+> **Note**: The APIM service supports `External`, `Internal`, and `None` VNet integration modes (configurable via `virtualNetworkType` parameter in `src/core/apim.bicep:141`). Currently defaults to `None` (public access). The networking module is an acknowledged placeholder for future VNet provisioning.
+
+---
+
+### 2.4 Container Platforms (0)
+
+| Component | Type | Description                  | Source | Confidence |
+| --------- | ---- | ---------------------------- | ------ | ---------- |
+| —         | —    | Not detected in source files | —      | —          |
+
+**Status**: Not detected in current infrastructure configuration. No AKS clusters, container registries, Docker configurations, or Kubernetes manifests found in analyzed folder paths.
+
+---
+
+### 2.5 Cloud Services — PaaS/SaaS (3)
+
+| Component                    | Type                                            | Description                                                                                                               | Source                                                       | Confidence  |
+| ---------------------------- | ----------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------ | ----------- |
+| Azure API Management Service | PaaS (Microsoft.ApiManagement/service)          | Premium SKU API gateway with managed identity, VNet integration support, developer portal, and built-in rate limiting     | `src/core/apim.bicep:169-209`, `src/core/main.bicep:149-170` | 0.92 (High) |
+| Azure API Center Service     | PaaS (Microsoft.ApiCenter/services)             | Centralized API catalog and governance platform; automatically discovers and imports APIs from APIM                       | `src/inventory/main.bicep:100-132`                           | 0.83 (High) |
+| Azure Resource Group         | IaaS Scope (Microsoft.Resources/resourceGroups) | Subscription-scoped resource group created by orchestration template; naming pattern `{solutionName}-{env}-{location}-rg` | `infra/main.bicep:101-108`                                   | 0.98 (High) |
+
+---
+
+### 2.6 Security Infrastructure (3)
+
+| Component                  | Type                                                              | Description                                                                                                                                     | Source                                                            | Confidence  |
+| -------------------------- | ----------------------------------------------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------- | ----------------------------------------------------------------- | ----------- |
+| APIM Global CORS Policy    | Policy (Microsoft.ApiManagement/service/policies)                 | Global CORS policy allowing credentials; restricts allowed origins to developer portal URL, gateway URL, management API URL                     | `src/core/developer-portal.bicep:143-175`                         | 0.91 (High) |
+| Azure AD Identity Provider | Auth Provider (Microsoft.ApiManagement/service/identityProviders) | AAD integration for developer portal; MSAL 2.0; tenant-restricted to `MngEnvMCAP341438.onmicrosoft.com`; client ID/secret via secure parameters | `src/core/developer-portal.bicep:183-198`                         | 0.91 (High) |
+| RBAC Role Assignments      | Access Control (Microsoft.Authorization/roleAssignments)          | Grants Reader role to APIM managed identity; grants API Center Data Reader and Compliance Manager roles to API Center managed identity          | `src/core/apim.bicep:222-238`, `src/inventory/main.bicep:140-162` | 0.90 (High) |
+
+---
+
+### 2.7 Messaging Infrastructure (0)
+
+| Component | Type | Description                  | Source | Confidence |
+| --------- | ---- | ---------------------------- | ------ | ---------- |
+| —         | —    | Not detected in source files | —      | —          |
+
+**Status**: Not detected in current infrastructure configuration. No Azure Service Bus, Azure Event Hubs, Event Grid subscriptions, or messaging queue configurations found in Bicep templates.
+
+---
+
+### 2.8 Monitoring & Observability (2)
+
+| Component                     | Type                                            | Description                                                                                                                                                                         | Source                                                                                             | Confidence  |
+| ----------------------------- | ----------------------------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | -------------------------------------------------------------------------------------------------- | ----------- |
+| Azure Log Analytics Workspace | PaaS (Microsoft.OperationalInsights/workspaces) | Centralized log aggregation and query hub; PerGB2018 SKU; self-monitoring diagnostic settings configured; serves as backend for Application Insights (workspace-based mode)         | `src/shared/monitoring/operational/main.bicep:150-200`, `src/shared/monitoring/main.bicep:110-145` | 0.89 (High) |
+| Azure Application Insights    | PaaS (Microsoft.Insights/components)            | APM and distributed tracing; workspace-based `LogAnalytics` ingestion mode linked to Log Analytics; 90-day retention; APIM Application Insights Logger configured for API telemetry | `src/shared/monitoring/insights/main.bicep:121-142`, `src/core/apim.bicep:285-300`                 | 0.89 (High) |
+
+---
+
+### 2.9 Identity & Access (3)
+
+| Component                                        | Type             | Description                                                                                                                                 | Source                                                                                        | Confidence  |
+| ------------------------------------------------ | ---------------- | ------------------------------------------------------------------------------------------------------------------------------------------- | --------------------------------------------------------------------------------------------- | ----------- |
+| System-Assigned Managed Identity (APIM)          | Managed Identity | System-assigned identity on APIM service; enables credential-free access to Azure resources; principal ID exposed as output for RBAC wiring | `src/core/apim.bicep:168-173`, `src/shared/common-types.bicep:44-49`                          | 0.92 (High) |
+| System-Assigned Managed Identity (API Center)    | Managed Identity | System-assigned identity on API Center service; enables credential-free API source integration and RBAC operations                          | `src/inventory/main.bicep:107-130`, `src/shared/common-types.bicep:54-60`                     | 0.90 (High) |
+| System-Assigned Managed Identity (Log Analytics) | Managed Identity | System-assigned identity on Log Analytics workspace; supports secure integration with other monitoring services                             | `src/shared/monitoring/operational/main.bicep:152-165`, `src/shared/common-types.bicep:44-49` | 0.88 (High) |
+
+---
+
+### 2.10 API Management (3)
+
+| Component                              | Type                                                                          | Description                                                                                                                                       | Source                                                     | Confidence  |
+| -------------------------------------- | ----------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------- | ---------------------------------------------------------- | ----------- |
+| Azure API Management Service (Premium) | API Gateway (Microsoft.ApiManagement/service@2025-03-01-preview)              | Core API gateway; Premium SKU (capacity: 1); multi-region support; developer portal; VNet integration support; built-in rate limiting and caching | `src/core/apim.bicep:169-209`, `infra/settings.yaml:39-56` | 0.98 (High) |
+| APIM Workspace                         | Workspace (Microsoft.ApiManagement/service/workspaces@2025-03-01-preview)     | Logical workspace `workspace1` for team-based API organization and independent lifecycle management                                               | `src/core/workspaces.bicep:48-63`                          | 0.93 (High) |
+| Developer Portal                       | Portal Config (Microsoft.ApiManagement/service/portalconfigs, portalsettings) | Self-service developer portal with AAD authentication; sign-in and sign-up enabled; terms of service consent required                             | `src/core/developer-portal.bicep:200-240`                  | 0.91 (High) |
+
+---
+
+### 2.11 Caching Infrastructure (0)
+
+| Component | Type | Description                  | Source | Confidence |
+| --------- | ---- | ---------------------------- | ------ | ---------- |
+| —         | —    | Not detected in source files | —      | —          |
+
+**Status**: Not detected in current infrastructure configuration. No Azure Cache for Redis, CDN profiles, or dedicated in-memory caching resources found. The APIM service supports built-in response caching as a policy capability (referenced in `src/core/main.bicep` documentation comments), but no external caching infrastructure is provisioned.
+
+---
+
+## Section 3: Architecture Principles
+
+The following infrastructure design principles are observable across the analyzed source files, with direct traceability to specific implementation patterns.
+
+### 3.1 Infrastructure as Code (Immutable Infrastructure)
+
+**Observed pattern**: All Azure resources are defined declaratively in Bicep templates. No imperative scripts or portal-based provisioning detected for resource deployment.
+
+**Evidence**:
+
+- `infra/main.bicep:1-200` — Subscription-scoped orchestration template coordinates all deployments
+- `src/core/main.bicep:100-200` — Modular Bicep decomposition with explicit dependency chains
+- `infra/settings.yaml:1-80` — Environment configuration separated from template logic (configuration-as-code)
+
+**Implication**: Resources are treated as immutable units. Configuration changes are applied by redeploying templates, not by modifying running resources. The `pre-provision.sh` hook (`infra/azd-hooks/pre-provision.sh`) purges soft-deleted APIM instances to enable clean re-provisioning.
+
+---
+
+### 3.2 Least Privilege Access
+
+**Observed pattern**: Managed identities are used exclusively for service-to-service authentication. Role assignments grant only the minimum required permissions via Azure RBAC built-in roles.
+
+**Evidence**:
+
+- `src/core/apim.bicep:222-238` — APIM managed identity receives Reader role (GUID: `acdd72a7-3385-48ef-bd42-f606fba81ae7`) only
+- `src/inventory/main.bicep:140-162` — API Center receives API Center Data Reader (`71522526-b88f-4d52-b57f-d31fc3546d0d`) and Compliance Manager (`6cba8790-29c5-48e5-bab1-c7541b01cb04`) roles only
+- `src/shared/constants.bicep:105-115` — Role definition IDs centralized; no Owner or Contributor role assignments present
+
+**Implication**: No broad subscription-level permissions granted to service principals. Credential rotation risk is eliminated by using managed identities.
+
+---
+
+### 3.3 Defense in Depth
+
+**Observed pattern**: Multiple independent security controls are layered: network-level CORS policies, application-level AAD authentication, and identity-level RBAC restrictions.
+
+**Evidence**:
+
+- `src/core/developer-portal.bicep:143-175` — CORS policy restricts allowed origins to exact portal and gateway URLs
+- `src/core/developer-portal.bicep:183-198` — AAD identity provider restricts authentication to specific tenant (`MngEnvMCAP341438.onmicrosoft.com`)
+- `src/core/apim.bicep:134-137` — Public network access is parameter-controlled (`publicNetworkAccess: bool`) enabling private deployment
+- `src/core/apim.bicep:139-145` — VNet integration mode configurable (`External`/`Internal`/`None`) for network-layer isolation
+
+---
+
+### 3.4 Cloud-Native Design
+
+**Observed pattern**: Solution is built exclusively on PaaS managed services with no IaaS compute. All components leverage Azure-native managed identity, diagnostic integration, and platform SLAs.
+
+**Evidence**:
+
+- `src/core/apim.bicep:169` — `Microsoft.ApiManagement/service@2025-03-01-preview` (latest preview API version)
+- `src/shared/monitoring/insights/main.bicep:95` — App Insights uses `LogAnalytics` ingestion mode (workspace-based, recommended for cost optimization)
+- `src/core/main.bicep:36-50` — Developer portal, workspaces, and Application Insights logger all provisioned as native APIM child resources
+
+---
+
+### 3.5 Observability First
+
+**Observed pattern**: Every deployed resource has diagnostic settings configured, routing logs and metrics to both Log Analytics (for real-time queries) and Storage Account (for long-term archival).
+
+**Evidence**:
+
+- `src/core/apim.bicep:263-280` — APIM diagnostic settings route `allLogs` and `AllMetrics` to Log Analytics and Storage
+- `src/core/apim.bicep:285-300` — Application Insights Logger configured on APIM for API-level performance telemetry
+- `src/shared/monitoring/operational/main.bicep:210-250` — Log Analytics workspace self-monitors via diagnostic settings feedback loop
+- `src/shared/monitoring/insights/main.bicep:160-195` — Application Insights diagnostic settings route to both Log Analytics and Storage
+
+---
+
+### 3.6 Governance by Configuration
+
+**Observed pattern**: Tagging strategy, naming conventions, and environment-specific configuration are managed via a central YAML configuration file, ensuring consistent governance metadata on all resources.
+
+**Evidence**:
+
+- `infra/settings.yaml:18-37` — Comprehensive tag schema: `CostCenter`, `BusinessUnit`, `Owner`, `ApplicationName`, `ProjectName`, `ServiceClass`, `RegulatoryCompliance`, `SupportContact`, `ChargebackModel`, `BudgetCode`
+- `infra/main.bicep:90-96` — `commonTags` object merges governance tags with runtime metadata (`environment`, `managedBy`, `templateVersion`)
+- `src/shared/constants.bicep:40-60` — Naming suffix patterns centralized: `-law`, `-ai`, `-apim`, `-apicenter`, `sa` (storage)
+
+---
+
+## Section 4: Current State Baseline
+
+### 4.1 Deployment Topology Overview
+
+The APIM Accelerator deploys a complete API Management landing zone in a single Azure Subscription. The orchestration template (`infra/main.bicep`) operates at subscription scope, creating a dedicated resource group and deploying all components in a defined dependency sequence: Shared Monitoring → Core APIM Platform → API Inventory Management.
+
+| Deployment Attribute   | Current Value                                                            |
+| ---------------------- | ------------------------------------------------------------------------ |
+| Deployment Scope       | Azure Subscription (subscription-scoped Bicep)                           |
+| Resource Group Pattern | `apim-accelerator-{envName}-{location}-rg`                               |
+| Supported Environments | `dev`, `test`, `staging`, `prod`, `uat`                                  |
+| Primary Region         | Configurable (parameter: `location`)                                     |
+| Provisioning Tool      | Azure Developer CLI (`azd up`) or Azure CLI (`az deployment sub create`) |
+| Template Version       | 2.0.0 (`infra/main.bicep`)                                               |
+| APIM SKU               | Premium (capacity: 1 unit, configurable)                                 |
+| Network Access Mode    | Public (default); configurable to Private/VNet via parameters            |
+| Managed Identity Model | System-Assigned on APIM, API Center, and Log Analytics                   |
+| Log Retention          | App Insights: 90 days; Storage: long-term archival                       |
+
+---
+
+### 4.2 Deployment Architecture Diagram
+
 
 
 ✅ Mermaid Verification: 5/5 | Score: 100/100 | Subgraphs: 3 | Style directives: 3 | Violations: 0
@@ -883,78 +1071,271 @@ The APIM Accelerator deploys resources in a strict sequenced dependency chain. T
 
 ### 🖼️ 8.2 Infrastructure Module Dependency Diagram
 
-```mermaid
+chnology Architecture - APIM Accelerator
+
+**Generated**: 2026-03-19T00:00:00Z  
+**Session ID**: 7f3e4a1b-9c2d-4f8e-b6a0-553241770001  
+**Target Layer**: Technology  
+**Framework**: TOGAF 10 Technology Architecture  
+**Infrastructure Components Found**: 12  
+**Confidence Threshold**: 0.70  
+**Quality Level**: Comprehensive
+
+> **Sections Generated**: 1, 2, 3, 4, 5, 8 (per `output_sections: [1, 2, 3, 4, 5, 8]`)
+
 ---
-title: APIM Accelerator - Cloud Resource Hierarchy
-config:
-  theme: base
-  look: classic
-  layout: dagre
-  themeVariables:
-    fontSize: '15px'
+
+## Section 1: Executive Summary
+
+The **APIM Accelerator** is an Azure-native API Management landing zone implemented entirely as Infrastructure as Code using Bicep templates. The solution deploys a production-grade Azure API Management service (Premium SKU) alongside a complete observability stack and a centralized API governance platform, all orchestrated from a subscription-scoped main template.
+
+### Infrastructure Portfolio by Type
+
+| Component Type             | Count | Confidence Level | Primary Sources                                                                             |
+| -------------------------- | ----- | ---------------- | ------------------------------------------------------------------------------------------- |
+| Compute Resources          | 0     | N/A              | Not detected                                                                                |
+| Storage Systems            | 1     | High (0.89)      | `src/shared/monitoring/operational/main.bicep`                                              |
+| Network Infrastructure     | 1     | Medium (0.78)    | `src/shared/networking/main.bicep`                                                          |
+| Container Platforms        | 0     | N/A              | Not detected                                                                                |
+| Cloud Services (PaaS/SaaS) | 3     | High (0.92)      | `infra/main.bicep`, `src/core/main.bicep`, `src/inventory/main.bicep`                       |
+| Security Infrastructure    | 3     | High (0.91)      | `src/core/apim.bicep`, `src/core/developer-portal.bicep`, `src/shared/constants.bicep`      |
+| Messaging Infrastructure   | 0     | N/A              | Not detected                                                                                |
+| Monitoring & Observability | 2     | High (0.89)      | `src/shared/monitoring/insights/main.bicep`, `src/shared/monitoring/operational/main.bicep` |
+| Identity & Access          | 3     | High (0.90)      | `src/core/apim.bicep`, `src/inventory/main.bicep`, `src/shared/common-types.bicep`          |
+| API Management             | 3     | High (0.95)      | `src/core/apim.bicep`, `src/core/workspaces.bicep`, `src/core/developer-portal.bicep`       |
+| Caching Infrastructure     | 0     | N/A              | Not detected                                                                                |
+
+**Total detected components**: 12 across 9 source Bicep files  
+**Average confidence score (detected)**: 0.89 (High)  
+**Deployment scope**: Azure Subscription (subscription-scoped Bicep orchestration)  
+**Provisioning mechanism**: Azure Developer CLI (`azd up`) / Azure CLI (`az deployment sub create`)
+
+### Maturity Assessment
+
+| Dimension              | Assessment  | Evidence                                                                                                    |
+| ---------------------- | ----------- | ----------------------------------------------------------------------------------------------------------- |
+| IaC Coverage           | High        | 100% of resources defined in Bicep; no manual portal deployments detected                                   |
+| Observability          | High        | Diagnostic settings enabled for all resources; dual-destination log routing                                 |
+| Security Configuration | Medium-High | Managed Identity used; AAD auth configured; public network access enabled by default (parameter-controlled) |
+| Naming Consistency     | High        | Deterministic naming pattern: `{solutionName}-{uniqueSuffix}-{suffix}`                                      |
+| Governance & Tagging   | High        | Comprehensive tag schema in `infra/settings.yaml` applied to all resources                                  |
+
 ---
-flowchart LR
-    accTitle: APIM Accelerator Cloud Resource Hierarchy
-    accDescr: Shows hierarchical Bicep module decomposition and resource ownership from subscription scope to individual Azure resources
 
-    %% ═══════════════════════════════════════════════════════════════════════════
-    %% AZURE / FLUENT ARCHITECTURE PATTERN v1.1 - Resource Hierarchy View
-    %% ═══════════════════════════════════════════════════════════════════════════
+## Section 2: Architecture Landscape
 
-    SUB["☁️ Azure Subscription\ninfra/main.bicep\ntargetScope=subscription"]:::scope
+### 2.1 Compute Resources (0)
 
-    RG["📦 Resource Group\napim-accelerator-{env}-{loc}-rg"]:::scope
+| Component | Type | Description                  | Source | Confidence |
+| --------- | ---- | ---------------------------- | ------ | ---------- |
+| —         | —    | Not detected in source files | —      | —          |
 
-    MOD_SHARED["📦 Module: shared\nsrc/shared/main.bicep"]:::module
-    MOD_CORE["📦 Module: core\nsrc/core/main.bicep"]:::module
-    MOD_INV["📦 Module: inventory\nsrc/inventory/main.bicep"]:::module
+**Status**: Not detected in current infrastructure configuration. The solution uses exclusively PaaS (Platform-as-Service) managed compute. No Virtual Machines, container workloads, or serverless Function apps are provisioned. API processing capacity is provided by Azure API Management's managed compute plane (configured in §2.10).
 
-    R_LAW["📊 Log Analytics Workspace\nMicrosoft.OperationalInsights/workspaces"]:::resource
-    R_ST["💾 Storage Account\nMicrosoft.Storage/storageAccounts"]:::resource
-    R_AI["🔭 Application Insights\nMicrosoft.Insights/components"]:::resource
-    R_DIAG1["⚙️ Diagnostic Settings (LAW)\nMicrosoft.Insights/diagnosticSettings"]:::child
-    R_DIAG2["⚙️ Diagnostic Settings (AppIns)\nMicrosoft.Insights/diagnosticSettings"]:::child
+---
 
-    R_APIM["⚙️ API Management Service\nMicrosoft.ApiManagement/service"]:::resource
-    R_APIM_LOGGER["📡 APIM AppInsights Logger\nMicrosoft.ApiManagement/service/loggers"]:::child
-    R_APIM_DIAG["⚙️ Diagnostic Settings (APIM)\nMicrosoft.Insights/diagnosticSettings"]:::child
-    R_APIM_WS["📁 APIM Workspace\nMicrosoft.ApiManagement/service/workspaces"]:::child
-    R_DP_IDPROV["🔐 AAD Identity Provider\nMicrosoft.ApiManagement/service/identityProviders"]:::child
-    R_APIM_POLICY["📜 APIM CORS Policy\nMicrosoft.ApiManagement/service/policies"]:::child
-    R_RBAC_APIM["🔒 RBAC: Reader Role\nMicrosoft.Authorization/roleAssignments"]:::security
+### 2.2 Storage Systems (1)
 
-    R_APC["📋 API Center Service\nMicrosoft.ApiCenter/services"]:::resource
-    R_APC_WS["📁 API Center Workspace\nMicrosoft.ApiCenter/services/workspaces"]:::child
-    R_APC_SRC["🔗 API Source (APIM)\nMicrosoft.ApiCenter/.../apiSources"]:::child
-    R_RBAC_APC["🔒 RBAC: Data Reader + Compliance Mgr\nMicrosoft.Authorization/roleAssignments"]:::security
+| Component             | Type                         | Description                                                                           | Source                                                 | Confidence  |
+| --------------------- | ---------------------------- | ------------------------------------------------------------------------------------- | ------------------------------------------------------ | ----------- |
+| Azure Storage Account | Cloud Storage (Standard_LRS) | Diagnostic log archival and long-term retention for Log Analytics and APIM audit data | `src/shared/monitoring/operational/main.bicep:109-130` | 0.89 (High) |
 
-    SUB --> RG
-    RG --> MOD_SHARED
-    RG --> MOD_CORE
-    RG --> MOD_INV
-    MOD_SHARED --> R_LAW
-    MOD_SHARED --> R_ST
-    MOD_SHARED --> R_AI
-    R_LAW --> R_DIAG1
-    R_AI --> R_DIAG2
-    MOD_CORE --> R_APIM
-    R_APIM --> R_APIM_LOGGER
-    R_APIM --> R_APIM_DIAG
-    R_APIM --> R_APIM_WS
-    R_APIM --> R_DP_IDPROV
-    R_APIM --> R_APIM_POLICY
-    R_APIM --> R_RBAC_APIM
-    MOD_INV --> R_APC
-    R_APC --> R_APC_WS
-    R_APC_WS --> R_APC_SRC
-    R_APC --> R_RBAC_APC
+---
 
-    classDef scope fill:#EFF6FC,stroke:#0078D4,stroke-width:2px,color:#323130
-    classDef module fill:#FFF4CE,stroke:#F59D00,stroke-width:2px,color:#323130
-    classDef resource fill:#0078D4,stroke:#005A9E,stroke-width:2px,color:#FFFFFF
-    classDef child fill:#FAFAFA,stroke:#8A8886,stroke-width:1px,color:#323130
-    classDef security fill:#D83B01,stroke:#A4262C,stroke-width:2px,color:#FFFFFF
-```
+### 2.3 Network Infrastructure (1)
+
+| Component                     | Type                                   | Description                                                                                       | Source                                   | Confidence    |
+| ----------------------------- | -------------------------------------- | ------------------------------------------------------------------------------------------------- | ---------------------------------------- | ------------- |
+| Virtual Network (Placeholder) | VNet (Microsoft.ScVmm/virtualNetworks) | Placeholder networking module; SCVMM-based VNet placeholder for future VNet integration with APIM | `src/shared/networking/main.bicep:60-68` | 0.78 (Medium) |
+
+> **Note**: The APIM service supports `External`, `Internal`, and `None` VNet integration modes (configurable via `virtualNetworkType` parameter in `src/core/apim.bicep:141`). Currently defaults to `None` (public access). The networking module is an acknowledged placeholder for future VNet provisioning.
+
+---
+
+### 2.4 Container Platforms (0)
+
+| Component | Type | Description                  | Source | Confidence |
+| --------- | ---- | ---------------------------- | ------ | ---------- |
+| —         | —    | Not detected in source files | —      | —          |
+
+**Status**: Not detected in current infrastructure configuration. No AKS clusters, container registries, Docker configurations, or Kubernetes manifests found in analyzed folder paths.
+
+---
+
+### 2.5 Cloud Services — PaaS/SaaS (3)
+
+| Component                    | Type                                            | Description                                                                                                               | Source                                                       | Confidence  |
+| ---------------------------- | ----------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------ | ----------- |
+| Azure API Management Service | PaaS (Microsoft.ApiManagement/service)          | Premium SKU API gateway with managed identity, VNet integration support, developer portal, and built-in rate limiting     | `src/core/apim.bicep:169-209`, `src/core/main.bicep:149-170` | 0.92 (High) |
+| Azure API Center Service     | PaaS (Microsoft.ApiCenter/services)             | Centralized API catalog and governance platform; automatically discovers and imports APIs from APIM                       | `src/inventory/main.bicep:100-132`                           | 0.83 (High) |
+| Azure Resource Group         | IaaS Scope (Microsoft.Resources/resourceGroups) | Subscription-scoped resource group created by orchestration template; naming pattern `{solutionName}-{env}-{location}-rg` | `infra/main.bicep:101-108`                                   | 0.98 (High) |
+
+---
+
+### 2.6 Security Infrastructure (3)
+
+| Component                  | Type                                                              | Description                                                                                                                                     | Source                                                            | Confidence  |
+| -------------------------- | ----------------------------------------------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------- | ----------------------------------------------------------------- | ----------- |
+| APIM Global CORS Policy    | Policy (Microsoft.ApiManagement/service/policies)                 | Global CORS policy allowing credentials; restricts allowed origins to developer portal URL, gateway URL, management API URL                     | `src/core/developer-portal.bicep:143-175`                         | 0.91 (High) |
+| Azure AD Identity Provider | Auth Provider (Microsoft.ApiManagement/service/identityProviders) | AAD integration for developer portal; MSAL 2.0; tenant-restricted to `MngEnvMCAP341438.onmicrosoft.com`; client ID/secret via secure parameters | `src/core/developer-portal.bicep:183-198`                         | 0.91 (High) |
+| RBAC Role Assignments      | Access Control (Microsoft.Authorization/roleAssignments)          | Grants Reader role to APIM managed identity; grants API Center Data Reader and Compliance Manager roles to API Center managed identity          | `src/core/apim.bicep:222-238`, `src/inventory/main.bicep:140-162` | 0.90 (High) |
+
+---
+
+### 2.7 Messaging Infrastructure (0)
+
+| Component | Type | Description                  | Source | Confidence |
+| --------- | ---- | ---------------------------- | ------ | ---------- |
+| —         | —    | Not detected in source files | —      | —          |
+
+**Status**: Not detected in current infrastructure configuration. No Azure Service Bus, Azure Event Hubs, Event Grid subscriptions, or messaging queue configurations found in Bicep templates.
+
+---
+
+### 2.8 Monitoring & Observability (2)
+
+| Component                     | Type                                            | Description                                                                                                                                                                         | Source                                                                                             | Confidence  |
+| ----------------------------- | ----------------------------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | -------------------------------------------------------------------------------------------------- | ----------- |
+| Azure Log Analytics Workspace | PaaS (Microsoft.OperationalInsights/workspaces) | Centralized log aggregation and query hub; PerGB2018 SKU; self-monitoring diagnostic settings configured; serves as backend for Application Insights (workspace-based mode)         | `src/shared/monitoring/operational/main.bicep:150-200`, `src/shared/monitoring/main.bicep:110-145` | 0.89 (High) |
+| Azure Application Insights    | PaaS (Microsoft.Insights/components)            | APM and distributed tracing; workspace-based `LogAnalytics` ingestion mode linked to Log Analytics; 90-day retention; APIM Application Insights Logger configured for API telemetry | `src/shared/monitoring/insights/main.bicep:121-142`, `src/core/apim.bicep:285-300`                 | 0.89 (High) |
+
+---
+
+### 2.9 Identity & Access (3)
+
+| Component                                        | Type             | Description                                                                                                                                 | Source                                                                                        | Confidence  |
+| ------------------------------------------------ | ---------------- | ------------------------------------------------------------------------------------------------------------------------------------------- | --------------------------------------------------------------------------------------------- | ----------- |
+| System-Assigned Managed Identity (APIM)          | Managed Identity | System-assigned identity on APIM service; enables credential-free access to Azure resources; principal ID exposed as output for RBAC wiring | `src/core/apim.bicep:168-173`, `src/shared/common-types.bicep:44-49`                          | 0.92 (High) |
+| System-Assigned Managed Identity (API Center)    | Managed Identity | System-assigned identity on API Center service; enables credential-free API source integration and RBAC operations                          | `src/inventory/main.bicep:107-130`, `src/shared/common-types.bicep:54-60`                     | 0.90 (High) |
+| System-Assigned Managed Identity (Log Analytics) | Managed Identity | System-assigned identity on Log Analytics workspace; supports secure integration with other monitoring services                             | `src/shared/monitoring/operational/main.bicep:152-165`, `src/shared/common-types.bicep:44-49` | 0.88 (High) |
+
+---
+
+### 2.10 API Management (3)
+
+| Component                              | Type                                                                          | Description                                                                                                                                       | Source                                                     | Confidence  |
+| -------------------------------------- | ----------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------- | ---------------------------------------------------------- | ----------- |
+| Azure API Management Service (Premium) | API Gateway (Microsoft.ApiManagement/service@2025-03-01-preview)              | Core API gateway; Premium SKU (capacity: 1); multi-region support; developer portal; VNet integration support; built-in rate limiting and caching | `src/core/apim.bicep:169-209`, `infra/settings.yaml:39-56` | 0.98 (High) |
+| APIM Workspace                         | Workspace (Microsoft.ApiManagement/service/workspaces@2025-03-01-preview)     | Logical workspace `workspace1` for team-based API organization and independent lifecycle management                                               | `src/core/workspaces.bicep:48-63`                          | 0.93 (High) |
+| Developer Portal                       | Portal Config (Microsoft.ApiManagement/service/portalconfigs, portalsettings) | Self-service developer portal with AAD authentication; sign-in and sign-up enabled; terms of service consent required                             | `src/core/developer-portal.bicep:200-240`                  | 0.91 (High) |
+
+---
+
+### 2.11 Caching Infrastructure (0)
+
+| Component | Type | Description                  | Source | Confidence |
+| --------- | ---- | ---------------------------- | ------ | ---------- |
+| —         | —    | Not detected in source files | —      | —          |
+
+**Status**: Not detected in current infrastructure configuration. No Azure Cache for Redis, CDN profiles, or dedicated in-memory caching resources found. The APIM service supports built-in response caching as a policy capability (referenced in `src/core/main.bicep` documentation comments), but no external caching infrastructure is provisioned.
+
+---
+
+## Section 3: Architecture Principles
+
+The following infrastructure design principles are observable across the analyzed source files, with direct traceability to specific implementation patterns.
+
+### 3.1 Infrastructure as Code (Immutable Infrastructure)
+
+**Observed pattern**: All Azure resources are defined declaratively in Bicep templates. No imperative scripts or portal-based provisioning detected for resource deployment.
+
+**Evidence**:
+
+- `infra/main.bicep:1-200` — Subscription-scoped orchestration template coordinates all deployments
+- `src/core/main.bicep:100-200` — Modular Bicep decomposition with explicit dependency chains
+- `infra/settings.yaml:1-80` — Environment configuration separated from template logic (configuration-as-code)
+
+**Implication**: Resources are treated as immutable units. Configuration changes are applied by redeploying templates, not by modifying running resources. The `pre-provision.sh` hook (`infra/azd-hooks/pre-provision.sh`) purges soft-deleted APIM instances to enable clean re-provisioning.
+
+---
+
+### 3.2 Least Privilege Access
+
+**Observed pattern**: Managed identities are used exclusively for service-to-service authentication. Role assignments grant only the minimum required permissions via Azure RBAC built-in roles.
+
+**Evidence**:
+
+- `src/core/apim.bicep:222-238` — APIM managed identity receives Reader role (GUID: `acdd72a7-3385-48ef-bd42-f606fba81ae7`) only
+- `src/inventory/main.bicep:140-162` — API Center receives API Center Data Reader (`71522526-b88f-4d52-b57f-d31fc3546d0d`) and Compliance Manager (`6cba8790-29c5-48e5-bab1-c7541b01cb04`) roles only
+- `src/shared/constants.bicep:105-115` — Role definition IDs centralized; no Owner or Contributor role assignments present
+
+**Implication**: No broad subscription-level permissions granted to service principals. Credential rotation risk is eliminated by using managed identities.
+
+---
+
+### 3.3 Defense in Depth
+
+**Observed pattern**: Multiple independent security controls are layered: network-level CORS policies, application-level AAD authentication, and identity-level RBAC restrictions.
+
+**Evidence**:
+
+- `src/core/developer-portal.bicep:143-175` — CORS policy restricts allowed origins to exact portal and gateway URLs
+- `src/core/developer-portal.bicep:183-198` — AAD identity provider restricts authentication to specific tenant (`MngEnvMCAP341438.onmicrosoft.com`)
+- `src/core/apim.bicep:134-137` — Public network access is parameter-controlled (`publicNetworkAccess: bool`) enabling private deployment
+- `src/core/apim.bicep:139-145` — VNet integration mode configurable (`External`/`Internal`/`None`) for network-layer isolation
+
+---
+
+### 3.4 Cloud-Native Design
+
+**Observed pattern**: Solution is built exclusively on PaaS managed services with no IaaS compute. All components leverage Azure-native managed identity, diagnostic integration, and platform SLAs.
+
+**Evidence**:
+
+- `src/core/apim.bicep:169` — `Microsoft.ApiManagement/service@2025-03-01-preview` (latest preview API version)
+- `src/shared/monitoring/insights/main.bicep:95` — App Insights uses `LogAnalytics` ingestion mode (workspace-based, recommended for cost optimization)
+- `src/core/main.bicep:36-50` — Developer portal, workspaces, and Application Insights logger all provisioned as native APIM child resources
+
+---
+
+### 3.5 Observability First
+
+**Observed pattern**: Every deployed resource has diagnostic settings configured, routing logs and metrics to both Log Analytics (for real-time queries) and Storage Account (for long-term archival).
+
+**Evidence**:
+
+- `src/core/apim.bicep:263-280` — APIM diagnostic settings route `allLogs` and `AllMetrics` to Log Analytics and Storage
+- `src/core/apim.bicep:285-300` — Application Insights Logger configured on APIM for API-level performance telemetry
+- `src/shared/monitoring/operational/main.bicep:210-250` — Log Analytics workspace self-monitors via diagnostic settings feedback loop
+- `src/shared/monitoring/insights/main.bicep:160-195` — Application Insights diagnostic settings route to both Log Analytics and Storage
+
+---
+
+### 3.6 Governance by Configuration
+
+**Observed pattern**: Tagging strategy, naming conventions, and environment-specific configuration are managed via a central YAML configuration file, ensuring consistent governance metadata on all resources.
+
+**Evidence**:
+
+- `infra/settings.yaml:18-37` — Comprehensive tag schema: `CostCenter`, `BusinessUnit`, `Owner`, `ApplicationName`, `ProjectName`, `ServiceClass`, `RegulatoryCompliance`, `SupportContact`, `ChargebackModel`, `BudgetCode`
+- `infra/main.bicep:90-96` — `commonTags` object merges governance tags with runtime metadata (`environment`, `managedBy`, `templateVersion`)
+- `src/shared/constants.bicep:40-60` — Naming suffix patterns centralized: `-law`, `-ai`, `-apim`, `-apicenter`, `sa` (storage)
+
+---
+
+## Section 4: Current State Baseline
+
+### 4.1 Deployment Topology Overview
+
+The APIM Accelerator deploys a complete API Management landing zone in a single Azure Subscription. The orchestration template (`infra/main.bicep`) operates at subscription scope, creating a dedicated resource group and deploying all components in a defined dependency sequence: Shared Monitoring → Core APIM Platform → API Inventory Management.
+
+| Deployment Attribute   | Current Value                                                            |
+| ---------------------- | ------------------------------------------------------------------------ |
+| Deployment Scope       | Azure Subscription (subscription-scoped Bicep)                           |
+| Resource Group Pattern | `apim-accelerator-{envName}-{location}-rg`                               |
+| Supported Environments | `dev`, `test`, `staging`, `prod`, `uat`                                  |
+| Primary Region         | Configurable (parameter: `location`)                                     |
+| Provisioning Tool      | Azure Developer CLI (`azd up`) or Azure CLI (`az deployment sub create`) |
+| Template Version       | 2.0.0 (`infra/main.bicep`)                                               |
+| APIM SKU               | Premium (capacity: 1 unit, configurable)                                 |
+| Network Access Mode    | Public (default); configurable to Private/VNet via parameters            |
+| Managed Identity Model | System-Assigned on APIM, API Center, and Log Analytics                   |
+| Log Retention          | App Insights: 90 days; Storage: long-term archival                       |
+
+---
+
+### 4.2 Deployment Architecture Diagram
+
 
 
 ✅ Mermaid Verification: 5/5 | Score: 100/100 | Subgraphs: 1 | Style directives: 1 | Violations: 0
