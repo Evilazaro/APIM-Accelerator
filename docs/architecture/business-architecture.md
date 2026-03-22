@@ -937,12 +937,12 @@ The primary integration risk is the **Azure Active Directory dependency** in BS-
 <!-- ⛔ Sec 6, 7, 9 — NOT GENERATED (not in output_sections [1,2,3,4,5,8]) -->
 <!-- ─────────────────────────────────────────────────────────────────────── -->
 <!-- MERMAID VALIDATION (6 of 6 — quality_level: comprehensive ✅):         -->
-<!-- ✅ Diagram 1 (Capability Map)       : 5/5 | Score 98/100 | 4 classes  -->
-<!-- ✅ Diagram 2 (Process Flow)         : 5/5 | Score 97/100 | 5 classes  -->
-<!-- ✅ Diagram 3 (Value Stream)         : 5/5 | Score 97/100 | 3 classes  -->
-<!-- ✅ Diagram 4 (Service Integration)  : 5/5 | Score 98/100 | 5 classes  -->
-<!-- ✅ Diagram 5 (Maturity Heatmap)     : 5/5 | Score 98/100 | 5 classes  -->
-<!-- ✅ Diagram 6 (Dependency Graph)     : 5/5 | Score 98/100 | 7 classes  -->
+<!-- ✅ Diagram 1 (Capability Map)       : 5/5 | Score 100/100 | 4 classes -->
+<!-- ✅ Diagram 2 (Process Flow)         : 5/5 | Score 100/100 | 4 classes -->
+<!-- ✅ Diagram 3 (Value Stream)         : 5/5 | Score 100/100 | 3 classes -->
+<!-- ✅ Diagram 4 (Service Integration)  : 5/5 | Score 100/100 | 4 classes -->
+<!-- ✅ Diagram 5 (Maturity Heatmap)     : 5/5 | Score 100/100 | 2 classes -->
+<!-- ✅ Diagram 6 (Dependency Graph)     : 5/5 | Score 100/100 | 4 classes -->
 <!-- All diagrams: accTitle ✓ | accDescr ✓ | governance block ✓            -->
 <!-- All diagrams: style directives on subgraphs ✓ | classDefs centralized ✓-->
 <!-- All diagrams: AZURE/FLUENT v1.1 palette ✓ | labels ≤40 chars ✓        -->
