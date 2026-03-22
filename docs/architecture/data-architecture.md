@@ -281,10 +281,10 @@ flowchart TB
     %% ═══════════════════════════════════════════════════════════════════════════
 
     subgraph cfgdomain["🗂️ Configuration Data Domain"]
-        CFG1("🧩 Data Entities × 10"):::data
-        CFG2("🗃️ Data Models × 3"):::data
-        CFG3("📜 Data Contracts × 5"):::data
-        CFG4("🔀 Transformations × 5"):::data
+        CFG1("🧩 Data Entities × 10"):::neutral
+        CFG2("🗃️ Data Models × 3"):::neutral
+        CFG3("📜 Data Contracts × 5"):::neutral
+        CFG4("🔀 Transformations × 5"):::neutral
     end
 
     subgraph opsdomain["📊 Operational Monitoring Domain"]
@@ -295,8 +295,8 @@ flowchart TB
     end
 
     subgraph invdomain["📚 API Inventory Domain"]
-        INV1("📚 Azure API Center"):::external
-        INV2("⚡ Data Services × 3"):::external
+        INV1("📚 Azure API Center"):::neutral
+        INV2("⚡ Data Services × 3"):::neutral
     end
 
     subgraph secdomain["🔐 Identity & Security Domain"]
@@ -313,9 +313,7 @@ flowchart TB
     secdomain -.->|"governs"| invdomain
 
     classDef core fill:#EFF6FC,stroke:#0078D4,stroke-width:2px,color:#323130
-    classDef data fill:#F0E6FA,stroke:#8764B8,stroke-width:2px,color:#323130
     classDef neutral fill:#FAFAFA,stroke:#8A8886,stroke-width:2px,color:#323130
-    classDef external fill:#FAFAFA,stroke:#8A8886,stroke-width:2px,color:#323130
     classDef success fill:#DFF6DD,stroke:#107C10,stroke-width:2px,color:#323130
     classDef warning fill:#FFF4CE,stroke:#FFB900,stroke-width:2px,color:#323130
     classDef danger fill:#FDE7E9,stroke:#D13438,stroke-width:2px,color:#323130
@@ -419,9 +417,9 @@ flowchart TB
     %% ═══════════════════════════════════════════════════════════════════════════
 
     subgraph cfglayer["🗂️ Configuration Layer"]
-        YAML("📄 settings.yaml"):::data
-        TYPES("📋 common-types.bicep"):::data
-        CONSTANTS("⚙️ constants.bicep"):::data
+        YAML("📄 settings.yaml"):::neutral
+        TYPES("📋 common-types.bicep"):::neutral
+        CONSTANTS("⚙️ constants.bicep"):::neutral
     end
 
     subgraph iaclayer["🏗️ IaC Provisioning Layer"]
@@ -439,13 +437,13 @@ flowchart TB
 
     subgraph apimLayer["🔌 API Management Layer"]
         APIM("🔌 Azure APIM Service"):::core
-        DEVPORTAL("🌐 Developer Portal"):::external
+        DEVPORTAL("🌐 Developer Portal"):::neutral
         WORKSPACES("📁 APIM Workspaces"):::core
     end
 
     subgraph inventorylayer["📚 API Inventory Layer"]
-        APICENTER("📚 Azure API Center"):::data
-        APISOURCE("🔗 API Source Integration"):::data
+        APICENTER("📚 Azure API Center"):::neutral
+        APISOURCE("🔗 API Source Integration"):::neutral
     end
 
     YAML -->|"loadYamlContent()"| MAINBICEP
@@ -473,9 +471,7 @@ flowchart TB
     APISOURCE -->|"discovers APIs"| APIM
 
     classDef core fill:#EFF6FC,stroke:#0078D4,stroke-width:2px,color:#323130
-    classDef data fill:#F0E6FA,stroke:#8764B8,stroke-width:2px,color:#323130
     classDef neutral fill:#FAFAFA,stroke:#8A8886,stroke-width:2px,color:#323130
-    classDef external fill:#FAFAFA,stroke:#8A8886,stroke-width:2px,color:#323130
 
     style cfglayer fill:#F3F2F1,stroke:#8A8886,stroke-width:2px,color:#323130
     style iaclayer fill:#F3F2F1,stroke:#8A8886,stroke-width:2px,color:#323130
@@ -956,9 +952,9 @@ flowchart LR
     %% ═══════════════════════════════════════════════════════════════════════════
 
     subgraph deployTime["🏗️ Deploy-Time Data Flows"]
-        SETTINGSYAML("📄 settings.yaml"):::data
-        MAINTYPES("📋 common-types.bicep"):::data
-        CONSTANTS("⚙️ constants.bicep"):::data
+        SETTINGSYAML("📄 settings.yaml"):::neutral
+        MAINTYPES("📋 common-types.bicep"):::neutral
+        CONSTANTS("⚙️ constants.bicep"):::neutral
         MAINBICEP("📄 infra/main.bicep"):::neutral
         COREBICEP("📄 core/main.bicep"):::neutral
         SHAREDBICEP("📄 shared/main.bicep"):::neutral
@@ -969,12 +965,12 @@ flowchart LR
         LAW("🗄️ Log Analytics Workspace"):::core
         STORAGE("💾 Storage Account"):::core
         AI("📈 Application Insights"):::core
-        APICENTER("📚 Azure API Center"):::data
+        APICENTER("📚 Azure API Center"):::neutral
     end
 
     subgraph runtimeServices["🔌 Runtime Services"]
         APIM("🔌 Azure APIM Service"):::core
-        DEVPORTAL("🌐 Developer Portal"):::external
+        DEVPORTAL("🌐 Developer Portal"):::neutral
     end
 
     subgraph consumers["👥 Data Consumers"]
@@ -1011,9 +1007,7 @@ flowchart LR
     APICENTER -->|"API catalog"| GOVTEAM
 
     classDef core fill:#EFF6FC,stroke:#0078D4,stroke-width:2px,color:#323130
-    classDef data fill:#F0E6FA,stroke:#8764B8,stroke-width:2px,color:#323130
     classDef neutral fill:#FAFAFA,stroke:#8A8886,stroke-width:2px,color:#323130
-    classDef external fill:#FAFAFA,stroke:#8A8886,stroke-width:2px,color:#323130
     classDef warning fill:#FFF4CE,stroke:#FFB900,stroke-width:2px,color:#323130
 
     style deployTime fill:#F3F2F1,stroke:#8A8886,stroke-width:2px,color:#323130

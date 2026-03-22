@@ -319,8 +319,8 @@ flowchart TB
     end
 
     subgraph operations["📊 Operational Excellence"]
-        cap9("📊 Integrated Observability"):::data
-        cap10("🔧 Lifecycle Automation"):::data
+        cap9("📊 Integrated Observability"):::neutral
+        cap10("🔧 Lifecycle Automation"):::neutral
     end
 
     cap1 --> cap4
@@ -337,7 +337,7 @@ flowchart TB
     classDef core fill:#EFF6FC,stroke:#0078D4,stroke-width:2px,color:#323130
     classDef success fill:#DFF6DD,stroke:#107C10,stroke-width:2px,color:#323130
     classDef warning fill:#FFF4CE,stroke:#FFB900,stroke-width:2px,color:#323130
-    classDef data fill:#F0E6FA,stroke:#8764B8,stroke-width:2px,color:#323130
+    classDef neutral fill:#FAFAFA,stroke:#8A8886,stroke-width:2px,color:#323130
 ```
 
 ✅ Mermaid Verification: 5/5 | Score: 100/100 | Diagrams: 1 | Violations: 0
@@ -385,7 +385,7 @@ flowchart LR
 
     subgraph deployment["📦 Layered Deployment"]
         rg("📦 Resource Group"):::neutral
-        monitoring("📊 Shared Monitoring"):::data
+        monitoring("📊 Shared Monitoring"):::neutral
         apim("🌐 Core APIM Platform"):::core
         inventory("🔑 API Inventory Layer"):::core
     end
@@ -407,7 +407,6 @@ flowchart LR
     classDef core fill:#EFF6FC,stroke:#0078D4,stroke-width:2px,color:#323130
     classDef success fill:#DFF6DD,stroke:#107C10,stroke-width:2px,color:#323130
     classDef warning fill:#FFF4CE,stroke:#FFB900,stroke-width:2px,color:#323130
-    classDef data fill:#F0E6FA,stroke:#8764B8,stroke-width:2px,color:#323130
 ```
 
 ✅ Mermaid Verification: 5/5 | Score: 100/100 | Diagrams: 1 | Violations: 0
@@ -692,8 +691,8 @@ flowchart TB
     end
 
     subgraph external["🌐 External Dependencies"]
-        ext1("☁️ Azure Subscription"):::external
-        ext2("🔐 Azure Active Directory"):::external
+        ext1("☁️ Azure Subscription"):::neutral
+        ext2("🔐 Azure Active Directory"):::neutral
     end
 
     actor1 --> bs1
@@ -719,7 +718,6 @@ flowchart TB
     classDef core fill:#EFF6FC,stroke:#0078D4,stroke-width:2px,color:#323130
     classDef success fill:#DFF6DD,stroke:#107C10,stroke-width:2px,color:#323130
     classDef warning fill:#FFF4CE,stroke:#FFB900,stroke-width:2px,color:#323130
-    classDef external fill:#FAFAFA,stroke:#8A8886,stroke-width:2px,color:#323130
 ```
 
 ✅ Mermaid Verification: 5/5 | Score: 100/100 | Diagrams: 1 | Violations: 0
@@ -758,38 +756,35 @@ flowchart LR
     %% ═══════════════════════════════════════════════════════════════════════════
 
     subgraph apiPlatform["🚀 API Platform Delivery — Level 4 Managed"]
-        c1("⚡ API Provisioning<br>Current: 4 | Target: 5"):::managed
-        c2("📊 Monitoring & Observability<br>Current: 4 | Target: 5"):::managed
-        c3("🔑 APIM Configuration<br>Current: 4 | Target: 4"):::managed
+        c1("⚡ API Provisioning<br>Current: 4 | Target: 5"):::core
+        c2("📊 Monitoring & Observability<br>Current: 4 | Target: 5"):::core
+        c3("🔑 APIM Configuration<br>Current: 4 | Target: 4"):::core
     end
 
     subgraph devExp["👤 Developer Experience — Level 3 Defined"]
-        c4("🌐 Developer Portal<br>Current: 3 | Target: 4"):::defined
-        c5("🧩 Workspace Mgmt<br>Current: 3 | Target: 4"):::defined
-        c6("📋 API Discovery<br>Current: 3 | Target: 5"):::defined
+        c4("🌐 Developer Portal<br>Current: 3 | Target: 4"):::success
+        c5("🧩 Workspace Mgmt<br>Current: 3 | Target: 4"):::success
+        c6("📋 API Discovery<br>Current: 3 | Target: 5"):::success
     end
 
     subgraph governance["🛡️ API Governance & Security — Level 3 Defined"]
-        c7("🔒 API Governance<br>Current: 3 | Target: 4"):::defined
-        c8("🔐 Identity & Access Mgmt<br>Current: 3 | Target: 4"):::defined
-        c9("📜 Policy Enforcement<br>Current: 3 | Target: 4"):::defined
+        c7("🔒 API Governance<br>Current: 3 | Target: 4"):::success
+        c8("🔐 Identity & Access Mgmt<br>Current: 3 | Target: 4"):::success
+        c9("📜 Policy Enforcement<br>Current: 3 | Target: 4"):::success
     end
 
     subgraph opEx["⚙️ Operational Excellence — Level 4 Managed"]
-        c10("🔄 IaC Automation<br>Current: 4 | Target: 5"):::managed
-        c11("🚦 Deployment Orchestration<br>Current: 4 | Target: 5"):::managed
+        c10("🔄 IaC Automation<br>Current: 4 | Target: 5"):::core
+        c11("🚦 Deployment Orchestration<br>Current: 4 | Target: 5"):::core
     end
 
-    style apiPlatform fill:#F3F2F1,stroke:#0078D4,stroke-width:2px,color:#323130
-    style devExp fill:#F3F2F1,stroke:#107C10,stroke-width:2px,color:#323130
-    style governance fill:#F3F2F1,stroke:#FFB900,stroke-width:2px,color:#323130
-    style opEx fill:#F3F2F1,stroke:#8764B8,stroke-width:2px,color:#323130
+    style apiPlatform fill:#F3F2F1,stroke:#8A8886,stroke-width:2px,color:#323130
+    style devExp fill:#F3F2F1,stroke:#8A8886,stroke-width:2px,color:#323130
+    style governance fill:#F3F2F1,stroke:#8A8886,stroke-width:2px,color:#323130
+    style opEx fill:#F3F2F1,stroke:#8A8886,stroke-width:2px,color:#323130
 
-    classDef managed fill:#EFF6FC,stroke:#0078D4,stroke-width:2px,color:#323130
-    classDef defined fill:#DFF6DD,stroke:#107C10,stroke-width:2px,color:#323130
-    classDef initiating fill:#FFF4CE,stroke:#FFB900,stroke-width:2px,color:#323130
-    classDef optimising fill:#F0E6FA,stroke:#8764B8,stroke-width:2px,color:#323130
-    classDef gap fill:#FDE7E9,stroke:#D13438,stroke-width:2px,color:#323130
+    classDef core fill:#EFF6FC,stroke:#0078D4,stroke-width:2px,color:#323130
+    classDef success fill:#DFF6DD,stroke:#107C10,stroke-width:2px,color:#323130
 ```
 
 ✅ Mermaid Verification: 5/5 | Score: 100/100 | Diagrams: 1 | Violations: 0
@@ -828,10 +823,10 @@ flowchart TB
     %% ═══════════════════════════════════════════════════════════════════════════
 
     subgraph bizLayer["🏢 Business Layer"]
-        a1("👨‍💻 Platform Engineer"):::actor
-        a2("🏗️ Cloud Architect"):::actor
-        a3("👩‍💼 API Developer"):::actor
-        a4("📱 API Consumer"):::actor
+        a1("👨‍💻 Platform Engineer"):::neutral
+        a2("🏗️ Cloud Architect"):::neutral
+        a3("👩‍💼 API Developer"):::neutral
+        a4("📱 API Consumer"):::neutral
         bs1("🚀 API Platform Delivery"):::core
         bs2("📊 Monitoring Service"):::neutral
         bs3("🔑 Governance Service"):::warning
@@ -840,16 +835,16 @@ flowchart TB
     end
 
     subgraph techLayer["⚙️ Technology Layer"]
-        t1("📦 APIM Service<br>src/core/apim.bicep"):::tech
-        t2("🔭 Log Analytics + App Insights<br>src/shared/monitoring/"):::tech
-        t3("🗂️ Inventory Module<br>src/inventory/main.bicep"):::tech
-        t4("🏛️ Networking<br>src/shared/networking/"):::tech
+        t1("📦 APIM Service<br>src/core/apim.bicep"):::core
+        t2("🔭 Log Analytics + App Insights<br>src/shared/monitoring/"):::core
+        t3("🗂️ Inventory Module<br>src/inventory/main.bicep"):::core
+        t4("🏗️ Networking<br>src/shared/networking/"):::core
     end
 
     subgraph extLayer["🌐 External Dependencies"]
-        e1("☁️ Azure Subscription"):::external
-        e2("🔐 Azure Active Directory"):::external
-        e3("🛠️ azd CLI"):::external
+        e1("☁️ Azure Subscription"):::neutral
+        e2("🔐 Azure Active Directory"):::neutral
+        e3("🛠️ azd CLI"):::neutral
     end
 
     a1 --> bs1
@@ -871,17 +866,14 @@ flowchart TB
     bs4 --> e2
     bs1 --> e3
 
-    style bizLayer fill:#F3F2F1,stroke:#0078D4,stroke-width:2px,color:#323130
-    style techLayer fill:#F3F2F1,stroke:#8764B8,stroke-width:2px,color:#323130
+    style bizLayer fill:#F3F2F1,stroke:#8A8886,stroke-width:2px,color:#323130
+    style techLayer fill:#F3F2F1,stroke:#8A8886,stroke-width:2px,color:#323130
     style extLayer fill:#F3F2F1,stroke:#8A8886,stroke-width:2px,color:#323130
 
-    classDef actor fill:#FAFAFA,stroke:#8A8886,stroke-width:2px,color:#323130
     classDef core fill:#EFF6FC,stroke:#0078D4,stroke-width:2px,color:#323130
     classDef neutral fill:#FAFAFA,stroke:#8A8886,stroke-width:2px,color:#323130
     classDef warning fill:#FFF4CE,stroke:#FFB900,stroke-width:2px,color:#323130
     classDef success fill:#DFF6DD,stroke:#107C10,stroke-width:2px,color:#323130
-    classDef tech fill:#EFF6FC,stroke:#0078D4,stroke-width:2px,color:#323130
-    classDef external fill:#FAFAFA,stroke:#8A8886,stroke-width:2px,color:#323130
 ```
 
 ✅ Mermaid Verification: 5/5 | Score: 100/100 | Diagrams: 1 | Violations: 0

@@ -5,7 +5,7 @@
 **Target Layer**: Technology  
 **Framework**: TOGAF 10 Technology Architecture  
 **Infrastructure Components Found**: 12  
-**Quality Level**: Comprehensive  
+**Quality Level**: Comprehensive
 
 > **Sections Generated**: 1, 2, 3, 4, 5, 8 (per `output_sections: [1, 2, 3, 4, 5, 8]`)
 
@@ -13,14 +13,14 @@
 
 ## 📑 Quick Navigation
 
-| # | 🔗 Section |
-|---|---|
-| 1 | [📋 Executive Summary](#section-1-executive-summary) |
-| 2 | [🗺️ Architecture Landscape](#section-2-architecture-landscape) |
-| 3 | [📐 Architecture Principles](#section-3-architecture-principles) |
-| 4 | [📍 Current State Baseline](#section-4-current-state-baseline) |
-| 5 | [🗃️ Component Catalog](#section-5-component-catalog) |
-| 8 | [🔗 Dependencies & Integration](#section-8-dependencies--integration) |
+| #   | 🔗 Section                                                            |
+| --- | --------------------------------------------------------------------- |
+| 1   | [📋 Executive Summary](#section-1-executive-summary)                  |
+| 2   | [🗺️ Architecture Landscape](#section-2-architecture-landscape)        |
+| 3   | [📐 Architecture Principles](#section-3-architecture-principles)      |
+| 4   | [📍 Current State Baseline](#section-4-current-state-baseline)        |
+| 5   | [🗃️ Component Catalog](#section-5-component-catalog)                  |
+| 8   | [🔗 Dependencies & Integration](#section-8-dependencies--integration) |
 
 ---
 
@@ -30,33 +30,33 @@ The **APIM Accelerator** is an Azure-native API Management landing zone implemen
 
 ### 📦 Infrastructure Portfolio by Type
 
-| 🧩 Component Type | 🔢 Count |
-|---|---|
-| Compute Resources | 0 |
-| Storage Systems | 1 |
-| Network Infrastructure | 1 |
-| Container Platforms | 0 |
-| Cloud Services (PaaS/SaaS) | 3 |
-| Security Infrastructure | 3 |
-| Messaging Infrastructure | 0 |
-| Monitoring & Observability | 2 |
-| Identity & Access | 3 |
-| API Management | 3 |
-| Caching Infrastructure | 0 |
+| 🧩 Component Type          | 🔢 Count |
+| -------------------------- | -------- |
+| Compute Resources          | 0        |
+| Storage Systems            | 1        |
+| Network Infrastructure     | 1        |
+| Container Platforms        | 0        |
+| Cloud Services (PaaS/SaaS) | 3        |
+| Security Infrastructure    | 3        |
+| Messaging Infrastructure   | 0        |
+| Monitoring & Observability | 2        |
+| Identity & Access          | 3        |
+| API Management             | 3        |
+| Caching Infrastructure     | 0        |
 
 **Total detected components**: 12 across 9 source Bicep files  
 **Deployment scope**: Azure Subscription (subscription-scoped Bicep orchestration)  
-**Provisioning mechanism**: Azure Developer CLI (`azd up`) / Azure CLI (`az deployment sub create`)  
+**Provisioning mechanism**: Azure Developer CLI (`azd up`) / Azure CLI (`az deployment sub create`)
 
 ### 📊 Maturity Assessment
 
-| 📐 Dimension | ✅ Assessment |
-|---|---|
-| IaC Coverage | High |
-| Observability | High |
-| Security Configuration | Medium-High |
-| Naming Consistency | High |
-| Governance & Tagging | High |
+| 📐 Dimension           | ✅ Assessment |
+| ---------------------- | ------------- |
+| IaC Coverage           | High          |
+| Observability          | High          |
+| Security Configuration | Medium-High   |
+| Naming Consistency     | High          |
+| Governance & Tagging   | High          |
 
 ---
 
@@ -64,9 +64,9 @@ The **APIM Accelerator** is an Azure-native API Management landing zone implemen
 
 ### 💻 2.1 Compute Resources (0)
 
-| 🔧 Component | 📁 Type | 📝 Description |
-|---|---|---|
-| — | — | Not detected in source files |
+| 🔧 Component | 📁 Type | 📝 Description               |
+| ------------ | ------- | ---------------------------- |
+| —            | —       | Not detected in source files |
 
 **Status**: Not detected in current infrastructure configuration. The solution uses exclusively PaaS (Platform-as-Service) managed compute. No Virtual Machines, container workloads, or serverless Function apps are provisioned. API processing capacity is provided by Azure API Management's managed compute plane (configured in §2.10).
 
@@ -74,16 +74,16 @@ The **APIM Accelerator** is an Azure-native API Management landing zone implemen
 
 ### 💾 2.2 Storage Systems (1)
 
-| 🔧 Component | 📁 Type | 📝 Description |
-|---|---|---|
-| Azure Storage Account | Cloud Storage (Standard\_LRS) | Diagnostic log archival and long-term retention for Log Analytics and APIM audit data |
+| 🔧 Component          | 📁 Type                      | 📝 Description                                                                        |
+| --------------------- | ---------------------------- | ------------------------------------------------------------------------------------- |
+| Azure Storage Account | Cloud Storage (Standard_LRS) | Diagnostic log archival and long-term retention for Log Analytics and APIM audit data |
 
 ---
 
 ### 🌐 2.3 Network Infrastructure (1)
 
-| 🔧 Component | 📁 Type | 📝 Description |
-|---|---|---|
+| 🔧 Component                  | 📁 Type                                | 📝 Description                                                                                    |
+| ----------------------------- | -------------------------------------- | ------------------------------------------------------------------------------------------------- |
 | Virtual Network (Placeholder) | VNet (Microsoft.ScVmm/virtualNetworks) | Placeholder networking module; SCVMM-based VNet placeholder for future VNet integration with APIM |
 
 > **Note**: The APIM service supports `External`, `Internal`, and `None` VNet integration modes (configurable via `virtualNetworkType` parameter). Currently defaults to `None` (public access). The networking module is an acknowledged placeholder for future VNet provisioning.
@@ -92,9 +92,9 @@ The **APIM Accelerator** is an Azure-native API Management landing zone implemen
 
 ### 🐳 2.4 Container Platforms (0)
 
-| 🔧 Component | 📁 Type | 📝 Description |
-|---|---|---|
-| — | — | Not detected in source files |
+| 🔧 Component | 📁 Type | 📝 Description               |
+| ------------ | ------- | ---------------------------- |
+| —            | —       | Not detected in source files |
 
 **Status**: Not detected in current infrastructure configuration. No AKS clusters, container registries, Docker configurations, or Kubernetes manifests found in analyzed folder paths.
 
@@ -102,29 +102,29 @@ The **APIM Accelerator** is an Azure-native API Management landing zone implemen
 
 ### ☁️ 2.5 Cloud Services — PaaS/SaaS (3)
 
-| 🔧 Component | 📁 Type | 📝 Description |
-|---|---|---|
-| Azure API Management Service | PaaS (Microsoft.ApiManagement/service) | Premium SKU API gateway with managed identity, VNet integration support, developer portal, and built-in rate limiting |
-| Azure API Center Service | PaaS (Microsoft.ApiCenter/services) | Centralized API catalog and governance platform; automatically discovers and imports APIs from APIM |
-| Azure Resource Group | IaaS Scope (Microsoft.Resources/resourceGroups) | Subscription-scoped resource group created by orchestration template; naming pattern `{solutionName}-{env}-{location}-rg` |
+| 🔧 Component                 | 📁 Type                                         | 📝 Description                                                                                                            |
+| ---------------------------- | ----------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------- |
+| Azure API Management Service | PaaS (Microsoft.ApiManagement/service)          | Premium SKU API gateway with managed identity, VNet integration support, developer portal, and built-in rate limiting     |
+| Azure API Center Service     | PaaS (Microsoft.ApiCenter/services)             | Centralized API catalog and governance platform; automatically discovers and imports APIs from APIM                       |
+| Azure Resource Group         | IaaS Scope (Microsoft.Resources/resourceGroups) | Subscription-scoped resource group created by orchestration template; naming pattern `{solutionName}-{env}-{location}-rg` |
 
 ---
 
 ### 🔒 2.6 Security Infrastructure (3)
 
-| 🔧 Component | 📁 Type | 📝 Description |
-|---|---|---|
-| APIM Global CORS Policy | Policy (Microsoft.ApiManagement/service/policies) | Global CORS policy allowing credentials; restricts allowed origins to developer portal URL, gateway URL, management API URL |
+| 🔧 Component               | 📁 Type                                                           | 📝 Description                                                                                                                                  |
+| -------------------------- | ----------------------------------------------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------- |
+| APIM Global CORS Policy    | Policy (Microsoft.ApiManagement/service/policies)                 | Global CORS policy allowing credentials; restricts allowed origins to developer portal URL, gateway URL, management API URL                     |
 | Azure AD Identity Provider | Auth Provider (Microsoft.ApiManagement/service/identityProviders) | AAD integration for developer portal; MSAL 2.0; tenant-restricted to `MngEnvMCAP341438.onmicrosoft.com`; client ID/secret via secure parameters |
-| RBAC Role Assignments | Access Control (Microsoft.Authorization/roleAssignments) | Grants Reader role to APIM managed identity; grants API Center Data Reader and Compliance Manager roles to API Center managed identity |
+| RBAC Role Assignments      | Access Control (Microsoft.Authorization/roleAssignments)          | Grants Reader role to APIM managed identity; grants API Center Data Reader and Compliance Manager roles to API Center managed identity          |
 
 ---
 
 ### 📨 2.7 Messaging Infrastructure (0)
 
-| 🔧 Component | 📁 Type | 📝 Description |
-|---|---|---|
-| — | — | Not detected in source files |
+| 🔧 Component | 📁 Type | 📝 Description               |
+| ------------ | ------- | ---------------------------- |
+| —            | —       | Not detected in source files |
 
 **Status**: Not detected in current infrastructure configuration. No Azure Service Bus, Azure Event Hubs, Event Grid subscriptions, or messaging queue configurations found in Bicep templates.
 
@@ -132,38 +132,38 @@ The **APIM Accelerator** is an Azure-native API Management landing zone implemen
 
 ### 📈 2.8 Monitoring & Observability (2)
 
-| 🔧 Component | 📁 Type | 📝 Description |
-|---|---|---|
-| Azure Log Analytics Workspace | PaaS (Microsoft.OperationalInsights/workspaces) | Centralized log aggregation and query hub; PerGB2018 SKU; self-monitoring diagnostic settings configured; serves as backend for Application Insights (workspace-based mode) |
-| Azure Application Insights | PaaS (Microsoft.Insights/components) | APM and distributed tracing; workspace-based `LogAnalytics` ingestion mode linked to Log Analytics; 90-day retention; APIM Application Insights Logger configured for API telemetry |
+| 🔧 Component                  | 📁 Type                                         | 📝 Description                                                                                                                                                                      |
+| ----------------------------- | ----------------------------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| Azure Log Analytics Workspace | PaaS (Microsoft.OperationalInsights/workspaces) | Centralized log aggregation and query hub; PerGB2018 SKU; self-monitoring diagnostic settings configured; serves as backend for Application Insights (workspace-based mode)         |
+| Azure Application Insights    | PaaS (Microsoft.Insights/components)            | APM and distributed tracing; workspace-based `LogAnalytics` ingestion mode linked to Log Analytics; 90-day retention; APIM Application Insights Logger configured for API telemetry |
 
 ---
 
 ### 🔑 2.9 Identity & Access (3)
 
-| 🔧 Component | 📁 Type | 📝 Description |
-|---|---|---|
-| System-Assigned Managed Identity (APIM) | Managed Identity | System-assigned identity on APIM service; enables credential-free access to Azure resources; principal ID exposed as output for RBAC wiring |
-| System-Assigned Managed Identity (API Center) | Managed Identity | System-assigned identity on API Center service; enables credential-free API source integration and RBAC operations |
-| System-Assigned Managed Identity (Log Analytics) | Managed Identity | System-assigned identity on Log Analytics workspace; supports secure integration with other monitoring services |
+| 🔧 Component                                     | 📁 Type          | 📝 Description                                                                                                                              |
+| ------------------------------------------------ | ---------------- | ------------------------------------------------------------------------------------------------------------------------------------------- |
+| System-Assigned Managed Identity (APIM)          | Managed Identity | System-assigned identity on APIM service; enables credential-free access to Azure resources; principal ID exposed as output for RBAC wiring |
+| System-Assigned Managed Identity (API Center)    | Managed Identity | System-assigned identity on API Center service; enables credential-free API source integration and RBAC operations                          |
+| System-Assigned Managed Identity (Log Analytics) | Managed Identity | System-assigned identity on Log Analytics workspace; supports secure integration with other monitoring services                             |
 
 ---
 
 ### 🔌 2.10 API Management (3)
 
-| 🔧 Component | 📁 Type | 📝 Description |
-|---|---|---|
-| Azure API Management Service (Premium) | API Gateway (Microsoft.ApiManagement/service@2025-03-01-preview) | Core API gateway; Premium SKU (capacity: 1); multi-region support; developer portal; VNet integration support; built-in rate limiting and caching |
-| APIM Workspace | Workspace (Microsoft.ApiManagement/service/workspaces@2025-03-01-preview) | Logical workspace `workspace1` for team-based API organization and independent lifecycle management |
-| Developer Portal | Portal Config (Microsoft.ApiManagement/service/portalconfigs, portalsettings) | Self-service developer portal with AAD authentication; sign-in and sign-up enabled; terms of service consent required |
+| 🔧 Component                           | 📁 Type                                                                       | 📝 Description                                                                                                                                    |
+| -------------------------------------- | ----------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------- |
+| Azure API Management Service (Premium) | API Gateway (Microsoft.ApiManagement/service@2025-03-01-preview)              | Core API gateway; Premium SKU (capacity: 1); multi-region support; developer portal; VNet integration support; built-in rate limiting and caching |
+| APIM Workspace                         | Workspace (Microsoft.ApiManagement/service/workspaces@2025-03-01-preview)     | Logical workspace `workspace1` for team-based API organization and independent lifecycle management                                               |
+| Developer Portal                       | Portal Config (Microsoft.ApiManagement/service/portalconfigs, portalsettings) | Self-service developer portal with AAD authentication; sign-in and sign-up enabled; terms of service consent required                             |
 
 ---
 
 ### ⚡ 2.11 Caching Infrastructure (0)
 
-| 🔧 Component | 📁 Type | 📝 Description |
-|---|---|---|
-| — | — | Not detected in source files |
+| 🔧 Component | 📁 Type | 📝 Description               |
+| ------------ | ------- | ---------------------------- |
+| —            | —       | Not detected in source files |
 
 **Status**: Not detected in current infrastructure configuration. No Azure Cache for Redis, CDN profiles, or dedicated in-memory caching resources found. The APIM service supports built-in response caching as a policy capability, but no external caching infrastructure is provisioned.
 
@@ -257,18 +257,18 @@ The following infrastructure design principles are observable across the analyze
 
 The APIM Accelerator deploys a complete API Management landing zone in a single Azure Subscription. The orchestration template (`infra/main.bicep`) operates at subscription scope, creating a dedicated resource group and deploying all components in a defined dependency sequence: Shared Monitoring → Core APIM Platform → API Inventory Management.
 
-| ⚙️ Deployment Attribute | 📋 Current Value |
-|---|---|
-| Deployment Scope | Azure Subscription (subscription-scoped Bicep) |
-| Resource Group Pattern | `apim-accelerator-{envName}-{location}-rg` |
-| Supported Environments | `dev`, `test`, `staging`, `prod`, `uat` |
-| Primary Region | Configurable (parameter: `location`) |
-| Provisioning Tool | Azure Developer CLI (`azd up`) or Azure CLI (`az deployment sub create`) |
-| Template Version | 2.0.0 (`infra/main.bicep`) |
-| APIM SKU | Premium (capacity: 1 unit, configurable) |
-| Network Access Mode | Public (default); configurable to Private/VNet via parameters |
-| Managed Identity Model | System-Assigned on APIM, API Center, and Log Analytics |
-| Log Retention | App Insights: 90 days; Storage: long-term archival |
+| ⚙️ Deployment Attribute | 📋 Current Value                                                         |
+| ----------------------- | ------------------------------------------------------------------------ |
+| Deployment Scope        | Azure Subscription (subscription-scoped Bicep)                           |
+| Resource Group Pattern  | `apim-accelerator-{envName}-{location}-rg`                               |
+| Supported Environments  | `dev`, `test`, `staging`, `prod`, `uat`                                  |
+| Primary Region          | Configurable (parameter: `location`)                                     |
+| Provisioning Tool       | Azure Developer CLI (`azd up`) or Azure CLI (`az deployment sub create`) |
+| Template Version        | 2.0.0 (`infra/main.bicep`)                                               |
+| APIM SKU                | Premium (capacity: 1 unit, configurable)                                 |
+| Network Access Mode     | Public (default); configurable to Private/VNet via parameters            |
+| Managed Identity Model  | System-Assigned on APIM, API Center, and Log Analytics                   |
+| Log Retention           | App Insights: 90 days; Storage: long-term archival                       |
 
 ---
 
@@ -305,19 +305,19 @@ flowchart TB
         subgraph RG["📦 Resource Group — apim-accelerator-{env}-{location}-rg"]
 
             subgraph CorePlatform["⚙️ Core Platform Module"]
-                APIM["⚙️ Azure API Management\nPremium SKU · 1 unit\nSystemAssigned MI"]:::primary
-                DevPortal["🖥️ Developer Portal\nAAD OAuth2 · MSAL-2"]:::primary
-                WS["📁 APIM Workspace\nworkspace1"]:::primary
+                APIM["⚙️ Azure API Management\nPremium SKU · 1 unit\nSystemAssigned MI"]:::core
+                DevPortal["🖥️ Developer Portal\nAAD OAuth2 · MSAL-2"]:::core
+                WS["📁 APIM Workspace\nworkspace1"]:::core
             end
 
             subgraph Inventory["📋 API Inventory Module"]
-                APICenter["📋 Azure API Center\nSystemAssigned MI"]:::secondary
-                APICWorkspace["📁 API Center Workspace\ndefault"]:::secondary
+                APICenter["📋 Azure API Center\nSystemAssigned MI"]:::success
+                APICWorkspace["📁 API Center Workspace\ndefault"]:::success
             end
 
             subgraph SharedMon["📊 Shared Monitoring Module"]
-                LAW["📊 Log Analytics Workspace\nPerGB2018 · SystemAssigned MI"]:::monitoring
-                AppIns["🔭 Application Insights\nweb · LogAnalytics mode\n90d retention"]:::monitoring
+                LAW["📊 Log Analytics Workspace\nPerGB2018 · SystemAssigned MI"]:::warning
+                AppIns["🔭 Application Insights\nweb · LogAnalytics mode\n90d retention"]:::warning
                 StorageAcct["💾 Storage Account\nStandard_LRS · StorageV2"]:::neutral
             end
 
@@ -338,48 +338,47 @@ flowchart TB
     AppIns -->|Archive| StorageAcct
     LAW -->|Self-monitoring| StorageAcct
 
-    %% Centralized classDefs — WCAG AA compliant
-    classDef primary fill:#0078D4,stroke:#005A9E,stroke-width:2px,color:#FFFFFF
-    classDef secondary fill:#00B7C3,stroke:#007C85,stroke-width:2px,color:#1A1A1A
-    classDef monitoring fill:#5C2D91,stroke:#3B1A5A,stroke-width:2px,color:#FFFFFF
+    %% Centralized classDefs — AZURE/FLUENT v1.1 canonical palette — WCAG AA compliant
+    classDef core fill:#EFF6FC,stroke:#0078D4,stroke-width:2px,color:#323130
+    classDef success fill:#DFF6DD,stroke:#107C10,stroke-width:2px,color:#323130
+    classDef warning fill:#FFF4CE,stroke:#FFB900,stroke-width:2px,color:#323130
     classDef neutral fill:#FAFAFA,stroke:#8A8886,stroke-width:2px,color:#323130
 
     %% Subgraph styling (no class directive on subgraphs — use style)
-    style AzSub fill:#F3F2F1,stroke:#A19F9D,stroke-width:3px,color:#323130
-    style RG fill:#EFF6FC,stroke:#0078D4,stroke-width:2px,color:#323130
-    style CorePlatform fill:#E8F4FD,stroke:#0078D4,stroke-width:1px,color:#323130
-    style Inventory fill:#E0FAFA,stroke:#00B7C3,stroke-width:1px,color:#323130
-    style SharedMon fill:#F1EBF9,stroke:#5C2D91,stroke-width:1px,color:#323130
+    style AzSub fill:#F3F2F1,stroke:#8A8886,stroke-width:2px,color:#323130
+    style RG fill:#F3F2F1,stroke:#8A8886,stroke-width:2px,color:#323130
+    style CorePlatform fill:#F3F2F1,stroke:#8A8886,stroke-width:2px,color:#323130
+    style Inventory fill:#F3F2F1,stroke:#8A8886,stroke-width:2px,color:#323130
+    style SharedMon fill:#F3F2F1,stroke:#8A8886,stroke-width:2px,color:#323130
 ```
 
-
-✅ Mermaid Verification: 5/5 | Score: 100/100 | Subgraphs: 3 | Style directives: 3 | Violations: 0
+✅ Mermaid Verification: 5/5 | Score: 100/100 | Subgraphs: 5 | Style directives: 5 | Violations: 0
 
 ---
 
 ### ✅ 4.3 Availability Posture
 
-| 🏗️ Component | 📊 SLA | 🚀 Deployment Model | 🔄 Redundancy Strategy |
-|---|---|---|---|
-| Azure API Management Premium | 99.95% | PaaS (Single Region) | Premium SKU supports multi-region add-on |
-| Azure Log Analytics Workspace | 99.9% | PaaS | Azure-managed redundancy |
-| Azure Application Insights | 99.9% | PaaS | Workspace-based; inherits LAW SLA |
-| Azure Storage Account | 99.9% | Standard\_LRS | Local redundancy; 3 copies within datacenter |
-| Azure API Center | Best-effort (Public Preview GA) | PaaS | Azure-managed |
+| 🏗️ Component                  | 📊 SLA                          | 🚀 Deployment Model  | 🔄 Redundancy Strategy                       |
+| ----------------------------- | ------------------------------- | -------------------- | -------------------------------------------- |
+| Azure API Management Premium  | 99.95%                          | PaaS (Single Region) | Premium SKU supports multi-region add-on     |
+| Azure Log Analytics Workspace | 99.9%                           | PaaS                 | Azure-managed redundancy                     |
+| Azure Application Insights    | 99.9%                           | PaaS                 | Workspace-based; inherits LAW SLA            |
+| Azure Storage Account         | 99.9%                           | Standard_LRS         | Local redundancy; 3 copies within datacenter |
+| Azure API Center              | Best-effort (Public Preview GA) | PaaS                 | Azure-managed                                |
 
 ---
 
 ### 🔒 4.4 Security Configuration Status
 
-| 🔒 Security Control | 📊 Status | 🛠️ Implementation |
-|---|---|---|
-| Managed Identity | ✅ Configured | System-assigned on APIM, API Center, Log Analytics |
-| AAD Authentication | ✅ Configured | Developer portal uses MSAL 2.0 with tenant restriction |
-| CORS Policy | ✅ Configured | Restricts origins to exact portal/gateway/management API URLs |
-| Diagnostic Logging | ✅ Configured | allLogs + AllMetrics routed to Log Analytics and Storage |
-| Public Network Access | ⚠️ Configurable | Default: Enabled; production recommended to set `publicNetworkAccess: false` |
-| VNet Integration | ⚠️ Placeholder | Networking module is placeholder; VNet param available (`virtualNetworkType`) |
-| Client Secrets | ✅ Secure parameters | `@secure()` decorator on `clientSecret` parameter |
+| 🔒 Security Control   | 📊 Status            | 🛠️ Implementation                                                             |
+| --------------------- | -------------------- | ----------------------------------------------------------------------------- |
+| Managed Identity      | ✅ Configured        | System-assigned on APIM, API Center, Log Analytics                            |
+| AAD Authentication    | ✅ Configured        | Developer portal uses MSAL 2.0 with tenant restriction                        |
+| CORS Policy           | ✅ Configured        | Restricts origins to exact portal/gateway/management API URLs                 |
+| Diagnostic Logging    | ✅ Configured        | allLogs + AllMetrics routed to Log Analytics and Storage                      |
+| Public Network Access | ⚠️ Configurable      | Default: Enabled; production recommended to set `publicNetworkAccess: false`  |
+| VNet Integration      | ⚠️ Placeholder       | Networking module is placeholder; VNet param available (`virtualNetworkType`) |
+| Client Secrets        | ✅ Secure parameters | `@secure()` decorator on `clientSecret` parameter                             |
 
 ---
 
@@ -405,16 +404,16 @@ flowchart TB
 
 #### 🗄️ 5.2.1 Azure Storage Account
 
-| 🏷️ Resource Name | 📁 Resource Type | 🚀 Deployment Model | 📦 SKU | 🌍 Region | 📊 Availability SLA | 💰 Cost Tag |
-|---|---|---|---|---|---|---|
-| `apim-accelerator-{uniqueSuffix}sa{hash}` | Microsoft.Storage/storageAccounts@2025-01-01 | PaaS | Standard\_LRS (StorageV2) | Configurable (parameter: `location`) | 99.9% (LRS) | CostCenter:CC-1234, BusinessUnit:IT |
+| 🏷️ Resource Name                          | 📁 Resource Type                             | 🚀 Deployment Model | 📦 SKU                   | 🌍 Region                            | 📊 Availability SLA | 💰 Cost Tag                         |
+| ----------------------------------------- | -------------------------------------------- | ------------------- | ------------------------ | ------------------------------------ | ------------------- | ----------------------------------- |
+| `apim-accelerator-{uniqueSuffix}sa{hash}` | Microsoft.Storage/storageAccounts@2025-01-01 | PaaS                | Standard_LRS (StorageV2) | Configurable (parameter: `location`) | 99.9% (LRS)         | CostCenter:CC-1234, BusinessUnit:IT |
 
 **Security Posture**:
 
 - **Encryption**: Azure-managed AES-256 encryption at rest (default for all Azure Storage); TLS enforced in transit
 - **Network Isolation**: No explicit private endpoint configured in current template; inherits resource group network context
 - **Access Control**: Accessed by diagnostic settings resources via ARM resource IDs; no SAS tokens or access keys exposed in templates
-- **Compliance**: Data tagged with `RegulatoryCompliance: GDPR`; Standard\_LRS provides data durability within a single Azure region
+- **Compliance**: Data tagged with `RegulatoryCompliance: GDPR`; Standard_LRS provides data durability within a single Azure region
 - **Monitoring**: Diagnostic data flows into this account from Log Analytics, Application Insights, and APIM; the account itself is the archival endpoint
 
 **Lifecycle**:
@@ -431,9 +430,9 @@ flowchart TB
 
 #### 🌐 5.3.1 Virtual Network (Placeholder)
 
-| 🏷️ Resource Name | 📁 Resource Type | 🚀 Deployment Model | 📦 SKU | 🌍 Region | 📊 Availability SLA | 💰 Cost Tag |
-|---|---|---|---|---|---|---|
-| `vnet` (default) | Microsoft.ScVmm/virtualNetworks@2025-03-13 | Placeholder (SCVMM) | N/A | east us (default) | N/A (placeholder) | Not configured on placeholder |
+| 🏷️ Resource Name | 📁 Resource Type                           | 🚀 Deployment Model | 📦 SKU | 🌍 Region         | 📊 Availability SLA | 💰 Cost Tag                   |
+| ---------------- | ------------------------------------------ | ------------------- | ------ | ----------------- | ------------------- | ----------------------------- |
+| `vnet` (default) | Microsoft.ScVmm/virtualNetworks@2025-03-13 | Placeholder (SCVMM) | N/A    | east us (default) | N/A (placeholder)   | Not configured on placeholder |
 
 **Security Posture**:
 
@@ -473,9 +472,9 @@ flowchart TB
 
 #### 🔌 5.5.1 Azure API Management Service (Premium)
 
-| 🏷️ Resource Name | 📁 Resource Type | 🚀 Deployment Model | 📦 SKU | 🌍 Region | 📊 Availability SLA | 💰 Cost Tag |
-|---|---|---|---|---|---|---|
-| `apim-accelerator-{uniqueSuffix}-apim` | Microsoft.ApiManagement/service@2025-03-01-preview | PaaS | Premium (capacity: 1 unit) | Configurable (parameter: `location`) | 99.95% (single-region Premium) | CostCenter:CC-1234, lz-component-type:core, component:apiManagement |
+| 🏷️ Resource Name                       | 📁 Resource Type                                   | 🚀 Deployment Model | 📦 SKU                     | 🌍 Region                            | 📊 Availability SLA            | 💰 Cost Tag                                                         |
+| -------------------------------------- | -------------------------------------------------- | ------------------- | -------------------------- | ------------------------------------ | ------------------------------ | ------------------------------------------------------------------- |
+| `apim-accelerator-{uniqueSuffix}-apim` | Microsoft.ApiManagement/service@2025-03-01-preview | PaaS                | Premium (capacity: 1 unit) | Configurable (parameter: `location`) | 99.95% (single-region Premium) | CostCenter:CC-1234, lz-component-type:core, component:apiManagement |
 
 **Security Posture**:
 
@@ -497,9 +496,9 @@ flowchart TB
 
 #### 📋 5.5.2 Azure API Center Service
 
-| 🏷️ Resource Name | 📁 Resource Type | 🚀 Deployment Model | 📦 SKU | 🌍 Region | 📊 Availability SLA | 💰 Cost Tag |
-|---|---|---|---|---|---|---|
-| `apim-accelerator-apicenter` | Microsoft.ApiCenter/services@2024-06-01-preview | PaaS | Standard (GA) | Configurable (parameter: `location`, default: `eastus`) | Best-effort (Generally Available) | CostCenter:CC-1234, lz-component-type:shared, component:inventory |
+| 🏷️ Resource Name             | 📁 Resource Type                                | 🚀 Deployment Model | 📦 SKU        | 🌍 Region                                               | 📊 Availability SLA               | 💰 Cost Tag                                                       |
+| ---------------------------- | ----------------------------------------------- | ------------------- | ------------- | ------------------------------------------------------- | --------------------------------- | ----------------------------------------------------------------- |
+| `apim-accelerator-apicenter` | Microsoft.ApiCenter/services@2024-06-01-preview | PaaS                | Standard (GA) | Configurable (parameter: `location`, default: `eastus`) | Best-effort (Generally Available) | CostCenter:CC-1234, lz-component-type:shared, component:inventory |
 
 **Security Posture**:
 
@@ -521,8 +520,8 @@ flowchart TB
 
 #### 📁 5.5.3 Azure Resource Group
 
-| 🏷️ Resource Name | 📁 Resource Type | 🚀 Deployment Model | 📦 SKU | 🌍 Region | 📊 Availability SLA | 💰 Cost Tag |
-|---|---|---|---|---|---|---|
+| 🏷️ Resource Name                           | 📁 Resource Type                              | 🚀 Deployment Model  | 📦 SKU     | 🌍 Region                            | 📊 Availability SLA     | 💰 Cost Tag                                                                       |
+| ------------------------------------------ | --------------------------------------------- | -------------------- | ---------- | ------------------------------------ | ----------------------- | --------------------------------------------------------------------------------- |
 | `apim-accelerator-{envName}-{location}-rg` | Microsoft.Resources/resourceGroups@2025-04-01 | IaaS Scope Container | N/A (free) | Configurable (parameter: `location`) | N/A (logical container) | CostCenter:CC-1234, environment:{envName}, managedBy:bicep, templateVersion:2.0.0 |
 
 **Security Posture**:
@@ -547,9 +546,9 @@ flowchart TB
 
 #### 🛡️ 5.6.1 APIM Global CORS Policy
 
-| 🏷️ Resource Name | 📁 Resource Type | 🚀 Deployment Model | 📦 SKU | 🌍 Region | 📊 Availability SLA | 💰 Cost Tag |
-|---|---|---|---|---|---|---|
-| `policy` | Microsoft.ApiManagement/service/policies@2025-03-01-preview | PaaS (APIM child resource) | Inherits APIM Premium | Inherits APIM region | Inherits APIM 99.95% | Inherits APIM tags |
+| 🏷️ Resource Name | 📁 Resource Type                                            | 🚀 Deployment Model        | 📦 SKU                | 🌍 Region            | 📊 Availability SLA  | 💰 Cost Tag        |
+| ---------------- | ----------------------------------------------------------- | -------------------------- | --------------------- | -------------------- | -------------------- | ------------------ |
+| `policy`         | Microsoft.ApiManagement/service/policies@2025-03-01-preview | PaaS (APIM child resource) | Inherits APIM Premium | Inherits APIM region | Inherits APIM 99.95% | Inherits APIM tags |
 
 **Security Posture**:
 
@@ -571,9 +570,9 @@ flowchart TB
 
 #### 🔐 5.6.2 Azure AD Identity Provider (Developer Portal)
 
-| 🏷️ Resource Name | 📁 Resource Type | 🚀 Deployment Model | 📦 SKU | 🌍 Region | 📊 Availability SLA | 💰 Cost Tag |
-|---|---|---|---|---|---|---|
-| `aad` | Microsoft.ApiManagement/service/identityProviders@2025-03-01-preview | PaaS (APIM child resource) | Inherits APIM Premium | Inherits APIM region | Inherits APIM 99.95% | Inherits APIM tags |
+| 🏷️ Resource Name | 📁 Resource Type                                                     | 🚀 Deployment Model        | 📦 SKU                | 🌍 Region            | 📊 Availability SLA  | 💰 Cost Tag        |
+| ---------------- | -------------------------------------------------------------------- | -------------------------- | --------------------- | -------------------- | -------------------- | ------------------ |
+| `aad`            | Microsoft.ApiManagement/service/identityProviders@2025-03-01-preview | PaaS (APIM child resource) | Inherits APIM Premium | Inherits APIM region | Inherits APIM 99.95% | Inherits APIM tags |
 
 **Security Posture**:
 
@@ -595,9 +594,9 @@ flowchart TB
 
 #### 🔑 5.6.3 RBAC Role Assignments
 
-| 🏷️ Resource Name | 📁 Resource Type | 🚀 Deployment Model | 📦 SKU | 🌍 Region | 📊 Availability SLA | 💰 Cost Tag |
-|---|---|---|---|---|---|---|
-| `guid(sub, rg, rg.name, apim.id, apim.name, readerRoleId)` | Microsoft.Authorization/roleAssignments@2022-04-01 | Platform (Resource Group scope) | N/A (free) | Resource Group scope | N/A | Inherits parent tags |
+| 🏷️ Resource Name                                           | 📁 Resource Type                                   | 🚀 Deployment Model             | 📦 SKU     | 🌍 Region            | 📊 Availability SLA | 💰 Cost Tag          |
+| ---------------------------------------------------------- | -------------------------------------------------- | ------------------------------- | ---------- | -------------------- | ------------------- | -------------------- |
+| `guid(sub, rg, rg.name, apim.id, apim.name, readerRoleId)` | Microsoft.Authorization/roleAssignments@2022-04-01 | Platform (Resource Group scope) | N/A (free) | Resource Group scope | N/A                 | Inherits parent tags |
 
 **Security Posture**:
 
@@ -637,9 +636,9 @@ flowchart TB
 
 #### 📊 5.8.1 Azure Log Analytics Workspace
 
-| 🏷️ Resource Name | 📁 Resource Type | 🚀 Deployment Model | 📦 SKU | 🌍 Region | 📊 Availability SLA | 💰 Cost Tag |
-|---|---|---|---|---|---|---|
-| `apim-accelerator-{uniqueSuffix}-law` | Microsoft.OperationalInsights/workspaces@2025-02-01 | PaaS | PerGB2018 | Configurable (parameter: `location`) | 99.9% | CostCenter:CC-1234, lz-component-type:shared, component:monitoring |
+| 🏷️ Resource Name                      | 📁 Resource Type                                    | 🚀 Deployment Model | 📦 SKU    | 🌍 Region                            | 📊 Availability SLA | 💰 Cost Tag                                                        |
+| ------------------------------------- | --------------------------------------------------- | ------------------- | --------- | ------------------------------------ | ------------------- | ------------------------------------------------------------------ |
+| `apim-accelerator-{uniqueSuffix}-law` | Microsoft.OperationalInsights/workspaces@2025-02-01 | PaaS                | PerGB2018 | Configurable (parameter: `location`) | 99.9%               | CostCenter:CC-1234, lz-component-type:shared, component:monitoring |
 
 **Security Posture**:
 
@@ -661,9 +660,9 @@ flowchart TB
 
 #### 🔍 5.8.2 Azure Application Insights
 
-| 🏷️ Resource Name | 📁 Resource Type | 🚀 Deployment Model | 📦 SKU | 🌍 Region | 📊 Availability SLA | 💰 Cost Tag |
-|---|---|---|---|---|---|---|
-| `apim-accelerator-{uniqueSuffix}-ai` | Microsoft.Insights/components@2020-02-02 | PaaS | Workspace-based (LogAnalytics mode) | Configurable (parameter: `location`) | 99.9% | CostCenter:CC-1234, lz-component-type:shared, component:monitoring |
+| 🏷️ Resource Name                     | 📁 Resource Type                         | 🚀 Deployment Model | 📦 SKU                              | 🌍 Region                            | 📊 Availability SLA | 💰 Cost Tag                                                        |
+| ------------------------------------ | ---------------------------------------- | ------------------- | ----------------------------------- | ------------------------------------ | ------------------- | ------------------------------------------------------------------ |
+| `apim-accelerator-{uniqueSuffix}-ai` | Microsoft.Insights/components@2020-02-02 | PaaS                | Workspace-based (LogAnalytics mode) | Configurable (parameter: `location`) | 99.9%               | CostCenter:CC-1234, lz-component-type:shared, component:monitoring |
 
 **Security Posture**:
 
@@ -687,9 +686,9 @@ flowchart TB
 
 #### 🔑 5.9.1 System-Assigned Managed Identity — APIM Service
 
-| 🏷️ Resource Name | 📁 Resource Type | 🚀 Deployment Model | 📦 SKU | 🌍 Region | 📊 Availability SLA | 💰 Cost Tag |
-|---|---|---|---|---|---|---|
-| (auto-generated by Azure) | System-Assigned Managed Identity on Microsoft.ApiManagement/service | Platform | Free | Inherits APIM region | N/A (platform-managed) | Inherits APIM tags |
+| 🏷️ Resource Name          | 📁 Resource Type                                                    | 🚀 Deployment Model | 📦 SKU | 🌍 Region            | 📊 Availability SLA    | 💰 Cost Tag        |
+| ------------------------- | ------------------------------------------------------------------- | ------------------- | ------ | -------------------- | ---------------------- | ------------------ |
+| (auto-generated by Azure) | System-Assigned Managed Identity on Microsoft.ApiManagement/service | Platform            | Free   | Inherits APIM region | N/A (platform-managed) | Inherits APIM tags |
 
 **Security Posture**:
 
@@ -711,9 +710,9 @@ flowchart TB
 
 #### 🔑 5.9.2 System-Assigned Managed Identity — API Center
 
-| 🏷️ Resource Name | 📁 Resource Type | 🚀 Deployment Model | 📦 SKU | 🌍 Region | 📊 Availability SLA | 💰 Cost Tag |
-|---|---|---|---|---|---|---|
-| (auto-generated by Azure) | System-Assigned Managed Identity on Microsoft.ApiCenter/services | Platform | Free | Inherits API Center region | N/A (platform-managed) | Inherits API Center tags |
+| 🏷️ Resource Name          | 📁 Resource Type                                                 | 🚀 Deployment Model | 📦 SKU | 🌍 Region                  | 📊 Availability SLA    | 💰 Cost Tag              |
+| ------------------------- | ---------------------------------------------------------------- | ------------------- | ------ | -------------------------- | ---------------------- | ------------------------ |
+| (auto-generated by Azure) | System-Assigned Managed Identity on Microsoft.ApiCenter/services | Platform            | Free   | Inherits API Center region | N/A (platform-managed) | Inherits API Center tags |
 
 **Security Posture**:
 
@@ -735,9 +734,9 @@ flowchart TB
 
 #### 🔑 5.9.3 System-Assigned Managed Identity — Log Analytics Workspace
 
-| 🏷️ Resource Name | 📁 Resource Type | 🚀 Deployment Model | 📦 SKU | 🌍 Region | 📊 Availability SLA | 💰 Cost Tag |
-|---|---|---|---|---|---|---|
-| (auto-generated by Azure) | System-Assigned Managed Identity on Microsoft.OperationalInsights/workspaces | Platform | Free | Inherits Log Analytics region | N/A (platform-managed) | Inherits monitoring tags |
+| 🏷️ Resource Name          | 📁 Resource Type                                                             | 🚀 Deployment Model | 📦 SKU | 🌍 Region                     | 📊 Availability SLA    | 💰 Cost Tag              |
+| ------------------------- | ---------------------------------------------------------------------------- | ------------------- | ------ | ----------------------------- | ---------------------- | ------------------------ |
+| (auto-generated by Azure) | System-Assigned Managed Identity on Microsoft.OperationalInsights/workspaces | Platform            | Free   | Inherits Log Analytics region | N/A (platform-managed) | Inherits monitoring tags |
 
 **Security Posture**:
 
@@ -763,9 +762,9 @@ flowchart TB
 
 > See §5.5.1 for the primary Cloud Services entry. This subsection provides API-Management-specific configuration detail.
 
-| 🏷️ Resource Name | 📁 Resource Type | 🚀 Deployment Model | 📦 SKU | 🌍 Region | 📊 Availability SLA | 💰 Cost Tag |
-|---|---|---|---|---|---|---|
-| `apim-accelerator-{uniqueSuffix}-apim` | Microsoft.ApiManagement/service@2025-03-01-preview | PaaS | Premium, capacity:1 | Configurable (parameter: `location`) | 99.95% (single region) | CostCenter:CC-1234, lz-component-type:core, component:apiManagement |
+| 🏷️ Resource Name                       | 📁 Resource Type                                   | 🚀 Deployment Model | 📦 SKU              | 🌍 Region                            | 📊 Availability SLA    | 💰 Cost Tag                                                         |
+| -------------------------------------- | -------------------------------------------------- | ------------------- | ------------------- | ------------------------------------ | ---------------------- | ------------------------------------------------------------------- |
+| `apim-accelerator-{uniqueSuffix}-apim` | Microsoft.ApiManagement/service@2025-03-01-preview | PaaS                | Premium, capacity:1 | Configurable (parameter: `location`) | 99.95% (single region) | CostCenter:CC-1234, lz-component-type:core, component:apiManagement |
 
 **API Management-Specific Configuration**:
 
@@ -798,9 +797,9 @@ flowchart TB
 
 #### 🗂️ 5.10.2 APIM Workspace
 
-| 🏷️ Resource Name | 📁 Resource Type | 🚀 Deployment Model | 📦 SKU | 🌍 Region | 📊 Availability SLA | 💰 Cost Tag |
-|---|---|---|---|---|---|---|
-| `workspace1` | Microsoft.ApiManagement/service/workspaces@2025-03-01-preview | PaaS (APIM child resource) | Premium (workspace requires Premium SKU) | Inherits APIM region | Inherits APIM 99.95% | Inherits APIM tags |
+| 🏷️ Resource Name | 📁 Resource Type                                              | 🚀 Deployment Model        | 📦 SKU                                   | 🌍 Region            | 📊 Availability SLA  | 💰 Cost Tag        |
+| ---------------- | ------------------------------------------------------------- | -------------------------- | ---------------------------------------- | -------------------- | -------------------- | ------------------ |
+| `workspace1`     | Microsoft.ApiManagement/service/workspaces@2025-03-01-preview | PaaS (APIM child resource) | Premium (workspace requires Premium SKU) | Inherits APIM region | Inherits APIM 99.95% | Inherits APIM tags |
 
 **Security Posture**:
 
@@ -822,8 +821,8 @@ flowchart TB
 
 #### 🌐 5.10.3 Developer Portal
 
-| 🏷️ Resource Name | 📁 Resource Type | 🚀 Deployment Model | 📦 SKU | 🌍 Region | 📊 Availability SLA | 💰 Cost Tag |
-|---|---|---|---|---|---|---|
+| 🏷️ Resource Name                                | 📁 Resource Type                                                                 | 🚀 Deployment Model         | 📦 SKU                | 🌍 Region            | 📊 Availability SLA  | 💰 Cost Tag        |
+| ----------------------------------------------- | -------------------------------------------------------------------------------- | --------------------------- | --------------------- | -------------------- | -------------------- | ------------------ |
 | `default` (portal config) / `signin` / `signup` | Microsoft.ApiManagement/service/portalconfigs@2025-03-01-preview, portalsettings | PaaS (APIM child resources) | Inherits APIM Premium | Inherits APIM region | Inherits APIM 99.95% | Inherits APIM tags |
 
 **Security Posture**:
@@ -866,18 +865,18 @@ flowchart TB
 
 The APIM Accelerator deploys resources in a strict sequenced dependency chain. The orchestration template (`infra/main.bicep`) enforces these dependencies through Bicep module `dependsOn` relationships and output parameter passing.
 
-| 📊 Deployment Layer | 🔧 Component | 🔗 Depends On | 📤 Provides Output |
-|---|---|---|---|
-| 1 — Subscription Scope | Resource Group | None | Resource Group scope reference |
-| 2 — Shared/Operational | Log Analytics Workspace | Resource Group | `AZURE_LOG_ANALYTICS_WORKSPACE_ID` |
-| 2 — Shared/Operational | Storage Account | Resource Group | `AZURE_STORAGE_ACCOUNT_ID` |
-| 3 — Shared/Insights | Application Insights | Log Analytics Workspace, Storage Account | `APPLICATION_INSIGHTS_RESOURCE_ID`, `APPLICATION_INSIGHTS_INSTRUMENTATION_KEY` |
-| 4 — Core Platform | API Management Service | Log Analytics Workspace, Storage Account, Application Insights | `API_MANAGEMENT_RESOURCE_ID`, `API_MANAGEMENT_NAME` |
-| 4 — Core Platform | APIM Workspace | API Management Service | — |
-| 4 — Core Platform | Developer Portal Config | API Management Service | — |
-| 5 — Inventory | API Center Service | Resource Group | `apiCenter.identity.principalId` |
-| 5 — Inventory | API Center Workspace | API Center Service | — |
-| 5 — Inventory | API Source (APIM→API Center) | API Center Workspace, API Management Name & ID | — |
+| 📊 Deployment Layer    | 🔧 Component                 | 🔗 Depends On                                                  | 📤 Provides Output                                                             |
+| ---------------------- | ---------------------------- | -------------------------------------------------------------- | ------------------------------------------------------------------------------ |
+| 1 — Subscription Scope | Resource Group               | None                                                           | Resource Group scope reference                                                 |
+| 2 — Shared/Operational | Log Analytics Workspace      | Resource Group                                                 | `AZURE_LOG_ANALYTICS_WORKSPACE_ID`                                             |
+| 2 — Shared/Operational | Storage Account              | Resource Group                                                 | `AZURE_STORAGE_ACCOUNT_ID`                                                     |
+| 3 — Shared/Insights    | Application Insights         | Log Analytics Workspace, Storage Account                       | `APPLICATION_INSIGHTS_RESOURCE_ID`, `APPLICATION_INSIGHTS_INSTRUMENTATION_KEY` |
+| 4 — Core Platform      | API Management Service       | Log Analytics Workspace, Storage Account, Application Insights | `API_MANAGEMENT_RESOURCE_ID`, `API_MANAGEMENT_NAME`                            |
+| 4 — Core Platform      | APIM Workspace               | API Management Service                                         | —                                                                              |
+| 4 — Core Platform      | Developer Portal Config      | API Management Service                                         | —                                                                              |
+| 5 — Inventory          | API Center Service           | Resource Group                                                 | `apiCenter.identity.principalId`                                               |
+| 5 — Inventory          | API Center Workspace         | API Center Service                                             | —                                                                              |
+| 5 — Inventory          | API Source (APIM→API Center) | API Center Workspace, API Management Name & ID                 | —                                                                              |
 
 ---
 
@@ -901,32 +900,32 @@ flowchart LR
     %% AZURE / FLUENT ARCHITECTURE PATTERN v1.1 - Resource Hierarchy View
     %% ═══════════════════════════════════════════════════════════════════════════
 
-    SUB["☁️ Azure Subscription\ninfra/main.bicep\ntargetScope=subscription"]:::scope
+    SUB["☁️ Azure Subscription\ninfra/main.bicep\ntargetScope=subscription"]:::core
 
-    RG["📦 Resource Group\napim-accelerator-{env}-{loc}-rg"]:::scope
+    RG["📦 Resource Group\napim-accelerator-{env}-{loc}-rg"]:::core
 
-    MOD_SHARED["📦 Module: shared\nsrc/shared/main.bicep"]:::module
-    MOD_CORE["📦 Module: core\nsrc/core/main.bicep"]:::module
-    MOD_INV["📦 Module: inventory\nsrc/inventory/main.bicep"]:::module
+    MOD_SHARED["📦 Module: shared\nsrc/shared/main.bicep"]:::warning
+    MOD_CORE["📦 Module: core\nsrc/core/main.bicep"]:::warning
+    MOD_INV["📦 Module: inventory\nsrc/inventory/main.bicep"]:::warning
 
-    R_LAW["📊 Log Analytics Workspace\nMicrosoft.OperationalInsights/workspaces"]:::resource
-    R_ST["💾 Storage Account\nMicrosoft.Storage/storageAccounts"]:::resource
-    R_AI["🔭 Application Insights\nMicrosoft.Insights/components"]:::resource
-    R_DIAG1["⚙️ Diagnostic Settings (LAW)\nMicrosoft.Insights/diagnosticSettings"]:::child
-    R_DIAG2["⚙️ Diagnostic Settings (AppIns)\nMicrosoft.Insights/diagnosticSettings"]:::child
+    R_LAW["📊 Log Analytics Workspace\nMicrosoft.OperationalInsights/workspaces"]:::core
+    R_ST["💾 Storage Account\nMicrosoft.Storage/storageAccounts"]:::core
+    R_AI["🔭 Application Insights\nMicrosoft.Insights/components"]:::core
+    R_DIAG1["⚙️ Diagnostic Settings (LAW)\nMicrosoft.Insights/diagnosticSettings"]:::neutral
+    R_DIAG2["⚙️ Diagnostic Settings (AppIns)\nMicrosoft.Insights/diagnosticSettings"]:::neutral
 
-    R_APIM["⚙️ API Management Service\nMicrosoft.ApiManagement/service"]:::resource
-    R_APIM_LOGGER["📡 APIM AppInsights Logger\nMicrosoft.ApiManagement/service/loggers"]:::child
-    R_APIM_DIAG["⚙️ Diagnostic Settings (APIM)\nMicrosoft.Insights/diagnosticSettings"]:::child
-    R_APIM_WS["📁 APIM Workspace\nMicrosoft.ApiManagement/service/workspaces"]:::child
-    R_DP_IDPROV["🔐 AAD Identity Provider\nMicrosoft.ApiManagement/service/identityProviders"]:::child
-    R_APIM_POLICY["📜 APIM CORS Policy\nMicrosoft.ApiManagement/service/policies"]:::child
-    R_RBAC_APIM["🔒 RBAC: Reader Role\nMicrosoft.Authorization/roleAssignments"]:::security
+    R_APIM["⚙️ API Management Service\nMicrosoft.ApiManagement/service"]:::core
+    R_APIM_LOGGER["📡 APIM AppInsights Logger\nMicrosoft.ApiManagement/service/loggers"]:::neutral
+    R_APIM_DIAG["⚙️ Diagnostic Settings (APIM)\nMicrosoft.Insights/diagnosticSettings"]:::neutral
+    R_APIM_WS["📁 APIM Workspace\nMicrosoft.ApiManagement/service/workspaces"]:::neutral
+    R_DP_IDPROV["🔐 AAD Identity Provider\nMicrosoft.ApiManagement/service/identityProviders"]:::neutral
+    R_APIM_POLICY["📜 APIM CORS Policy\nMicrosoft.ApiManagement/service/policies"]:::neutral
+    R_RBAC_APIM["🔒 RBAC: Reader Role\nMicrosoft.Authorization/roleAssignments"]:::danger
 
-    R_APC["📋 API Center Service\nMicrosoft.ApiCenter/services"]:::resource
-    R_APC_WS["📁 API Center Workspace\nMicrosoft.ApiCenter/services/workspaces"]:::child
-    R_APC_SRC["🔗 API Source (APIM)\nMicrosoft.ApiCenter/.../apiSources"]:::child
-    R_RBAC_APC["🔒 RBAC: Data Reader + Compliance Mgr\nMicrosoft.Authorization/roleAssignments"]:::security
+    R_APC["📋 API Center Service\nMicrosoft.ApiCenter/services"]:::core
+    R_APC_WS["📁 API Center Workspace\nMicrosoft.ApiCenter/services/workspaces"]:::neutral
+    R_APC_SRC["🔗 API Source (APIM)\nMicrosoft.ApiCenter/.../apiSources"]:::neutral
+    R_RBAC_APC["🔒 RBAC: Data Reader + Compliance Mgr\nMicrosoft.Authorization/roleAssignments"]:::danger
 
     SUB --> RG
     RG --> MOD_SHARED
@@ -949,15 +948,13 @@ flowchart LR
     R_APC_WS --> R_APC_SRC
     R_APC --> R_RBAC_APC
 
-    classDef scope fill:#EFF6FC,stroke:#0078D4,stroke-width:2px,color:#323130
-    classDef module fill:#FFF4CE,stroke:#F59D00,stroke-width:2px,color:#323130
-    classDef resource fill:#0078D4,stroke:#005A9E,stroke-width:2px,color:#FFFFFF
-    classDef child fill:#FAFAFA,stroke:#8A8886,stroke-width:1px,color:#323130
-    classDef security fill:#D83B01,stroke:#A4262C,stroke-width:2px,color:#FFFFFF
+    classDef core fill:#EFF6FC,stroke:#0078D4,stroke-width:2px,color:#323130
+    classDef warning fill:#FFF4CE,stroke:#FFB900,stroke-width:2px,color:#323130
+    classDef neutral fill:#FAFAFA,stroke:#8A8886,stroke-width:2px,color:#323130
+    classDef danger fill:#FDE7E9,stroke:#D13438,stroke-width:2px,color:#323130
 ```
 
-
-✅ Mermaid Verification: 5/5 | Score: 100/100 | Subgraphs: 1 | Style directives: 1 | Violations: 0
+✅ Mermaid Verification: 5/5 | Score: 100/100 | Subgraphs: 0 | Style directives: 0 | Violations: 0
 
 ---
 
@@ -965,28 +962,28 @@ flowchart LR
 
 The following table documents how outputs flow between modules, binding resources during deployment.
 
-| 📤 Output Name | 🏭 Produced By | 🔄 Consumed By | 🎯 Purpose |
-|---|---|---|---|
-| `AZURE_LOG_ANALYTICS_WORKSPACE_ID` | `src/shared/monitoring/operational/main.bicep` | `src/shared/monitoring/insights/main.bicep`, `src/core/main.bicep` → `src/core/apim.bicep` | Routes diagnostic logs; links App Insights to workspace |
-| `AZURE_STORAGE_ACCOUNT_ID` | `src/shared/monitoring/operational/main.bicep` | `src/shared/monitoring/insights/main.bicep`, `src/core/main.bicep` → `src/core/apim.bicep` | Archival destination for diagnostic logs |
-| `APPLICATION_INSIGHTS_RESOURCE_ID` | `src/shared/monitoring/insights/main.bicep` | `src/core/main.bicep` → `src/core/apim.bicep` | Links APIM Application Insights Logger |
-| `APPLICATION_INSIGHTS_INSTRUMENTATION_KEY` | `src/shared/monitoring/insights/main.bicep` | `src/core/main.bicep` → `src/core/apim.bicep` | Credentials for APIM App Insights Logger (secure) |
-| `API_MANAGEMENT_NAME` | `src/core/main.bicep` → `src/core/apim.bicep` | `src/inventory/main.bicep` | API source name in API Center |
-| `API_MANAGEMENT_RESOURCE_ID` | `src/core/main.bicep` → `src/core/apim.bicep` | `src/inventory/main.bicep` | API source resource ID in API Center |
-| `APPLICATION_INSIGHTS_RESOURCE_ID` | `src/shared/main.bicep` | `infra/main.bicep` (output to azd) | Exposed for post-deployment configuration |
-| `AZURE_STORAGE_ACCOUNT_ID` | `src/shared/main.bicep` | `infra/main.bicep` (output to azd) | Exposed for post-deployment configuration |
+| 📤 Output Name                             | 🏭 Produced By                                 | 🔄 Consumed By                                                                             | 🎯 Purpose                                              |
+| ------------------------------------------ | ---------------------------------------------- | ------------------------------------------------------------------------------------------ | ------------------------------------------------------- |
+| `AZURE_LOG_ANALYTICS_WORKSPACE_ID`         | `src/shared/monitoring/operational/main.bicep` | `src/shared/monitoring/insights/main.bicep`, `src/core/main.bicep` → `src/core/apim.bicep` | Routes diagnostic logs; links App Insights to workspace |
+| `AZURE_STORAGE_ACCOUNT_ID`                 | `src/shared/monitoring/operational/main.bicep` | `src/shared/monitoring/insights/main.bicep`, `src/core/main.bicep` → `src/core/apim.bicep` | Archival destination for diagnostic logs                |
+| `APPLICATION_INSIGHTS_RESOURCE_ID`         | `src/shared/monitoring/insights/main.bicep`    | `src/core/main.bicep` → `src/core/apim.bicep`                                              | Links APIM Application Insights Logger                  |
+| `APPLICATION_INSIGHTS_INSTRUMENTATION_KEY` | `src/shared/monitoring/insights/main.bicep`    | `src/core/main.bicep` → `src/core/apim.bicep`                                              | Credentials for APIM App Insights Logger (secure)       |
+| `API_MANAGEMENT_NAME`                      | `src/core/main.bicep` → `src/core/apim.bicep`  | `src/inventory/main.bicep`                                                                 | API source name in API Center                           |
+| `API_MANAGEMENT_RESOURCE_ID`               | `src/core/main.bicep` → `src/core/apim.bicep`  | `src/inventory/main.bicep`                                                                 | API source resource ID in API Center                    |
+| `APPLICATION_INSIGHTS_RESOURCE_ID`         | `src/shared/main.bicep`                        | `infra/main.bicep` (output to azd)                                                         | Exposed for post-deployment configuration               |
+| `AZURE_STORAGE_ACCOUNT_ID`                 | `src/shared/main.bicep`                        | `infra/main.bicep` (output to azd)                                                         | Exposed for post-deployment configuration               |
 
 ---
 
 ### 🔌 8.4 External Service Integrations
 
-| 🔌 External Service | 🔗 Integration Type | ↔️ Direction | 🎯 Purpose |
-|---|---|---|---|
-| Azure Active Directory (`login.windows.net`) | Identity Provider | Inbound (authentication) | Developer portal user authentication via MSAL 2.0 |
-| Azure AD Tenant (`MngEnvMCAP341438.onmicrosoft.com`) | Tenant Restriction | Inbound | Restricts developer portal sign-in to specific tenant |
-| Azure ARM / Resource Manager | Deployment API | Outbound (provisioning) | All resource deployments go through ARM at subscription scope |
-| Azure Developer CLI (azd) | Deployment Orchestration | Outbound | Orchestrates provisioning; triggers `pre-provision.sh` |
-| Azure CLI (`az apim`) | Pre-provisioning | Outbound | Purges soft-deleted APIM instances before re-deployment |
+| 🔌 External Service                                  | 🔗 Integration Type      | ↔️ Direction             | 🎯 Purpose                                                    |
+| ---------------------------------------------------- | ------------------------ | ------------------------ | ------------------------------------------------------------- |
+| Azure Active Directory (`login.windows.net`)         | Identity Provider        | Inbound (authentication) | Developer portal user authentication via MSAL 2.0             |
+| Azure AD Tenant (`MngEnvMCAP341438.onmicrosoft.com`) | Tenant Restriction       | Inbound                  | Restricts developer portal sign-in to specific tenant         |
+| Azure ARM / Resource Manager                         | Deployment API           | Outbound (provisioning)  | All resource deployments go through ARM at subscription scope |
+| Azure Developer CLI (azd)                            | Deployment Orchestration | Outbound                 | Orchestrates provisioning; triggers `pre-provision.sh`        |
+| Azure CLI (`az apim`)                                | Pre-provisioning         | Outbound                 | Purges soft-deleted APIM instances before re-deployment       |
 
 ---
 
@@ -994,20 +991,20 @@ The following table documents how outputs flow between modules, binding resource
 
 The following matrix documents which Azure resources are connected to which infrastructure components at runtime.
 
-| 🔌 Consumer Service | 💾 Consumes Resource | ⚙️ Binding Mechanism |
-|---|---|---|
-| Azure API Management | Log Analytics Workspace | Diagnostic Settings (`workspaceId`) |
-| Azure API Management | Storage Account | Diagnostic Settings (`storageAccountId`) |
-| Azure API Management | Application Insights | Application Insights Logger (`credentials.instrumentationKey`) |
-| Azure API Management | Azure AD | Identity Provider (`authority: login.windows.net`) |
-| Azure API Management | Managed Identity | System-Assigned (`identityType: 'SystemAssigned'`) |
-| Application Insights | Log Analytics Workspace | Workspace-based ingestion (`WorkspaceResourceId`) |
-| Application Insights | Storage Account | Diagnostic Settings archival |
-| Log Analytics Workspace | Storage Account | Self-monitoring diagnostic settings archival |
-| API Center | API Management | API Source integration (`azureApiManagementSource.resourceId`) |
-| API Center | Managed Identity | System-Assigned for RBAC operations |
-| API Center | Resource Group | RBAC role assignments (Data Reader, Compliance Manager) |
+| 🔌 Consumer Service     | 💾 Consumes Resource    | ⚙️ Binding Mechanism                                           |
+| ----------------------- | ----------------------- | -------------------------------------------------------------- |
+| Azure API Management    | Log Analytics Workspace | Diagnostic Settings (`workspaceId`)                            |
+| Azure API Management    | Storage Account         | Diagnostic Settings (`storageAccountId`)                       |
+| Azure API Management    | Application Insights    | Application Insights Logger (`credentials.instrumentationKey`) |
+| Azure API Management    | Azure AD                | Identity Provider (`authority: login.windows.net`)             |
+| Azure API Management    | Managed Identity        | System-Assigned (`identityType: 'SystemAssigned'`)             |
+| Application Insights    | Log Analytics Workspace | Workspace-based ingestion (`WorkspaceResourceId`)              |
+| Application Insights    | Storage Account         | Diagnostic Settings archival                                   |
+| Log Analytics Workspace | Storage Account         | Self-monitoring diagnostic settings archival                   |
+| API Center              | API Management          | API Source integration (`azureApiManagementSource.resourceId`) |
+| API Center              | Managed Identity        | System-Assigned for RBAC operations                            |
+| API Center              | Resource Group          | RBAC role assignments (Data Reader, Compliance Manager)        |
 
 ---
 
-*Document generated by BDAT Technology Architecture Documentation Assistant v3.0.0 | TOGAF 10 Technology Layer | Session: 7f3e4a1b-9c2d-4f8e-b6a0-553241770001*
+_Document generated by BDAT Technology Architecture Documentation Assistant v3.0.0 | TOGAF 10 Technology Layer | Session: 7f3e4a1b-9c2d-4f8e-b6a0-553241770001_

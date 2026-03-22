@@ -125,10 +125,10 @@ flowchart TB
     end
 
     subgraph AZURE["☁️ Azure Platform"]
-        LAW("🗄️ Log Analytics Workspace"):::data
-        AI("📈 Application Insights"):::data
-        APICENTER("🗂️ Azure API Center"):::data
-        SA("💾 Storage Account"):::data
+        LAW("🗄️ Log Analytics Workspace"):::neutral
+        AI("📈 Application Insights"):::neutral
+        APICENTER("🗂️ Azure API Center"):::neutral
+        SA("💾 Storage Account"):::neutral
     end
 
     PE -->|"azd up / azd provision"| PIPELINE
@@ -151,7 +151,6 @@ flowchart TB
 
     classDef neutral fill:#FAFAFA,stroke:#8A8886,stroke-width:2px,color:#323130
     classDef core fill:#EFF6FC,stroke:#0078D4,stroke-width:2px,color:#323130
-    classDef data fill:#F0E6FA,stroke:#8764B8,stroke-width:2px,color:#323130
 
     style ACTORS fill:#F3F2F1,stroke:#8A8886,stroke-width:2px,color:#323130
     style PLATFORM fill:#F3F2F1,stroke:#0078D4,stroke-width:2px,color:#323130
@@ -202,7 +201,7 @@ flowchart TB
     end
 
     subgraph OBS["📊 Observability Tier"]
-        S4("📊 Monitoring Aggregation Service"):::data
+        S4("📊 Monitoring Aggregation Service"):::neutral
     end
 
     subgraph ORCH["🔧 Orchestration Tier (Bicep Modules)"]
@@ -228,7 +227,6 @@ flowchart TB
     classDef neutral fill:#FAFAFA,stroke:#8A8886,stroke-width:2px,color:#323130
     classDef core fill:#EFF6FC,stroke:#0078D4,stroke-width:2px,color:#323130
     classDef success fill:#DFF6DD,stroke:#107C10,stroke-width:2px,color:#323130
-    classDef data fill:#F0E6FA,stroke:#8764B8,stroke-width:2px,color:#323130
 
     style GATEWAY fill:#F3F2F1,stroke:#0078D4,stroke-width:2px,color:#323130
     style CATALOG fill:#F3F2F1,stroke:#107C10,stroke-width:2px,color:#323130
@@ -271,8 +269,8 @@ flowchart TB
     %% ═══════════════════════════════════════════════════════════════════════════
 
     subgraph SHARED_INT["🔷 Shared Integration Layer"]
-        SH_SVC("📊 Monitoring Service Bundle"):::data
-        SH_OUT("🔌 Monitoring Outputs Interface"):::data
+        SH_SVC("📊 Monitoring Service Bundle"):::neutral
+        SH_OUT("🔌 Monitoring Outputs Interface"):::neutral
     end
 
     subgraph CORE_INT["⚙️ Core Integration Layer"]
@@ -296,7 +294,6 @@ flowchart TB
     classDef neutral fill:#FAFAFA,stroke:#8A8886,stroke-width:2px,color:#323130
     classDef core fill:#EFF6FC,stroke:#0078D4,stroke-width:2px,color:#323130
     classDef success fill:#DFF6DD,stroke:#107C10,stroke-width:2px,color:#323130
-    classDef data fill:#F0E6FA,stroke:#8764B8,stroke-width:2px,color:#323130
 
     style SHARED_INT fill:#F3F2F1,stroke:#8764B8,stroke-width:2px,color:#323130
     style CORE_INT fill:#F3F2F1,stroke:#0078D4,stroke-width:2px,color:#323130
@@ -530,9 +527,9 @@ flowchart TB
     %% ═══════════════════════════════════════════════════════════════════════════
 
     subgraph SHARED_LAYER["📊 Shared Monitoring Layer (src/shared/)"]
-        LAW("🗄️ Log Analytics Workspace"):::data
-        APPINS("📈 Application Insights"):::data
-        SA("💾 Storage Account"):::data
+        LAW("🗄️ Log Analytics Workspace"):::neutral
+        APPINS("📈 Application Insights"):::neutral
+        SA("💾 Storage Account"):::neutral
     end
 
     subgraph CORE_LAYER["⚙️ Core Platform Layer (src/core/)"]
@@ -558,7 +555,6 @@ flowchart TB
     classDef neutral fill:#FAFAFA,stroke:#8A8886,stroke-width:2px,color:#323130
     classDef core fill:#EFF6FC,stroke:#0078D4,stroke-width:2px,color:#323130
     classDef success fill:#DFF6DD,stroke:#107C10,stroke-width:2px,color:#323130
-    classDef data fill:#F0E6FA,stroke:#8764B8,stroke-width:2px,color:#323130
 
     style SHARED_LAYER fill:#F3F2F1,stroke:#8764B8,stroke-width:2px,color:#323130
     style CORE_LAYER fill:#F3F2F1,stroke:#0078D4,stroke-width:2px,color:#323130
@@ -1236,14 +1232,14 @@ flowchart TB
 
     subgraph SHARED_LAYER["📊 Shared Layer (Monitoring)"]
         SHAREDMOD("📦 Shared Module"):::neutral
-        LAW("🗄️ Log Analytics"):::data
-        SA("💾 Storage Account"):::data
+        LAW("🗄️ Log Analytics"):::neutral
+        SA("💾 Storage Account"):::neutral
     end
 
     subgraph CORE_LAYER["⚙️ Core Layer (API Management)"]
         COREMOD("📦 Core Module"):::neutral
         APIM("⚙️ APIM Gateway"):::core
-        APPINS("📈 App Insights"):::data
+        APPINS("📈 App Insights"):::neutral
         PORTAL("🌐 Developer Portal"):::core
         WS("📁 Workspace"):::core
     end
@@ -1280,7 +1276,6 @@ flowchart TB
 
     classDef neutral fill:#FAFAFA,stroke:#8A8886,stroke-width:2px,color:#323130
     classDef core fill:#EFF6FC,stroke:#0078D4,stroke-width:2px,color:#323130
-    classDef data fill:#F0E6FA,stroke:#8764B8,stroke-width:2px,color:#323130
 
     style DEPLOY fill:#F3F2F1,stroke:#8A8886,stroke-width:2px,color:#323130
     style SHARED_LAYER fill:#F3F2F1,stroke:#8764B8,stroke-width:2px,color:#323130
@@ -1343,9 +1338,9 @@ flowchart LR
     end
 
     subgraph SINKS["📥 Data Sinks"]
-        LAW("🗄️ Log Analytics"):::data
-        APPINS("📈 Application Insights"):::data
-        SA("💾 Storage Account"):::data
+        LAW("🗄️ Log Analytics"):::neutral
+        APPINS("📈 Application Insights"):::neutral
+        SA("💾 Storage Account"):::neutral
     end
 
     subgraph IDENTITY["🔒 Identity Plane"]
@@ -1363,7 +1358,6 @@ flowchart LR
     classDef neutral fill:#FAFAFA,stroke:#8A8886,stroke-width:2px,color:#323130
     classDef core fill:#EFF6FC,stroke:#0078D4,stroke-width:2px,color:#323130
     classDef success fill:#DFF6DD,stroke:#107C10,stroke-width:2px,color:#323130
-    classDef data fill:#F0E6FA,stroke:#8764B8,stroke-width:2px,color:#323130
     classDef warning fill:#FFF4CE,stroke:#FFB900,stroke-width:2px,color:#323130
 
     style SOURCES fill:#F3F2F1,stroke:#0078D4,stroke-width:2px,color:#323130
