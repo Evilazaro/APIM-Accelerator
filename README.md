@@ -101,16 +101,6 @@ flowchart TB
     accTitle: APIM Accelerator Landing Zone Architecture
     accDescr: End-to-end architecture of the APIM Accelerator showing azd CLI orchestration, Bicep modules, and deployed Azure resources grouped by shared monitoring, core platform, and API inventory layers
 
-    %% ═══════════════════════════════════════════════════════════════════════════
-    %% AZURE / FLUENT ARCHITECTURE PATTERN v1.1
-    %% (Semantic + Structural + Font + Accessibility Governance)
-    %% ═══════════════════════════════════════════════════════════════════════════
-    %% PHASE 1 - FLUENT UI: All styling uses approved Fluent UI palette only
-    %% PHASE 2 - GROUPS: Every subgraph has semantic color via style directive
-    %% PHASE 3 - COMPONENTS: Every node has semantic classDef + icon prefix
-    %% PHASE 4 - ACCESSIBILITY: accTitle/accDescr present, WCAG AA contrast
-    %% PHASE 5 - STANDARD: Governance block present, classDefs centralized
-    %% ═══════════════════════════════════════════════════════════════════════════
 
     subgraph devEnv["🖥️ Developer Environment"]
         direction TB
@@ -157,17 +147,7 @@ flowchart TB
     stg -->|"log archival"| apim
     apim -->|"linked source"| apiCenter
 
-    style devEnv fill:#EFF6FC,stroke:#0078D4,stroke-width:2px,color:#323130
-    style azureSub fill:#F3F2F1,stroke:#8A8886,stroke-width:2px,color:#323130
-    style sharedLayer fill:#FAFAFA,stroke:#8A8886,stroke-width:2px,color:#323130
-    style coreLayer fill:#EFF6FC,stroke:#0078D4,stroke-width:2px,color:#323130
-    style inventoryLayer fill:#FAFAFA,stroke:#8A8886,stroke-width:2px,color:#323130
 
-    %% Centralized semantic classDefs (AZURE/FLUENT v1.1 — Phase 5 compliant)
-    classDef neutral fill:#FAFAFA,stroke:#8A8886,stroke-width:2px,color:#323130
-    classDef core fill:#EFF6FC,stroke:#0078D4,stroke-width:2px,color:#323130
-    classDef success fill:#DFF6DD,stroke:#107C10,stroke-width:2px,color:#323130
-    classDef warning fill:#FFF4CE,stroke:#FFB900,stroke-width:2px,color:#323130
 ```
 
 ✅ Mermaid Verification: 5/5 | Score: 100/100 | Diagrams: 1 | Violations: 0

@@ -46,23 +46,6 @@ The core business strategy is to compress the time-to-production for an enterpri
 
 The architecture follows a three-tier delivery model: **Shared Monitoring Infrastructure** (foundation layer), **Core API Management Platform** (API gateway, developer portal, and workspace management), and **API Inventory Layer** (governance, cataloging, and API discovery). All components are configuration-driven via `infra/settings.yaml`, enabling zero-code customization for standard deployments. Average confidence across all identified components is **0.74 (MEDIUM)**, reflecting that business layer signals are embedded in IaC documentation and configuration rather than dedicated business domain files — a characteristic of this repository's Technology Platform Engineering focus.
 
-**📊 Component Inventory Summary**:
-
-| 🏷️ Component Type            | 🔢 Count | 📈 Avg Maturity Level |
-| ---------------------------- | -------- | --------------------- |
-| 🎯 Business Strategy         | 1        | 3 – Defined           |
-| ⚡ Business Capabilities     | 10       | 3–4 – Defined/Managed |
-| 🔄 Value Streams             | 1        | 3 – Defined           |
-| 🔧 Business Processes        | 5        | 3 – Defined           |
-| 🏢 Business Services         | 5        | 3–4 – Defined/Managed |
-| ⚙️ Business Functions        | 6        | 3–4 – Defined/Managed |
-| 👥 Business Roles & Actors   | 6        | 3 – Defined           |
-| 📋 Business Rules            | 8        | 4 – Managed           |
-| ⚡ Business Events           | 6        | 3 – Defined           |
-| 🗃️ Business Objects/Entities | 8        | 3–4 – Defined/Managed |
-| 📏 KPIs & Metrics            | 6        | 3–4 – Defined/Managed |
-| **🧮 Total**                 | **62**   | **3.3 – Defined**     |
-
 ---
 
 ## 2. 🗺️ Architecture Landscape
@@ -290,16 +273,7 @@ flowchart TB
     accTitle: APIM Accelerator Business Capability Map
     accDescr: Four business capability domains with ten grouped capabilities — API Platform Delivery, Developer Experience, API Governance and Security, and Operational Excellence — sourced from README.md features table and src Bicep modules
 
-    %% ═══════════════════════════════════════════════════════════════════════════
-    %% AZURE / FLUENT ARCHITECTURE PATTERN v1.1
-    %% (Semantic + Structural + Font + Accessibility Governance)
-    %% ═══════════════════════════════════════════════════════════════════════════
-    %% PHASE 1 - FLUENT UI: All styling uses approved Fluent UI palette only
-    %% PHASE 2 - GROUPS: Every subgraph has semantic color via style directive
-    %% PHASE 3 - COMPONENTS: Every node has semantic classDef + icon prefix
-    %% PHASE 4 - ACCESSIBILITY: accTitle/accDescr present, WCAG AA contrast
-    %% PHASE 5 - STANDARD: Governance block present, classDefs centralized
-    %% ═══════════════════════════════════════════════════════════════════════════
+
 
     subgraph platformDelivery["⚙️ API Platform Delivery"]
         cap1("🚀 One-Command Deployment"):::core
@@ -329,15 +303,7 @@ flowchart TB
     cap8 --> cap4
     cap7 --> cap10
 
-    style platformDelivery fill:#EFF6FC,stroke:#0078D4,stroke-width:2px,color:#323130
-    style devExp fill:#DFF6DD,stroke:#107C10,stroke-width:2px,color:#323130
-    style apiGov fill:#FFF4CE,stroke:#FFB900,stroke-width:2px,color:#323130
-    style operations fill:#FAFAFA,stroke:#8A8886,stroke-width:2px,color:#323130
 
-    classDef core fill:#EFF6FC,stroke:#0078D4,stroke-width:2px,color:#323130
-    classDef success fill:#DFF6DD,stroke:#107C10,stroke-width:2px,color:#323130
-    classDef warning fill:#FFF4CE,stroke:#FFB900,stroke-width:2px,color:#323130
-    classDef neutral fill:#FAFAFA,stroke:#8A8886,stroke-width:2px,color:#323130
 ```
 
 ✅ Mermaid Verification: 5/5 | Score: 100/100 | Diagrams: 1 | Violations: 0
@@ -360,16 +326,6 @@ flowchart LR
     accTitle: API Platform Provisioning Process Flow
     accDescr: End-to-end provisioning sequence from platform engineer authentication through azd-up trigger, pre-provision hook soft-delete cleanup, layered Bicep deployment of monitoring then APIM then inventory, to operational platform outcome — sourced from README.md and azure.yaml
 
-    %% ═══════════════════════════════════════════════════════════════════════════
-    %% AZURE / FLUENT ARCHITECTURE PATTERN v1.1
-    %% (Semantic + Structural + Font + Accessibility Governance)
-    %% ═══════════════════════════════════════════════════════════════════════════
-    %% PHASE 1 - FLUENT UI: All styling uses approved Fluent UI palette only
-    %% PHASE 2 - GROUPS: Every subgraph has semantic color via style directive
-    %% PHASE 3 - COMPONENTS: Every node has semantic classDef + icon prefix
-    %% PHASE 4 - ACCESSIBILITY: accTitle/accDescr present, WCAG AA contrast
-    %% PHASE 5 - STANDARD: Governance block present, classDefs centralized
-    %% ═══════════════════════════════════════════════════════════════════════════
 
     subgraph initiation["🖥️ Initiation"]
         actor("👤 Platform Engineer"):::neutral
@@ -398,15 +354,6 @@ flowchart LR
     trigger --> preHook --> purge --> rg
     rg --> monitoring --> apim --> inventory --> ready
 
-    style initiation fill:#FAFAFA,stroke:#8A8886,stroke-width:2px,color:#323130
-    style provisioning fill:#FFF4CE,stroke:#FFB900,stroke-width:2px,color:#323130
-    style deployment fill:#EFF6FC,stroke:#0078D4,stroke-width:2px,color:#323130
-    style outcome fill:#DFF6DD,stroke:#107C10,stroke-width:2px,color:#323130
-
-    classDef neutral fill:#FAFAFA,stroke:#8A8886,stroke-width:2px,color:#323130
-    classDef core fill:#EFF6FC,stroke:#0078D4,stroke-width:2px,color:#323130
-    classDef success fill:#DFF6DD,stroke:#107C10,stroke-width:2px,color:#323130
-    classDef warning fill:#FFF4CE,stroke:#FFB900,stroke-width:2px,color:#323130
 ```
 
 ✅ Mermaid Verification: 5/5 | Score: 100/100 | Diagrams: 1 | Violations: 0
