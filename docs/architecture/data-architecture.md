@@ -25,70 +25,6 @@
 
 ---
 
-```yaml
-data_layer_reasoning:
-  phase: "Data Layer Analysis"
-  inputs_validated:
-    folder_paths_exist: true
-    target_layer_valid: "Data"
-    dependencies_loaded:
-      - "base-layer-config.prompt.md"
-      - "bdat-mermaid-improved.prompt.md"
-      - "coordinator.prompt.md"
-      - "error-taxonomy.prompt.md"
-    scan_results_available: true
-  strategy:
-    primary_approach: >
-      IaC codebase scan — Bicep type exports (common-types.bicep),
-      YAML configuration schemas (settings.yaml),
-      Azure resource declarations (operational/main.bicep, insights/main.bicep,
-      inventory/main.bicep, apim.bicep), and utility functions (constants.bicep).
-    fallback_if_failed: >
-      Search for data artifacts in /src/, /infra/, and configuration
-      YAML files for schema and entity definitions.
-    expected_output: >
-      11 subsections (5.1-5.11) covering: configuration entities,
-      IaC data models, Azure data stores, diagnostic data flows,
-      API data services, governance tagging, parameter quality rules,
-      reference master data, naming transformation functions,
-      typed Bicep contracts, and security mechanisms.
-  scan_summary:
-    data_entities_found: 10
-    data_models_found: 3
-    data_stores_found: 4
-    data_flows_found: 5
-    data_services_found: 3
-    data_governance_found: 4
-    data_quality_rules_found: 5
-    master_data_found: 4
-    data_transformations_found: 5
-    data_contracts_found: 5
-    data_security_found: 5
-    total_components: 53
-  confidence_formula: "30% filename + 25% path + 35% content + 10% crossref"
-  average_confidence: 0.84
-  maturity_level_claimed: 2
-  maturity_level_evidenced: 2
-  gate_checks:
-    - criterion: "All 11 data component type subsections present"
-      status: "PASS"
-    - criterion: "Mandatory ERD present in Section 5.1"
-      status: "PASS"
-    - criterion: "AZURE/FLUENT governance block in all Mermaid diagrams"
-      status: "PASS"
-    - criterion: "Source file references for all components"
-      status: "PASS"
-    - criterion: "No PII or actual data values in output"
-      status: "PASS"
-    - criterion: "9 sections present with correct titles"
-      status: "PASS"
-    - criterion: "Sections 2, 4, 5, 8 end with Summary"
-      status: "PASS"
-  proceed: true
-```
-
----
-
 ## 📊 Section 1: Executive Summary
 
 ### 📋 Overview
@@ -98,38 +34,6 @@ The APIM-Accelerator repository represents a cloud-native Infrastructure-as-Code
 The solution's data layer is not a traditional application data tier with relational schemas or transactional databases; instead, it is an infrastructure-layer data estate where the principal data assets are Azure Monitor telemetry streams, configuration objects, and API registry metadata. All data flows are defined declaratively via Bicep diagnostic settings, Application Insights loggers, and API source integrations. Security is enforced through managed identities, least-privilege RBAC, `@secure()` output decorators, and controlled public network access settings.
 
 A total of **53 data layer components** were identified across 11 canonical component types, all traceable to files within the repository root. The average confidence score is **0.84**, with all components exceeding the 0.70 threshold. The overall data architecture maturity is assessed at **Level 2 (Managed)**: role-based access is implemented, a typed configuration schema (data dictionary equivalent) is maintained, and resource tagging governance is formalized. A centralized schema registry and dedicated data catalog beyond the API Center scope are not yet present, preventing Level 3 attainment.
-
-### 🔍 Key Findings
-
-| 🔍 Finding                                 | 📝 Detail                                                         | ⚠️ Severity   |
-| ------------------------------------------ | ----------------------------------------------------------------- | ------------- |
-| **53 data components identified**          | Across all 11 canonical types from 8 source files                 | Informational |
-| **4 Azure data stores deployed**           | Log Analytics, Storage Account, Application Insights, API Center  | Informational |
-| **5 data flows documented**                | All as declarative Bicep diagnostic/logger/source resources       | Informational |
-| **GDPR compliance tagged**                 | `RegulatoryCompliance: "GDPR"` on all resources via settings.yaml | Positive      |
-| **Managed identity enforced**              | SystemAssigned identity on APIM, Log Analytics, API Center        | Positive      |
-| **No schema registry present**             | No schema versioning mechanism beyond ARM API version pinning     | Gap           |
-| **No data catalog**                        | API Center covers API metadata only; no broader data catalog      | Gap           |
-| **90-day telemetry retention**             | Application Insights default; may be insufficient for compliance  | Risk          |
-| **@secure() applied to sensitive outputs** | Instrumentation key and client secret protected                   | Positive      |
-| **Public network access configurable**     | Default open; production deployments should disable for APIM      | Risk          |
-
-### 📊 Data Quality Scorecard
-
-| 📐 Dimension            | 🎯 Score | 📊 Assessment                                                           |
-| ----------------------- | -------- | ----------------------------------------------------------------------- |
-| **Schema Completeness** | 85/100   | Good — 10 typed entities defined; tags schema informal                  |
-| **Source Traceability** | 100/100  | All 53 components trace to source files                                 |
-| **Governance Coverage** | 80/100   | GDPR tag, RBAC, managed identity present; no DLP policy                 |
-| **Data Classification** | 70/100   | Implicit classification via RBAC; no explicit taxonomy file             |
-| **Security Controls**   | 90/100   | @secure(), managed identity, network access; no encryption-at-rest spec |
-| **Retention Policy**    | 60/100   | 90-day default for AI; no explicit policy for Log Analytics             |
-| **Data Lineage**        | 75/100   | Diagnostic flows documented; no formal lineage tool                     |
-| **Quality Automation**  | 80/100   | Bicep parameter validators; no runtime data quality checks              |
-
-### 🛡️ Coverage Summary
-
-The APIM-Accelerator data governance model relies on Azure native controls: managed identity eliminates credential sprawl, RBAC (Reader, API Center Data Reader, API Center Compliance Manager roles) enforces least privilege, resource tags provide cost allocation and compliance traceability, and diagnostic settings create an audit trail. However, the governance framework remains at an infrastructure level. There is no data stewardship register, no data owner RACI, and no formal data retention schedule beyond the 90-day Application Insights default. The overall data governance maturity aligns with **Level 2 (Managed)** on the 5-level TOGAF data maturity scale. Advancing to Level 3 requires: deploying a centralized data catalog (e.g., Microsoft Purview), defining explicit retention policies per data store, and establishing a schema registry or contract testing mechanism.
 
 ---
 
@@ -269,16 +173,7 @@ flowchart TB
     accTitle: APIM Accelerator Data Domain Map
     accDescr: High-level taxonomy of the four data domains showing component types within each domain and cross-domain governance relationships
 
-    %% ═══════════════════════════════════════════════════════════════════════════
-    %% AZURE / FLUENT ARCHITECTURE PATTERN v1.1
-    %% (Semantic + Structural + Font + Accessibility Governance)
-    %% ═══════════════════════════════════════════════════════════════════════════
-    %% PHASE 1 - FLUENT UI: All styling uses approved Fluent UI palette only
-    %% PHASE 2 - GROUPS: Every subgraph has semantic color via style directive
-    %% PHASE 3 - COMPONENTS: Every node has semantic classDef + icon prefix
-    %% PHASE 4 - ACCESSIBILITY: accTitle/accDescr present, WCAG AA contrast
-    %% PHASE 5 - STANDARD: Governance block present, classDefs centralized
-    %% ═══════════════════════════════════════════════════════════════════════════
+
 
     subgraph cfgdomain["🗂️ Configuration Data Domain"]
         CFG1("🧩 Data Entities × 10"):::neutral
@@ -312,16 +207,7 @@ flowchart TB
     secdomain -.->|"governs"| opsdomain
     secdomain -.->|"governs"| invdomain
 
-    classDef core fill:#EFF6FC,stroke:#0078D4,stroke-width:2px,color:#323130
-    classDef neutral fill:#FAFAFA,stroke:#8A8886,stroke-width:2px,color:#323130
-    classDef success fill:#DFF6DD,stroke:#107C10,stroke-width:2px,color:#323130
-    classDef warning fill:#FFF4CE,stroke:#FFB900,stroke-width:2px,color:#323130
-    classDef danger fill:#FDE7E9,stroke:#D13438,stroke-width:2px,color:#323130
 
-    style cfgdomain fill:#FAFAFA,stroke:#8A8886,stroke-width:2px,color:#323130
-    style opsdomain fill:#EFF6FC,stroke:#0078D4,stroke-width:2px,color:#323130
-    style invdomain fill:#FAFAFA,stroke:#8A8886,stroke-width:2px,color:#323130
-    style secdomain fill:#F3F2F1,stroke:#8A8886,stroke-width:2px,color:#323130
 ```
 
 ✅ Mermaid Verification: 5/5 | Score: 100/100 | Diagrams: 1 | Violations: 0
@@ -405,16 +291,7 @@ flowchart TB
     accTitle: APIM Accelerator Baseline Data Architecture
     accDescr: Current state data topology showing configuration layer, IaC provisioning layer, monitoring data stores, and API inventory layer with all data flows between components
 
-    %% ═══════════════════════════════════════════════════════════════════════════
-    %% AZURE / FLUENT ARCHITECTURE PATTERN v1.1
-    %% (Semantic + Structural + Font + Accessibility Governance)
-    %% ═══════════════════════════════════════════════════════════════════════════
-    %% PHASE 1 - FLUENT UI: All styling uses approved Fluent UI palette only
-    %% PHASE 2 - GROUPS: Every subgraph has semantic color via style directive
-    %% PHASE 3 - COMPONENTS: Every node has semantic classDef + icon prefix
-    %% PHASE 4 - ACCESSIBILITY: accTitle/accDescr present, WCAG AA contrast
-    %% PHASE 5 - STANDARD: Governance block present, classDefs centralized
-    %% ═══════════════════════════════════════════════════════════════════════════
+
 
     subgraph cfglayer["🗂️ Configuration Layer"]
         YAML("📄 settings.yaml"):::neutral
@@ -470,14 +347,7 @@ flowchart TB
     APICENTER -->|"hosts"| APISOURCE
     APISOURCE -->|"discovers APIs"| APIM
 
-    classDef core fill:#EFF6FC,stroke:#0078D4,stroke-width:2px,color:#323130
-    classDef neutral fill:#FAFAFA,stroke:#8A8886,stroke-width:2px,color:#323130
 
-    style cfglayer fill:#FAFAFA,stroke:#8A8886,stroke-width:2px,color:#323130
-    style iaclayer fill:#FAFAFA,stroke:#8A8886,stroke-width:2px,color:#323130
-    style monitorlayer fill:#EFF6FC,stroke:#0078D4,stroke-width:2px,color:#323130
-    style apimLayer fill:#EFF6FC,stroke:#0078D4,stroke-width:2px,color:#323130
-    style inventorylayer fill:#FAFAFA,stroke:#8A8886,stroke-width:2px,color:#323130
 ```
 
 ✅ Mermaid Verification: 5/5 | Score: 100/100 | Diagrams: 1 | Violations: 0
@@ -577,16 +447,7 @@ erDiagram
     accTitle: APIM Accelerator Data Entity Relationship Diagram
     accDescr: Shows core configuration data entities and their structural relationships within the APIM Accelerator Bicep type system and settings.yaml schema
 
-    %% ═══════════════════════════════════════════════════════════════════════════
-    %% AZURE / FLUENT ARCHITECTURE PATTERN v1.1
-    %% (Semantic + Structural + Font + Accessibility Governance)
-    %% ═══════════════════════════════════════════════════════════════════════════
-    %% PHASE 1 - FLUENT UI: All styling uses approved Fluent UI palette only
-    %% PHASE 2 - GROUPS: Every subgraph has semantic color via style directive
-    %% PHASE 3 - COMPONENTS: Every node has semantic classDef + icon prefix
-    %% PHASE 4 - ACCESSIBILITY: accTitle/accDescr present, WCAG AA contrast
-    %% PHASE 5 - STANDARD: Governance block present, classDefs centralized
-    %% ═══════════════════════════════════════════════════════════════════════════
+
 
     APIM_LANDING_ZONE ||--|| SHARED : contains
     APIM_LANDING_ZONE ||--|| CORE_PLATFORM : contains
@@ -940,16 +801,7 @@ flowchart LR
     accTitle: APIM Accelerator Data Lineage and Producer-Consumer Relationships
     accDescr: Shows all data producer and consumer relationships including deployment-time configuration flows and runtime telemetry and API discovery flows
 
-    %% ═══════════════════════════════════════════════════════════════════════════
-    %% AZURE / FLUENT ARCHITECTURE PATTERN v1.1
-    %% (Semantic + Structural + Font + Accessibility Governance)
-    %% ═══════════════════════════════════════════════════════════════════════════
-    %% PHASE 1 - FLUENT UI: All styling uses approved Fluent UI palette only
-    %% PHASE 2 - GROUPS: Every subgraph has semantic color via style directive
-    %% PHASE 3 - COMPONENTS: Every node has semantic classDef + icon prefix
-    %% PHASE 4 - ACCESSIBILITY: accTitle/accDescr present, WCAG AA contrast
-    %% PHASE 5 - STANDARD: Governance block present, classDefs centralized
-    %% ═══════════════════════════════════════════════════════════════════════════
+
 
     subgraph deployTime["🏗️ Deploy-Time Data Flows"]
         SETTINGSYAML("📄 settings.yaml"):::neutral
@@ -1006,14 +858,7 @@ flowchart LR
     AI -->|"performance dashboards"| OPS
     APICENTER -->|"API catalog"| GOVTEAM
 
-    classDef core fill:#EFF6FC,stroke:#0078D4,stroke-width:2px,color:#323130
-    classDef neutral fill:#FAFAFA,stroke:#8A8886,stroke-width:2px,color:#323130
-    classDef warning fill:#FFF4CE,stroke:#FFB900,stroke-width:2px,color:#323130
 
-    style deployTime fill:#FAFAFA,stroke:#8A8886,stroke-width:2px,color:#323130
-    style runtimeStores fill:#EFF6FC,stroke:#0078D4,stroke-width:2px,color:#323130
-    style runtimeServices fill:#EFF6FC,stroke:#0078D4,stroke-width:2px,color:#323130
-    style consumers fill:#FAFAFA,stroke:#8A8886,stroke-width:2px,color:#323130
 ```
 
 ✅ Mermaid Verification: 5/5 | Score: 100/100 | Diagrams: 1 | Violations: 0

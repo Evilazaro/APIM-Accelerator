@@ -562,16 +562,6 @@ flowchart LR
     accTitle: APIM Accelerator API Platform Value Stream Map
     accDescr: Left-to-right value stream showing six sequential stages from business intent through YAML configuration, azd provisioning, platform availability, team onboarding, to business value delivered — sourced from README.md and azure.yaml
 
-    %% ═══════════════════════════════════════════════════════════════════════════
-    %% AZURE / FLUENT ARCHITECTURE PATTERN v1.1
-    %% (Semantic + Structural + Font + Accessibility Governance)
-    %% ═══════════════════════════════════════════════════════════════════════════
-    %% PHASE 1 - FLUENT UI: All styling uses approved Fluent UI palette only
-    %% PHASE 2 - GROUPS: Every subgraph has semantic color via style directive
-    %% PHASE 3 - COMPONENTS: Every node has semantic classDef + icon prefix
-    %% PHASE 4 - ACCESSIBILITY: accTitle/accDescr present, WCAG AA contrast
-    %% PHASE 5 - STANDARD: Governance block present, classDefs centralized
-    %% ═══════════════════════════════════════════════════════════════════════════
 
     intent("💡 Business Intent"):::neutral
     config("⚙️ YAML Configuration"):::core
@@ -586,9 +576,7 @@ flowchart LR
     platform -->|"workspaces + portal"| onboarding
     onboarding -->|"APIs live"| value
 
-    classDef neutral fill:#FAFAFA,stroke:#8A8886,stroke-width:2px,color:#323130
-    classDef core fill:#EFF6FC,stroke:#0078D4,stroke-width:2px,color:#323130
-    classDef success fill:#DFF6DD,stroke:#107C10,stroke-width:2px,color:#323130
+
 ```
 
 ✅ Mermaid Verification: 5/5 | Score: 100/100 | Diagrams: 1 | Violations: 0
@@ -611,16 +599,7 @@ flowchart TB
     accTitle: Business Service Integration Map
     accDescr: Business actor roles consuming business services which depend on Technology and external components — showing unidirectional dependency chains across actors, business services, and external dependencies
 
-    %% ═══════════════════════════════════════════════════════════════════════════
-    %% AZURE / FLUENT ARCHITECTURE PATTERN v1.1
-    %% (Semantic + Structural + Font + Accessibility Governance)
-    %% ═══════════════════════════════════════════════════════════════════════════
-    %% PHASE 1 - FLUENT UI: All styling uses approved Fluent UI palette only
-    %% PHASE 2 - GROUPS: Every subgraph has semantic color via style directive
-    %% PHASE 3 - COMPONENTS: Every node has semantic classDef + icon prefix
-    %% PHASE 4 - ACCESSIBILITY: accTitle/accDescr present, WCAG AA contrast
-    %% PHASE 5 - STANDARD: Governance block present, classDefs centralized
-    %% ═══════════════════════════════════════════════════════════════════════════
+
 
     subgraph actors["👥 Business Actors"]
         actor1("👨‍💻 Platform Engineer"):::neutral
@@ -657,14 +636,7 @@ flowchart TB
     bs4 --> ext2
     bs3 --> ext1
 
-    style actors fill:#FAFAFA,stroke:#8A8886,stroke-width:2px,color:#323130
-    style bizServices fill:#FAFAFA,stroke:#8A8886,stroke-width:2px,color:#323130
-    style external fill:#FAFAFA,stroke:#8A8886,stroke-width:2px,color:#323130
 
-    classDef neutral fill:#FAFAFA,stroke:#8A8886,stroke-width:2px,color:#323130
-    classDef core fill:#EFF6FC,stroke:#0078D4,stroke-width:2px,color:#323130
-    classDef success fill:#DFF6DD,stroke:#107C10,stroke-width:2px,color:#323130
-    classDef warning fill:#FFF4CE,stroke:#FFB900,stroke-width:2px,color:#323130
 ```
 
 ✅ Mermaid Verification: 5/5 | Score: 100/100 | Diagrams: 1 | Violations: 0
@@ -691,16 +663,7 @@ flowchart LR
     accTitle: APIM Accelerator Capability Maturity Visual Heatmap
     accDescr: Grouped flowchart showing current maturity level for eleven capabilities across four domains — API Platform Delivery and Operational Excellence at Level 4 Managed, Developer Experience and API Governance at Level 3 Defined
 
-    %% ═══════════════════════════════════════════════════════════════════════════
-    %% AZURE / FLUENT ARCHITECTURE PATTERN v1.1
-    %% (Semantic + Structural + Font + Accessibility Governance)
-    %% ═══════════════════════════════════════════════════════════════════════════
-    %% PHASE 1 - FLUENT UI: All styling uses approved Fluent UI palette only
-    %% PHASE 2 - GROUPS: Every subgraph has semantic color via style directive
-    %% PHASE 3 - COMPONENTS: Every node has semantic classDef + icon prefix
-    %% PHASE 4 - ACCESSIBILITY: accTitle/accDescr present, WCAG AA contrast
-    %% PHASE 5 - STANDARD: Governance block present, classDefs centralized
-    %% ═══════════════════════════════════════════════════════════════════════════
+
 
     subgraph apiPlatform["🚀 API Platform Delivery — Level 4 Managed"]
         c1("⚡ API Provisioning<br>Current: 4 | Target: 5"):::core
@@ -725,13 +688,6 @@ flowchart LR
         c11("🚦 Deployment Orchestration<br>Current: 4 | Target: 5"):::core
     end
 
-    style apiPlatform fill:#EFF6FC,stroke:#0078D4,stroke-width:2px,color:#323130
-    style devExp fill:#DFF6DD,stroke:#107C10,stroke-width:2px,color:#323130
-    style governance fill:#DFF6DD,stroke:#107C10,stroke-width:2px,color:#323130
-    style opEx fill:#EFF6FC,stroke:#0078D4,stroke-width:2px,color:#323130
-
-    classDef core fill:#EFF6FC,stroke:#0078D4,stroke-width:2px,color:#323130
-    classDef success fill:#DFF6DD,stroke:#107C10,stroke-width:2px,color:#323130
 ```
 
 ✅ Mermaid Verification: 5/5 | Score: 100/100 | Diagrams: 1 | Violations: 0
@@ -758,16 +714,7 @@ flowchart TB
     accTitle: APIM Accelerator Cross-Layer Dependency Graph
     accDescr: Directed dependency graph showing Platform Engineer, Cloud Architect, API Developer, and API Consumer actors depending on business services which depend on Technology layer resources and external Azure services
 
-    %% ═══════════════════════════════════════════════════════════════════════════
-    %% AZURE / FLUENT ARCHITECTURE PATTERN v1.1
-    %% (Semantic + Structural + Font + Accessibility Governance)
-    %% ═══════════════════════════════════════════════════════════════════════════
-    %% PHASE 1 - FLUENT UI: All styling uses approved Fluent UI palette only
-    %% PHASE 2 - GROUPS: Every subgraph has semantic color via style directive
-    %% PHASE 3 - COMPONENTS: Every node has semantic classDef + icon prefix
-    %% PHASE 4 - ACCESSIBILITY: accTitle/accDescr present, WCAG AA contrast
-    %% PHASE 5 - STANDARD: Governance block present, classDefs centralized
-    %% ═══════════════════════════════════════════════════════════════════════════
+
 
     subgraph bizLayer["🏢 Business Layer"]
         a1("👨‍💻 Platform Engineer"):::neutral
@@ -813,14 +760,6 @@ flowchart TB
     bs4 --> e2
     bs1 --> e3
 
-    style bizLayer fill:#FAFAFA,stroke:#8A8886,stroke-width:2px,color:#323130
-    style techLayer fill:#EFF6FC,stroke:#0078D4,stroke-width:2px,color:#323130
-    style extLayer fill:#FAFAFA,stroke:#8A8886,stroke-width:2px,color:#323130
-
-    classDef core fill:#EFF6FC,stroke:#0078D4,stroke-width:2px,color:#323130
-    classDef neutral fill:#FAFAFA,stroke:#8A8886,stroke-width:2px,color:#323130
-    classDef warning fill:#FFF4CE,stroke:#FFB900,stroke-width:2px,color:#323130
-    classDef success fill:#DFF6DD,stroke:#107C10,stroke-width:2px,color:#323130
 ```
 
 ✅ Mermaid Verification: 5/5 | Score: 100/100 | Diagrams: 1 | Violations: 0
