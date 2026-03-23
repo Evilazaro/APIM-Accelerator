@@ -276,13 +276,15 @@ The APIM Accelerator deploys a complete API Management landing zone in a single 
 
 ```mermaid
 ---
-title: APIM Accelerator - Technology Infrastructure Context
+title: "APIM Accelerator - Technology Infrastructure Context"
 config:
   theme: base
   look: classic
   layout: dagre
   themeVariables:
     fontSize: '16px'
+  flowchart:
+    htmlLabels: true
 ---
 flowchart TB
     accTitle: APIM Accelerator Technology Infrastructure Context
@@ -292,10 +294,10 @@ flowchart TB
     %% AZURE / FLUENT ARCHITECTURE PATTERN v1.1
     %% (Semantic + Structural + Font + Accessibility Governance)
     %% ═══════════════════════════════════════════════════════════════════════════
-    %% PHASE 1 - STRUCTURAL: Direction TB, flat topology, nesting ≤ 3
-    %% PHASE 2 - SEMANTIC: Max 4 semantic classes, neutral-first palette
-    %% PHASE 3 - FONT: Dark text on light backgrounds, contrast ≥ 4.5:1
-    %% PHASE 4 - ACCESSIBILITY: accTitle/accDescr present, icons on nodes
+    %% PHASE 1 - FLUENT UI: All styling uses approved Fluent UI palette only
+    %% PHASE 2 - GROUPS: Every subgraph has semantic color via style directive
+    %% PHASE 3 - COMPONENTS: Every node has semantic classDef + icon prefix
+    %% PHASE 4 - ACCESSIBILITY: accTitle/accDescr present, WCAG AA contrast
     %% PHASE 5 - STANDARD: Governance block present, classDefs centralized
     %% ═══════════════════════════════════════════════════════════════════════════
 
@@ -884,20 +886,29 @@ The APIM Accelerator deploys resources in a strict sequenced dependency chain. T
 
 ```mermaid
 ---
-title: APIM Accelerator - Cloud Resource Hierarchy
+title: "APIM Accelerator - Cloud Resource Hierarchy"
 config:
   theme: base
   look: classic
   layout: dagre
   themeVariables:
-    fontSize: '15px'
+    fontSize: '16px'
+  flowchart:
+    htmlLabels: true
 ---
 flowchart LR
     accTitle: APIM Accelerator Cloud Resource Hierarchy
     accDescr: Shows hierarchical Bicep module decomposition and resource ownership from subscription scope to individual Azure resources
 
     %% ═══════════════════════════════════════════════════════════════════════════
-    %% AZURE / FLUENT ARCHITECTURE PATTERN v1.1 - Resource Hierarchy View
+    %% AZURE / FLUENT ARCHITECTURE PATTERN v1.1
+    %% (Semantic + Structural + Font + Accessibility Governance)
+    %% ═══════════════════════════════════════════════════════════════════════════
+    %% PHASE 1 - FLUENT UI: All styling uses approved Fluent UI palette only
+    %% PHASE 2 - GROUPS: Every subgraph has semantic color via style directive
+    %% PHASE 3 - COMPONENTS: Every node has semantic classDef + icon prefix
+    %% PHASE 4 - ACCESSIBILITY: accTitle/accDescr present, WCAG AA contrast
+    %% PHASE 5 - STANDARD: Governance block present, classDefs centralized
     %% ═══════════════════════════════════════════════════════════════════════════
 
     SUB["☁️ Azure Subscription\ninfra/main.bicep\ntargetScope=subscription"]:::core
