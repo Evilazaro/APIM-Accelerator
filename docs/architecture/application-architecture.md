@@ -152,10 +152,10 @@ flowchart TB
     classDef neutral fill:#FAFAFA,stroke:#8A8886,stroke-width:2px,color:#323130
     classDef core fill:#EFF6FC,stroke:#0078D4,stroke-width:2px,color:#323130
 
-    style ACTORS fill:#F3F2F1,stroke:#8A8886,stroke-width:2px,color:#323130
-    style PLATFORM fill:#F3F2F1,stroke:#0078D4,stroke-width:2px,color:#323130
-    style AZD fill:#F3F2F1,stroke:#8A8886,stroke-width:2px,color:#323130
-    style AZURE fill:#F3F2F1,stroke:#8A8886,stroke-width:2px,color:#323130
+    style ACTORS fill:#FAFAFA,stroke:#8A8886,stroke-width:2px,color:#323130
+    style PLATFORM fill:#EFF6FC,stroke:#0078D4,stroke-width:2px,color:#323130
+    style AZD fill:#FAFAFA,stroke:#8A8886,stroke-width:2px,color:#323130
+    style AZURE fill:#FAFAFA,stroke:#8A8886,stroke-width:2px,color:#323130
 ```
 
 ✅ Mermaid Verification: 5/5 | Score: 100/100 | Diagrams: 1 | Violations: 0
@@ -228,11 +228,11 @@ flowchart TB
     classDef core fill:#EFF6FC,stroke:#0078D4,stroke-width:2px,color:#323130
     classDef success fill:#DFF6DD,stroke:#107C10,stroke-width:2px,color:#323130
 
-    style GATEWAY fill:#F3F2F1,stroke:#0078D4,stroke-width:2px,color:#323130
-    style CATALOG fill:#F3F2F1,stroke:#107C10,stroke-width:2px,color:#323130
-    style OBS fill:#F3F2F1,stroke:#8A8886,stroke-width:2px,color:#323130
-    style ORCH fill:#F3F2F1,stroke:#8A8886,stroke-width:2px,color:#323130
-    style CONTRACT fill:#F3F2F1,stroke:#8A8886,stroke-width:2px,color:#323130
+    style GATEWAY fill:#EFF6FC,stroke:#0078D4,stroke-width:2px,color:#323130
+    style CATALOG fill:#DFF6DD,stroke:#107C10,stroke-width:2px,color:#323130
+    style OBS fill:#FAFAFA,stroke:#8A8886,stroke-width:2px,color:#323130
+    style ORCH fill:#FAFAFA,stroke:#8A8886,stroke-width:2px,color:#323130
+    style CONTRACT fill:#FAFAFA,stroke:#8A8886,stroke-width:2px,color:#323130
 ```
 
 ✅ Mermaid Verification: 5/5 | Score: 100/100 | Diagrams: 1 | Violations: 0
@@ -295,9 +295,9 @@ flowchart TB
     classDef core fill:#EFF6FC,stroke:#0078D4,stroke-width:2px,color:#323130
     classDef success fill:#DFF6DD,stroke:#107C10,stroke-width:2px,color:#323130
 
-    style SHARED_INT fill:#F3F2F1,stroke:#8A8886,stroke-width:2px,color:#323130
-    style CORE_INT fill:#F3F2F1,stroke:#0078D4,stroke-width:2px,color:#323130
-    style INV_INT fill:#F3F2F1,stroke:#107C10,stroke-width:2px,color:#323130
+    style SHARED_INT fill:#FAFAFA,stroke:#8A8886,stroke-width:2px,color:#323130
+    style CORE_INT fill:#EFF6FC,stroke:#0078D4,stroke-width:2px,color:#323130
+    style INV_INT fill:#DFF6DD,stroke:#107C10,stroke-width:2px,color:#323130
 ```
 
 ✅ Mermaid Verification: 5/5 | Score: 100/100 | Diagrams: 1 | Violations: 0
@@ -556,9 +556,9 @@ flowchart TB
     classDef core fill:#EFF6FC,stroke:#0078D4,stroke-width:2px,color:#323130
     classDef success fill:#DFF6DD,stroke:#107C10,stroke-width:2px,color:#323130
 
-    style SHARED_LAYER fill:#F3F2F1,stroke:#8A8886,stroke-width:2px,color:#323130
-    style CORE_LAYER fill:#F3F2F1,stroke:#0078D4,stroke-width:2px,color:#323130
-    style INV_LAYER fill:#F3F2F1,stroke:#107C10,stroke-width:2px,color:#323130
+    style SHARED_LAYER fill:#FAFAFA,stroke:#8A8886,stroke-width:2px,color:#323130
+    style CORE_LAYER fill:#EFF6FC,stroke:#0078D4,stroke-width:2px,color:#323130
+    style INV_LAYER fill:#DFF6DD,stroke:#107C10,stroke-width:2px,color:#323130
 ```
 
 ✅ Mermaid Verification: 5/5 | Score: 100/100 | Diagrams: 1 | Violations: 0
@@ -1277,10 +1277,10 @@ flowchart TB
     classDef neutral fill:#FAFAFA,stroke:#8A8886,stroke-width:2px,color:#323130
     classDef core fill:#EFF6FC,stroke:#0078D4,stroke-width:2px,color:#323130
 
-    style DEPLOY fill:#F3F2F1,stroke:#8A8886,stroke-width:2px,color:#323130
-    style SHARED_LAYER fill:#F3F2F1,stroke:#8A8886,stroke-width:2px,color:#323130
-    style CORE_LAYER fill:#F3F2F1,stroke:#0078D4,stroke-width:2px,color:#323130
-    style INV_LAYER fill:#F3F2F1,stroke:#0078D4,stroke-width:2px,color:#323130
+    style DEPLOY fill:#FAFAFA,stroke:#8A8886,stroke-width:2px,color:#323130
+    style SHARED_LAYER fill:#FAFAFA,stroke:#8A8886,stroke-width:2px,color:#323130
+    style CORE_LAYER fill:#EFF6FC,stroke:#0078D4,stroke-width:2px,color:#323130
+    style INV_LAYER fill:#EFF6FC,stroke:#0078D4,stroke-width:2px,color:#323130
 ```
 
 ✅ Mermaid Verification: 5/5 | Score: 100/100 | Diagrams: 1 | Violations: 0
@@ -1360,9 +1360,9 @@ flowchart LR
     classDef success fill:#DFF6DD,stroke:#107C10,stroke-width:2px,color:#323130
     classDef warning fill:#FFF4CE,stroke:#FFB900,stroke-width:2px,color:#323130
 
-    style SOURCES fill:#F3F2F1,stroke:#0078D4,stroke-width:2px,color:#323130
-    style SINKS fill:#F3F2F1,stroke:#8A8886,stroke-width:2px,color:#323130
-    style IDENTITY fill:#F3F2F1,stroke:#FFB900,stroke-width:2px,color:#323130
+    style SOURCES fill:#EFF6FC,stroke:#0078D4,stroke-width:2px,color:#323130
+    style SINKS fill:#FAFAFA,stroke:#8A8886,stroke-width:2px,color:#323130
+    style IDENTITY fill:#FFF4CE,stroke:#FFB900,stroke-width:2px,color:#323130
 ```
 
 ✅ Mermaid Verification: 5/5 | Score: 100/100 | Diagrams: 1 | Violations: 0
