@@ -318,9 +318,9 @@ flowchart TB
     classDef warning fill:#FFF4CE,stroke:#FFB900,stroke-width:2px,color:#323130
     classDef danger fill:#FDE7E9,stroke:#D13438,stroke-width:2px,color:#323130
 
-    style cfgdomain fill:#F3F2F1,stroke:#8A8886,stroke-width:2px,color:#323130
-    style opsdomain fill:#F3F2F1,stroke:#0078D4,stroke-width:2px,color:#323130
-    style invdomain fill:#F3F2F1,stroke:#8A8886,stroke-width:2px,color:#323130
+    style cfgdomain fill:#FAFAFA,stroke:#8A8886,stroke-width:2px,color:#323130
+    style opsdomain fill:#EFF6FC,stroke:#0078D4,stroke-width:2px,color:#323130
+    style invdomain fill:#FAFAFA,stroke:#8A8886,stroke-width:2px,color:#323130
     style secdomain fill:#F3F2F1,stroke:#8A8886,stroke-width:2px,color:#323130
 ```
 
@@ -473,11 +473,11 @@ flowchart TB
     classDef core fill:#EFF6FC,stroke:#0078D4,stroke-width:2px,color:#323130
     classDef neutral fill:#FAFAFA,stroke:#8A8886,stroke-width:2px,color:#323130
 
-    style cfglayer fill:#F3F2F1,stroke:#8A8886,stroke-width:2px,color:#323130
-    style iaclayer fill:#F3F2F1,stroke:#8A8886,stroke-width:2px,color:#323130
-    style monitorlayer fill:#F3F2F1,stroke:#0078D4,stroke-width:2px,color:#323130
-    style apimLayer fill:#F3F2F1,stroke:#0078D4,stroke-width:2px,color:#323130
-    style inventorylayer fill:#F3F2F1,stroke:#8A8886,stroke-width:2px,color:#323130
+    style cfglayer fill:#FAFAFA,stroke:#8A8886,stroke-width:2px,color:#323130
+    style iaclayer fill:#FAFAFA,stroke:#8A8886,stroke-width:2px,color:#323130
+    style monitorlayer fill:#EFF6FC,stroke:#0078D4,stroke-width:2px,color:#323130
+    style apimLayer fill:#EFF6FC,stroke:#0078D4,stroke-width:2px,color:#323130
+    style inventorylayer fill:#FAFAFA,stroke:#8A8886,stroke-width:2px,color:#323130
 ```
 
 ✅ Mermaid Verification: 5/5 | Score: 100/100 | Diagrams: 1 | Violations: 0
@@ -1010,10 +1010,10 @@ flowchart LR
     classDef neutral fill:#FAFAFA,stroke:#8A8886,stroke-width:2px,color:#323130
     classDef warning fill:#FFF4CE,stroke:#FFB900,stroke-width:2px,color:#323130
 
-    style deployTime fill:#F3F2F1,stroke:#8A8886,stroke-width:2px,color:#323130
-    style runtimeStores fill:#F3F2F1,stroke:#0078D4,stroke-width:2px,color:#323130
-    style runtimeServices fill:#F3F2F1,stroke:#0078D4,stroke-width:2px,color:#323130
-    style consumers fill:#F3F2F1,stroke:#8A8886,stroke-width:2px,color:#323130
+    style deployTime fill:#FAFAFA,stroke:#8A8886,stroke-width:2px,color:#323130
+    style runtimeStores fill:#EFF6FC,stroke:#0078D4,stroke-width:2px,color:#323130
+    style runtimeServices fill:#EFF6FC,stroke:#0078D4,stroke-width:2px,color:#323130
+    style consumers fill:#FAFAFA,stroke:#8A8886,stroke-width:2px,color:#323130
 ```
 
 ✅ Mermaid Verification: 5/5 | Score: 100/100 | Diagrams: 1 | Violations: 0
