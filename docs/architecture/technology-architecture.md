@@ -290,16 +290,6 @@ flowchart TB
     accTitle: APIM Accelerator Technology Infrastructure Context
     accDescr: Shows all 23 Azure technology components organized within the resource group and their primary connectivity relationships
 
-    %% ═══════════════════════════════════════════════════════════════════════════
-    %% AZURE / FLUENT ARCHITECTURE PATTERN v1.1
-    %% (Semantic + Structural + Font + Accessibility Governance)
-    %% ═══════════════════════════════════════════════════════════════════════════
-    %% PHASE 1 - FLUENT UI: All styling uses approved Fluent UI palette only
-    %% PHASE 2 - GROUPS: Every subgraph has semantic color via style directive
-    %% PHASE 3 - COMPONENTS: Every node has semantic classDef + icon prefix
-    %% PHASE 4 - ACCESSIBILITY: accTitle/accDescr present, WCAG AA contrast
-    %% PHASE 5 - STANDARD: Governance block present, classDefs centralized
-    %% ═══════════════════════════════════════════════════════════════════════════
 
     Internet(["🌍 API Consumers / Internet"]):::neutral
 
@@ -340,18 +330,7 @@ flowchart TB
     AppIns -->|Archive| StorageAcct
     LAW -->|Self-monitoring| StorageAcct
 
-    %% Centralized classDefs — AZURE/FLUENT v1.1 canonical palette — WCAG AA compliant
-    classDef core fill:#EFF6FC,stroke:#0078D4,stroke-width:2px,color:#323130
-    classDef success fill:#DFF6DD,stroke:#107C10,stroke-width:2px,color:#323130
-    classDef warning fill:#FFF4CE,stroke:#FFB900,stroke-width:2px,color:#323130
-    classDef neutral fill:#FAFAFA,stroke:#8A8886,stroke-width:2px,color:#323130
 
-    %% Subgraph styling (no class directive on subgraphs — use style)
-    style AzSub fill:#F3F2F1,stroke:#8A8886,stroke-width:2px,color:#323130
-    style RG fill:#F3F2F1,stroke:#8A8886,stroke-width:2px,color:#323130
-    style CorePlatform fill:#EFF6FC,stroke:#0078D4,stroke-width:2px,color:#323130
-    style Inventory fill:#DFF6DD,stroke:#107C10,stroke-width:2px,color:#323130
-    style SharedMon fill:#FFF4CE,stroke:#FFB900,stroke-width:2px,color:#323130
 ```
 
 ✅ Mermaid Verification: 5/5 | Score: 100/100 | Subgraphs: 5 | Style directives: 5 | Violations: 0
@@ -900,16 +879,7 @@ flowchart LR
     accTitle: APIM Accelerator Cloud Resource Hierarchy
     accDescr: Shows hierarchical Bicep module decomposition and resource ownership from subscription scope to individual Azure resources
 
-    %% ═══════════════════════════════════════════════════════════════════════════
-    %% AZURE / FLUENT ARCHITECTURE PATTERN v1.1
-    %% (Semantic + Structural + Font + Accessibility Governance)
-    %% ═══════════════════════════════════════════════════════════════════════════
-    %% PHASE 1 - FLUENT UI: All styling uses approved Fluent UI palette only
-    %% PHASE 2 - GROUPS: Every subgraph has semantic color via style directive
-    %% PHASE 3 - COMPONENTS: Every node has semantic classDef + icon prefix
-    %% PHASE 4 - ACCESSIBILITY: accTitle/accDescr present, WCAG AA contrast
-    %% PHASE 5 - STANDARD: Governance block present, classDefs centralized
-    %% ═══════════════════════════════════════════════════════════════════════════
+
 
     SUB["☁️ Azure Subscription\ninfra/main.bicep\ntargetScope=subscription"]:::core
 
@@ -959,10 +929,7 @@ flowchart LR
     R_APC_WS --> R_APC_SRC
     R_APC --> R_RBAC_APC
 
-    classDef core fill:#EFF6FC,stroke:#0078D4,stroke-width:2px,color:#323130
-    classDef warning fill:#FFF4CE,stroke:#FFB900,stroke-width:2px,color:#323130
-    classDef neutral fill:#FAFAFA,stroke:#8A8886,stroke-width:2px,color:#323130
-    classDef danger fill:#FDE7E9,stroke:#D13438,stroke-width:2px,color:#323130
+
 ```
 
 ✅ Mermaid Verification: 5/5 | Score: 100/100 | Subgraphs: 0 | Style directives: 0 | Violations: 0
