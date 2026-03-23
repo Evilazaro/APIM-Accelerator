@@ -273,6 +273,17 @@ flowchart TB
     accTitle: APIM Accelerator Business Capability Map
     accDescr: Four business capability domains with ten grouped capabilities — API Platform Delivery, Developer Experience, API Governance and Security, and Operational Excellence — sourced from README.md features table and src Bicep modules
 
+    %% ═══════════════════════════════════════════════════════════════════════════
+    %% AZURE / FLUENT ARCHITECTURE PATTERN v2.0
+    %% (Semantic + Structural + Font + Accessibility Governance)
+    %% ═══════════════════════════════════════════════════════════════════════════
+    %% PHASE 1 - FLUENT UI: All styling uses approved Fluent UI palette only
+    %% PHASE 2 - GROUPS: Every subgraph has semantic color via style directive
+    %% PHASE 3 - COMPONENTS: Every node has semantic classDef + icon prefix
+    %% PHASE 4 - ACCESSIBILITY: accTitle/accDescr present, WCAG AA contrast
+    %% PHASE 5 - STANDARD: Governance block present, classDefs centralized
+    %% ═══════════════════════════════════════════════════════════════════════════
+
 
 
     subgraph platformDelivery["⚙️ API Platform Delivery"]
@@ -325,6 +336,17 @@ config:
 flowchart LR
     accTitle: API Platform Provisioning Process Flow
     accDescr: End-to-end provisioning sequence from platform engineer authentication through azd-up trigger, pre-provision hook soft-delete cleanup, layered Bicep deployment of monitoring then APIM then inventory, to operational platform outcome — sourced from README.md and azure.yaml
+
+    %% ═══════════════════════════════════════════════════════════════════════════
+    %% AZURE / FLUENT ARCHITECTURE PATTERN v2.0
+    %% (Semantic + Structural + Font + Accessibility Governance)
+    %% ═══════════════════════════════════════════════════════════════════════════
+    %% PHASE 1 - FLUENT UI: All styling uses approved Fluent UI palette only
+    %% PHASE 2 - GROUPS: Every subgraph has semantic color via style directive
+    %% PHASE 3 - COMPONENTS: Every node has semantic classDef + icon prefix
+    %% PHASE 4 - ACCESSIBILITY: accTitle/accDescr present, WCAG AA contrast
+    %% PHASE 5 - STANDARD: Governance block present, classDefs centralized
+    %% ═══════════════════════════════════════════════════════════════════════════
 
 
     subgraph initiation["🖥️ Initiation"]
@@ -562,6 +584,17 @@ flowchart LR
     accTitle: APIM Accelerator API Platform Value Stream Map
     accDescr: Left-to-right value stream showing six sequential stages from business intent through YAML configuration, azd provisioning, platform availability, team onboarding, to business value delivered — sourced from README.md and azure.yaml
 
+    %% ═══════════════════════════════════════════════════════════════════════════
+    %% AZURE / FLUENT ARCHITECTURE PATTERN v2.0
+    %% (Semantic + Structural + Font + Accessibility Governance)
+    %% ═══════════════════════════════════════════════════════════════════════════
+    %% PHASE 1 - FLUENT UI: All styling uses approved Fluent UI palette only
+    %% PHASE 2 - GROUPS: Every subgraph has semantic color via style directive
+    %% PHASE 3 - COMPONENTS: Every node has semantic classDef + icon prefix
+    %% PHASE 4 - ACCESSIBILITY: accTitle/accDescr present, WCAG AA contrast
+    %% PHASE 5 - STANDARD: Governance block present, classDefs centralized
+    %% ═══════════════════════════════════════════════════════════════════════════
+
 
     intent("💡 Business Intent"):::neutral
     config("⚙️ YAML Configuration"):::core
@@ -598,6 +631,17 @@ config:
 flowchart TB
     accTitle: Business Service Integration Map
     accDescr: Business actor roles consuming business services which depend on Technology and external components — showing unidirectional dependency chains across actors, business services, and external dependencies
+
+    %% ═══════════════════════════════════════════════════════════════════════════
+    %% AZURE / FLUENT ARCHITECTURE PATTERN v2.0
+    %% (Semantic + Structural + Font + Accessibility Governance)
+    %% ═══════════════════════════════════════════════════════════════════════════
+    %% PHASE 1 - FLUENT UI: All styling uses approved Fluent UI palette only
+    %% PHASE 2 - GROUPS: Every subgraph has semantic color via style directive
+    %% PHASE 3 - COMPONENTS: Every node has semantic classDef + icon prefix
+    %% PHASE 4 - ACCESSIBILITY: accTitle/accDescr present, WCAG AA contrast
+    %% PHASE 5 - STANDARD: Governance block present, classDefs centralized
+    %% ═══════════════════════════════════════════════════════════════════════════
 
 
 
@@ -663,6 +707,17 @@ flowchart LR
     accTitle: APIM Accelerator Capability Maturity Visual Heatmap
     accDescr: Grouped flowchart showing current maturity level for eleven capabilities across four domains — API Platform Delivery and Operational Excellence at Level 4 Managed, Developer Experience and API Governance at Level 3 Defined
 
+    %% ═══════════════════════════════════════════════════════════════════════════
+    %% AZURE / FLUENT ARCHITECTURE PATTERN v2.0
+    %% (Semantic + Structural + Font + Accessibility Governance)
+    %% ═══════════════════════════════════════════════════════════════════════════
+    %% PHASE 1 - FLUENT UI: All styling uses approved Fluent UI palette only
+    %% PHASE 2 - GROUPS: Every subgraph has semantic color via style directive
+    %% PHASE 3 - COMPONENTS: Every node has semantic classDef + icon prefix
+    %% PHASE 4 - ACCESSIBILITY: accTitle/accDescr present, WCAG AA contrast
+    %% PHASE 5 - STANDARD: Governance block present, classDefs centralized
+    %% ═══════════════════════════════════════════════════════════════════════════
+
 
 
     subgraph apiPlatform["🚀 API Platform Delivery — Level 4 Managed"]
@@ -713,6 +768,17 @@ config:
 flowchart TB
     accTitle: APIM Accelerator Cross-Layer Dependency Graph
     accDescr: Directed dependency graph showing Platform Engineer, Cloud Architect, API Developer, and API Consumer actors depending on business services which depend on Technology layer resources and external Azure services
+
+    %% ═══════════════════════════════════════════════════════════════════════════
+    %% AZURE / FLUENT ARCHITECTURE PATTERN v2.0
+    %% (Semantic + Structural + Font + Accessibility Governance)
+    %% ═══════════════════════════════════════════════════════════════════════════
+    %% PHASE 1 - FLUENT UI: All styling uses approved Fluent UI palette only
+    %% PHASE 2 - GROUPS: Every subgraph has semantic color via style directive
+    %% PHASE 3 - COMPONENTS: Every node has semantic classDef + icon prefix
+    %% PHASE 4 - ACCESSIBILITY: accTitle/accDescr present, WCAG AA contrast
+    %% PHASE 5 - STANDARD: Governance block present, classDefs centralized
+    %% ═══════════════════════════════════════════════════════════════════════════
 
 
 
