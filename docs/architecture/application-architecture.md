@@ -1280,7 +1280,7 @@ flowchart TB
     style DEPLOY fill:#F3F2F1,stroke:#8A8886,stroke-width:2px,color:#323130
     style SHARED_LAYER fill:#F3F2F1,stroke:#8A8886,stroke-width:2px,color:#323130
     style CORE_LAYER fill:#F3F2F1,stroke:#0078D4,stroke-width:2px,color:#323130
-    style INV_LAYER fill:#F3F2F1,stroke:#107C10,stroke-width:2px,color:#323130
+    style INV_LAYER fill:#F3F2F1,stroke:#0078D4,stroke-width:2px,color:#323130
 ```
 
 ✅ Mermaid Verification: 5/5 | Score: 100/100 | Diagrams: 1 | Violations: 0
