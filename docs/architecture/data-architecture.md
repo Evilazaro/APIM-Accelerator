@@ -173,6 +173,17 @@ flowchart TB
     accTitle: APIM Accelerator Data Domain Map
     accDescr: High-level taxonomy of the four data domains showing component types within each domain and cross-domain governance relationships
 
+    %% ═══════════════════════════════════════════════════════════════════════════
+    %% AZURE / FLUENT ARCHITECTURE PATTERN v2.0
+    %% (Semantic + Structural + Font + Accessibility Governance)
+    %% ═══════════════════════════════════════════════════════════════════════════
+    %% PHASE 1 - FLUENT UI: All styling uses approved Fluent UI palette only
+    %% PHASE 2 - GROUPS: Every subgraph has semantic color via style directive
+    %% PHASE 3 - COMPONENTS: Every node has semantic classDef + icon prefix
+    %% PHASE 4 - ACCESSIBILITY: accTitle/accDescr present, WCAG AA contrast
+    %% PHASE 5 - STANDARD: Governance block present, classDefs centralized
+    %% ═══════════════════════════════════════════════════════════════════════════
+
 
 
     subgraph cfgdomain["🗂️ Configuration Data Domain"]
@@ -207,6 +218,16 @@ flowchart TB
     secdomain -.->|"governs"| opsdomain
     secdomain -.->|"governs"| invdomain
 
+    classDef neutral fill:#FAFAFA,stroke:#8A8886,stroke-width:2px,color:#323130
+    classDef core fill:#EFF6FC,stroke:#0078D4,stroke-width:2px,color:#323130
+    classDef success fill:#DFF6DD,stroke:#107C10,stroke-width:2px,color:#323130
+    classDef warning fill:#FFF4CE,stroke:#FFB900,stroke-width:2px,color:#323130
+    classDef danger fill:#FDE7E9,stroke:#D13438,stroke-width:2px,color:#323130
+
+    style cfgdomain fill:#F3F2F1,stroke:#8A8886,stroke-width:2px,color:#323130
+    style opsdomain fill:#F3F2F1,stroke:#8A8886,stroke-width:2px,color:#323130
+    style invdomain fill:#F3F2F1,stroke:#8A8886,stroke-width:2px,color:#323130
+    style secdomain fill:#F3F2F1,stroke:#8A8886,stroke-width:2px,color:#323130
 
 ```
 
@@ -291,6 +312,17 @@ flowchart TB
     accTitle: APIM Accelerator Baseline Data Architecture
     accDescr: Current state data topology showing configuration layer, IaC provisioning layer, monitoring data stores, and API inventory layer with all data flows between components
 
+    %% ═══════════════════════════════════════════════════════════════════════════
+    %% AZURE / FLUENT ARCHITECTURE PATTERN v2.0
+    %% (Semantic + Structural + Font + Accessibility Governance)
+    %% ═══════════════════════════════════════════════════════════════════════════
+    %% PHASE 1 - FLUENT UI: All styling uses approved Fluent UI palette only
+    %% PHASE 2 - GROUPS: Every subgraph has semantic color via style directive
+    %% PHASE 3 - COMPONENTS: Every node has semantic classDef + icon prefix
+    %% PHASE 4 - ACCESSIBILITY: accTitle/accDescr present, WCAG AA contrast
+    %% PHASE 5 - STANDARD: Governance block present, classDefs centralized
+    %% ═══════════════════════════════════════════════════════════════════════════
+
 
 
     subgraph cfglayer["🗂️ Configuration Layer"]
@@ -347,6 +379,17 @@ flowchart TB
     APICENTER -->|"hosts"| APISOURCE
     APISOURCE -->|"discovers APIs"| APIM
 
+    classDef neutral fill:#FAFAFA,stroke:#8A8886,stroke-width:2px,color:#323130
+    classDef core fill:#EFF6FC,stroke:#0078D4,stroke-width:2px,color:#323130
+    classDef success fill:#DFF6DD,stroke:#107C10,stroke-width:2px,color:#323130
+    classDef warning fill:#FFF4CE,stroke:#FFB900,stroke-width:2px,color:#323130
+    classDef danger fill:#FDE7E9,stroke:#D13438,stroke-width:2px,color:#323130
+
+    style cfglayer fill:#F3F2F1,stroke:#8A8886,stroke-width:2px,color:#323130
+    style iaclayer fill:#F3F2F1,stroke:#8A8886,stroke-width:2px,color:#323130
+    style monitorlayer fill:#F3F2F1,stroke:#8A8886,stroke-width:2px,color:#323130
+    style apimLayer fill:#F3F2F1,stroke:#8A8886,stroke-width:2px,color:#323130
+    style inventorylayer fill:#F3F2F1,stroke:#8A8886,stroke-width:2px,color:#323130
 
 ```
 
@@ -801,6 +844,17 @@ flowchart LR
     accTitle: APIM Accelerator Data Lineage and Producer-Consumer Relationships
     accDescr: Shows all data producer and consumer relationships including deployment-time configuration flows and runtime telemetry and API discovery flows
 
+    %% ═══════════════════════════════════════════════════════════════════════════
+    %% AZURE / FLUENT ARCHITECTURE PATTERN v2.0
+    %% (Semantic + Structural + Font + Accessibility Governance)
+    %% ═══════════════════════════════════════════════════════════════════════════
+    %% PHASE 1 - FLUENT UI: All styling uses approved Fluent UI palette only
+    %% PHASE 2 - GROUPS: Every subgraph has semantic color via style directive
+    %% PHASE 3 - COMPONENTS: Every node has semantic classDef + icon prefix
+    %% PHASE 4 - ACCESSIBILITY: accTitle/accDescr present, WCAG AA contrast
+    %% PHASE 5 - STANDARD: Governance block present, classDefs centralized
+    %% ═══════════════════════════════════════════════════════════════════════════
+
 
 
     subgraph deployTime["🏗️ Deploy-Time Data Flows"]
@@ -858,6 +912,16 @@ flowchart LR
     AI -->|"performance dashboards"| OPS
     APICENTER -->|"API catalog"| GOVTEAM
 
+    classDef neutral fill:#FAFAFA,stroke:#8A8886,stroke-width:2px,color:#323130
+    classDef core fill:#EFF6FC,stroke:#0078D4,stroke-width:2px,color:#323130
+    classDef success fill:#DFF6DD,stroke:#107C10,stroke-width:2px,color:#323130
+    classDef warning fill:#FFF4CE,stroke:#FFB900,stroke-width:2px,color:#323130
+    classDef danger fill:#FDE7E9,stroke:#D13438,stroke-width:2px,color:#323130
+
+    style deployTime fill:#F3F2F1,stroke:#8A8886,stroke-width:2px,color:#323130
+    style runtimeStores fill:#F3F2F1,stroke:#8A8886,stroke-width:2px,color:#323130
+    style runtimeServices fill:#F3F2F1,stroke:#8A8886,stroke-width:2px,color:#323130
+    style consumers fill:#F3F2F1,stroke:#8A8886,stroke-width:2px,color:#323130
 
 ```
 
