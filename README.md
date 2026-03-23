@@ -157,11 +157,11 @@ flowchart TB
     stg -->|"log archival"| apim
     apim -->|"linked source"| apiCenter
 
-    style devEnv fill:#F3F2F1,stroke:#0078D4,stroke-width:2px,color:#323130
+    style devEnv fill:#EFF6FC,stroke:#0078D4,stroke-width:2px,color:#323130
     style azureSub fill:#F3F2F1,stroke:#8A8886,stroke-width:2px,color:#323130
-    style sharedLayer fill:#F3F2F1,stroke:#8A8886,stroke-width:2px,color:#323130
-    style coreLayer fill:#F3F2F1,stroke:#0078D4,stroke-width:2px,color:#323130
-    style inventoryLayer fill:#F3F2F1,stroke:#8A8886,stroke-width:2px,color:#323130
+    style sharedLayer fill:#FAFAFA,stroke:#8A8886,stroke-width:2px,color:#323130
+    style coreLayer fill:#EFF6FC,stroke:#0078D4,stroke-width:2px,color:#323130
+    style inventoryLayer fill:#FAFAFA,stroke:#8A8886,stroke-width:2px,color:#323130
 
     %% Centralized semantic classDefs (AZURE/FLUENT v1.1 — Phase 5 compliant)
     classDef neutral fill:#FAFAFA,stroke:#8A8886,stroke-width:2px,color:#323130
