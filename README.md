@@ -101,6 +101,16 @@ flowchart TB
     accTitle: APIM Accelerator Landing Zone Architecture
     accDescr: End-to-end architecture of the APIM Accelerator showing azd CLI orchestration, Bicep modules, and deployed Azure resources grouped by shared monitoring, core platform, and API inventory layers
 
+    %% ═══════════════════════════════════════════════════════════════════════════
+    %% AZURE / FLUENT ARCHITECTURE PATTERN v2.0
+    %% (Semantic + Structural + Font + Accessibility Governance)
+    %% ═══════════════════════════════════════════════════════════════════════════
+    %% PHASE 1 - FLUENT UI: All styling uses approved Fluent UI palette only
+    %% PHASE 2 - GROUPS: Every subgraph has semantic color via style directive
+    %% PHASE 3 - COMPONENTS: Every node has semantic classDef + icon prefix
+    %% PHASE 4 - ACCESSIBILITY: accTitle/accDescr present, WCAG AA contrast
+    %% PHASE 5 - STANDARD: Governance block present, classDefs centralized
+    %% ═══════════════════════════════════════════════════════════════════════════
 
     subgraph devEnv["🖥️ Developer Environment"]
         direction TB
@@ -147,6 +157,16 @@ flowchart TB
     stg -->|"log archival"| apim
     apim -->|"linked source"| apiCenter
 
+    classDef neutral fill:#FAFAFA,stroke:#8A8886,stroke-width:2px,color:#323130
+    classDef core fill:#EFF6FC,stroke:#0078D4,stroke-width:2px,color:#323130
+    classDef success fill:#DFF6DD,stroke:#107C10,stroke-width:2px,color:#323130
+    classDef warning fill:#FFF4CE,stroke:#FFB900,stroke-width:2px,color:#323130
+
+    style devEnv fill:#F3F2F1,stroke:#8A8886,stroke-width:2px,color:#323130
+    style azureSub fill:#F3F2F1,stroke:#8A8886,stroke-width:2px,color:#323130
+    style sharedLayer fill:#F3F2F1,stroke:#8A8886,stroke-width:2px,color:#323130
+    style coreLayer fill:#F3F2F1,stroke:#8A8886,stroke-width:2px,color:#323130
+    style inventoryLayer fill:#F3F2F1,stroke:#8A8886,stroke-width:2px,color:#323130
 
 ```
 

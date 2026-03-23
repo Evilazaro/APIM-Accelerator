@@ -302,29 +302,29 @@ flowchart TB
     %% ═══════════════════════════════════════════════════════════════════════════
 
 
-    Internet(["🌍 API Consumers / Internet"]):::neutral
+    Internet("🌍 API Consumers / Internet"):::neutral
 
     subgraph AzSub["☁️ Azure Subscription"]
         subgraph RG["📦 Resource Group — apim-accelerator-{env}-{location}-rg"]
 
             subgraph CorePlatform["⚙️ Core Platform Module"]
-                APIM["⚙️ Azure API Management\nPremium SKU · 1 unit\nSystemAssigned MI"]:::core
-                DevPortal["🖥️ Developer Portal\nAAD OAuth2 · MSAL-2"]:::core
-                WS["📁 APIM Workspace\nworkspace1"]:::core
+                APIM("⚙️ Azure API Management\nPremium SKU · 1 unit\nSystemAssigned MI"):::core
+                DevPortal("🖥️ Developer Portal\nAAD OAuth2 · MSAL-2"):::core
+                WS("📁 APIM Workspace\nworkspace1"):::core
             end
 
             subgraph Inventory["📋 API Inventory Module"]
-                APICenter["📋 Azure API Center\nSystemAssigned MI"]:::success
-                APICWorkspace["📁 API Center Workspace\ndefault"]:::success
+                APICenter("📋 Azure API Center\nSystemAssigned MI"):::success
+                APICWorkspace("📁 API Center Workspace\ndefault"):::success
             end
 
             subgraph SharedMon["📊 Shared Monitoring Module"]
-                LAW["📊 Log Analytics Workspace\nPerGB2018 · SystemAssigned MI"]:::warning
-                AppIns["🔭 Application Insights\nweb · LogAnalytics mode\n90d retention"]:::warning
-                StorageAcct["💾 Storage Account\nStandard_LRS · StorageV2"]:::neutral
+                LAW("📊 Log Analytics Workspace\nPerGB2018 · SystemAssigned MI"):::warning
+                AppIns("🔭 Application Insights\nweb · LogAnalytics mode\n90d retention"):::warning
+                StorageAcct("💾 Storage Account\nStandard_LRS · StorageV2"):::neutral
             end
 
-            VNet["🔗 Virtual Network\n(SCVMM placeholder)"]:::neutral
+            VNet("🔗 Virtual Network\n(SCVMM placeholder)"):::neutral
         end
     end
 
@@ -914,32 +914,32 @@ flowchart LR
 
 
 
-    SUB["☁️ Azure Subscription\ninfra/main.bicep\ntargetScope=subscription"]:::core
+    SUB("☁️ Azure Subscription\ninfra/main.bicep\ntargetScope=subscription"):::core
 
-    RG["📦 Resource Group\napim-accelerator-{env}-{loc}-rg"]:::core
+    RG("📦 Resource Group\napim-accelerator-{env}-{loc}-rg"):::core
 
-    MOD_SHARED["📦 Module: shared\nsrc/shared/main.bicep"]:::warning
-    MOD_CORE["📦 Module: core\nsrc/core/main.bicep"]:::warning
-    MOD_INV["📦 Module: inventory\nsrc/inventory/main.bicep"]:::warning
+    MOD_SHARED("📦 Module: shared\nsrc/shared/main.bicep"):::warning
+    MOD_CORE("📦 Module: core\nsrc/core/main.bicep"):::warning
+    MOD_INV("📦 Module: inventory\nsrc/inventory/main.bicep"):::warning
 
-    R_LAW["📊 Log Analytics Workspace\nMicrosoft.OperationalInsights/workspaces"]:::core
-    R_ST["💾 Storage Account\nMicrosoft.Storage/storageAccounts"]:::core
-    R_AI["🔭 Application Insights\nMicrosoft.Insights/components"]:::core
-    R_DIAG1["⚙️ Diagnostic Settings (LAW)\nMicrosoft.Insights/diagnosticSettings"]:::neutral
-    R_DIAG2["⚙️ Diagnostic Settings (AppIns)\nMicrosoft.Insights/diagnosticSettings"]:::neutral
+    R_LAW("📊 Log Analytics Workspace\nMicrosoft.OperationalInsights/workspaces"):::core
+    R_ST("💾 Storage Account\nMicrosoft.Storage/storageAccounts"):::core
+    R_AI("🔭 Application Insights\nMicrosoft.Insights/components"):::core
+    R_DIAG1("⚙️ Diagnostic Settings (LAW)\nMicrosoft.Insights/diagnosticSettings"):::neutral
+    R_DIAG2("⚙️ Diagnostic Settings (AppIns)\nMicrosoft.Insights/diagnosticSettings"):::neutral
 
-    R_APIM["⚙️ API Management Service\nMicrosoft.ApiManagement/service"]:::core
-    R_APIM_LOGGER["📡 APIM AppInsights Logger\nMicrosoft.ApiManagement/service/loggers"]:::neutral
-    R_APIM_DIAG["⚙️ Diagnostic Settings (APIM)\nMicrosoft.Insights/diagnosticSettings"]:::neutral
-    R_APIM_WS["📁 APIM Workspace\nMicrosoft.ApiManagement/service/workspaces"]:::neutral
-    R_DP_IDPROV["🔐 AAD Identity Provider\nMicrosoft.ApiManagement/service/identityProviders"]:::neutral
-    R_APIM_POLICY["📜 APIM CORS Policy\nMicrosoft.ApiManagement/service/policies"]:::neutral
-    R_RBAC_APIM["🔒 RBAC: Reader Role\nMicrosoft.Authorization/roleAssignments"]:::danger
+    R_APIM("⚙️ API Management Service\nMicrosoft.ApiManagement/service"):::core
+    R_APIM_LOGGER("📡 APIM AppInsights Logger\nMicrosoft.ApiManagement/service/loggers"):::neutral
+    R_APIM_DIAG("⚙️ Diagnostic Settings (APIM)\nMicrosoft.Insights/diagnosticSettings"):::neutral
+    R_APIM_WS("📁 APIM Workspace\nMicrosoft.ApiManagement/service/workspaces"):::neutral
+    R_DP_IDPROV("🔐 AAD Identity Provider\nMicrosoft.ApiManagement/service/identityProviders"):::neutral
+    R_APIM_POLICY("📜 APIM CORS Policy\nMicrosoft.ApiManagement/service/policies"):::neutral
+    R_RBAC_APIM("🔒 RBAC: Reader Role\nMicrosoft.Authorization/roleAssignments"):::danger
 
-    R_APC["📋 API Center Service\nMicrosoft.ApiCenter/services"]:::core
-    R_APC_WS["📁 API Center Workspace\nMicrosoft.ApiCenter/services/workspaces"]:::neutral
-    R_APC_SRC["🔗 API Source (APIM)\nMicrosoft.ApiCenter/.../apiSources"]:::neutral
-    R_RBAC_APC["🔒 RBAC: Data Reader + Compliance Mgr\nMicrosoft.Authorization/roleAssignments"]:::danger
+    R_APC("📋 API Center Service\nMicrosoft.ApiCenter/services"):::core
+    R_APC_WS("📁 API Center Workspace\nMicrosoft.ApiCenter/services/workspaces"):::neutral
+    R_APC_SRC("🔗 API Source (APIM)\nMicrosoft.ApiCenter/.../apiSources"):::neutral
+    R_RBAC_APC("🔒 RBAC: Data Reader + Compliance Mgr\nMicrosoft.Authorization/roleAssignments"):::danger
 
     SUB --> RG
     RG --> MOD_SHARED
