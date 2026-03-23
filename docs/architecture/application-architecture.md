@@ -153,9 +153,6 @@ flowchart TB
 
     classDef neutral fill:#FAFAFA,stroke:#8A8886,stroke-width:2px,color:#323130
     classDef core fill:#EFF6FC,stroke:#0078D4,stroke-width:2px,color:#323130
-    classDef success fill:#DFF6DD,stroke:#107C10,stroke-width:2px,color:#323130
-    classDef warning fill:#FFF4CE,stroke:#FFB900,stroke-width:2px,color:#323130
-    classDef danger fill:#FDE7E9,stroke:#D13438,stroke-width:2px,color:#323130
 
     style ACTORS fill:#F3F2F1,stroke:#8A8886,stroke-width:2px,color:#323130
     style PLATFORM fill:#F3F2F1,stroke:#8A8886,stroke-width:2px,color:#323130
@@ -233,8 +230,6 @@ flowchart TB
     classDef neutral fill:#FAFAFA,stroke:#8A8886,stroke-width:2px,color:#323130
     classDef core fill:#EFF6FC,stroke:#0078D4,stroke-width:2px,color:#323130
     classDef success fill:#DFF6DD,stroke:#107C10,stroke-width:2px,color:#323130
-    classDef warning fill:#FFF4CE,stroke:#FFB900,stroke-width:2px,color:#323130
-    classDef danger fill:#FDE7E9,stroke:#D13438,stroke-width:2px,color:#323130
 
     style GATEWAY fill:#F3F2F1,stroke:#8A8886,stroke-width:2px,color:#323130
     style CATALOG fill:#F3F2F1,stroke:#8A8886,stroke-width:2px,color:#323130
@@ -303,8 +298,6 @@ flowchart TB
     classDef neutral fill:#FAFAFA,stroke:#8A8886,stroke-width:2px,color:#323130
     classDef core fill:#EFF6FC,stroke:#0078D4,stroke-width:2px,color:#323130
     classDef success fill:#DFF6DD,stroke:#107C10,stroke-width:2px,color:#323130
-    classDef warning fill:#FFF4CE,stroke:#FFB900,stroke-width:2px,color:#323130
-    classDef danger fill:#FDE7E9,stroke:#D13438,stroke-width:2px,color:#323130
 
     style SHARED_INT fill:#F3F2F1,stroke:#8A8886,stroke-width:2px,color:#323130
     style CORE_INT fill:#F3F2F1,stroke:#8A8886,stroke-width:2px,color:#323130
@@ -461,7 +454,6 @@ flowchart LR
     classDef core fill:#EFF6FC,stroke:#0078D4,stroke-width:2px,color:#323130
     classDef success fill:#DFF6DD,stroke:#107C10,stroke-width:2px,color:#323130
     classDef warning fill:#FFF4CE,stroke:#FFB900,stroke-width:2px,color:#323130
-    classDef danger fill:#FDE7E9,stroke:#D13438,stroke-width:2px,color:#323130
 
 ```
 
@@ -571,8 +563,6 @@ flowchart TB
     classDef neutral fill:#FAFAFA,stroke:#8A8886,stroke-width:2px,color:#323130
     classDef core fill:#EFF6FC,stroke:#0078D4,stroke-width:2px,color:#323130
     classDef success fill:#DFF6DD,stroke:#107C10,stroke-width:2px,color:#323130
-    classDef warning fill:#FFF4CE,stroke:#FFB900,stroke-width:2px,color:#323130
-    classDef danger fill:#FDE7E9,stroke:#D13438,stroke-width:2px,color:#323130
 
     style SHARED_LAYER fill:#F3F2F1,stroke:#8A8886,stroke-width:2px,color:#323130
     style CORE_LAYER fill:#F3F2F1,stroke:#8A8886,stroke-width:2px,color:#323130
@@ -662,11 +652,26 @@ config:
   layout: dagre
   themeVariables:
     fontSize: '16px'
+    actorBkg: '#0078D4'
+    actorBorder: '#106EBE'
+    actorTextColor: '#FFFFFF'
+    signalColor: '#106EBE'
+    signalTextColor: '#106EBE'
 ---
 sequenceDiagram
-    accTitle: APIM Accelerator Application Deployment Sequence Diagram
+    accTitle: APIM Deployment Sequence
     accDescr: Sequence diagram showing the deployment-time collaboration flow between the four application services and the azd orchestrator
 
+%% ═══════════════════════════════════════════════════════════════════════════
+%% AZURE / FLUENT ARCHITECTURE PATTERN v2.0
+%% (Semantic + Structural + Font + Accessibility Governance)
+%% ═══════════════════════════════════════════════════════════════════════════
+%% PHASE 1 - FLUENT UI: All styling uses approved Fluent UI palette only
+%% PHASE 2 - GROUPS: Every subgraph has semantic color via style directive
+%% PHASE 3 - COMPONENTS: Every node has semantic classDef + icon prefix
+%% PHASE 4 - ACCESSIBILITY: accTitle/accDescr present, WCAG AA contrast
+%% PHASE 5 - STANDARD: Governance block present, classDefs centralized
+%% ═══════════════════════════════════════════════════════════════════════════
 
     participant PE as 👤 Platform Engineer
     participant AZD as 🚀 azd CLI
@@ -1285,9 +1290,6 @@ flowchart TB
 
     classDef neutral fill:#FAFAFA,stroke:#8A8886,stroke-width:2px,color:#323130
     classDef core fill:#EFF6FC,stroke:#0078D4,stroke-width:2px,color:#323130
-    classDef success fill:#DFF6DD,stroke:#107C10,stroke-width:2px,color:#323130
-    classDef warning fill:#FFF4CE,stroke:#FFB900,stroke-width:2px,color:#323130
-    classDef danger fill:#FDE7E9,stroke:#D13438,stroke-width:2px,color:#323130
 
     style DEPLOY fill:#F3F2F1,stroke:#8A8886,stroke-width:2px,color:#323130
     style SHARED_LAYER fill:#F3F2F1,stroke:#8A8886,stroke-width:2px,color:#323130
@@ -1371,7 +1373,6 @@ flowchart LR
     classDef core fill:#EFF6FC,stroke:#0078D4,stroke-width:2px,color:#323130
     classDef success fill:#DFF6DD,stroke:#107C10,stroke-width:2px,color:#323130
     classDef warning fill:#FFF4CE,stroke:#FFB900,stroke-width:2px,color:#323130
-    classDef danger fill:#FDE7E9,stroke:#D13438,stroke-width:2px,color:#323130
 
     style SOURCES fill:#F3F2F1,stroke:#8A8886,stroke-width:2px,color:#323130
     style SINKS fill:#F3F2F1,stroke:#8A8886,stroke-width:2px,color:#323130
