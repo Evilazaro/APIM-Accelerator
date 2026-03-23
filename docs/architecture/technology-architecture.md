@@ -349,9 +349,9 @@ flowchart TB
     %% Subgraph styling (no class directive on subgraphs — use style)
     style AzSub fill:#F3F2F1,stroke:#8A8886,stroke-width:2px,color:#323130
     style RG fill:#F3F2F1,stroke:#8A8886,stroke-width:2px,color:#323130
-    style CorePlatform fill:#F3F2F1,stroke:#8A8886,stroke-width:2px,color:#323130
-    style Inventory fill:#F3F2F1,stroke:#8A8886,stroke-width:2px,color:#323130
-    style SharedMon fill:#F3F2F1,stroke:#8A8886,stroke-width:2px,color:#323130
+    style CorePlatform fill:#F3F2F1,stroke:#0078D4,stroke-width:2px,color:#323130
+    style Inventory fill:#F3F2F1,stroke:#107C10,stroke-width:2px,color:#323130
+    style SharedMon fill:#F3F2F1,stroke:#FFB900,stroke-width:2px,color:#323130
 ```
 
 ✅ Mermaid Verification: 5/5 | Score: 100/100 | Subgraphs: 5 | Style directives: 5 | Violations: 0
