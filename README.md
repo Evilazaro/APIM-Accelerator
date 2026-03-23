@@ -126,9 +126,9 @@ flowchart TB
 
         subgraph sharedLayer["🔭 Shared Monitoring"]
             direction LR
-            law("📊 Log Analytics Workspace"):::data
-            ai("📈 Application Insights"):::data
-            stg("🗄️ Storage Account"):::data
+            law("📊 Log Analytics Workspace"):::neutral
+            ai("📈 Application Insights"):::neutral
+            stg("🗄️ Storage Account"):::neutral
         end
 
         subgraph coreLayer["⚙️ Core API Management Platform"]
@@ -168,7 +168,6 @@ flowchart TB
     classDef core fill:#EFF6FC,stroke:#0078D4,stroke-width:2px,color:#323130
     classDef success fill:#DFF6DD,stroke:#107C10,stroke-width:2px,color:#323130
     classDef warning fill:#FFF4CE,stroke:#FFB900,stroke-width:2px,color:#323130
-    classDef data fill:#F0E6FA,stroke:#8764B8,stroke-width:2px,color:#323130
 ```
 
 ✅ Mermaid Verification: 5/5 | Score: 100/100 | Diagrams: 1 | Violations: 0
