@@ -1223,17 +1223,7 @@ flowchart TB
     accDescr: Directed graph showing all service-to-service dependencies and data flow connections across the application layer
 
     %% ═══════════════════════════════════════════════════════════════════════════
-    %% AZURE / FLUENT ARCHITECTURE PATTERN v1.1
-    %% (Semantic + Structural + Font + Accessibility Governance)
-    %% ═══════════════════════════════════════════════════════════════════════════
-    %% PHASE 1 - FLUENT UI: All styling uses approved Fluent UI palette only
-    %% PHASE 2 - GROUPS: Every subgraph has semantic color via style directive
-    %% PHASE 3 - COMPONENTS: Every node has semantic classDef + icon prefix
-    %% PHASE 4 - ACCESSIBILITY: accTitle/accDescr present, WCAG AA contrast
-    %% PHASE 5 - STANDARD: Governance block present, classDefs centralized
-    %% ═══════════════════════════════════════════════════════════════════════════
-
-    subgraph DEPLOY["🚀 Deployment Plane"]
+    %% AZURE / FLUENT ARCHITECTURE PATTERN v2.0["🚀 Deployment Plane"]
         AZD("🔧 azd CLI"):::neutral
         HOOK("📜 pre-provision.sh"):::neutral
         INFRA("📄 infra/main.bicep"):::neutral
@@ -1285,11 +1275,14 @@ flowchart TB
 
     classDef neutral fill:#FAFAFA,stroke:#8A8886,stroke-width:2px,color:#323130
     classDef core fill:#EFF6FC,stroke:#0078D4,stroke-width:2px,color:#323130
+    classDef success fill:#DFF6DD,stroke:#107C10,stroke-width:2px,color:#323130
+    classDef warning fill:#FFF4CE,stroke:#FFB900,stroke-width:2px,color:#323130
+    classDef danger fill:#FDE7E9,stroke:#D13438,stroke-width:2px,color:#323130
 
-    style DEPLOY fill:#FAFAFA,stroke:#8A8886,stroke-width:2px,color:#323130
-    style SHARED_LAYER fill:#FAFAFA,stroke:#8A8886,stroke-width:2px,color:#323130
-    style CORE_LAYER fill:#EFF6FC,stroke:#0078D4,stroke-width:2px,color:#323130
-    style INV_LAYER fill:#EFF6FC,stroke:#0078D4,stroke-width:2px,color:#323130
+    style DEPLOY fill:#F3F2F1,stroke:#8A8886,stroke-width:2px,color:#323130
+    style SHARED_LAYER fill:#F3F2F1,stroke:#8A8886,stroke-width:2px,color:#323130
+    style CORE_LAYER fill:#F3F2F1,stroke:#8A8886,stroke-width:2px,color:#323130
+    style INV_LAYER fill:#F3F2F1,stroke:#8A8886,stroke-width:2px,color:#323130
 ```
 
 ✅ Mermaid Verification: 5/5 | Score: 100/100 | Diagrams: 1 | Violations: 0
