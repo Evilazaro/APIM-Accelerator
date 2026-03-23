@@ -314,6 +314,16 @@ flowchart TB
     cap8 --> cap4
     cap7 --> cap10
 
+    classDef neutral fill:#FAFAFA,stroke:#8A8886,stroke-width:2px,color:#323130
+    classDef core fill:#EFF6FC,stroke:#0078D4,stroke-width:2px,color:#323130
+    classDef success fill:#DFF6DD,stroke:#107C10,stroke-width:2px,color:#323130
+    classDef warning fill:#FFF4CE,stroke:#FFB900,stroke-width:2px,color:#323130
+    classDef danger fill:#FDE7E9,stroke:#D13438,stroke-width:2px,color:#323130
+
+    style platformDelivery fill:#F3F2F1,stroke:#8A8886,stroke-width:2px,color:#323130
+    style devExp fill:#F3F2F1,stroke:#8A8886,stroke-width:2px,color:#323130
+    style apiGov fill:#F3F2F1,stroke:#8A8886,stroke-width:2px,color:#323130
+    style operations fill:#F3F2F1,stroke:#8A8886,stroke-width:2px,color:#323130
 
 ```
 
@@ -375,6 +385,17 @@ flowchart LR
     actor --> clone --> auth --> trigger
     trigger --> preHook --> purge --> rg
     rg --> monitoring --> apim --> inventory --> ready
+
+    classDef neutral fill:#FAFAFA,stroke:#8A8886,stroke-width:2px,color:#323130
+    classDef core fill:#EFF6FC,stroke:#0078D4,stroke-width:2px,color:#323130
+    classDef success fill:#DFF6DD,stroke:#107C10,stroke-width:2px,color:#323130
+    classDef warning fill:#FFF4CE,stroke:#FFB900,stroke-width:2px,color:#323130
+    classDef danger fill:#FDE7E9,stroke:#D13438,stroke-width:2px,color:#323130
+
+    style initiation fill:#F3F2F1,stroke:#8A8886,stroke-width:2px,color:#323130
+    style provisioning fill:#F3F2F1,stroke:#8A8886,stroke-width:2px,color:#323130
+    style deployment fill:#F3F2F1,stroke:#8A8886,stroke-width:2px,color:#323130
+    style outcome fill:#F3F2F1,stroke:#8A8886,stroke-width:2px,color:#323130
 
 ```
 
@@ -609,6 +630,11 @@ flowchart LR
     platform -->|"workspaces + portal"| onboarding
     onboarding -->|"APIs live"| value
 
+    classDef neutral fill:#FAFAFA,stroke:#8A8886,stroke-width:2px,color:#323130
+    classDef core fill:#EFF6FC,stroke:#0078D4,stroke-width:2px,color:#323130
+    classDef success fill:#DFF6DD,stroke:#107C10,stroke-width:2px,color:#323130
+    classDef warning fill:#FFF4CE,stroke:#FFB900,stroke-width:2px,color:#323130
+    classDef danger fill:#FDE7E9,stroke:#D13438,stroke-width:2px,color:#323130
 
 ```
 
@@ -680,6 +706,15 @@ flowchart TB
     bs4 --> ext2
     bs3 --> ext1
 
+    classDef neutral fill:#FAFAFA,stroke:#8A8886,stroke-width:2px,color:#323130
+    classDef core fill:#EFF6FC,stroke:#0078D4,stroke-width:2px,color:#323130
+    classDef success fill:#DFF6DD,stroke:#107C10,stroke-width:2px,color:#323130
+    classDef warning fill:#FFF4CE,stroke:#FFB900,stroke-width:2px,color:#323130
+    classDef danger fill:#FDE7E9,stroke:#D13438,stroke-width:2px,color:#323130
+
+    style actors fill:#F3F2F1,stroke:#8A8886,stroke-width:2px,color:#323130
+    style bizServices fill:#F3F2F1,stroke:#8A8886,stroke-width:2px,color:#323130
+    style external fill:#F3F2F1,stroke:#8A8886,stroke-width:2px,color:#323130
 
 ```
 
@@ -742,6 +777,17 @@ flowchart LR
         c10("🔄 IaC Automation<br>Current: 4 | Target: 5"):::core
         c11("🚦 Deployment Orchestration<br>Current: 4 | Target: 5"):::core
     end
+
+    classDef neutral fill:#FAFAFA,stroke:#8A8886,stroke-width:2px,color:#323130
+    classDef core fill:#EFF6FC,stroke:#0078D4,stroke-width:2px,color:#323130
+    classDef success fill:#DFF6DD,stroke:#107C10,stroke-width:2px,color:#323130
+    classDef warning fill:#FFF4CE,stroke:#FFB900,stroke-width:2px,color:#323130
+    classDef danger fill:#FDE7E9,stroke:#D13438,stroke-width:2px,color:#323130
+
+    style apiPlatform fill:#F3F2F1,stroke:#8A8886,stroke-width:2px,color:#323130
+    style devExp fill:#F3F2F1,stroke:#8A8886,stroke-width:2px,color:#323130
+    style governance fill:#F3F2F1,stroke:#8A8886,stroke-width:2px,color:#323130
+    style opEx fill:#F3F2F1,stroke:#8A8886,stroke-width:2px,color:#323130
 
 ```
 
@@ -825,6 +871,16 @@ flowchart TB
     t4 --> e1
     bs4 --> e2
     bs1 --> e3
+
+    classDef neutral fill:#FAFAFA,stroke:#8A8886,stroke-width:2px,color:#323130
+    classDef core fill:#EFF6FC,stroke:#0078D4,stroke-width:2px,color:#323130
+    classDef success fill:#DFF6DD,stroke:#107C10,stroke-width:2px,color:#323130
+    classDef warning fill:#FFF4CE,stroke:#FFB900,stroke-width:2px,color:#323130
+    classDef danger fill:#FDE7E9,stroke:#D13438,stroke-width:2px,color:#323130
+
+    style bizLayer fill:#F3F2F1,stroke:#8A8886,stroke-width:2px,color:#323130
+    style techLayer fill:#F3F2F1,stroke:#8A8886,stroke-width:2px,color:#323130
+    style extLayer fill:#F3F2F1,stroke:#8A8886,stroke-width:2px,color:#323130
 
 ```
 
