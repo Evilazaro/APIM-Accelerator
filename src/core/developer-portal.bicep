@@ -67,14 +67,12 @@ var allowedTenants = [
 @maxLength(50)
 param apiManagementName string
 
-@description('Azure AD application client ID for developer portal authentication. Obtain from Azure AD app registration.')
-@minLength(36)
-@maxLength(36)
-param clientId string
+@description('Azure AD application client ID for developer portal authentication. Obtain from Azure AD app registration. Leave empty to skip AAD identity provider configuration.')
+param clientId string = ''
 
-@description('Azure AD application client secret for developer portal authentication. Obtain from Azure AD app registration certificates & secrets.')
+@description('Azure AD application client secret for developer portal authentication. Obtain from Azure AD app registration certificates & secrets. Leave empty to skip AAD identity provider configuration.')
 @secure()
-param clientSecret string
+param clientSecret string = ''
 
 // =================================================================
 // EXISTING RESOURCES
@@ -131,8 +129,8 @@ resource apimPolicy 'Microsoft.ApiManagement/service/policies@2025-03-01-preview
 // AZURE AD IDENTITY PROVIDER
 // =================================================================
 
-@description('Azure AD identity provider configuration - Enables AAD authentication for developer portal users')
-resource apimIdentityProvider 'Microsoft.ApiManagement/service/identityProviders@2025-03-01-preview' = {
+@description('Azure AD identity provider configuration - Enables AAD authentication for developer portal users. Only deployed when clientId and clientSecret are provided.')
+resource apimIdentityProvider 'Microsoft.ApiManagement/service/identityProviders@2025-03-01-preview' = if (!empty(clientId) && !empty(clientSecret)) {
   parent: apim
   // Configures sign-in and sign-up settings for the developer portal.
   // These settings control user registration and authentication flows.

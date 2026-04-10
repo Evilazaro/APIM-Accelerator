@@ -312,7 +312,7 @@ resource appInsightsLogger 'Microsoft.ApiManagement/service/loggers@2025-03-01-p
 // - API_MANAGEMENT_RESOURCE_ID: Full ARM resource ID
 // - API_MANAGEMENT_NAME: Service name for CLI/SDK operations
 // - AZURE_API_MANAGEMENT_IDENTITY_PRINCIPAL_ID: For RBAC assignments
-// - AZURE_CLIENT_SECRET_*: For authentication scenarios
+// - AZURE_API_MANAGEMENT_IDENTITY_CLIENT_ID: Managed identity client ID
 // =================================================================
 
 @description('Resource ID of the deployed API Management service')
@@ -324,14 +324,5 @@ output API_MANAGEMENT_NAME string = apim.name
 @description('Principal ID of the API Management service managed identity')
 output AZURE_API_MANAGEMENT_IDENTITY_PRINCIPAL_ID string = apim.identity.principalId
 
-@description('Client secret identity resource ID (for existing identity scenarios)')
-output AZURE_CLIENT_SECRET_ID string = clientSecret.id
-
-@description('Client secret identity name (for existing identity scenarios)')
-output AZURE_CLIENT_SECRET_NAME string = clientSecret.name
-
-@description('Client secret principal ID (for existing identity scenarios)')
-output AZURE_CLIENT_SECRET_PRINCIPAL_ID string = clientSecret.properties.principalId
-
-@description('Client secret client ID (for existing identity scenarios)')
-output AZURE_CLIENT_SECRET_CLIENT_ID string = clientSecret.properties.clientId
+@description('Client ID (application ID) of the API Management service managed identity')
+output AZURE_API_MANAGEMENT_IDENTITY_CLIENT_ID string = clientSecret.properties.clientId

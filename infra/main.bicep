@@ -178,3 +178,17 @@ module inventory '../src/inventory/main.bicep' = {
     tags: settings.shared.tags
   }
 }
+
+//==============================================================================
+// CORE PLATFORM OUTPUTS
+//==============================================================================
+// Key outputs from core API Management deployment for reference and integration
+
+@description('Resource ID of the deployed API Management service')
+output API_MANAGEMENT_RESOURCE_ID string = core.outputs.API_MANAGEMENT_RESOURCE_ID
+
+@description('Name of the deployed API Management service for configuration and reference')
+output API_MANAGEMENT_NAME string = core.outputs.API_MANAGEMENT_NAME
+
+@description('Resource ID of the Log Analytics workspace used for centralized monitoring')
+output AZURE_LOG_ANALYTICS_WORKSPACE_ID string = shared.outputs.AZURE_LOG_ANALYTICS_WORKSPACE_ID

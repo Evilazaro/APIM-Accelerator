@@ -174,6 +174,13 @@ param applicationInsIghtsResourceId string
 @description('Tags to be applied to all core platform resources')
 param tags object
 
+@description('Azure AD application client ID for developer portal AAD authentication. Leave empty to skip developer portal AAD configuration.')
+param developerPortalClientId string = ''
+
+@secure()
+@description('Azure AD application client secret for developer portal AAD authentication. Leave empty to skip developer portal AAD configuration.')
+param developerPortalClientSecret string = ''
+
 //==============================================================================
 // VARIABLES AND CONFIGURATION
 //==============================================================================
@@ -271,16 +278,16 @@ module providers 'workspaces.bicep' = [
 // Configures API Management developer portal with Azure AD authentication
 // The developer portal enables API consumers to discover, test, and subscribe
 // to APIs with self-service capabilities.
+// AAD authentication is only configured when developerPortalClientId and
+// developerPortalClientSecret parameters are provided.
 
-// Deploy developer portal with OAuth2/Azure AD integration
-// Note: Uses APIM outputs for client credentials (verify these are correct)
-@description('Developer portal configuration with Azure AD integration for self-service API consumption')
+@description('Developer portal configuration with optional Azure AD integration for self-service API consumption')
 module devPortal 'developer-portal.bicep' = {
   name: 'deploy-developer-portal'
   scope: resourceGroup()
   params: {
     apiManagementName: apim.outputs.API_MANAGEMENT_NAME
-    clientId: apim.outputs.AZURE_CLIENT_SECRET_CLIENT_ID
-    clientSecret: apim.outputs.AZURE_CLIENT_SECRET_CLIENT_ID
+    clientId: developerPortalClientId
+    clientSecret: developerPortalClientSecret
   }
 }
