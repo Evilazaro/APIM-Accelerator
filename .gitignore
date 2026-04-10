@@ -23,6 +23,7 @@ mono_crash.*
 
 # Prompt folder
 [Pp]rompts/
+.[Cc]laude/
 
 # Refactored folder
 [Rr]efactored/
