@@ -85,20 +85,23 @@ This document captures the architecture of the solution according to the **TOGAF
 
 ### 3.3 Business Capabilities Enabled
 
-```
-┌────────────────────────────────────────────────────────────────┐
-│                     Business Capabilities                      │
-├──────────────────┬─────────────────────┬───────────────────────┤
-│  API Publishing  │  API Consumption    │  API Governance        │
-│  (Producers)     │  (Consumers)        │  (Compliance)          │
-├──────────────────┼─────────────────────┼───────────────────────┤
-│ - Workspace-     │ - Developer portal  │ - Centralized catalog  │
-│   based API      │   self-service      │   (API Center)         │
-│   lifecycle      │ - OAuth2/Azure AD   │ - Regulatory tagging   │
-│ - Policy         │   sign-in           │ - RBAC enforcement     │
-│   enforcement    │ - API discovery     │ - Audit log retention  │
-│ - Rate limiting  │ - Testing sandbox   │ - GDPR compliance      │
-└──────────────────┴─────────────────────┴───────────────────────┘
+```mermaid
+mindmap
+  root((Business
+    Capabilities))
+    API Publishing
+      Workspace-based API lifecycle
+      Policy enforcement
+      Rate limiting
+    API Consumption
+      Developer portal self-service
+      OAuth2 / Azure AD sign-in
+      API discovery & testing sandbox
+    API Governance
+      Centralized catalog via API Center
+      Regulatory tagging
+      RBAC enforcement
+      Audit log retention & GDPR
 ```
 
 ---
@@ -117,25 +120,13 @@ The APIM Accelerator manages three distinct data domains:
 
 ### 4.2 Data Flow Overview
 
-```
-┌──────────────┐    HTTP Requests     ┌──────────────────────┐
-│  API Consumer│ ───────────────────► │  Azure API Management│
-└──────────────┘                      │  (Gateway)           │
-                                      └──────────┬───────────┘
-                                                 │ Diagnostic Logs
-                              ┌──────────────────┼──────────────────┐
-                              ▼                  ▼                  ▼
-                   ┌──────────────┐  ┌──────────────────┐  ┌──────────────┐
-                   │ Log Analytics│  │Application Insights│  │Storage Acct  │
-                   │ Workspace    │  │ (APM / traces)   │  │ (log archive)│
-                   └──────────────┘  └──────────────────┘  └──────────────┘
-                              │
-                              │  API Sync (auto-discovery)
-                              ▼
-                   ┌──────────────────────┐
-                   │   Azure API Center   │
-                   │  (catalog metadata)  │
-                   └──────────────────────┘
+```mermaid
+flowchart TD
+    Consumer([API Consumer]) -->|HTTP Requests| APIM[Azure API Management\nGateway]
+    APIM -->|Diagnostic Logs| LAW[(Log Analytics\nWorkspace)]
+    APIM -->|APM Traces| AI[(Application Insights\nAPM / traces)]
+    APIM -->|Log Archive| ST[(Storage Account\nlog archive)]
+    LAW -->|API Sync — auto-discovery| APC[(Azure API Center\ncatalog metadata)]
 ```
 
 ### 4.3 Data Sensitivity and Governance
@@ -160,49 +151,34 @@ This is the primary domain of this document. The application architecture descri
 
 The solution is decomposed into four logical application components aligned to the Bicep module hierarchy:
 
-```
-┌────────────────────────────────────────────────────────────────────────────┐
-│                        APIM Landing Zone                                   │
-│                                                                            │
-│  ┌─────────────────────────────────────────────────────────────────────┐  │
-│  │  [AC-01] Shared Infrastructure Component                            │  │
-│  │  src/shared/                                                        │  │
-│  │                                                                     │  │
-│  │  ┌──────────────────────┐   ┌──────────────────┐  ┌─────────────┐  │  │
-│  │  │ [AC-01a] Operational │   │ [AC-01b] App     │  │[AC-01c]     │  │  │
-│  │  │ Monitoring           │   │ Insights (APM)   │  │Storage Acct │  │  │
-│  │  │ (Log Analytics)      │   │                  │  │(log archive)│  │  │
-│  │  └──────────────────────┘   └──────────────────┘  └─────────────┘  │  │
-│  └─────────────────────────────────────────────────────────────────────┘  │
-│                              ▲ (depends on)                                │
-│  ┌─────────────────────────────────────────────────────────────────────┐  │
-│  │  [AC-02] Core API Platform Component                                │  │
-│  │  src/core/                                                          │  │
-│  │                                                                     │  │
-│  │  ┌────────────────┐  ┌──────────────┐  ┌───────────────────────┐  │  │
-│  │  │ [AC-02a]       │  │ [AC-02b]     │  │ [AC-02c]              │  │  │
-│  │  │ API Management │  │ Workspaces   │  │ Developer Portal      │  │  │
-│  │  │ Gateway        │  │ (isolation)  │  │ (Azure AD / OAuth2)   │  │  │
-│  │  └────────────────┘  └──────────────┘  └───────────────────────┘  │  │
-│  └─────────────────────────────────────────────────────────────────────┘  │
-│                              ▲ (depends on)                                │
-│  ┌─────────────────────────────────────────────────────────────────────┐  │
-│  │  [AC-03] API Inventory Component                                    │  │
-│  │  src/inventory/                                                     │  │
-│  │                                                                     │  │
-│  │  ┌──────────────────┐  ┌────────────────────┐  ┌────────────────┐  │  │
-│  │  │ [AC-03a]         │  │ [AC-03b]           │  │ [AC-03c]       │  │  │
-│  │  │ API Center       │  │ Default Workspace  │  │ API Source     │  │  │
-│  │  │ Service          │  │ (catalog org.)     │  │ (APIM sync)    │  │  │
-│  │  └──────────────────┘  └────────────────────┘  └────────────────┘  │  │
-│  └─────────────────────────────────────────────────────────────────────┘  │
-│                                                                            │
-│  ┌─────────────────────────────────────────────────────────────────────┐  │
-│  │  [AC-04] Networking Component (Placeholder)                         │  │
-│  │  src/shared/networking/                                             │  │
-│  │  [Future: VNet integration, subnets, NSGs for private APIM]        │  │
-│  └─────────────────────────────────────────────────────────────────────┘  │
-└────────────────────────────────────────────────────────────────────────────┘
+```mermaid
+graph TD
+    subgraph LZ[APIM Landing Zone]
+        subgraph AC01["AC-01 — Shared Infrastructure  ·  src/shared/"]
+            AC01a[AC-01a · Log Analytics\nOperational Monitoring]
+            AC01b[AC-01b · Application Insights\nAPM]
+            AC01c[AC-01c · Storage Account\nlog archive]
+        end
+
+        subgraph AC02["AC-02 — Core API Platform  ·  src/core/"]
+            AC02a[AC-02a · API Management\nGateway]
+            AC02b[AC-02b · Workspaces\nteam isolation]
+            AC02c[AC-02c · Developer Portal\nAzure AD / OAuth2]
+        end
+
+        subgraph AC03["AC-03 — API Inventory  ·  src/inventory/"]
+            AC03a[AC-03a · API Center Service]
+            AC03b[AC-03b · Default Workspace\ncatalog organisation]
+            AC03c[AC-03c · API Source\nAPIM sync]
+        end
+
+        subgraph AC04["AC-04 — Networking  ·  src/shared/networking/  ⚠ Placeholder"]
+            AC04n[Future: VNet · Subnets · NSGs for private APIM]
+        end
+
+        AC01 -->|provides monitoring outputs| AC02
+        AC02 -->|provides APIM resource ID & name| AC03
+    end
 ```
 
 ### 5.2 Application Component Catalog
@@ -325,37 +301,36 @@ The solution is decomposed into four logical application components aligned to t
 
 ### 5.3 Application Interaction Diagram
 
-```
-                         ┌─────────────────────────────────┐
-                         │         Azure Subscription       │
-                         └───────────────┬─────────────────┘
-                                         │ targetScope = 'subscription'
-                                         │ infra/main.bicep
-                                         ▼
-                         ┌──────────────────────────────────┐
-                         │      Resource Group               │
-                         │  apim-accelerator-{env}-{loc}-rg │
-                         └───────────────┬──────────────────┘
-                                         │
-               ┌─────────────────────────┼──────────────────────┐
-               │                         │                      │
-               ▼                         ▼                      ▼
-  ┌────────────────────┐   ┌─────────────────────┐  ┌─────────────────────┐
-  │   AC-01            │   │   AC-02             │  │   AC-03             │
-  │   Shared Infra     │──►│   Core API Platform │─►│   API Inventory     │
-  │                    │   │                     │  │                     │
-  │  ┌──────────────┐  │   │ ┌───────────────┐  │  │ ┌─────────────────┐ │
-  │  │Log Analytics │  │   │ │ APIM Gateway  │  │  │ │  API Center     │ │
-  │  └──────────────┘  │   │ └───────┬───────┘  │  │ └────────┬────────┘ │
-  │  ┌──────────────┐  │   │         │           │  │          │          │
-  │  │App Insights  │  │   │ ┌───────┴───────┐  │  │ ┌────────┴────────┐ │
-  │  └──────────────┘  │   │ │  Workspaces   │  │  │ │ Default WS +    │ │
-  │  ┌──────────────┐  │   │ └───────────────┘  │  │ │ API Source      │ │
-  │  │Storage Acct  │  │   │ ┌───────────────┐  │  │ └─────────────────┘ │
-  │  └──────────────┘  │   │ │ Dev Portal    │  │  └─────────────────────┘
-  └────────────────────┘   │ │ (Azure AD)    │  │
-                           │ └───────────────┘  │
-                           └─────────────────────┘
+```mermaid
+graph TD
+    SUB(["☁ Azure Subscription\ninfra/main.bicep — targetScope = subscription"])
+    SUB --> RG["📦 Resource Group\napim-accelerator-{env}-{loc}-rg"]
+
+    RG --> AC01
+    RG --> AC02
+    RG --> AC03
+
+    subgraph AC01[AC-01 · Shared Infrastructure]
+        LAW[Log Analytics Workspace]
+        AI[Application Insights]
+        ST[Storage Account]
+    end
+
+    subgraph AC02[AC-02 · Core API Platform]
+        APIM[APIM Gateway]
+        WS[Workspaces]
+        DP[Developer Portal\nAzure AD]
+        APIM --> WS
+    end
+
+    subgraph AC03[AC-03 · API Inventory]
+        APC[API Center]
+        DWS[Default Workspace\n+ API Source]
+        APC --> DWS
+    end
+
+    AC01 -->|"AZURE_LOG_ANALYTICS_WORKSPACE_ID\nAPPLICATION_INSIGHTS_RESOURCE_ID\nAZURE_STORAGE_ACCOUNT_ID"| AC02
+    AC02 -->|"API_MANAGEMENT_RESOURCE_ID\nAPI_MANAGEMENT_NAME"| AC03
 ```
 
 ### 5.4 Application Services Catalog
@@ -374,23 +349,21 @@ The solution is decomposed into four logical application components aligned to t
 
 The Premium SKU of APIM enables **workspace-based multi-tenancy** within a single service instance:
 
-```
-┌──────────────────────────────────────────────────────────────┐
-│               Azure API Management Service                   │
-│                   (Premium SKU)                              │
-│                                                              │
-│  ┌──────────────────────┐   ┌──────────────────────────┐    │
-│  │     workspace1       │   │     workspace-N           │    │
-│  │  (Team A APIs)       │   │  (Team B APIs)            │    │
-│  │                      │   │                           │    │
-│  │  - Independent API   │   │  - Independent API        │    │
-│  │    lifecycle         │   │    lifecycle              │    │
-│  │  - Scoped RBAC       │   │  - Scoped RBAC            │    │
-│  │  - Separate policies │   │  - Separate policies      │    │
-│  └──────────────────────┘   └──────────────────────────┘    │
-│                                                              │
-│  Shared: Gateway, Monitoring, Developer Portal, Policies     │
-└──────────────────────────────────────────────────────────────┘
+```mermaid
+graph TD
+    subgraph APIM["Azure API Management Service — Premium SKU"]
+        subgraph WS1[workspace1 · Team A APIs]
+            W1A[Independent API lifecycle]
+            W1B[Scoped RBAC]
+            W1C[Separate policies]
+        end
+        subgraph WSN[workspace-N · Team B APIs]
+            WNA[Independent API lifecycle]
+            WNB[Scoped RBAC]
+            WNC[Separate policies]
+        end
+        SH["🔗 Shared: Gateway · Monitoring · Developer Portal · Global Policies"]
+    end
 ```
 
 Benefits:
@@ -401,32 +374,20 @@ Benefits:
 
 ### 5.6 Developer Portal Authentication Flow
 
-```
-  API Consumer Browser
-         │
-         │  1. Navigate to Developer Portal URL
-         ▼
-  ┌──────────────────────────────┐
-  │   APIM Developer Portal      │
-  │   (AC-02c)                   │
-  └──────────┬───────────────────┘
-             │  2. Redirect to Azure AD login
-             ▼
-  ┌──────────────────────────────┐
-  │   Azure Active Directory     │
-  │   (Identity Provider: AAD)   │
-  │   allowedTenants:            │
-  │   MngEnvMCAP341438.onmicro.. │
-  └──────────┬───────────────────┘
-             │  3. Token issued (MSAL-2 / OpenID Connect)
-             ▼
-  ┌──────────────────────────────┐
-  │   Developer Portal           │
-  │   (Authenticated session)    │
-  │   - Browse API catalog       │
-  │   - Subscribe to APIs        │
-  │   - Test via sandbox         │
-  └──────────────────────────────┘
+```mermaid
+sequenceDiagram
+    actor Browser as API Consumer Browser
+    participant Portal as APIM Developer Portal (AC-02c)
+    participant AAD as Azure Active Directory
+
+    Browser->>Portal: 1. Navigate to Developer Portal URL
+    Portal-->>Browser: 2. Redirect to Azure AD login
+    Browser->>AAD: 3. Submit credentials
+    Note over AAD: allowedTenants: MngEnvMCAP341438.onmicrosoft.com
+    AAD-->>Browser: 4. Token issued (MSAL-2 / OpenID Connect)
+    Browser->>Portal: 5. Present token
+    Portal-->>Browser: 6. Authenticated session granted
+    Note over Browser,Portal: Browse API catalog\nSubscribe to APIs\nTest via sandbox
 ```
 
 ---
@@ -483,21 +444,14 @@ App Insights:     {solutionName}-{uniqueSuffix}-ai
 
 ### 6.5 Deployment Sequence
 
-```
-Phase 1 ──► Resource Group Creation
-              (infra/main.bicep, subscription scope)
+```mermaid
+flowchart LR
+    P1["**Phase 1**\nResource Group Creation\ninfra/main.bicep\nsubscription scope"]
+    P2["**Phase 2**\nShared Infrastructure\nAC-01\nLog Analytics → Storage\n→ App Insights\nsrc/shared/main.bicep"]
+    P3["**Phase 3**\nCore API Platform\nAC-02\nAPIM → Workspaces\n→ Developer Portal\nsrc/core/main.bicep"]
+    P4["**Phase 4**\nAPI Inventory\nAC-03\nAPI Center → Workspace\n→ API Source → RBAC\nsrc/inventory/main.bicep"]
 
-Phase 2 ──► Shared Infrastructure (AC-01)
-              Log Analytics → Storage Account → Application Insights
-              (src/shared/main.bicep → src/shared/monitoring/*)
-
-Phase 3 ──► Core API Platform (AC-02)
-              API Management Service → Workspaces → Developer Portal
-              (src/core/main.bicep → apim.bicep, workspaces.bicep, developer-portal.bicep)
-
-Phase 4 ──► API Inventory (AC-03)
-              API Center → Default Workspace → API Source Integration → RBAC
-              (src/inventory/main.bicep)
+    P1 --> P2 --> P3 --> P4
 ```
 
 ### 6.6 Governance Tags Applied to All Resources
@@ -562,42 +516,34 @@ Phase 4 ──► API Inventory (AC-03)
 
 ## 9. Appendix — Module Dependency Map
 
-```
-infra/main.bicep  (Orchestration — Subscription scope)
-│
-├── src/shared/main.bicep                         [AC-01 Shared Infra]
-│   └── src/shared/monitoring/main.bicep
-│       ├── src/shared/monitoring/operational/main.bicep
-│       │   ├── Microsoft.OperationalInsights/workspaces  [AC-01a Log Analytics]
-│       │   └── Microsoft.Storage/storageAccounts          [AC-01c Storage]
-│       └── src/shared/monitoring/insights/main.bicep
-│           └── Microsoft.Insights/components              [AC-01b App Insights]
-│
-├── src/core/main.bicep                            [AC-02 Core Platform]
-│   ├── src/core/apim.bicep
-│   │   └── Microsoft.ApiManagement/service        [AC-02a APIM Gateway]
-│   ├── src/core/workspaces.bicep
-│   │   └── Microsoft.ApiManagement/service/workspaces  [AC-02b Workspaces]
-│   └── src/core/developer-portal.bicep
-│       └── Microsoft.ApiManagement/service/portalsettings  [AC-02c Dev Portal]
-│
-└── src/inventory/main.bicep                       [AC-03 API Inventory]
-    ├── Microsoft.ApiCenter/services               [AC-03a API Center]
-    ├── Microsoft.ApiCenter/services/workspaces    [AC-03b Default WS]
-    ├── Microsoft.ApiCenter/services/workspaces/apiSources  [AC-03c APIM Sync]
-    └── Microsoft.Authorization/roleAssignments    [AC-03d RBAC]
+```mermaid
+graph TD
+    MAIN["infra/main.bicep\nOrchestration — Subscription scope"]
 
-Shared type definitions:
-└── src/shared/common-types.bicep
-    └── Types: ApiManagement, Inventory, Monitoring, Shared, ApimSku,
-               SystemAssignedIdentity, ExtendedIdentity, LogAnalytics,
-               ApplicationInsights, ApiCenter
+    MAIN --> SHARED["src/shared/main.bicep\nAC-01 Shared Infra"]
+    SHARED --> MON["src/shared/monitoring/main.bicep"]
+    MON --> OPS["src/shared/monitoring/operational/main.bicep"]
+    MON --> INS["src/shared/monitoring/insights/main.bicep"]
+    OPS --> LAW["Microsoft.OperationalInsights/workspaces\nAC-01a · Log Analytics"]
+    OPS --> ST["Microsoft.Storage/storageAccounts\nAC-01c · Storage"]
+    INS --> AI["Microsoft.Insights/components\nAC-01b · App Insights"]
 
-Shared utility functions:
-└── src/shared/constants.bicep
-    └── Functions: generateUniqueSuffix()
-    └── Constants: diagnosticSettings, storageAccount, logAnalytics,
-                   identityTypes, roleDefinitions, apiManagement
+    MAIN --> CORE["src/core/main.bicep\nAC-02 Core Platform"]
+    CORE --> APIMB["src/core/apim.bicep"]
+    CORE --> WSB["src/core/workspaces.bicep"]
+    CORE --> DPB["src/core/developer-portal.bicep"]
+    APIMB --> APIMR["Microsoft.ApiManagement/service\nAC-02a · APIM Gateway"]
+    WSB --> WSR["Microsoft.ApiManagement/service/workspaces\nAC-02b · Workspaces"]
+    DPB --> DPR["Microsoft.ApiManagement/service/portalsettings\nAC-02c · Dev Portal"]
+
+    MAIN --> INVB["src/inventory/main.bicep\nAC-03 API Inventory"]
+    INVB --> APC["Microsoft.ApiCenter/services\nAC-03a · API Center"]
+    INVB --> APCWS["Microsoft.ApiCenter/services/workspaces\nAC-03b · Default WS"]
+    INVB --> APCSRC["Microsoft.ApiCenter/.../apiSources\nAC-03c · APIM Sync"]
+    INVB --> RBAC["Microsoft.Authorization/roleAssignments\nAC-03d · RBAC"]
+
+    MAIN -.->|imports| CT["src/shared/common-types.bicep\nTypes: ApiManagement · Inventory\nMonitoring · Shared · ApimSku"]
+    MAIN -.->|imports| CN["src/shared/constants.bicep\ngenerateUniqueSuffix()\ndiagnosticSettings · storageAccount"]
 ```
 
 ---
