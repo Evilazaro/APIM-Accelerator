@@ -10,7 +10,7 @@ Enterprise-grade Azure API Management landing zone accelerator that provisions a
 
 ## Table of Contents
 
-- [📖 APIM Accelerator](#-apim-accelerator-1)
+- [📖 APIM Accelerator](#-apim-accelerator)
 - [✨ Features](#-features)
 - [🚀 Quick Start](#-quick-start)
 - [📦 Deployment](#-deployment)
