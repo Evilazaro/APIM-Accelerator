@@ -337,39 +337,28 @@ flowchart TB
     accTitle: APIM Accelerator Landing Zone Architecture
     accDescr: Modular Azure API Management landing zone showing deployment flow from Platform Engineer through Azure Developer CLI to Azure subscription resources across three infrastructure layers. Dev=neutral, AzdCLI=core, PreHook=neutral, RG=neutral, LAW=success, AppIns=success, Storage=neutral, APIM=core, Workspaces=neutral, DevPortal=neutral, APICenter=warning, APISource=warning. WCAG AA compliant.
 
-    %%
-    %% AZURE / FLUENT ARCHITECTURE PATTERN v2.0
-    %% (Semantic + Structural + Font + Accessibility Governance)
-    %%
-    %% PHASE 1 - FLUENT UI: All styling uses approved Fluent UI palette only
-    %% PHASE 2 - GROUPS: Every subgraph has semantic color via style directive
-    %% PHASE 3 - COMPONENTS: Every node has semantic classDef + icon prefix
-    %% PHASE 4 - ACCESSIBILITY: accTitle/accDescr present, WCAG AA contrast
-    %% PHASE 5 - STANDARD: Governance block present, classDefs centralized
-    %%
-
     Dev(["👨‍💻 Platform Engineer"])
-    AzdCLI["🚀 Azure Developer CLI\nazd up / azd provision"]
-    PreHook["🔧 Pre-Provision Hook\npre-provision.sh"]
+    AzdCLI("🚀 Azure Developer CLI\nazd up / azd provision")
+    PreHook("🔧 Pre-Provision Hook\npre-provision.sh")
 
     subgraph AzSub ["☁️ Azure Subscription"]
-        RG["📦 Resource Group\n{solution}-{env}-{location}-rg"]
+        RG("📦 Resource Group\n{solution}-{env}-{location}-rg")
 
         subgraph SharedLayer ["🔗 Shared Infrastructure Layer"]
-            LAW["📊 Log Analytics Workspace\nCentralized logging and KQL queries"]
-            AppIns["🔍 Application Insights\nAPM and distributed tracing"]
-            Storage["🗄️ Storage Account\nDiagnostic log archival"]
+            LAW("📊 Log Analytics Workspace\nCentralized logging and KQL queries")
+            AppIns("🔍 Application Insights\nAPM and distributed tracing")
+            Storage("🗄️ Storage Account\nDiagnostic log archival")
         end
 
         subgraph CoreLayer ["🌐 Core API Management Layer"]
-            APIM["🌐 API Management Service\nPremium SKU · Managed Identity"]
-            Workspaces["🏢 APIM Workspaces\nTeam isolation and governance"]
-            DevPortal["🖥️ Developer Portal\nAzure AD auth · CORS policies"]
+            APIM("🌐 API Management Service\nPremium SKU · Managed Identity")
+            Workspaces("🏢 APIM Workspaces\nTeam isolation and governance")
+            DevPortal("🖥️ Developer Portal\nAzure AD auth · CORS policies")
         end
 
         subgraph InventoryLayer ["🗂️ Inventory and Governance Layer"]
-            APICenter["🗂️ Azure API Center\nCentralized API catalog"]
-            APISource["🔗 API Source Integration\nAPIM to API Center sync"]
+            APICenter("🗂️ Azure API Center\nCentralized API catalog")
+            APISource("🔗 API Source Integration\nAPIM to API Center sync")
         end
     end
 
