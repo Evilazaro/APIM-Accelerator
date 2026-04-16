@@ -1,25 +1,25 @@
 # APIM Accelerator
 
-[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](./LICENSE)
-[![Azure](https://img.shields.io/badge/Azure-API%20Management-0078D4?logo=microsoft-azure)](https://learn.microsoft.com/azure/api-management/)
-[![Bicep](https://img.shields.io/badge/IaC-Bicep-orange)](https://learn.microsoft.com/azure/azure-resource-manager/bicep/)
-[![Azure Developer CLI](https://img.shields.io/badge/azd-enabled-blue)](https://learn.microsoft.com/azure/developer/azure-developer-cli/)
-[![Version](https://img.shields.io/badge/version-2.0.0-green)](./infra/main.bicep)
+(!(License: MIT)(https://img.shields.io/badge/License-MIT-yellow.svg))(./LICENSE)
+(!(Azure)(https://img.shields.io/badge/Azure-API%20Management-0078D4?logo=microsoft-azure))(https://learn.microsoft.com/azure/api-management/)
+(!(Bicep)(https://img.shields.io/badge/IaC-Bicep-orange))(https://learn.microsoft.com/azure/azure-resource-manager/bicep/)
+(!(Azure Developer CLI)(https://img.shields.io/badge/azd-enabled-blue))(https://learn.microsoft.com/azure/developer/azure-developer-cli/)
+(!(Version)(https://img.shields.io/badge/version-2.0.0-green))(./infra/main.bicep)
 
 Enterprise-grade Azure API Management landing zone accelerator that provisions a production-ready API platform with centralized monitoring, API governance, and multi-team isolation using Azure Bicep and the Azure Developer CLI.
 
 ## Table of Contents
 
-- [📖 APIM Accelerator](#-apim-accelerator-1)
-- [✨ Features](#-features)
-- [🚀 Quick Start](#-quick-start)
-- [📦 Deployment](#-deployment)
-- [📋 Requirements](#-requirements)
-- [💻 Usage](#-usage)
-- [⚙️ Configuration](#️-configuration)
-- [🏗️ Architecture](#️-architecture)
-- [🤝 Contributing](#-contributing)
-- [📄 License](#-license)
+- (📖 APIM Accelerator)(#-apim-accelerator-1)
+- (✨ Features)(#-features)
+- (🚀 Quick Start)(#-quick-start)
+- (📦 Deployment)(#-deployment)
+- (📋 Requirements)(#-requirements)
+- (💻 Usage)(#-usage)
+- (⚙️ Configuration)(#️-configuration)
+- (🏗️ Architecture)(#️-architecture)
+- (🤝 Contributing)(#-contributing)
+- (📄 License)(#-license)
 
 ## 📖 APIM Accelerator
 
@@ -31,7 +31,7 @@ This accelerator is designed for organizations that need consistent, governed AP
 
 By combining the Azure Developer CLI (`azd`), modular Bicep templates, and a single `infra/settings.yaml` configuration file, the accelerator gives platform teams a repeatable, auditable workflow for deploying the entire APIM platform — including monitoring, workspaces, developer portal, and API Center integration — across dev, test, staging, production, and UAT environments.
 
-> [!NOTE]
+> (!NOTE)
 > The accelerator deploys at **subscription scope**, creating a dedicated resource group named `{solutionName}-{env}-{location}-rg` and all required resources automatically. Ensure you have **Contributor** or **Owner** role on the target subscription before deploying.
 
 ## ✨ Features
@@ -40,7 +40,7 @@ By combining the Azure Developer CLI (`azd`), modular Bicep templates, and a sin
 
 The APIM Accelerator provides a comprehensive set of capabilities for enterprise API platform engineering. Each component is encapsulated in an independent Bicep module, is individually configurable through `infra/settings.yaml`, and integrates seamlessly with Azure Monitor for end-to-end observability.
 
-> [!TIP]
+> (!TIP)
 > The `infra/settings.yaml` file is the single configuration entry point for the entire landing zone. Customize it once and every deployed resource reflects your organizational naming conventions, tags, SKU selections, and identity settings.
 
 | Feature                       | Description                                                                                                                      | Module                            | Status    |
@@ -94,7 +94,7 @@ Outputs:
   AZURE_STORAGE_ACCOUNT_ID         = /subscriptions/.../storageAccounts/apimacceleratorsa
 ```
 
-> [!IMPORTANT]
+> (!IMPORTANT)
 > The Azure API Management **Premium SKU** provisioning takes **30–45 minutes** to complete. This is a platform constraint imposed by Azure and is expected behavior. The `azd up` command will wait and display progress until provisioning finishes.
 
 ## 📦 Deployment
@@ -142,7 +142,7 @@ Provisioning Azure resources (azd provision)
   (✓) Done: Deploying inventory management components
 ```
 
-> [!WARNING]
+> (!WARNING)
 > Deleting an APIM service triggers **soft-delete** in Azure, which retains the resource name for up to 48 hours. The pre-provision hook (`infra/azd-hooks/pre-provision.sh`) purges these soft-deleted instances automatically when you run `azd provision`. You can also run it manually: `./infra/azd-hooks/pre-provision.sh <location>`.
 
 ## 📋 Requirements
@@ -155,11 +155,11 @@ Verify all requirements before running `azd up` to avoid mid-deployment failures
 
 | Requirement                        | Min. Version         | Purpose                                                   | Install                                                                                             |
 | ---------------------------------- | -------------------- | --------------------------------------------------------- | --------------------------------------------------------------------------------------------------- |
-| ☁️ **Azure Subscription**          | Active               | Target subscription for all resource deployments          | [Azure Portal](https://portal.azure.com)                                                            |
-| 🔧 **Azure CLI** (`az`)            | ≥ 2.50.0             | Azure resource management and authentication              | [Install Guide](https://learn.microsoft.com/cli/azure/install-azure-cli)                            |
-| 🚀 **Azure Developer CLI** (`azd`) | ≥ 1.5.0              | Deployment orchestration and lifecycle management         | [Install Guide](https://learn.microsoft.com/azure/developer/azure-developer-cli/install-azd)        |
-| 🔑 **Azure RBAC**                  | Contributor or Owner | Subscription-scope resource group creation and deployment | [RBAC docs](https://learn.microsoft.com/azure/role-based-access-control/)                           |
-| 🌍 **Supported Region**            | —                    | Target region must support APIM Premium SKU               | [Products by Region](https://azure.microsoft.com/explore/global-infrastructure/products-by-region/) |
+| ☁️ **Azure Subscription**          | Active               | Target subscription for all resource deployments          | (Azure Portal)(https://portal.azure.com)                                                            |
+| 🔧 **Azure CLI** (`az`)            | ≥ 2.50.0             | Azure resource management and authentication              | (Install Guide)(https://learn.microsoft.com/cli/azure/install-azure-cli)                            |
+| 🚀 **Azure Developer CLI** (`azd`) | ≥ 1.5.0              | Deployment orchestration and lifecycle management         | (Install Guide)(https://learn.microsoft.com/azure/developer/azure-developer-cli/install-azd)        |
+| 🔑 **Azure RBAC**                  | Contributor or Owner | Subscription-scope resource group creation and deployment | (RBAC docs)(https://learn.microsoft.com/azure/role-based-access-control/)                           |
+| 🌍 **Supported Region**            | —                    | Target region must support APIM Premium SKU               | (Products by Region)(https://azure.microsoft.com/explore/global-infrastructure/products-by-region/) |
 
 **Verify installed tool versions:**
 
@@ -242,7 +242,7 @@ All environment-specific configuration is centralized in `infra/settings.yaml`. 
 | 💰 `core.apiManagement.sku.name`       | `Premium`              | APIM pricing tier (`Developer`, `Basic`, `Standard`, `Premium`, `Consumption`) | ✅ Yes      |
 | 📈 `core.apiManagement.sku.capacity`   | `1`                    | Number of APIM scale units (Premium supports 1–10)                             | ✅ Yes      |
 | 🔑 `core.apiManagement.identity.type`  | `SystemAssigned`       | Managed identity type (`SystemAssigned`, `UserAssigned`, `None`)               | ✅ Yes      |
-| 🗂️ `core.apiManagement.workspaces`     | `[{name: workspace1}]` | Array of APIM workspace definitions for team isolation                         | ⚠️ Optional |
+| 🗂️ `core.apiManagement.workspaces`     | `({name: workspace1})` | Array of APIM workspace definitions for team isolation                         | ⚠️ Optional |
 
 **Monitoring Configuration (`infra/settings.yaml`):**
 
@@ -277,7 +277,7 @@ shared:
       name: ""
       identity:
         type: "SystemAssigned"
-        userAssignedIdentities: []
+        userAssignedIdentities: ()
     applicationInsights:
       name: ""
   tags:
@@ -302,7 +302,7 @@ core:
       capacity: 1
     identity:
       type: "SystemAssigned"
-      userAssignedIdentities: []
+      userAssignedIdentities: ()
     workspaces:
       - name: "sales-apis"
       - name: "finance-apis"
@@ -312,7 +312,7 @@ inventory:
     name: ""
     identity:
       type: "SystemAssigned"
-      userAssignedIdentities: []
+      userAssignedIdentities: ()
 ```
 
 ## 🏗️ Architecture
@@ -335,28 +335,28 @@ flowchart TB
     accTitle: APIM Accelerator Landing Zone Architecture
     accDescr: Modular Azure API Management landing zone with shared monitoring, core APIM platform, and API Center inventory management deployed via the Azure Developer CLI
 
-    Dev(["👨‍💻 Platform Engineer"])
-    AzdCLI["🚀 Azure Developer CLI\nazd up / azd provision"]
-    PreHook["🔧 Pre-Provision Hook\npre-provision.sh"]
+    Dev(("👨‍💻 Platform Engineer"))
+    AzdCLI("🚀 Azure Developer CLI\nazd up / azd provision")
+    PreHook("🔧 Pre-Provision Hook\npre-provision.sh")
 
-    subgraph AzSub["☁️ Azure Subscription"]
-        RG["📦 Resource Group\n{solution}-{env}-{location}-rg"]
+    subgraph AzSub("☁️ Azure Subscription")
+        RG("📦 Resource Group\n{solution}-{env}-{location}-rg")
 
-        subgraph SharedLayer["🔗 Shared Infrastructure Layer"]
-            LAW["📊 Log Analytics Workspace\nCentralized logging and KQL queries"]
-            AppIns["🔍 Application Insights\nAPM and distributed tracing"]
-            Storage["🗄️ Storage Account\nDiagnostic log archival"]
+        subgraph SharedLayer("🔗 Shared Infrastructure Layer")
+            LAW("📊 Log Analytics Workspace\nCentralized logging and KQL queries")
+            AppIns("🔍 Application Insights\nAPM and distributed tracing")
+            Storage("🗄️ Storage Account\nDiagnostic log archival")
         end
 
-        subgraph CoreLayer["🌐 Core API Management Layer"]
-            APIM["🌐 API Management Service\nPremium SKU · Managed Identity"]
-            Workspaces["🏢 APIM Workspaces\nTeam isolation and governance"]
-            DevPortal["🖥️ Developer Portal\nAzure AD auth · CORS policies"]
+        subgraph CoreLayer("🌐 Core API Management Layer")
+            APIM("🌐 API Management Service\nPremium SKU · Managed Identity")
+            Workspaces("🏢 APIM Workspaces\nTeam isolation and governance")
+            DevPortal("🖥️ Developer Portal\nAzure AD auth · CORS policies")
         end
 
-        subgraph InventoryLayer["🗂️ Inventory and Governance Layer"]
-            APICenter["🗂️ Azure API Center\nCentralized API catalog"]
-            APISource["🔗 API Source Integration\nAPIM to API Center sync"]
+        subgraph InventoryLayer("🗂️ Inventory and Governance Layer")
+            APICenter("🗂️ Azure API Center\nCentralized API catalog")
+            APISource("🔗 API Source Integration\nAPIM to API Center sync")
         end
     end
 
@@ -447,9 +447,9 @@ azd provision --environment dev
 - Add new constants and utility functions to `src/shared/constants.bicep`
 - Place new modules under the appropriate layer (`src/core/`, `src/shared/`, or `src/inventory/`) and reference them from the corresponding `main.bicep` orchestrator
 
-> [!NOTE]
+> (!NOTE)
 > The `src/shared/networking/` directory is scaffolded but not yet active. The networking module is commented out in `src/shared/main.bicep` and is a planned future extension for VNet integration at the shared infrastructure layer.
 
 ## 📄 License
 
-[MIT](./LICENSE) — Created by **Evilazaro Alves | Principal Cloud Solution Architect | Cloud Platforms and AI Apps | Microsoft**
+(MIT)(./LICENSE) — Created by **Evilazaro Alves | Principal Cloud Solution Architect | Cloud Platforms and AI Apps | Microsoft**
