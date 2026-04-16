@@ -328,33 +328,46 @@ config:
   theme: base
   look: classic
   layout: dagre
+  themeVariables:
+    fontSize: '16px'
   flowchart:
     htmlLabels: true
 ---
 flowchart TB
     accTitle: APIM Accelerator Landing Zone Architecture
-    accDescr: Modular Azure API Management landing zone with shared monitoring, core APIM platform, and API Center inventory management deployed via the Azure Developer CLI
+    accDescr: Modular Azure API Management landing zone showing deployment flow from Platform Engineer through Azure Developer CLI to Azure subscription resources across three infrastructure layers. Dev=neutral, AzdCLI=core, PreHook=neutral, RG=neutral, LAW=success, AppIns=success, Storage=neutral, APIM=core, Workspaces=neutral, DevPortal=neutral, APICenter=warning, APISource=warning. WCAG AA compliant.
+
+    %%
+    %% AZURE / FLUENT ARCHITECTURE PATTERN v2.0
+    %% (Semantic + Structural + Font + Accessibility Governance)
+    %%
+    %% PHASE 1 - FLUENT UI: All styling uses approved Fluent UI palette only
+    %% PHASE 2 - GROUPS: Every subgraph has semantic color via style directive
+    %% PHASE 3 - COMPONENTS: Every node has semantic classDef + icon prefix
+    %% PHASE 4 - ACCESSIBILITY: accTitle/accDescr present, WCAG AA contrast
+    %% PHASE 5 - STANDARD: Governance block present, classDefs centralized
+    %%
 
     Dev(["👨‍💻 Platform Engineer"])
     AzdCLI["🚀 Azure Developer CLI\nazd up / azd provision"]
     PreHook["🔧 Pre-Provision Hook\npre-provision.sh"]
 
-    subgraph AzSub["☁️ Azure Subscription"]
+    subgraph AzSub ["☁️ Azure Subscription"]
         RG["📦 Resource Group\n{solution}-{env}-{location}-rg"]
 
-        subgraph SharedLayer["🔗 Shared Infrastructure Layer"]
+        subgraph SharedLayer ["🔗 Shared Infrastructure Layer"]
             LAW["📊 Log Analytics Workspace\nCentralized logging and KQL queries"]
             AppIns["🔍 Application Insights\nAPM and distributed tracing"]
             Storage["🗄️ Storage Account\nDiagnostic log archival"]
         end
 
-        subgraph CoreLayer["🌐 Core API Management Layer"]
+        subgraph CoreLayer ["🌐 Core API Management Layer"]
             APIM["🌐 API Management Service\nPremium SKU · Managed Identity"]
             Workspaces["🏢 APIM Workspaces\nTeam isolation and governance"]
             DevPortal["🖥️ Developer Portal\nAzure AD auth · CORS policies"]
         end
 
-        subgraph InventoryLayer["🗂️ Inventory and Governance Layer"]
+        subgraph InventoryLayer ["🗂️ Inventory and Governance Layer"]
             APICenter["🗂️ Azure API Center\nCentralized API catalog"]
             APISource["🔗 API Source Integration\nAPIM to API Center sync"]
         end
@@ -374,27 +387,21 @@ flowchart TB
     APIM -- "registered as source" --> APISource
     APISource -- "synchronizes APIs" --> APICenter
 
-    classDef userNode fill:#323130,stroke:#605E5C,stroke-width:2px,color:#FFFFFF
-    classDef toolNode fill:#0078D4,stroke:#005A9E,stroke-width:2px,color:#FFFFFF
-    classDef processNode fill:#107C10,stroke:#0B5C0B,stroke-width:2px,color:#FFFFFF
-    classDef dataNode fill:#038387,stroke:#025C5F,stroke-width:2px,color:#FFFFFF
-    classDef platformNode fill:#5C2D91,stroke:#3B1D5E,stroke-width:2px,color:#FFFFFF
-    classDef governanceNode fill:#D77F00,stroke:#A05C00,stroke-width:2px,color:#FFFFFF
-    classDef infraNode fill:#C8730E,stroke:#9B540A,stroke-width:2px,color:#FFFFFF
+    %% Centralized semantic classDefs (AZURE/FLUENT v1.1)
     classDef neutral fill:#FAFAFA,stroke:#8A8886,stroke-width:2px,color:#323130
+    classDef core fill:#EFF6FC,stroke:#0078D4,stroke-width:2px,color:#323130
+    classDef success fill:#DFF6DD,stroke:#107C10,stroke-width:2px,color:#323130
+    classDef warning fill:#FFF4CE,stroke:#FFB900,stroke-width:2px,color:#323130
 
-    class Dev userNode
-    class AzdCLI,PreHook toolNode
-    class APIM platformNode
-    class Workspaces,DevPortal processNode
-    class LAW,AppIns,Storage dataNode
-    class APICenter,APISource governanceNode
-    class RG infraNode
+    class Dev,PreHook,RG,Workspaces,DevPortal,Storage neutral
+    class AzdCLI,APIM core
+    class LAW,AppIns success
+    class APICenter,APISource warning
 
-    style AzSub fill:#EFF6FC,stroke:#0078D4,stroke-width:2px
-    style SharedLayer fill:#DFF6DD,stroke:#107C10,stroke-width:1px
-    style CoreLayer fill:#F0E6FF,stroke:#5C2D91,stroke-width:1px
-    style InventoryLayer fill:#FFF4CE,stroke:#D77F00,stroke-width:1px
+    style AzSub fill:#F3F2F1,stroke:#8A8886,stroke-width:2px,color:#323130
+    style SharedLayer fill:#EDEBE9,stroke:#8A8886,stroke-width:1px,color:#323130
+    style CoreLayer fill:#EDEBE9,stroke:#8A8886,stroke-width:1px,color:#323130
+    style InventoryLayer fill:#EDEBE9,stroke:#8A8886,stroke-width:1px,color:#323130
 ```
 
 **Component Roles:**
