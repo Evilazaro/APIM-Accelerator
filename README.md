@@ -13,12 +13,12 @@ Enterprise-grade Azure API Management landing zone accelerator that provisions a
 
 - [📖 APIM Accelerator](#-apim-accelerator)
 - [✨ Features](#-features)
+- [🏗️ Architecture](#️-architecture)
 - [🚀 Quick Start](#-quick-start)
 - [📦 Deployment](#-deployment)
 - [📋 Requirements](#-requirements)
 - [💻 Usage](#-usage)
 - [⚙️ Configuration](#️-configuration)
-- [🏗️ Architecture](#️-architecture)
 - [🤝 Contributing](#-contributing)
 - [📄 License](#-license)
 
@@ -44,16 +44,113 @@ The APIM Accelerator provides a comprehensive set of enterprise API platform cap
 > [!TIP]
 > The `infra/settings.yaml` file is the single configuration entry point for the entire landing zone. Customize it once and every deployed resource reflects your organizational naming conventions, tags, SKU selections, and identity settings.
 
-| 🏷️ Feature | 📄 Description | 📁 Module | ✅ Status |
-| --- | --- | --- | --- |
-| 🌐 **API Management Service** | Deploy APIM with configurable SKU (`Developer`, `Basic`, `BasicV2`, `Standard`, `StandardV2`, `Premium`, `Consumption`), managed identity, optional VNet integration, and full diagnostic settings | `src/core/apim.bicep` | ✅ Stable |
-| 📊 **Centralized Monitoring** | Log Analytics workspace, Application Insights, and Storage Account providing a full observability stack with auto-linked diagnostics and instrumentation key output | `src/shared/monitoring/` | ✅ Stable |
-| 🗂️ **API Center Governance** | Azure API Center with APIM as an API source, a default workspace, and RBAC assignments (Data Reader + Compliance Manager) for automated API catalog discovery | `src/inventory/main.bicep` | ✅ Stable |
-| 🏢 **Team Workspaces** | APIM workspace isolation enabling independent API lifecycle management per team or project within a single APIM instance (Premium SKU required) | `src/core/workspaces.bicep` | ✅ Stable |
-| 🔒 **Managed Identity** | System-assigned and user-assigned managed identity support across APIM, Log Analytics, and API Center for credential-free Azure resource authentication | `src/core/apim.bicep` | ✅ Stable |
-| 🖥️ **Developer Portal** | Self-service developer portal with Azure AD (MSAL 2.0) authentication, global CORS policies, and sign-in/sign-up user flow configuration | `src/core/developer-portal.bicep` | ✅ Stable |
-| 🔄 **Multi-Environment** | Parameterized deployment supporting `dev`, `test`, `staging`, `prod`, and `uat` via `AZURE_ENV_NAME`, with per-environment tagging applied to all resources | `infra/main.bicep` | ✅ Stable |
-| 🧹 **Pre-Provision Hook** | Automatic purge of soft-deleted APIM instances before provisioning to prevent naming conflicts during redeployment cycles | `infra/azd-hooks/pre-provision.sh` | ✅ Stable |
+| 🏷️ Feature                    | 📄 Description                                                                                                                                                                                     | 📁 Module                          | ✅ Status |
+| ----------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ---------------------------------- | --------- |
+| 🌐 **API Management Service** | Deploy APIM with configurable SKU (`Developer`, `Basic`, `BasicV2`, `Standard`, `StandardV2`, `Premium`, `Consumption`), managed identity, optional VNet integration, and full diagnostic settings | `src/core/apim.bicep`              | ✅ Stable |
+| 📊 **Centralized Monitoring** | Log Analytics workspace, Application Insights, and Storage Account providing a full observability stack with auto-linked diagnostics and instrumentation key output                                | `src/shared/monitoring/`           | ✅ Stable |
+| 🗂️ **API Center Governance**  | Azure API Center with APIM as an API source, a default workspace, and RBAC assignments (Data Reader + Compliance Manager) for automated API catalog discovery                                      | `src/inventory/main.bicep`         | ✅ Stable |
+| 🏢 **Team Workspaces**        | APIM workspace isolation enabling independent API lifecycle management per team or project within a single APIM instance (Premium SKU required)                                                    | `src/core/workspaces.bicep`        | ✅ Stable |
+| 🔒 **Managed Identity**       | System-assigned and user-assigned managed identity support across APIM, Log Analytics, and API Center for credential-free Azure resource authentication                                            | `src/core/apim.bicep`              | ✅ Stable |
+| 🖥️ **Developer Portal**       | Self-service developer portal with Azure AD (MSAL 2.0) authentication, global CORS policies, and sign-in/sign-up user flow configuration                                                           | `src/core/developer-portal.bicep`  | ✅ Stable |
+| 🔄 **Multi-Environment**      | Parameterized deployment supporting `dev`, `test`, `staging`, `prod`, and `uat` via `AZURE_ENV_NAME`, with per-environment tagging applied to all resources                                        | `infra/main.bicep`                 | ✅ Stable |
+| 🧹 **Pre-Provision Hook**     | Automatic purge of soft-deleted APIM instances before provisioning to prevent naming conflicts during redeployment cycles                                                                          | `infra/azd-hooks/pre-provision.sh` | ✅ Stable |
+
+## 🏗️ Architecture
+
+**Overview**
+
+The APIM Accelerator follows a modular, layered architecture pattern deployed at Azure subscription scope by `infra/main.bicep`. The infrastructure is organized into three functional layers: the **Shared Infrastructure Layer** (monitoring foundation of Log Analytics, Application Insights, and Storage Account), the **Core API Management Layer** (APIM gateway, team workspaces, and developer portal), and the **Inventory and Governance Layer** (API Center with automated APIM source integration). All layers are orchestrated by `infra/main.bicep` and coordinated through the Azure Developer CLI lifecycle hooks defined in `azure.yaml`.
+
+```mermaid
+---
+title: "APIM Accelerator - Landing Zone Architecture"
+config:
+  theme: base
+  look: classic
+  layout: dagre
+  themeVariables:
+    fontSize: '16px'
+  flowchart:
+    htmlLabels: true
+---
+flowchart TB
+    accTitle: APIM Accelerator Landing Zone Architecture
+    accDescr: Modular Azure API Management landing zone showing deployment flow from Platform Engineer through Azure Developer CLI and a pre-provision hook to three layers in an Azure subscription. Layer 1 shared monitoring contains Log Analytics Workspace, Application Insights, and Storage Account. Layer 2 core platform contains API Management Service, Team Workspaces, and Developer Portal. Layer 3 inventory contains API Center and API Source Integration. WCAG AA compliant using Fluent UI color palette.
+
+    %% =======================================================================
+    %% AZURE / FLUENT ARCHITECTURE PATTERN v2.0
+    %% (Semantic + Structural + Font + Accessibility Governance)
+    %% =======================================================================
+    %% PHASE 1 - FLUENT UI: All styling uses approved Fluent UI palette only
+    %% PHASE 2 - GROUPS: Every subgraph has semantic color via style directive
+    %% PHASE 3 - COMPONENTS: Every node has semantic classDef + icon prefix
+    %% PHASE 4 - ACCESSIBILITY: accTitle/accDescr present, WCAG AA contrast
+    %% PHASE 5 - STANDARD: Governance block present, classDefs centralized
+    %% =======================================================================
+
+    Engineer(["👨‍💻 Platform Engineer"]):::neutral
+    AzdCli("🚀 Azure Developer CLI\nazd up / azd provision"):::core
+    PreHook("🔧 Pre-Provision Hook\nPurge soft-deleted APIM"):::neutral
+
+    subgraph AzSub ["☁️ Azure Subscription"]
+        RG("📦 Resource Group\n{solution}-{env}-{location}-rg"):::neutral
+
+        subgraph SharedLayer ["📊 Shared Infrastructure Layer"]
+            LAW("📊 Log Analytics Workspace\nLogs and KQL queries"):::success
+            AppIns("🔍 Application Insights\nAPM and distributed tracing"):::success
+            StorAcc("🗄️ Storage Account\nDiagnostic log archival"):::neutral
+        end
+
+        subgraph CoreLayer ["🌐 Core API Management Layer"]
+            APIMSvc("🌐 API Management Service\nGateway and policy engine"):::core
+            TeamWsp("🏢 Team Workspaces\nPer-team API isolation"):::neutral
+            DevPort("🖥️ Developer Portal\nAzure AD and MSAL 2.0"):::neutral
+        end
+
+        subgraph InvLayer ["🗂️ Inventory and Governance Layer"]
+            ApiCtr("🗂️ Azure API Center\nCentralized API catalog"):::warning
+            ApiSrc("🔗 API Source Integration\nAPIM-to-API Center sync"):::warning
+        end
+    end
+
+    Engineer -- "configures infra/settings.yaml" --> AzdCli
+    AzdCli -- "executes pre-provision" --> PreHook
+    AzdCli -- "provisions infra/main.bicep" --> RG
+    RG -- "1st: monitoring foundation" --> SharedLayer
+    RG -- "2nd: APIM platform" --> CoreLayer
+    RG -- "3rd: governance layer" --> InvLayer
+    APIMSvc -- "APM telemetry" --> AppIns
+    APIMSvc -- "diagnostic logs" --> LAW
+    APIMSvc -- "log archival" --> StorAcc
+    APIMSvc -- "workspace isolation" --> TeamWsp
+    APIMSvc -- "portal configuration" --> DevPort
+    APIMSvc -- "registered as API source" --> ApiSrc
+    ApiSrc -- "synchronizes API catalog" --> ApiCtr
+
+    style AzSub fill:#F3F2F1,stroke:#8A8886,stroke-width:2px,color:#323130
+    style SharedLayer fill:#EDEBE9,stroke:#107C10,stroke-width:1px,color:#323130
+    style CoreLayer fill:#EDEBE9,stroke:#0078D4,stroke-width:1px,color:#323130
+    style InvLayer fill:#EDEBE9,stroke:#8A8886,stroke-width:1px,color:#323130
+
+    classDef core fill:#EFF6FC,stroke:#0078D4,stroke-width:2px,color:#323130
+    classDef success fill:#DFF6DD,stroke:#107C10,stroke-width:2px,color:#323130
+    classDef neutral fill:#FAFAFA,stroke:#8A8886,stroke-width:2px,color:#323130
+    classDef warning fill:#FFF4CE,stroke:#797673,stroke-width:2px,color:#323130
+```
+
+**Component Roles:**
+
+| 🧩 Component                   | 📄 Purpose                                                                                                                            | 📁 Source Module                               |
+| ------------------------------ | ------------------------------------------------------------------------------------------------------------------------------------- | ---------------------------------------------- |
+| 🌐 **API Management Service**  | API gateway, policy enforcement, rate limiting, caching, and managed identity for downstream service authentication                   | `src/core/apim.bicep`                          |
+| 📊 **Log Analytics Workspace** | Centralized log aggregation, KQL queries, alerting foundation, and diagnostic log sink for all platform resources                     | `src/shared/monitoring/operational/main.bicep` |
+| 🔍 **Application Insights**    | Application performance monitoring, request tracing, failure analysis, and instrumentation key export                                 | `src/shared/monitoring/insights/main.bicep`    |
+| 🗄️ **Storage Account**         | Long-term diagnostic log archival for compliance and audit retention; also serves as APIM diagnostic storage                          | `src/shared/monitoring/operational/main.bicep` |
+| 🏢 **Team Workspaces**         | Logical isolation of APIs and resources within a single APIM instance; enables per-team lifecycle management (Premium SKU only)       | `src/core/workspaces.bicep`                    |
+| 🖥️ **Developer Portal**        | Self-service API documentation and testing portal with Azure AD identity provider (MSAL 2.0) and CORS policy configuration            | `src/core/developer-portal.bicep`              |
+| 🗂️ **Azure API Center**        | Centralized API catalog with automated APIM discovery, default workspace, governance policies, and compliance management              | `src/inventory/main.bicep`                     |
+| 🔗 **API Source Integration**  | Registers the APIM service as an API source within the API Center default workspace for automatic API synchronization                 | `src/inventory/main.bicep`                     |
+| 🔒 **RBAC Assignments**        | Grants the API Center managed identity **API Center Data Reader** and **API Center Compliance Manager** roles at resource group scope | `src/inventory/main.bicep`                     |
 
 ## 🚀 Quick Start
 
@@ -167,13 +264,13 @@ Verify all requirements before running `azd up` to avoid mid-deployment failures
 > [!IMPORTANT]
 > **How It Works**: `azd up` reads `infra/main.parameters.json`, maps `AZURE_ENV_NAME` and `AZURE_LOCATION` environment variables to Bicep parameters `envName` and `location`, then calls `az deployment sub create` at subscription scope on your behalf. Both CLIs must be authenticated and up-to-date for the deployment to succeed.
 
-| 🔧 Requirement | 📦 Min. Version | 📄 Purpose | 🔗 Install |
-| --- | --- | --- | --- |
-| ☁️ **Azure Subscription** | Active | Target subscription for all resource deployments at subscription scope | [Azure Portal](https://portal.azure.com) |
-| 🔧 **Azure CLI** (`az`) | ≥ 2.50.0 | Azure resource management, authentication, and direct CLI deployments | [Install Guide](https://learn.microsoft.com/cli/azure/install-azure-cli) |
-| 🚀 **Azure Developer CLI** (`azd`) | ≥ 1.5.0 | Deployment orchestration, environment lifecycle management, and hooks | [Install Guide](https://learn.microsoft.com/azure/developer/azure-developer-cli/install-azd) |
-| 🔑 **Azure RBAC** | Contributor or Owner | Subscription-scope resource group creation and all child resource deployments | [RBAC docs](https://learn.microsoft.com/azure/role-based-access-control/) |
-| 🌍 **Supported Region** | — | Target Azure region must support APIM Premium SKU and Azure API Center | [Products by Region](https://azure.microsoft.com/explore/global-infrastructure/products-by-region/) |
+| 🔧 Requirement                     | 📦 Min. Version      | 📄 Purpose                                                                    | 🔗 Install                                                                                          |
+| ---------------------------------- | -------------------- | ----------------------------------------------------------------------------- | --------------------------------------------------------------------------------------------------- |
+| ☁️ **Azure Subscription**          | Active               | Target subscription for all resource deployments at subscription scope        | [Azure Portal](https://portal.azure.com)                                                            |
+| 🔧 **Azure CLI** (`az`)            | ≥ 2.50.0             | Azure resource management, authentication, and direct CLI deployments         | [Install Guide](https://learn.microsoft.com/cli/azure/install-azure-cli)                            |
+| 🚀 **Azure Developer CLI** (`azd`) | ≥ 1.5.0              | Deployment orchestration, environment lifecycle management, and hooks         | [Install Guide](https://learn.microsoft.com/azure/developer/azure-developer-cli/install-azd)        |
+| 🔑 **Azure RBAC**                  | Contributor or Owner | Subscription-scope resource group creation and all child resource deployments | [RBAC docs](https://learn.microsoft.com/azure/role-based-access-control/)                           |
+| 🌍 **Supported Region**            | —                    | Target Azure region must support APIM Premium SKU and Azure API Center        | [Products by Region](https://azure.microsoft.com/explore/global-infrastructure/products-by-region/) |
 
 **Verify installed tool versions:**
 
@@ -296,51 +393,51 @@ All environment-specific configuration is centralized in `infra/settings.yaml`. 
 
 **APIM Service Configuration (`infra/settings.yaml` → `core.apiManagement`):**
 
-| ⚙️ Parameter | 🔧 Default | 📄 Description | ✅ Required |
-| --- | --- | --- | --- |
-| 🏷️ `solutionName` | `apim-accelerator` | Base name for all resources; determines resource group and auto-generated resource names | ✅ Yes |
-| 📧 `core.apiManagement.publisherEmail` | `evilazaro@gmail.com` | Publisher contact email required by Azure for APIM service creation | ✅ Yes |
-| 🏢 `core.apiManagement.publisherName` | `Contoso` | Publisher organization name displayed in the developer portal | ✅ Yes |
-| 💰 `core.apiManagement.sku.name` | `Premium` | APIM pricing tier: `Developer`, `Basic`, `BasicV2`, `Standard`, `StandardV2`, `Premium`, `Consumption` | ✅ Yes |
-| 📈 `core.apiManagement.sku.capacity` | `1` | Number of APIM scale units (`Premium` supports 1–10; `Developer` is fixed at 1) | ✅ Yes |
-| 🔑 `core.apiManagement.identity.type` | `SystemAssigned` | Managed identity type: `SystemAssigned` or `UserAssigned` | ✅ Yes |
-| 🗂️ `core.apiManagement.workspaces` | `[{name: "workspace1"}]` | Array of APIM workspace definitions for team isolation (Premium SKU only) | ⚠️ Optional |
-| 📛 `core.apiManagement.name` | Auto-generated | APIM service name; leave `""` to auto-generate as `{solutionName}-{uniqueSuffix}-apim` | ⚠️ Optional |
+| ⚙️ Parameter                           | 🔧 Default               | 📄 Description                                                                                         | ✅ Required |
+| -------------------------------------- | ------------------------ | ------------------------------------------------------------------------------------------------------ | ----------- |
+| 🏷️ `solutionName`                      | `apim-accelerator`       | Base name for all resources; determines resource group and auto-generated resource names               | ✅ Yes      |
+| 📧 `core.apiManagement.publisherEmail` | `evilazaro@gmail.com`    | Publisher contact email required by Azure for APIM service creation                                    | ✅ Yes      |
+| 🏢 `core.apiManagement.publisherName`  | `Contoso`                | Publisher organization name displayed in the developer portal                                          | ✅ Yes      |
+| 💰 `core.apiManagement.sku.name`       | `Premium`                | APIM pricing tier: `Developer`, `Basic`, `BasicV2`, `Standard`, `StandardV2`, `Premium`, `Consumption` | ✅ Yes      |
+| 📈 `core.apiManagement.sku.capacity`   | `1`                      | Number of APIM scale units (`Premium` supports 1–10; `Developer` is fixed at 1)                        | ✅ Yes      |
+| 🔑 `core.apiManagement.identity.type`  | `SystemAssigned`         | Managed identity type: `SystemAssigned` or `UserAssigned`                                              | ✅ Yes      |
+| 🗂️ `core.apiManagement.workspaces`     | `[{name: "workspace1"}]` | Array of APIM workspace definitions for team isolation (Premium SKU only)                              | ⚠️ Optional |
+| 📛 `core.apiManagement.name`           | Auto-generated           | APIM service name; leave `""` to auto-generate as `{solutionName}-{uniqueSuffix}-apim`                 | ⚠️ Optional |
 
 **Monitoring Configuration (`infra/settings.yaml` → `shared.monitoring`):**
 
-| ⚙️ Parameter | 🔧 Default | 📄 Description | ✅ Required |
-| --- | --- | --- | --- |
-| 📊 `shared.monitoring.logAnalytics.name` | Auto-generated | Log Analytics workspace name; leave `""` to auto-generate as `{solution}-{suffix}-law` | ⚠️ Optional |
-| 🔍 `shared.monitoring.applicationInsights.name` | Auto-generated | Application Insights instance name; leave `""` to auto-generate as `{solution}-{suffix}-ai` | ⚠️ Optional |
-| 🔑 `shared.monitoring.logAnalytics.identity.type` | `SystemAssigned` | Managed identity type for the Log Analytics workspace | ✅ Yes |
-| 🗄️ `shared.monitoring.logAnalytics.workSpaceResourceId` | `""` | Existing Log Analytics workspace resource ID to reuse; leave `""` to create a new one | ⚠️ Optional |
+| ⚙️ Parameter                                            | 🔧 Default       | 📄 Description                                                                              | ✅ Required |
+| ------------------------------------------------------- | ---------------- | ------------------------------------------------------------------------------------------- | ----------- |
+| 📊 `shared.monitoring.logAnalytics.name`                | Auto-generated   | Log Analytics workspace name; leave `""` to auto-generate as `{solution}-{suffix}-law`      | ⚠️ Optional |
+| 🔍 `shared.monitoring.applicationInsights.name`         | Auto-generated   | Application Insights instance name; leave `""` to auto-generate as `{solution}-{suffix}-ai` | ⚠️ Optional |
+| 🔑 `shared.monitoring.logAnalytics.identity.type`       | `SystemAssigned` | Managed identity type for the Log Analytics workspace                                       | ✅ Yes      |
+| 🗄️ `shared.monitoring.logAnalytics.workSpaceResourceId` | `""`             | Existing Log Analytics workspace resource ID to reuse; leave `""` to create a new one       | ⚠️ Optional |
 
 **API Center Configuration (`infra/settings.yaml` → `inventory.apiCenter`):**
 
-| ⚙️ Parameter | 🔧 Default | 📄 Description | ✅ Required |
-| --- | --- | --- | --- |
-| 🗂️ `inventory.apiCenter.name` | Auto-generated | API Center service name; leave `""` to auto-generate as `{solutionName}-apicenter` | ⚠️ Optional |
-| 🔑 `inventory.apiCenter.identity.type` | `SystemAssigned` | Managed identity type: `SystemAssigned`, `UserAssigned`, `SystemAssigned, UserAssigned`, or `None` | ✅ Yes |
-| 👤 `inventory.apiCenter.identity.userAssignedIdentities` | `[]` | List of user-assigned managed identity resource IDs (when `UserAssigned` type is selected) | ⚠️ Optional |
+| ⚙️ Parameter                                             | 🔧 Default       | 📄 Description                                                                                     | ✅ Required |
+| -------------------------------------------------------- | ---------------- | -------------------------------------------------------------------------------------------------- | ----------- |
+| 🗂️ `inventory.apiCenter.name`                            | Auto-generated   | API Center service name; leave `""` to auto-generate as `{solutionName}-apicenter`                 | ⚠️ Optional |
+| 🔑 `inventory.apiCenter.identity.type`                   | `SystemAssigned` | Managed identity type: `SystemAssigned`, `UserAssigned`, `SystemAssigned, UserAssigned`, or `None` | ✅ Yes      |
+| 👤 `inventory.apiCenter.identity.userAssignedIdentities` | `[]`             | List of user-assigned managed identity resource IDs (when `UserAssigned` type is selected)         | ⚠️ Optional |
 
 **Governance Tags (`infra/settings.yaml` → `shared.tags`):**
 
 > [!NOTE]
 > Governance tags defined in `shared.tags` are merged with `managedBy: bicep`, `environment: {envName}`, and `templateVersion: 2.0.0` at deployment time by `infra/main.bicep`, and are applied to every resource in the landing zone. Update these values to match your organization's tagging policy.
 
-| 🏷️ Tag Key | 🔧 Default Value | 📄 Purpose |
-| --- | --- | --- |
-| 💰 `CostCenter` | `CC-1234` | Cost allocation tracking across Azure billing reports |
-| 🏢 `BusinessUnit` | `IT` | Business unit or department identification |
-| 👤 `Owner` | `evilazaro@gmail.com` | Resource owner and incident contact |
-| 📛 `ApplicationName` | `APIM Platform` | Workload or application name for resource grouping |
-| 📋 `ProjectName` | `APIMForAll` | Project or initiative for portfolio tracking |
-| 🔴 `ServiceClass` | `Critical` | Workload tier classification: `Critical`, `Standard`, `Experimental` |
-| ✅ `RegulatoryCompliance` | `GDPR` | Applicable compliance standards: `GDPR`, `HIPAA`, `PCI`, `None` |
-| 📞 `SupportContact` | `evilazaro@gmail.com` | Incident support team or contact email |
-| 💳 `ChargebackModel` | `Dedicated` | Chargeback or showback model for cost attribution |
-| 💼 `BudgetCode` | `FY25-Q1-InitiativeX` | Budget or financial initiative code |
+| 🏷️ Tag Key                | 🔧 Default Value      | 📄 Purpose                                                           |
+| ------------------------- | --------------------- | -------------------------------------------------------------------- |
+| 💰 `CostCenter`           | `CC-1234`             | Cost allocation tracking across Azure billing reports                |
+| 🏢 `BusinessUnit`         | `IT`                  | Business unit or department identification                           |
+| 👤 `Owner`                | `evilazaro@gmail.com` | Resource owner and incident contact                                  |
+| 📛 `ApplicationName`      | `APIM Platform`       | Workload or application name for resource grouping                   |
+| 📋 `ProjectName`          | `APIMForAll`          | Project or initiative for portfolio tracking                         |
+| 🔴 `ServiceClass`         | `Critical`            | Workload tier classification: `Critical`, `Standard`, `Experimental` |
+| ✅ `RegulatoryCompliance` | `GDPR`                | Applicable compliance standards: `GDPR`, `HIPAA`, `PCI`, `None`      |
+| 📞 `SupportContact`       | `evilazaro@gmail.com` | Incident support team or contact email                               |
+| 💳 `ChargebackModel`      | `Dedicated`           | Chargeback or showback model for cost attribution                    |
+| 💼 `BudgetCode`           | `FY25-Q1-InitiativeX` | Budget or financial initiative code                                  |
 
 **Complete `infra/settings.yaml` example:**
 
@@ -350,13 +447,13 @@ solutionName: "apim-accelerator"
 shared:
   monitoring:
     logAnalytics:
-      name: ""                       # leave empty for auto-generation
-      workSpaceResourceId: ""        # leave empty to create a new workspace
+      name: "" # leave empty for auto-generation
+      workSpaceResourceId: "" # leave empty to create a new workspace
       identity:
         type: "SystemAssigned"
         userAssignedIdentities: []
     applicationInsights:
-      name: ""                       # leave empty for auto-generation
+      name: "" # leave empty for auto-generation
       logAnalyticsWorkspaceResourceId: ""
     tags:
       lz-component-type: "shared"
@@ -375,14 +472,14 @@ shared:
 
 core:
   apiManagement:
-    name: ""                         # leave empty for auto-generation
+    name: "" # leave empty for auto-generation
     publisherEmail: "api@contoso.com"
     publisherName: "Contoso Ltd"
     sku:
-      name: "Premium"                # Developer | Basic | BasicV2 | Standard | StandardV2 | Premium | Consumption
-      capacity: 1                    # Premium supports 1-10 scale units
+      name: "Premium" # Developer | Basic | BasicV2 | Standard | StandardV2 | Premium | Consumption
+      capacity: 1 # Premium supports 1-10 scale units
     identity:
-      type: "SystemAssigned"         # SystemAssigned | UserAssigned
+      type: "SystemAssigned" # SystemAssigned | UserAssigned
       userAssignedIdentities: []
     workspaces:
       - name: "sales-apis"
@@ -394,9 +491,9 @@ core:
 
 inventory:
   apiCenter:
-    name: ""                         # leave empty for auto-generation
+    name: "" # leave empty for auto-generation
     identity:
-      type: "SystemAssigned"         # SystemAssigned | UserAssigned | SystemAssigned, UserAssigned | None
+      type: "SystemAssigned" # SystemAssigned | UserAssigned | SystemAssigned, UserAssigned | None
       userAssignedIdentities: []
   tags:
     lz-component-type: "shared"
@@ -410,8 +507,8 @@ The `infra/main.parameters.json` file binds `azd` environment variables to Bicep
 ```json
 {
   "parameters": {
-    "envName":   { "value": "${AZURE_ENV_NAME}" },
-    "location":  { "value": "${AZURE_LOCATION}" }
+    "envName": { "value": "${AZURE_ENV_NAME}" },
+    "location": { "value": "${AZURE_LOCATION}" }
   }
 }
 ```
@@ -422,103 +519,6 @@ Override these values manually when using the Azure CLI directly:
 azd env set AZURE_ENV_NAME dev
 azd env set AZURE_LOCATION eastus
 ```
-
-## 🏗️ Architecture
-
-**Overview**
-
-The APIM Accelerator follows a modular, layered architecture pattern deployed at Azure subscription scope by `infra/main.bicep`. The infrastructure is organized into three functional layers: the **Shared Infrastructure Layer** (monitoring foundation of Log Analytics, Application Insights, and Storage Account), the **Core API Management Layer** (APIM gateway, team workspaces, and developer portal), and the **Inventory and Governance Layer** (API Center with automated APIM source integration). All layers are orchestrated by `infra/main.bicep` and coordinated through the Azure Developer CLI lifecycle hooks defined in `azure.yaml`.
-
-```mermaid
----
-title: "APIM Accelerator - Landing Zone Architecture"
-config:
-  theme: base
-  look: classic
-  layout: dagre
-  themeVariables:
-    fontSize: '16px'
-  flowchart:
-    htmlLabels: true
----
-flowchart TB
-    accTitle: APIM Accelerator Landing Zone Architecture
-    accDescr: Modular Azure API Management landing zone showing deployment flow from Platform Engineer through Azure Developer CLI and a pre-provision hook to three layers in an Azure subscription. Layer 1 shared monitoring contains Log Analytics Workspace, Application Insights, and Storage Account. Layer 2 core platform contains API Management Service, Team Workspaces, and Developer Portal. Layer 3 inventory contains API Center and API Source Integration. WCAG AA compliant using Fluent UI color palette.
-
-    %% =======================================================================
-    %% AZURE / FLUENT ARCHITECTURE PATTERN v2.0
-    %% (Semantic + Structural + Font + Accessibility Governance)
-    %% =======================================================================
-    %% PHASE 1 - FLUENT UI: All styling uses approved Fluent UI palette only
-    %% PHASE 2 - GROUPS: Every subgraph has semantic color via style directive
-    %% PHASE 3 - COMPONENTS: Every node has semantic classDef + icon prefix
-    %% PHASE 4 - ACCESSIBILITY: accTitle/accDescr present, WCAG AA contrast
-    %% PHASE 5 - STANDARD: Governance block present, classDefs centralized
-    %% =======================================================================
-
-    Engineer(["👨‍💻 Platform Engineer"]):::neutral
-    AzdCli("🚀 Azure Developer CLI\nazd up / azd provision"):::core
-    PreHook("🔧 Pre-Provision Hook\nPurge soft-deleted APIM"):::neutral
-
-    subgraph AzSub ["☁️ Azure Subscription"]
-        RG("📦 Resource Group\n{solution}-{env}-{location}-rg"):::neutral
-
-        subgraph SharedLayer ["📊 Shared Infrastructure Layer"]
-            LAW("📊 Log Analytics Workspace\nLogs and KQL queries"):::success
-            AppIns("🔍 Application Insights\nAPM and distributed tracing"):::success
-            StorAcc("🗄️ Storage Account\nDiagnostic log archival"):::neutral
-        end
-
-        subgraph CoreLayer ["🌐 Core API Management Layer"]
-            APIMSvc("🌐 API Management Service\nGateway and policy engine"):::core
-            TeamWsp("🏢 Team Workspaces\nPer-team API isolation"):::neutral
-            DevPort("🖥️ Developer Portal\nAzure AD and MSAL 2.0"):::neutral
-        end
-
-        subgraph InvLayer ["🗂️ Inventory and Governance Layer"]
-            ApiCtr("🗂️ Azure API Center\nCentralized API catalog"):::warning
-            ApiSrc("🔗 API Source Integration\nAPIM-to-API Center sync"):::warning
-        end
-    end
-
-    Engineer -- "configures infra/settings.yaml" --> AzdCli
-    AzdCli -- "executes pre-provision" --> PreHook
-    AzdCli -- "provisions infra/main.bicep" --> RG
-    RG -- "1st: monitoring foundation" --> SharedLayer
-    RG -- "2nd: APIM platform" --> CoreLayer
-    RG -- "3rd: governance layer" --> InvLayer
-    APIMSvc -- "APM telemetry" --> AppIns
-    APIMSvc -- "diagnostic logs" --> LAW
-    APIMSvc -- "log archival" --> StorAcc
-    APIMSvc -- "workspace isolation" --> TeamWsp
-    APIMSvc -- "portal configuration" --> DevPort
-    APIMSvc -- "registered as API source" --> ApiSrc
-    ApiSrc -- "synchronizes API catalog" --> ApiCtr
-
-    style AzSub fill:#F3F2F1,stroke:#8A8886,stroke-width:2px,color:#323130
-    style SharedLayer fill:#EDEBE9,stroke:#107C10,stroke-width:1px,color:#323130
-    style CoreLayer fill:#EDEBE9,stroke:#0078D4,stroke-width:1px,color:#323130
-    style InvLayer fill:#EDEBE9,stroke:#8A8886,stroke-width:1px,color:#323130
-
-    classDef core fill:#EFF6FC,stroke:#0078D4,stroke-width:2px,color:#323130
-    classDef success fill:#DFF6DD,stroke:#107C10,stroke-width:2px,color:#323130
-    classDef neutral fill:#FAFAFA,stroke:#8A8886,stroke-width:2px,color:#323130
-    classDef warning fill:#FFF4CE,stroke:#797673,stroke-width:2px,color:#323130
-```
-
-**Component Roles:**
-
-| 🧩 Component | 📄 Purpose | 📁 Source Module |
-| --- | --- | --- |
-| 🌐 **API Management Service** | API gateway, policy enforcement, rate limiting, caching, and managed identity for downstream service authentication | `src/core/apim.bicep` |
-| 📊 **Log Analytics Workspace** | Centralized log aggregation, KQL queries, alerting foundation, and diagnostic log sink for all platform resources | `src/shared/monitoring/operational/main.bicep` |
-| 🔍 **Application Insights** | Application performance monitoring, request tracing, failure analysis, and instrumentation key export | `src/shared/monitoring/insights/main.bicep` |
-| 🗄️ **Storage Account** | Long-term diagnostic log archival for compliance and audit retention; also serves as APIM diagnostic storage | `src/shared/monitoring/operational/main.bicep` |
-| 🏢 **Team Workspaces** | Logical isolation of APIs and resources within a single APIM instance; enables per-team lifecycle management (Premium SKU only) | `src/core/workspaces.bicep` |
-| 🖥️ **Developer Portal** | Self-service API documentation and testing portal with Azure AD identity provider (MSAL 2.0) and CORS policy configuration | `src/core/developer-portal.bicep` |
-| 🗂️ **Azure API Center** | Centralized API catalog with automated APIM discovery, default workspace, governance policies, and compliance management | `src/inventory/main.bicep` |
-| 🔗 **API Source Integration** | Registers the APIM service as an API source within the API Center default workspace for automatic API synchronization | `src/inventory/main.bicep` |
-| 🔒 **RBAC Assignments** | Grants the API Center managed identity **API Center Data Reader** and **API Center Compliance Manager** roles at resource group scope | `src/inventory/main.bicep` |
 
 ## 🤝 Contributing
 
@@ -560,12 +560,12 @@ azd provision --environment dev
 
 **Project structure conventions:**
 
-| 📁 Directory | 📄 Purpose | 🔧 Module Pattern |
-| --- | --- | --- |
-| 🏗️ `infra/` | Orchestration entry point, deployment parameters, and lifecycle hooks | `main.bicep` calls `src/` modules at subscription scope |
-| 🌐 `src/core/` | Core APIM platform components — service, workspaces, and developer portal | One primary resource per `.bicep` file |
-| 🔗 `src/shared/` | Cross-cutting shared services — monitoring, type definitions, and constants | `main.bicep` orchestrates `monitoring/`, `networking/` submodules |
-| 🗂️ `src/inventory/` | API governance and catalog components | Single `main.bicep` deploys API Center, workspace, source, and RBAC |
+| 📁 Directory        | 📄 Purpose                                                                  | 🔧 Module Pattern                                                   |
+| ------------------- | --------------------------------------------------------------------------- | ------------------------------------------------------------------- |
+| 🏗️ `infra/`         | Orchestration entry point, deployment parameters, and lifecycle hooks       | `main.bicep` calls `src/` modules at subscription scope             |
+| 🌐 `src/core/`      | Core APIM platform components — service, workspaces, and developer portal   | One primary resource per `.bicep` file                              |
+| 🔗 `src/shared/`    | Cross-cutting shared services — monitoring, type definitions, and constants | `main.bicep` orchestrates `monitoring/`, `networking/` submodules   |
+| 🗂️ `src/inventory/` | API governance and catalog components                                       | Single `main.bicep` deploys API Center, workspace, source, and RBAC |
 
 > [!NOTE]
 > The `src/shared/networking/` directory is scaffolded as a placeholder for future VNet integration. The networking module is commented out in `src/shared/main.bicep`. Contributions adding VNet, NSG, and private endpoint support are welcome.
