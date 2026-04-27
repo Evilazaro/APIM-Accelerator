@@ -75,18 +75,18 @@ config:
 ---
 flowchart TB
     accTitle: APIM Accelerator Landing Zone Architecture
-    accDescr: Modular Azure API Management landing zone showing deployment flow from Platform Engineer through Azure Developer CLI and a pre-provision hook to three layers in an Azure subscription. Layer 1 shared monitoring contains Log Analytics Workspace, Application Insights, and Storage Account. Layer 2 core platform contains API Management Service, Team Workspaces, and Developer Portal. Layer 3 inventory contains API Center and API Source Integration. WCAG AA compliant using Fluent UI color palette.
+    accDescr: Modular Azure API Management landing zone showing deployment flow from Platform Engineer through Azure Developer CLI and a pre-provision hook to three layers in an Azure subscription. Engineer=neutral, AzdCli=core, PreHook=neutral, RG=neutral, LAW=success, AppIns=success, StorAcc=neutral, APIMSvc=core, TeamWsp=neutral, DevPort=neutral, ApiCtr=warning, ApiSrc=warning. WCAG AA compliant.
 
-    %% =======================================================================
+    %%
     %% AZURE / FLUENT ARCHITECTURE PATTERN v2.0
     %% (Semantic + Structural + Font + Accessibility Governance)
-    %% =======================================================================
+    %%
     %% PHASE 1 - FLUENT UI: All styling uses approved Fluent UI palette only
     %% PHASE 2 - GROUPS: Every subgraph has semantic color via style directive
     %% PHASE 3 - COMPONENTS: Every node has semantic classDef + icon prefix
     %% PHASE 4 - ACCESSIBILITY: accTitle/accDescr present, WCAG AA contrast
     %% PHASE 5 - STANDARD: Governance block present, classDefs centralized
-    %% =======================================================================
+    %%
 
     Engineer(["👨‍💻 Platform Engineer"]):::neutral
     AzdCli("🚀 Azure Developer CLI\nazd up / azd provision"):::core
@@ -127,15 +127,15 @@ flowchart TB
     APIMSvc -- "registered as API source" --> ApiSrc
     ApiSrc -- "synchronizes API catalog" --> ApiCtr
 
-    style AzSub fill:#F3F2F1,stroke:#8A8886,stroke-width:2px,color:#323130
-    style SharedLayer fill:#EDEBE9,stroke:#107C10,stroke-width:1px,color:#323130
-    style CoreLayer fill:#EDEBE9,stroke:#0078D4,stroke-width:1px,color:#323130
-    style InvLayer fill:#EDEBE9,stroke:#8A8886,stroke-width:1px,color:#323130
-
     classDef core fill:#EFF6FC,stroke:#0078D4,stroke-width:2px,color:#323130
     classDef success fill:#DFF6DD,stroke:#107C10,stroke-width:2px,color:#323130
     classDef neutral fill:#FAFAFA,stroke:#8A8886,stroke-width:2px,color:#323130
-    classDef warning fill:#FFF4CE,stroke:#797673,stroke-width:2px,color:#323130
+    classDef warning fill:#FFF4CE,stroke:#FFB900,stroke-width:2px,color:#323130
+
+    style AzSub fill:#F3F2F1,stroke:#8A8886,stroke-width:2px,color:#323130
+    style SharedLayer fill:#DFF6DD,stroke:#107C10,stroke-width:2px,color:#323130
+    style CoreLayer fill:#E8F0FE,stroke:#0078D4,stroke-width:2px,color:#323130
+    style InvLayer fill:#FFF4CE,stroke:#FFB900,stroke-width:2px,color:#323130
 ```
 
 **Component Roles:**
